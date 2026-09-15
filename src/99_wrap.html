@@ -1,0 +1,110 @@
+<script>
+SECT('10 · 정리');
+S({bare:true, cls:'div', ov:'§10 정리 — 요건에서 계통까지',
+html:`<div class="no">10</div><h2>요건에서 계통까지</h2><div class="ln"></div>
+<p>아홉 개의 장을 하나의 추적표로 묶는다. 이 표를 거꾸로 읽으면 설계 검토 체크리스트가 된다.</p>`});
+
+S({tag:'TRACEABILITY', ov:'요건 → 기능 → 계통 추적',
+src:'<b>출처</b> 10 CFR 50 Appendix A의 GDC, IAEA SSR-2/1 (Rev.1)의 기본안전기능, 그리고 6~9장에서 다룬 계통을 대응시킨 것',
+html:`<h2 class="t">설계는 요건에서 시작해 계통으로 끝난다 — <s>거꾸로 읽으면 근거를 잃는다</s></h2>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 320" role="img" aria-label="규제 요건에서 기본안전기능을 거쳐 공학적안전설비로 이어지는 추적 관계">
+  <defs><marker id="tr-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M0,0 L10,5 L0,10 z" fill="var(--rule)"/></marker></defs>
+  <g id="tr-hd">
+    <rect x="40" y="14" width="330" height="38" fill="var(--cool)"/>
+    <text x="205" y="39" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="#071018" font-weight="600">규제 요건</text>
+    <rect x="395" y="14" width="300" height="38" fill="var(--ok)"/>
+    <text x="545" y="39" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="#071018" font-weight="600">기본 안전기능</text>
+    <rect x="720" y="14" width="360" height="38" fill="var(--hot)"/>
+    <text x="900" y="39" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="#071018" font-weight="600">계통 (ESF)</text>
+  </g>
+  <g id="tr-rows"></g>
+</svg>
+</div></div>`,
+init(el){
+  const R=[['GDC 25 · 26 · 27','반응도 제어','제어봉 · 붕산 주입 · (무붕산 설계)'],
+    ['GDC 34','노심 잔열 제거','PRHR · DHRS · ICS · PAFS'],
+    ['GDC 35 · 10 CFR 50.46','노심 냉각재 보충','축압기 · CMT · SI 펌프 · RVV/RRV'],
+    ['GDC 16 · 38 · 41 · 50~57','방사성물질 격납','격납건물 · 살수 · 격리밸브 · PAR']];
+  const g=el.querySelector('#tr-rows');
+  R.forEach((r,i)=>{ const y=74+i*58;
+    g.insertAdjacentHTML('beforeend',
+      `<g data-r="${i}" opacity="0">
+       <rect x="40" y="${y}" width="330" height="44" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.2"/>
+       <text x="58" y="${y+28}" font-family="var(--mono)" font-size="15" fill="var(--cool)">${r[0]}</text>
+       <rect x="395" y="${y}" width="300" height="44" fill="var(--panel)" stroke="var(--ok)" stroke-width="1.2"/>
+       <text x="545" y="${y+28}" text-anchor="middle" font-family="var(--sans)" font-size="18" fill="var(--ok)">${r[1]}</text>
+       <rect x="720" y="${y}" width="360" height="44" fill="var(--panel)" stroke="var(--hot)" stroke-width="1.2"/>
+       <text x="900" y="${y+28}" text-anchor="middle" font-family="var(--sans)" font-size="16" fill="var(--hot)">${r[2]}</text>
+       <path d="M374,${y+22} H391" stroke="var(--rule)" stroke-width="1.4" marker-end="url(#tr-a)"/>
+       <path d="M699,${y+22} H716" stroke="var(--rule)" stroke-width="1.4" marker-end="url(#tr-a)"/></g>`); });
+  g.insertAdjacentHTML('beforeend',
+    '<text x="560" y="314" text-anchor="middle" class="lbl">이 표를 거꾸로 읽으면 설계 검토 체크리스트가 된다</text>');
+  const rows=[...g.querySelectorAll('[data-r]')];
+  if(RM){ rows.forEach(r=>r.setAttribute('opacity',1)); return; }
+  rows.forEach((r,i)=>r.animate([{opacity:0},{opacity:1}],{duration:420,delay:180*i,fill:'forwards'}));
+}});
+
+S({tag:'COMPARISON', ov:'노형별 ESF 구성 비교',
+src:'<b>출처</b> IAEA SMR Booklet 2022 (NuScale·i-SMR·BWRX-300·CAREM) · K.H. Bae et al., <i>Nucl. Eng. Des.</i> <b>379</b> (2021) 111247 (SMART100) · NRC ML15230A043 (AP1000) · Westinghouse ML033600086 (IRIS). <b>모두 설계자 제시 자료 기준</b>',
+html:`<h2 class="t">같은 일을 하는데 <em>이름이 다르다</em> — 나란히 놓고 보기</h2>
+<div class="body col">
+<table class="d sm">
+<tr><th style="width:14%">설계</th><th style="width:16%">정지계통</th><th style="width:24%">잔열제거</th><th style="width:23%">안전주입</th><th>격납</th></tr>
+<tr class="mark"><td>NuScale NPM</td><td>제어봉 + 붕산</td><td>DHRS 2계열(각 100 %) · 2상 자연순환</td><td>별도 수원 없음 · RVV 3 + RRV 2 재순환</td><td>침수 강재 CNV · 진공</td></tr>
+<tr><td>i-SMR</td><td>제어봉 (<b class="cool">무붕산</b>)</td><td>비LOCA: PAFS 피동보조급수</td><td>LOCA: EDV 3 + ERV 2</td><td>소형 강재 CV + PCCS</td></tr>
+<tr><td>SMART100</td><td>제어봉 + 붕산</td><td>PRHRS 4계열 (2차측 + 비상냉각탱크)</td><td>CMT 4기 + SIT 4기 (피동)</td><td>CPRSS · IRWST · PAR</td></tr>
+<tr><td>BWRX-300</td><td>제어봉 + 붕산</td><td>ICS 3루프 (각 약 33 MW) · 최소 7일</td><td>일체형 격리밸브로 대구경 파단 배제</td><td>지하 매설 PCV · 약 16 m × 44 m</td></tr>
+<tr><td>AP1000 <span class="lbl">(비교 기준)</span></td><td>제어봉 + 붕산</td><td>PRHR HX 1기 (IRWST 침수)</td><td>CMT 2기 + 축압기 2기 + IRWST · ADS 4단</td><td>강재 격납 + PCCS</td></tr>
+<tr><td>CAREM-25</td><td>FSS 급속정지봉 + SSS 고압 붕산탱크</td><td>PRHRS 2계열 · 36 h</td><td>MPIS 축압기 2기 · <b>파열판</b>으로 개시</td><td>압력억제형 · 설계압 0.5 MPa</td></tr>
+<tr><td>IRIS <span class="lbl">(역사적 참조)</span></td><td>제어봉 + 비상붕산탱크 2기</td><td>EHRS 피동 4계열 · RWST 내 U-튜브</td><td>EBT + 직접용기주입(DVI)</td><td>구형 강재 · 직경 25 m · 설계압 1.3 MPa</td></tr>
+</table>
+</div>`});
+
+S({tag:'CHECKLIST', ov:'마무리 — 네 줄 체크리스트',
+src:'다음 단계: 5~8주차 계통코드. 이 네 질문에 답할 수 있으면 노드화의 요구사항이 이미 정해진 것이다',
+html:`<h2 class="t">설계 자료를 받았을 때 <em>이 네 줄</em>을 채울 수 있는가</h2>
+<div class="body col">
+  <div style="display:flex;flex-direction:column;gap:12px;margin-top:6px">
+    <div class="readout" style="border-left:3px solid var(--hot)">
+      <span class="k">① 반응도 제어</span>
+      <div style="font-size:19px;color:var(--ink);font-weight:300;margin-top:4px">
+        반응도를 죽이는 <b>두 개의 독립 수단</b>은 무엇인가. stuck rod 가정에서도 정지여유도가 확보되는가</div></div>
+    <div class="readout" style="border-left:3px solid var(--cool)">
+      <span class="k">② 열 제거</span>
+      <div style="font-size:19px;color:var(--ink);font-weight:300;margin-top:4px">
+        정지 후 붕괴열의 <b>최종 열침원</b>은 무엇인가. 무조작으로 며칠을 버티며, 그 며칠은 <b>무슨 계산</b>에서 나왔는가</div></div>
+    <div class="readout" style="border-left:3px solid var(--cool)">
+      <span class="k">③ 냉각재 보충</span>
+      <div style="font-size:19px;color:var(--ink);font-weight:300;margin-top:4px">
+        냉각재를 잃었을 때 <b>압력 구간별 주입 수단</b>은 무엇인가. 장기 냉각은 어떻게 성립하는가</div></div>
+    <div class="readout" style="border-left:3px solid var(--ok)">
+      <span class="k">④ 격납</span>
+      <div style="font-size:19px;color:var(--ink);font-weight:300;margin-top:4px">
+        격납은 방출 에너지를 <b>어디에 흡수</b>시키는가. 수소는 어떻게 처리하는가</div></div>
+  </div>
+</div>`});
+
+S({bare:true, cls:'cover', ov:'맺음',
+html:`<div class="kick">다음 단계 · 5~8주차</div>
+<h1>코드가 답을 주지는<br><span>않는다</span></h1>
+<div class="ln"></div>
+<div class="meta">
+  코드는 여러분이 넣은 가정을 계산할 뿐이다.<br>
+  노드화를 어떻게 나눴는지, 어떤 상관식을 어떤 적용 범위에서 썼는지,<br>
+  붕괴열 곡선에 얼마의 여유를 뒀는지 — <b>이 선택들이 결과를 만든다.</b><br><br>
+  그 선택 하나하나에 근거를 댈 수 있게 하려고 이 자료가 요건과 수식을 함께 실었다.
+</div>
+<div class="hint">THINK LAB · 한양대학교 원자력공학과 · 지도교수 송민섭 · 2026년 9월</div>`,
+init(el){
+  if(RM) return;
+  const h1=el.querySelector('h1');
+  h1.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],
+    {duration:700,easing:'cubic-bezier(.2,.7,.3,1)',fill:'forwards'});
+}});
+
+buildOv(); go(0);
+</script>
+</body>
+</html>

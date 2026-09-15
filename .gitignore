@@ -1,0 +1,8 @@
+node_modules/
+shot_*.png
+contact.png
+_*.png
+_test.html
+*.zip
+.DS_Store
+Thumbs.db

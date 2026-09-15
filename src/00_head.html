@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SMR 설계요건과 공학적안전설비</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* ============================================================
+   THINK Lab · SMR 설계요건과 공학적안전설비 — 발표용 HTML
+   제어실 미믹 패널(control-room mimic) 시각 언어
+   ============================================================ */
+:root{
+  --ground:#070E18;      /* 근흑 네이비 바탕 */
+  --panel:#0E1B2C;       /* 패널면 */
+  --panel-2:#13263C;     /* 한 단계 밝은 패널 */
+  --rule:#1E3450;        /* 미믹 라인·헤어라인 */
+  --ink:#FFFFFF;         /* 본문 */
+  --ink-2:#C9D9EC;       /* 보조 텍스트 — 회색 아님, 청백색 */
+  --ink-3:#8FA8C6;       /* 라벨 전용(캡션·단위). 본문에는 쓰지 않음 */
+  --cool:#4CC9F0;        /* 강조색 = 냉각재 */
+  --hot:#FF7A45;         /* 열·노심·위험 */
+  --ok:#5DD39E;          /* 피동·성공 */
+  --amber:#FFC55C;       /* 규제 조문 */
+  --sans:'IBM Plex Sans KR','Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+  --mono:'IBM Plex Mono','SFMono-Regular',Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%;background:var(--ground);color:var(--ink);
+  font-family:var(--sans);overflow:hidden;-webkit-font-smoothing:antialiased}
+body{display:grid;place-items:center}
+
+/* ---------- 무대: 1280x720 고정, 뷰포트에 맞춰 스케일 ---------- */
+#stage{width:1280px;height:720px;position:relative;transform-origin:center center;
+  background:var(--ground);flex:none}
+.slide{position:absolute;inset:0;padding:30px 54px 26px;display:none;
+  flex-direction:column;opacity:0;transition:opacity .28s ease}
+.slide.on{display:flex;opacity:1}
+
+/* ---------- 상단 레일 ---------- */
+.rail{display:flex;align-items:baseline;gap:14px;flex:none;
+  border-bottom:1px solid var(--rule);padding-bottom:9px}
+.tag{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--cool)}
+.tag b{color:var(--ink);font-weight:600}
+.rail .sp{flex:1}
+.num{font-family:var(--mono);font-size:12px;color:var(--ink-3);letter-spacing:.08em}
+
+/* ---------- 제목 ---------- */
+h2.t{font-size:36px;line-height:1.2;font-weight:600;margin:16px 0 0;
+  letter-spacing:-.015em;text-wrap:balance}
+h2.t em{font-style:normal;color:var(--cool)}
+h2.t s{text-decoration:none;color:var(--hot)}
+p.sub{margin:8px 0 0;font-size:19px;color:var(--ink-2);font-weight:300;line-height:1.45}
+
+/* ---------- 불릿(상단 2~4개) ---------- */
+ul.b{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:7px}
+ul.b li{font-size:19.5px;line-height:1.42;color:var(--ink);padding-left:20px;position:relative;
+  font-weight:300}
+ul.b li::before{content:'';position:absolute;left:0;top:.62em;width:8px;height:2px;
+  background:var(--cool)}
+ul.b li b{font-weight:600}
+ul.b li .q{color:var(--ink-2)}
+ul.b li code,.mono{font-family:var(--mono);font-size:.94em;letter-spacing:-.01em}
+.hot{color:var(--hot)} .ok{color:var(--ok)} .cool{color:var(--cool)} .amb{color:var(--amber)}
+
+/* ---------- 본문 영역 ---------- */
+.body{flex:1;min-height:0;display:flex;gap:26px;margin-top:14px}
+.body.col{flex-direction:column}
+.fig{flex:1;min-width:0;position:relative;display:flex;flex-direction:column;justify-content:center}
+.fig svg{width:100%;height:auto;display:block}
+.side{width:330px;flex:none;display:flex;flex-direction:column;gap:12px;justify-content:center}
+
+/* ---------- 하단 레일 ---------- */
+.foot{flex:none;display:flex;align-items:center;gap:12px;padding-top:9px;
+  border-top:1px solid var(--rule);margin-top:12px}
+.src{font-size:12.5px;color:var(--ink-3);font-weight:300;line-height:1.35}
+.src b{color:var(--ink-2);font-weight:500}
+.foot .sp{flex:1}
+.brand{font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--ink-3)}
+
+/* ---------- 계기 판독 ---------- */
+.readout{background:var(--panel);border:1px solid var(--rule);padding:11px 14px 12px}
+.readout .k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);display:block;margin-bottom:3px}
+.readout .v{font-family:var(--mono);font-size:30px;font-weight:600;line-height:1;
+  font-variant-numeric:tabular-nums;color:var(--ink)}
+.readout .v small{font-size:15px;font-weight:400;color:var(--ink-2);margin-left:4px}
+.readout.hi{border-color:var(--cool)}
+.readout.hi .v{color:var(--cool)}
+.readout.warn{border-color:var(--hot)} .readout.warn .v{color:var(--hot)}
+.readout.good{border-color:var(--ok)} .readout.good .v{color:var(--ok)}
+
+/* ---------- 컨트롤 ---------- */
+.ctl{display:flex;flex-direction:column;gap:5px}
+.ctl label{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);display:flex;justify-content:space-between;align-items:baseline}
+.ctl label span{font-size:15px;color:var(--cool);font-weight:600;font-variant-numeric:tabular-nums;
+  letter-spacing:0;text-transform:none}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:22px;background:none;
+  cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:3px;background:var(--rule)}
+input[type=range]::-moz-range-track{height:3px;background:var(--rule)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;
+  margin-top:-6px;background:var(--cool);border:0;border-radius:50%}
+input[type=range]::-moz-range-thumb{width:15px;height:15px;background:var(--cool);border:0;
+  border-radius:50%}
+input[type=range]:focus-visible{outline:2px solid var(--cool);outline-offset:4px}
+.btn{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;color:var(--ink);
+  background:var(--panel);border:1px solid var(--rule);padding:8px 13px;cursor:pointer;
+  transition:border-color .15s,color .15s}
+.btn:hover{border-color:var(--cool);color:var(--cool)}
+.btn.act{border-color:var(--cool);color:var(--cool);background:#0d2438}
+.btn.danger:hover{border-color:var(--hot);color:var(--hot)}
+.btn:focus-visible{outline:2px solid var(--cool);outline-offset:3px}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ---------- 표 ---------- */
+table.d{width:100%;border-collapse:collapse;font-size:16px}
+table.d th{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--cool);text-align:left;font-weight:500;padding:0 12px 8px 0;
+  border-bottom:1px solid var(--cool)}
+table.d td{padding:8px 12px 8px 0;border-bottom:1px solid var(--rule);color:var(--ink-2);
+  font-weight:300;vertical-align:top;line-height:1.35}
+table.d td:first-child{color:var(--ink);font-weight:500}
+table.d td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+table.d tr.mark td{color:var(--cool)}
+table.d tr.mark td:first-child{color:var(--cool)}
+table.d.sm{font-size:14.5px}
+table.d.sm td{padding:6px 10px 6px 0}
+
+/* ---------- 인용/조문 ---------- */
+blockquote.q{margin:0;padding:14px 18px;background:var(--panel);
+  border-left:3px solid var(--amber);font-size:17px;line-height:1.5;color:var(--ink-2);
+  font-weight:300}
+blockquote.q b{color:var(--ink);font-weight:600}
+blockquote.q .cite{display:block;margin-top:9px;font-family:var(--mono);font-size:12px;
+  color:var(--amber);letter-spacing:.04em}
+.formula{font-family:var(--mono);font-size:24px;color:var(--ink);text-align:center;
+  padding:16px 0;letter-spacing:.01em}
+.formula .op{color:var(--cool)}
+.formula small{font-size:14px;color:var(--ink-3)}
+
+/* ---------- 표지 ---------- */
+.cover{justify-content:center;padding:0 90px}
+.cover .kick{font-family:var(--mono);font-size:13px;letter-spacing:.24em;color:var(--cool);
+  text-transform:uppercase}
+.cover h1{font-size:66px;line-height:1.06;margin:20px 0 0;font-weight:600;letter-spacing:-.03em}
+.cover h1 span{color:var(--cool)}
+.cover .ln{width:120px;height:2px;background:var(--hot);margin:26px 0}
+.cover .meta{font-size:17px;color:var(--ink-2);line-height:1.7;font-weight:300}
+.cover .meta b{color:var(--ink);font-weight:500}
+.cover .hint{margin-top:26px;font-family:var(--mono);font-size:12.5px;color:var(--ink-3);
+  letter-spacing:.04em}
+.cover .hint kbd{background:var(--panel);border:1px solid var(--rule);padding:2px 7px;
+  color:var(--ink-2);font-family:var(--mono);font-size:12px}
+
+/* ---------- 섹션 구분 ---------- */
+.div{justify-content:center;padding:0 90px}
+.div .no{font-family:var(--mono);font-size:150px;line-height:.85;font-weight:600;
+  color:var(--panel-2);letter-spacing:-.04em}
+.div h2{font-size:52px;margin:-46px 0 0;font-weight:600;letter-spacing:-.025em;position:relative}
+.div p{font-size:20px;color:var(--ink-2);margin:16px 0 0;max-width:760px;font-weight:300;
+  line-height:1.5}
+.div .ln{width:90px;height:2px;background:var(--cool);margin:22px 0 0}
+
+/* ---------- 진행 표시 ---------- */
+#prog{position:fixed;left:0;bottom:0;height:2px;background:var(--cool);width:0;
+  transition:width .28s ease;z-index:40}
+#help{position:fixed;right:14px;bottom:12px;font-family:var(--mono);font-size:11px;
+  color:var(--ink-3);letter-spacing:.06em;z-index:40;opacity:.7}
+
+/* ---------- 오버뷰 ---------- */
+#ov{position:fixed;inset:0;background:rgba(7,14,24,.97);z-index:50;display:none;
+  overflow-y:auto;padding:26px}
+#ov.on{display:block}
+#ov .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:11px}
+#ov .it{background:var(--panel);border:1px solid var(--rule);padding:11px 12px;cursor:pointer;
+  min-height:78px;display:flex;flex-direction:column;gap:5px}
+#ov .it:hover{border-color:var(--cool)}
+#ov .it .n{font-family:var(--mono);font-size:11px;color:var(--cool)}
+#ov .it .t{font-size:13.5px;line-height:1.3;color:var(--ink-2);font-weight:300}
+#ov h3{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);margin:22px 0 10px;font-weight:500}
+#ov h3:first-child{margin-top:0}
+
+/* ---------- SVG 공통 ---------- */
+.lbl{font-family:var(--mono);font-size:12px;fill:var(--ink-3);letter-spacing:.04em}
+.lbl.b{fill:var(--ink-2)}
+.val{font-family:var(--mono);font-size:15px;fill:var(--ink);font-variant-numeric:tabular-nums}
+.ttl{font-family:var(--sans);font-size:14px;fill:var(--ink);font-weight:500}
+.axis{stroke:var(--rule);stroke-width:1}
+.grid{stroke:var(--rule);stroke-width:.6;stroke-dasharray:2 4}
+
+@media (prefers-reduced-motion:reduce){
+  .slide{transition:none}
+  #prog{transition:none}
+}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="prog"></div>
+<div id="help">← → 이동 · O 목차 · F 전체화면 · R 다시재생</div>
+<div id="ov"><div class="grid" id="ovg"></div></div>

@@ -1,0 +1,6 @@
+{
+  "name": "smr-safety-analysis-tools",
+  "private": true,
+  "description": "슬라이드 렌더 검증용. node shot.js ../docs/index.html \"1,16,23\"",
+  "dependencies": { "playwright-core": "^1.40.0" }
+}

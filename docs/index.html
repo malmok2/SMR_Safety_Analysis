@@ -1,0 +1,2073 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SMR 설계요건과 공학적안전설비</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* ============================================================
+   THINK Lab · SMR 설계요건과 공학적안전설비 — 발표용 HTML
+   제어실 미믹 패널(control-room mimic) 시각 언어
+   ============================================================ */
+:root{
+  --ground:#070E18;      /* 근흑 네이비 바탕 */
+  --panel:#0E1B2C;       /* 패널면 */
+  --panel-2:#13263C;     /* 한 단계 밝은 패널 */
+  --rule:#1E3450;        /* 미믹 라인·헤어라인 */
+  --ink:#FFFFFF;         /* 본문 */
+  --ink-2:#C9D9EC;       /* 보조 텍스트 — 회색 아님, 청백색 */
+  --ink-3:#8FA8C6;       /* 라벨 전용(캡션·단위). 본문에는 쓰지 않음 */
+  --cool:#4CC9F0;        /* 강조색 = 냉각재 */
+  --hot:#FF7A45;         /* 열·노심·위험 */
+  --ok:#5DD39E;          /* 피동·성공 */
+  --amber:#FFC55C;       /* 규제 조문 */
+  --sans:'IBM Plex Sans KR','Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+  --mono:'IBM Plex Mono','SFMono-Regular',Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%;background:var(--ground);color:var(--ink);
+  font-family:var(--sans);overflow:hidden;-webkit-font-smoothing:antialiased}
+body{display:grid;place-items:center}
+
+/* ---------- 무대: 1280x720 고정, 뷰포트에 맞춰 스케일 ---------- */
+#stage{width:1280px;height:720px;position:relative;transform-origin:center center;
+  background:var(--ground);flex:none}
+.slide{position:absolute;inset:0;padding:30px 54px 26px;display:none;
+  flex-direction:column;opacity:0;transition:opacity .28s ease}
+.slide.on{display:flex;opacity:1}
+
+/* ---------- 상단 레일 ---------- */
+.rail{display:flex;align-items:baseline;gap:14px;flex:none;
+  border-bottom:1px solid var(--rule);padding-bottom:9px}
+.tag{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--cool)}
+.tag b{color:var(--ink);font-weight:600}
+.rail .sp{flex:1}
+.num{font-family:var(--mono);font-size:12px;color:var(--ink-3);letter-spacing:.08em}
+
+/* ---------- 제목 ---------- */
+h2.t{font-size:36px;line-height:1.2;font-weight:600;margin:16px 0 0;
+  letter-spacing:-.015em;text-wrap:balance}
+h2.t em{font-style:normal;color:var(--cool)}
+h2.t s{text-decoration:none;color:var(--hot)}
+p.sub{margin:8px 0 0;font-size:19px;color:var(--ink-2);font-weight:300;line-height:1.45}
+
+/* ---------- 불릿(상단 2~4개) ---------- */
+ul.b{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:7px}
+ul.b li{font-size:19.5px;line-height:1.42;color:var(--ink);padding-left:20px;position:relative;
+  font-weight:300}
+ul.b li::before{content:'';position:absolute;left:0;top:.62em;width:8px;height:2px;
+  background:var(--cool)}
+ul.b li b{font-weight:600}
+ul.b li .q{color:var(--ink-2)}
+ul.b li code,.mono{font-family:var(--mono);font-size:.94em;letter-spacing:-.01em}
+.hot{color:var(--hot)} .ok{color:var(--ok)} .cool{color:var(--cool)} .amb{color:var(--amber)}
+
+/* ---------- 본문 영역 ---------- */
+.body{flex:1;min-height:0;display:flex;gap:26px;margin-top:14px}
+.body.col{flex-direction:column}
+.fig{flex:1;min-width:0;position:relative;display:flex;flex-direction:column;justify-content:center}
+.fig svg{width:100%;height:auto;display:block}
+.side{width:330px;flex:none;display:flex;flex-direction:column;gap:12px;justify-content:center}
+
+/* ---------- 하단 레일 ---------- */
+.foot{flex:none;display:flex;align-items:center;gap:12px;padding-top:9px;
+  border-top:1px solid var(--rule);margin-top:12px}
+.src{font-size:12.5px;color:var(--ink-3);font-weight:300;line-height:1.35}
+.src b{color:var(--ink-2);font-weight:500}
+.foot .sp{flex:1}
+.brand{font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--ink-3)}
+
+/* ---------- 계기 판독 ---------- */
+.readout{background:var(--panel);border:1px solid var(--rule);padding:11px 14px 12px}
+.readout .k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);display:block;margin-bottom:3px}
+.readout .v{font-family:var(--mono);font-size:30px;font-weight:600;line-height:1;
+  font-variant-numeric:tabular-nums;color:var(--ink)}
+.readout .v small{font-size:15px;font-weight:400;color:var(--ink-2);margin-left:4px}
+.readout.hi{border-color:var(--cool)}
+.readout.hi .v{color:var(--cool)}
+.readout.warn{border-color:var(--hot)} .readout.warn .v{color:var(--hot)}
+.readout.good{border-color:var(--ok)} .readout.good .v{color:var(--ok)}
+
+/* ---------- 컨트롤 ---------- */
+.ctl{display:flex;flex-direction:column;gap:5px}
+.ctl label{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);display:flex;justify-content:space-between;align-items:baseline}
+.ctl label span{font-size:15px;color:var(--cool);font-weight:600;font-variant-numeric:tabular-nums;
+  letter-spacing:0;text-transform:none}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:22px;background:none;
+  cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:3px;background:var(--rule)}
+input[type=range]::-moz-range-track{height:3px;background:var(--rule)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;
+  margin-top:-6px;background:var(--cool);border:0;border-radius:50%}
+input[type=range]::-moz-range-thumb{width:15px;height:15px;background:var(--cool);border:0;
+  border-radius:50%}
+input[type=range]:focus-visible{outline:2px solid var(--cool);outline-offset:4px}
+.btn{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;color:var(--ink);
+  background:var(--panel);border:1px solid var(--rule);padding:8px 13px;cursor:pointer;
+  transition:border-color .15s,color .15s}
+.btn:hover{border-color:var(--cool);color:var(--cool)}
+.btn.act{border-color:var(--cool);color:var(--cool);background:#0d2438}
+.btn.danger:hover{border-color:var(--hot);color:var(--hot)}
+.btn:focus-visible{outline:2px solid var(--cool);outline-offset:3px}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ---------- 표 ---------- */
+table.d{width:100%;border-collapse:collapse;font-size:16px}
+table.d th{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--cool);text-align:left;font-weight:500;padding:0 12px 8px 0;
+  border-bottom:1px solid var(--cool)}
+table.d td{padding:8px 12px 8px 0;border-bottom:1px solid var(--rule);color:var(--ink-2);
+  font-weight:300;vertical-align:top;line-height:1.35}
+table.d td:first-child{color:var(--ink);font-weight:500}
+table.d td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+table.d tr.mark td{color:var(--cool)}
+table.d tr.mark td:first-child{color:var(--cool)}
+table.d.sm{font-size:14.5px}
+table.d.sm td{padding:6px 10px 6px 0}
+
+/* ---------- 인용/조문 ---------- */
+blockquote.q{margin:0;padding:14px 18px;background:var(--panel);
+  border-left:3px solid var(--amber);font-size:17px;line-height:1.5;color:var(--ink-2);
+  font-weight:300}
+blockquote.q b{color:var(--ink);font-weight:600}
+blockquote.q .cite{display:block;margin-top:9px;font-family:var(--mono);font-size:12px;
+  color:var(--amber);letter-spacing:.04em}
+.formula{font-family:var(--mono);font-size:24px;color:var(--ink);text-align:center;
+  padding:16px 0;letter-spacing:.01em}
+.formula .op{color:var(--cool)}
+.formula small{font-size:14px;color:var(--ink-3)}
+
+/* ---------- 표지 ---------- */
+.cover{justify-content:center;padding:0 90px}
+.cover .kick{font-family:var(--mono);font-size:13px;letter-spacing:.24em;color:var(--cool);
+  text-transform:uppercase}
+.cover h1{font-size:66px;line-height:1.06;margin:20px 0 0;font-weight:600;letter-spacing:-.03em}
+.cover h1 span{color:var(--cool)}
+.cover .ln{width:120px;height:2px;background:var(--hot);margin:26px 0}
+.cover .meta{font-size:17px;color:var(--ink-2);line-height:1.7;font-weight:300}
+.cover .meta b{color:var(--ink);font-weight:500}
+.cover .hint{margin-top:26px;font-family:var(--mono);font-size:12.5px;color:var(--ink-3);
+  letter-spacing:.04em}
+.cover .hint kbd{background:var(--panel);border:1px solid var(--rule);padding:2px 7px;
+  color:var(--ink-2);font-family:var(--mono);font-size:12px}
+
+/* ---------- 섹션 구분 ---------- */
+.div{justify-content:center;padding:0 90px}
+.div .no{font-family:var(--mono);font-size:150px;line-height:.85;font-weight:600;
+  color:var(--panel-2);letter-spacing:-.04em}
+.div h2{font-size:52px;margin:-46px 0 0;font-weight:600;letter-spacing:-.025em;position:relative}
+.div p{font-size:20px;color:var(--ink-2);margin:16px 0 0;max-width:760px;font-weight:300;
+  line-height:1.5}
+.div .ln{width:90px;height:2px;background:var(--cool);margin:22px 0 0}
+
+/* ---------- 진행 표시 ---------- */
+#prog{position:fixed;left:0;bottom:0;height:2px;background:var(--cool);width:0;
+  transition:width .28s ease;z-index:40}
+#help{position:fixed;right:14px;bottom:12px;font-family:var(--mono);font-size:11px;
+  color:var(--ink-3);letter-spacing:.06em;z-index:40;opacity:.7}
+
+/* ---------- 오버뷰 ---------- */
+#ov{position:fixed;inset:0;background:rgba(7,14,24,.97);z-index:50;display:none;
+  overflow-y:auto;padding:26px}
+#ov.on{display:block}
+#ov .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:11px}
+#ov .it{background:var(--panel);border:1px solid var(--rule);padding:11px 12px;cursor:pointer;
+  min-height:78px;display:flex;flex-direction:column;gap:5px}
+#ov .it:hover{border-color:var(--cool)}
+#ov .it .n{font-family:var(--mono);font-size:11px;color:var(--cool)}
+#ov .it .t{font-size:13.5px;line-height:1.3;color:var(--ink-2);font-weight:300}
+#ov h3{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);margin:22px 0 10px;font-weight:500}
+#ov h3:first-child{margin-top:0}
+
+/* ---------- SVG 공통 ---------- */
+.lbl{font-family:var(--mono);font-size:12px;fill:var(--ink-3);letter-spacing:.04em}
+.lbl.b{fill:var(--ink-2)}
+.val{font-family:var(--mono);font-size:15px;fill:var(--ink);font-variant-numeric:tabular-nums}
+.ttl{font-family:var(--sans);font-size:14px;fill:var(--ink);font-weight:500}
+.axis{stroke:var(--rule);stroke-width:1}
+.grid{stroke:var(--rule);stroke-width:.6;stroke-dasharray:2 4}
+
+@media (prefers-reduced-motion:reduce){
+  .slide{transition:none}
+  #prog{transition:none}
+}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="prog"></div>
+<div id="help">← → 이동 · O 목차 · F 전체화면 · R 다시재생</div>
+<div id="ov"><div class="grid" id="ovg"></div></div>
+<script>
+/* ================================================================
+   덱 엔진 — 슬라이드 등록·렌더·내비게이션, 애니메이션 프리미티브
+   ================================================================ */
+const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const D = [];                       // 슬라이드 목록
+const SEC = [];                     // 섹션 경계 { at, name }
+function S(o){ D.push(o); return D.length-1; }
+function SECT(name){ SEC.push({at:D.length, name}); }
+
+/* ---------- 정리 대상(슬라이드 떠날 때 멈춤) ---------- */
+let CLEAN = [];
+function onClean(fn){ CLEAN.push(fn); }
+function raf(fn){
+  let id, t0 = performance.now(), live = true;
+  function step(t){ if(!live) return; fn((t-t0)/1000, t); id = requestAnimationFrame(step); }
+  id = requestAnimationFrame(step);
+  onClean(()=>{ live=false; cancelAnimationFrame(id); });
+  return ()=>{ live=false; cancelAnimationFrame(id); };
+}
+
+/* ---------- 수치 유틸 ---------- */
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const fmt=(v,d=0)=>v.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+function decay(t,t0=1e8){ return 0.0622*(Math.pow(t,-0.2)-Math.pow(t+t0,-0.2)); }
+function rhoW(T){ return 1006.0-0.2646*T-0.002424*T*T; }
+
+/* ---------- SVG 경로 위를 흐르는 입자 ---------- */
+function flow(path, opt={}){
+  const n=opt.n||10, col=opt.color||'var(--cool)', r=opt.r||3.6;
+  const L=path.getTotalLength(), g=path.ownerSVGElement, dots=[];
+  const layer=document.createElementNS('http://www.w3.org/2000/svg','g');
+  path.parentNode.appendChild(layer);
+  for(let i=0;i<n;i++){
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('r',r); c.setAttribute('fill',col); layer.appendChild(c); dots.push(c);
+  }
+  const st={speed:opt.speed==null?0.14:opt.speed, on:true, dir:1};
+  raf((t)=>{
+    for(let i=0;i<n;i++){
+      let p=((t*st.speed*st.dir)+i/n)%1; if(p<0)p+=1;
+      const pt=path.getPointAtLength(p*L);
+      dots[i].setAttribute('cx',pt.x); dots[i].setAttribute('cy',pt.y);
+      dots[i].setAttribute('opacity', st.on? (opt.fade? 0.35+0.65*Math.sin(Math.PI*p):1) : 0);
+    }
+  });
+  st.el=layer; return st;
+}
+
+/* ---------- 값이 부드럽게 따라가는 판독기 ---------- */
+function track(obj,key,get,k=6){
+  raf((t,abs)=>{ obj[key]=lerp(obj[key],get(),Math.min(1,k*0.016)); });
+}
+
+/* ---------- 선 그래프 ---------- */
+function poly(pts){ return pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' '); }
+
+/* ---------- 렌더 ---------- */
+const stage=document.getElementById('stage');
+let cur=-1;
+function go(i,dir){
+  i=clamp(i,0,D.length-1); if(i===cur) return;
+  CLEAN.forEach(f=>{try{f()}catch(e){}}); CLEAN=[];
+  cur=i; const s=D[i];
+  const sec = SEC.filter(x=>x.at<=i).slice(-1)[0];
+  stage.innerHTML =
+    '<div class="slide on'+(s.cls?' '+s.cls:'')+'">'
+    + (s.bare? '' :
+      '<div class="rail"><span class="tag">'+(s.tag||(sec?sec.name:''))+'</span>'
+      +'<span class="sp"></span><span class="num">'+String(i+1).padStart(2,'0')+' / '+D.length+'</span></div>')
+    + s.html
+    + (s.bare? '' :
+      '<div class="foot"><span class="src">'+(s.src||'')+'</span><span class="sp"></span>'
+      +'<span class="brand">THINK LAB · HANYANG</span></div>')
+    + '</div>';
+  document.getElementById('prog').style.width=((i+1)/D.length*100)+'%';
+  if(s.init){ try{ s.init(stage.querySelector('.slide')); }catch(e){ console.error(e); } }
+}
+function replay(){ const i=cur; cur=-1; go(i); }
+
+/* ---------- 스케일 ---------- */
+function fit(){
+  const k=Math.min(innerWidth/1280, innerHeight/720);
+  stage.style.transform='scale('+k+')';
+}
+addEventListener('resize',fit); fit();
+
+/* ---------- 내비게이션 ---------- */
+addEventListener('keydown',e=>{
+  const ov=document.getElementById('ov');
+  if(e.key==='Escape'){ ov.classList.remove('on'); return; }
+  if(e.key==='o'||e.key==='O'){ ov.classList.toggle('on'); return; }
+  if(ov.classList.contains('on')) return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){ e.preventDefault(); go(cur+1); }
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); go(cur-1); }
+  else if(e.key==='Home'){ go(0); } else if(e.key==='End'){ go(D.length-1); }
+  else if(e.key==='r'||e.key==='R'){ replay(); }
+  else if(e.key==='f'||e.key==='F'){
+    if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen();
+  }
+});
+addEventListener('click',e=>{
+  if(e.target.closest('input,button,#ov,label')) return;
+  if(document.getElementById('ov').classList.contains('on')) return;
+  go(cur + (e.clientX < innerWidth*0.28 ? -1 : 1));
+});
+
+/* ---------- 조작 안내 자동 숨김 ---------- */
+(function(){ const h=document.getElementById('help'); let tm;
+  function poke(){ h.style.opacity=.72; clearTimeout(tm); tm=setTimeout(()=>h.style.opacity=0,4000); }
+  h.style.transition='opacity .5s'; addEventListener('mousemove',poke); addEventListener('keydown',poke); poke();
+})();
+
+/* ---------- 오버뷰 ---------- */
+function buildOv(){
+  const g=document.getElementById('ovg'); let h='';
+  D.forEach((s,i)=>{
+    const sec=SEC.filter(x=>x.at===i)[0];
+    h+='<div class="it" data-i="'+i+'"><span class="n">'+String(i+1).padStart(2,'0')
+      +'</span><span class="t">'+(s.ov||s.tag||'')+'</span></div>';
+  });
+  g.innerHTML=h;
+  g.querySelectorAll('.it').forEach(el=>el.onclick=()=>{
+    document.getElementById('ov').classList.remove('on'); go(+el.dataset.i);
+  });
+}
+</script>
+<script>
+/* ================================================================
+   표지 · 여정 지도
+   ================================================================ */
+S({bare:true, cls:'cover', ov:'표지',
+html:`<div class="kick">한양대학교 원자력공학과 · THINK Lab · NUE4067</div>
+<h1>SMR <span>설계요건</span>과<br>공학적안전설비</h1>
+<div class="ln"></div>
+<div class="meta">
+  왜 이렇게 설계했는가를 <b>계산으로</b> 답하기 위한 최소 원리<br>
+  2~3주차 강의 · 지도교수 <b>송민섭</b> · Rev1.0 · 2026년 9월
+</div>
+<div class="hint"><kbd>→</kbd> 다음 &nbsp; <kbd>←</kbd> 이전 &nbsp; <kbd>O</kbd> 목차 &nbsp; <kbd>F</kbd> 전체화면 &nbsp; <kbd>R</kbd> 애니메이션 다시재생</div>`,
+init(el){
+  if(RM) return;
+  const h1=el.querySelector('h1'), ln=el.querySelector('.ln');
+  h1.style.opacity=0; ln.style.width='0px';
+  h1.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],
+    {duration:700,easing:'cubic-bezier(.2,.7,.3,1)',fill:'forwards'});
+  ln.animate([{width:'0px'},{width:'120px'}],{duration:600,delay:500,fill:'forwards'});
+}});
+
+S({tag:'ROADMAP', ov:'이 발표의 구조 — 기능이 계통을 부른다',
+src:'IAEA SSR-2/1 (Rev.1) Requirement 4 · 10 CFR 50 Appendix A',
+html:`<h2 class="t">원자로가 반드시 해야 하는 <em>세 가지</em> — 그것이 계통을 부른다</h2>
+<ul class="b">
+  <li>계통 이름부터 외우면 왜 거기 있는지 알 수 없음. <b>요건 → 기능 → 계통</b> 순서로 읽음</li>
+  <li>앞 기능이 실패하면 뒤 기능의 부담이 커지는 <b>사슬</b>임 — 순서에 의미가 있음</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 330" role="img" aria-label="세 가지 기본안전기능과 그것을 담당하는 공학적안전설비의 대응 관계">
+  <defs><marker id="ar1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M0,0 L10,5 L0,10 z" fill="var(--rule)"/></marker></defs>
+  <g id="rm-fn">
+    <g transform="translate(0,10)">
+      <rect x="30" y="20" width="300" height="86" fill="var(--panel)" stroke="var(--hot)" stroke-width="1.5"/>
+      <text x="48" y="50" class="lbl" fill="var(--hot)">기본안전기능 ①</text>
+      <text x="48" y="80" font-family="var(--sans)" font-size="23" fill="var(--ink)" font-weight="500">반응도 제어</text>
+    </g>
+    <g transform="translate(0,122)">
+      <rect x="30" y="20" width="300" height="86" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.5"/>
+      <text x="48" y="50" class="lbl" fill="var(--cool)">기본안전기능 ②</text>
+      <text x="48" y="80" font-family="var(--sans)" font-size="23" fill="var(--ink)" font-weight="500">노심 열 제거</text>
+    </g>
+    <g transform="translate(0,234)">
+      <rect x="30" y="20" width="300" height="86" fill="var(--panel)" stroke="var(--ok)" stroke-width="1.5"/>
+      <text x="48" y="50" class="lbl" fill="var(--ok)">기본안전기능 ③</text>
+      <text x="48" y="80" font-family="var(--sans)" font-size="23" fill="var(--ink)" font-weight="500">방사성물질 격납</text>
+    </g>
+  </g>
+  <g id="rm-ln" stroke="var(--rule)" stroke-width="1.4" fill="none" marker-end="url(#ar1)">
+    <path d="M334,73 H470"/><path d="M334,185 H470"/><path d="M334,185 H420 V297 H470"/><path d="M334,297 H470"/>
+  </g>
+  <g id="rm-sys">
+    <g transform="translate(480,30)"><rect width="300" height="60" fill="none" stroke="var(--rule)"/>
+      <text x="18" y="25" class="lbl">6장</text>
+      <text x="18" y="46" font-family="var(--sans)" font-size="18" fill="var(--ink-2)">제어봉 · 붕산 주입</text></g>
+    <g transform="translate(480,142)"><rect width="300" height="60" fill="none" stroke="var(--rule)"/>
+      <text x="18" y="25" class="lbl">7장</text>
+      <text x="18" y="46" font-family="var(--sans)" font-size="18" fill="var(--ink-2)">잔열제거 · PRHR · DHRS</text></g>
+    <g transform="translate(480,254)"><rect width="300" height="60" fill="none" stroke="var(--rule)"/>
+      <text x="18" y="25" class="lbl">8장</text>
+      <text x="18" y="46" font-family="var(--sans)" font-size="18" fill="var(--ink-2)">안전주입 · 축압기 · CMT</text></g>
+    <g transform="translate(800,254)"><rect width="290" height="60" fill="none" stroke="var(--rule)"/>
+      <text x="18" y="25" class="lbl">9장</text>
+      <text x="18" y="46" font-family="var(--sans)" font-size="18" fill="var(--ink-2)">격납건물 · 살수 · PAR</text></g>
+  </g>
+  <path id="rm-chain" d="M180,116 V142 M180,228 V254" stroke="var(--ink-3)" stroke-width="1.2"
+        stroke-dasharray="3 4" fill="none"/>
+  <text x="196" y="135" class="lbl">실패하면 부담 증가</text>
+  <text x="196" y="247" class="lbl">실패하면 부담 증가</text>
+</svg>
+</div></div>`,
+init(el){
+  if(RM) return;
+  const gs=[...el.querySelectorAll('#rm-fn > g')], ls=[...el.querySelectorAll('#rm-ln path')],
+        ss=[...el.querySelectorAll('#rm-sys > g')];
+  gs.concat(ss).forEach(g=>g.style.opacity=0);
+  ls.forEach(p=>{const L=p.getTotalLength();p.style.strokeDasharray=L;p.style.strokeDashoffset=L;});
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:450,delay:120*i,fill:'forwards',easing:'ease-out'}));
+  ls.forEach((p,i)=>p.animate([{strokeDashoffset:p.getTotalLength()},{strokeDashoffset:0}],
+    {duration:500,delay:520+110*i,fill:'forwards'}));
+  ss.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:400,delay:760+110*i,fill:'forwards'}));
+}});
+
+/* ================================================================
+   SECTION 01 — SMR이란 무엇인가
+   ================================================================ */
+SECT('01 · SMR이란 무엇인가');
+S({bare:true, cls:'div', ov:'§01 SMR이란 무엇인가',
+html:`<div class="no">01</div><h2>SMR이란 무엇인가</h2><div class="ln"></div>
+<p>이름에 담긴 두 단어, 그리고 “작게 만든다”는 선택이 치르는 대가.
+이 장을 이해하지 못하면 이후 모든 설계 선택의 동기를 놓친다.</p>`});
+
+S({tag:'DEFINITION', ov:'Small + Modular — 300 MWe 경계',
+src:'<b>출처</b> IAEA, <i>Advances in SMR Technology Developments</i>, 2022 Edition · 300 MWe는 법적 정의가 아니라 분류를 위한 관례적 상한',
+html:`<h2 class="t">Small은 <em>결과가 아니라 선택</em>이다</h2>
+<ul class="b">
+  <li><b>Small</b> — 전기출력 <code>300 MWe</code> 이하. 열출력이 아니라 <b>전기출력</b> 기준임에 주의</li>
+  <li><b>Modular</b> — ① 공장에서 만들어 옮기는 <b>제작 단위</b>, ② 여러 대를 이어 붙이는 <b>출력 단위</b></li>
+  <li>공장 제작이 가능하려면 운반 한계 안에 들어와야 하고, 그러려면 작아야 함 — <b class="cool">모듈화를 가능하게 하려는 선택</b></li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 300" role="img" aria-label="주요 원자로의 전기출력 분포와 300 MWe SMR 경계">
+  <line x1="60" y1="215" x2="1075" y2="215" class="axis"/>
+  <g class="lbl" text-anchor="middle" fill="var(--ink-3)">
+    <text x="60" y="240">0</text><text x="262" y="240">300</text><text x="464" y="240">600</text>
+    <text x="666" y="240">900</text><text x="868" y="240">1200</text><text x="1070" y="240">1500</text>
+  </g>
+  <text x="1075" y="268" class="lbl" text-anchor="end">정격 전기출력 (MWe)</text>
+  <rect id="smrzone" x="60" y="60" width="0" height="155" fill="var(--cool)" opacity="0.07"/>
+  <line id="bline" x1="262" y1="215" x2="262" y2="215" stroke="var(--cool)" stroke-width="2" stroke-dasharray="5 4"/>
+  <text id="blbl" x="262" y="48" text-anchor="middle" font-family="var(--mono)" font-size="14"
+        fill="var(--cool)" opacity="0">SMR 경계 · 300 MWe</text>
+  <g id="dots"></g>
+</svg>
+</div></div>`,
+init(el){
+  const SV='http://www.w3.org/2000/svg';
+  const X=p=>60+p*(1015/1500);
+  const data=[
+    ['CAREM-25',30,-108],['RITM-200N',55,-82],['NuScale NPM',77,-56],['SMART100',110,-30],
+    ['i-SMR',170,-108],['BWRX-300',300,-82],['IRIS',335,-56],['AP1000',1110,-56],['APR1400',1400,-82]];
+  const g=el.querySelector('#dots');
+  data.forEach((d,i)=>{
+    const smr=d[1]<=300, x=X(d[1]), y=215, col=smr?'var(--cool)':'var(--hot)', ty=y+d[2];
+    const c=document.createElementNS(SV,'circle');
+    c.setAttribute('cx',x); c.setAttribute('cy',y); c.setAttribute('r',7);
+    c.setAttribute('fill',col); c.setAttribute('opacity',0); g.appendChild(c);
+    const stem=document.createElementNS(SV,'line');
+    stem.setAttribute('x1',x);stem.setAttribute('y1',y-8);stem.setAttribute('x2',x);
+    stem.setAttribute('y2',ty+7);
+    stem.setAttribute('stroke','var(--rule)');stem.setAttribute('stroke-width',1);
+    stem.setAttribute('opacity',0); g.appendChild(stem);
+    const t=document.createElementNS(SV,'text');
+    t.setAttribute('x',x); t.setAttribute('y',ty);
+    t.setAttribute('text-anchor', x>950?'end':(x<150?'start':'middle'));
+    t.setAttribute('font-family','var(--mono)');
+    t.setAttribute('font-size','13.5'); t.setAttribute('fill',smr?'var(--cool)':'var(--ink-2)');
+    t.setAttribute('opacity',0);
+    t.textContent=d[0]+'  '+d[1]+' MWe'; g.appendChild(t);
+    if(RM){c.setAttribute('opacity',1);t.setAttribute('opacity',1);stem.setAttribute('opacity',1);return;}
+    const dl=700+i*90;
+    [c,t,stem].forEach(e=>e.animate([{opacity:0},{opacity:1}],{duration:340,delay:dl,fill:'forwards'}));
+  });
+  const b=el.querySelector('#bline'), z=el.querySelector('#smrzone'), bl=el.querySelector('#blbl');
+  if(RM){ b.setAttribute('y2',44); z.setAttribute('width',202); bl.setAttribute('opacity',1); return; }
+  b.animate([{y2:215},{y2:44}],{duration:520,fill:'forwards',easing:'ease-out'});
+  bl.animate([{opacity:0},{opacity:1}],{duration:300,delay:480,fill:'forwards'});
+  z.animate([{width:0},{width:202}],{duration:600,delay:520,fill:'forwards',easing:'ease-out'});
+}});
+</script>
+<script>
+/* ---- 규모의 경제: 공통 스케일 ---- */
+const EC={ x0:150,x1:1500,px0:70,px1:670, y1:12500, py0:300,py1:25,
+  sx:P=>70+(P-150)/1350*600, sy:C=>300-C/12500*275,
+  C:P=>4000*Math.pow(P/1400,-0.49) };
+function ecAxes(){
+  let g='<line x1="70" y1="300" x2="690" y2="300" class="axis"/>'
+       +'<line x1="70" y1="300" x2="70" y2="18" class="axis"/>';
+  [0,3000,6000,9000,12000].forEach(c=>{ const y=EC.sy(c);
+    g+=`<line x1="70" y1="${y}" x2="690" y2="${y}" class="grid"/>`
+      +`<text x="62" y="${y+4}" class="lbl" text-anchor="end">${c?fmt(c):'0'}</text>`; });
+  [300,600,900,1200,1500].forEach(p=>{ const x=EC.sx(p);
+    g+=`<text x="${x}" y="320" class="lbl" text-anchor="middle">${p}</text>`; });
+  g+='<text x="690" y="338" class="lbl" text-anchor="end">정격 전기출력 (MWe)</text>'
+    +'<text x="70" y="12" class="lbl">비 자본비 (USD/kWe)</text>';
+  return g;
+}
+function ecCurve(){ let d=''; for(let P=150;P<=1500;P+=10){ d+=(d?'L':'M')+EC.sx(P).toFixed(1)+','+EC.sy(EC.C(P)).toFixed(1); } return d; }
+
+S({tag:'ECONOMY', ov:'규모의 경제 — 작게 만드는 대가',
+src:'<b>출처</b> L.M. Boldon, P. Sabharwall, INL/EXT-14-32616 (2014) §6.1 — NEA 평균 <i>n</i> = 0.51 채택. <b>유의</b> 상관식 검증 구간은 300~1300 MWe이므로 그 아래에서는 불확실성이 커진다',
+html:`<h2 class="t">출력을 줄이면 <s>kW당 비용이 오른다</s> — 얼마나 오르는지가 전부</h2>
+<ul class="b">
+  <li>용기·배관·구조물 비용은 <b>표면적</b>에 비례하고 출력은 <b>체적</b>에 비례 → 규모지수 <code>n ≈ 0.4~0.7</code></li>
+  <li>총 자본비가 아니라 <b class="cool">kW당 비용</b>을 봐야 함. 두 값은 반대 방향으로 움직임</li>
+</ul>
+<div class="body">
+  <div class="fig">
+    <div class="formula" style="white-space:nowrap;font-size:21px;padding:10px 0 14px">C₂/C₁ <span class="op">=</span> (P₂/P₁)<sup>n</sup>
+      &nbsp;&nbsp;<span class="op">→</span>&nbsp;&nbsp;
+      (C/P)₂/(C/P)₁ <span class="op">=</span> (P₂/P₁)<sup>n−1</sup>,&nbsp; <small>n − 1 &lt; 0</small></div>
+    <svg viewBox="0 0 700 345" role="img" aria-label="정격 출력에 따른 비 자본비 곡선. 출력이 작아질수록 kW당 비용이 급격히 오른다">
+      ${'{AXES}'}
+      <path id="ecc" d="" fill="none" stroke="var(--cool)" stroke-width="2.4"/>
+      <line id="ecref" x1="70" y1="0" x2="690" y2="0" stroke="var(--ink-3)" stroke-width="1" stroke-dasharray="4 4"/>
+      <text id="ecreft" x="686" y="0" class="lbl" text-anchor="end">대형 경수로 기준 1,400 MWe · 4,000</text>
+      <line id="ecvl" x1="0" y1="300" x2="0" y2="0" stroke="var(--hot)" stroke-width="1.2"/>
+      <circle id="ecpt" r="7" fill="var(--hot)"/>
+    </svg>
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">정격 전기출력</span><span class="v" id="ro-p">180<small>MWe</small></span></div>
+    <div class="readout hi"><span class="k">비 자본비</span><span class="v" id="ro-c">10,900<small>USD/kWe</small></span></div>
+    <div class="readout"><span class="k">1,400 MWe 대비</span><span class="v" id="ro-r">2.72<small>배</small></span></div>
+    <div class="ctl"><label>출력 조절 <span id="ro-s">180 MWe</span></label>
+      <input type="range" id="ec-slider" min="150" max="1400" step="10" value="180"></div>
+  </div>
+</div>`.replace('{AXES}',''),
+init(el){
+  const svg=el.querySelector('svg');
+  svg.insertAdjacentHTML('afterbegin', ecAxes());
+  const cv=el.querySelector('#ecc'); cv.setAttribute('d',ecCurve());
+  const L=cv.getTotalLength();
+  const ref=el.querySelector('#ecref'), reft=el.querySelector('#ecreft');
+  ref.setAttribute('y1',EC.sy(4000)); ref.setAttribute('y2',EC.sy(4000));
+  reft.setAttribute('y',EC.sy(4000)-8);
+  const vl=el.querySelector('#ecvl'), pt=el.querySelector('#ecpt');
+  const sl=el.querySelector('#ec-slider');
+  function upd(P){
+    const C=EC.C(P), x=EC.sx(P), y=EC.sy(C);
+    vl.setAttribute('x1',x);vl.setAttribute('x2',x);vl.setAttribute('y2',y);
+    pt.setAttribute('cx',x);pt.setAttribute('cy',y);
+    el.querySelector('#ro-p').innerHTML=fmt(P)+'<small>MWe</small>';
+    el.querySelector('#ro-c').innerHTML=fmt(C)+'<small>USD/kWe</small>';
+    el.querySelector('#ro-r').innerHTML=(C/4000).toFixed(2)+'<small>배</small>';
+    el.querySelector('#ro-s').textContent=fmt(P)+' MWe';
+  }
+  sl.oninput=()=>upd(+sl.value); upd(180);
+  if(RM) return;
+  cv.style.strokeDasharray=L; cv.style.strokeDashoffset=L;
+  cv.animate([{strokeDashoffset:L},{strokeDashoffset:0}],{duration:900,fill:'forwards',easing:'ease-in-out'});
+  // 1400 → 180 으로 미끄러지며 대가를 보여줌
+  let t0=null; sl.value=1400; upd(1400);
+  raf((t)=>{ if(t<1.0) return; const u=clamp((t-1.0)/1.6,0,1);
+    const e=1-Math.pow(1-u,3); const P=lerp(1400,180,e); sl.value=Math.round(P); upd(P); });
+}});
+
+S({tag:'ECONOMY', ov:'2.7배를 되돌리는 네 가지 인자',
+src:'<b>출처</b> Boldon &amp; Sabharwall, INL/EXT-14-32616 (2014) §5.5·§6.1, Eq.3~6·Eq.12 — 원 보고서는 NEA/OECD(2011), Carelli et al.(2010), Wilton(2012)을 인용. <b>모두 반복 건설을 전제</b>한다',
+html:`<h2 class="t">2.7배를 되돌리는 <em>네 가지 인자</em> — 버튼을 눌러 하나씩 적용</h2>
+<ul class="b">
+  <li>네 인자 모두 <b>반복</b>을 전제로 함. 지금 세계 어디에도 SMR 반복 건설 사례가 없음 — 전부 <b class="hot">FOAK</b></li>
+</ul>
+<div class="body">
+  <div class="fig">
+    <svg viewBox="0 0 700 345" role="img" aria-label="180 MWe SMR의 비 자본비가 네 가지 저감 인자를 적용할 때마다 계단식으로 내려가는 그림">
+      <path id="rc-c" d="" fill="none" stroke="var(--rule)" stroke-width="2"/>
+      <line id="rc-ref" x1="70" y1="0" x2="690" y2="0" stroke="var(--ink-3)" stroke-width="1" stroke-dasharray="4 4"/>
+      <text id="rc-reft" x="686" y="0" class="lbl" text-anchor="end">대형 경수로 4,000 USD/kWe</text>
+      <g id="rc-steps"></g>
+      <line id="rc-bar" x1="0" x2="0" stroke="var(--hot)" stroke-width="3"/>
+      <circle id="rc-pt" r="8" fill="var(--hot)"/>
+      <text id="rc-val" class="val" font-size="19" fill="var(--hot)" text-anchor="start"></text>
+    </svg>
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">180 MWe · 현재 추정</span><span class="v" id="rc-ro">10,900<small>USD/kWe</small></span></div>
+    <div class="btnrow" id="rc-btns" style="flex-direction:column;gap:7px">
+      <button class="btn" data-i="0">① Co-siting · 다수호기</button>
+      <button class="btn" data-i="1">② Modular design · 공장제작·학습</button>
+      <button class="btn" data-i="2">③ Plant configuration · 부지 구성</button>
+      <button class="btn" data-i="3">④ NOAK · 성숙 단계</button>
+      <button class="btn danger" data-i="-1">전부 해제</button>
+    </div>
+    <div class="src" style="font-size:12.5px">불가분비 분담 · 1호기 15 %+2~4호기 각 5 % ·
+      4기 부지 학습계수 0.81~0.90 · 정격 2배당 4.5 %</div>
+  </div>
+</div>`,
+init(el){
+  const svg=el.querySelector('svg');
+  svg.insertAdjacentHTML('afterbegin', ecAxes());
+  el.querySelector('#rc-c').setAttribute('d',ecCurve());
+  const ref=el.querySelector('#rc-ref'), reft=el.querySelector('#rc-reft');
+  ref.setAttribute('y1',EC.sy(4000));ref.setAttribute('y2',EC.sy(4000));reft.setAttribute('y',EC.sy(4000)-8);
+  const VAL=[10900,9700,8100,6300,4700];
+  const NAME=['Co-siting','Modular design','Plant configuration','NOAK'];
+  const X=EC.sx(180);
+  const g=el.querySelector('#rc-steps');
+  VAL.slice(1).forEach((v,i)=>{ const y=EC.sy(v);
+    g.insertAdjacentHTML('beforeend',
+      `<g opacity="0" data-s="${i}"><line x1="${X}" y1="${y}" x2="690" y2="${y}" stroke="var(--ok)" stroke-width="1" stroke-dasharray="5 4"/>`
+      +`<text x="686" y="${y-7}" class="lbl" fill="var(--ok)" text-anchor="end">${NAME[i]} → ${fmt(v)}</text></g>`); });
+  const bar=el.querySelector('#rc-bar'), pt=el.querySelector('#rc-pt'), vt=el.querySelector('#rc-val');
+  bar.setAttribute('x1',X);bar.setAttribute('x2',X);bar.setAttribute('y1',EC.sy(10900));
+  let on=0, shown=10900, target=10900;
+  function apply(){
+    target=VAL[on];
+    el.querySelectorAll('#rc-btns .btn').forEach(b=>{
+      const i=+b.dataset.i; if(i>=0) b.classList.toggle('act', i<on); });
+    [...g.children].forEach((c,i)=>c.setAttribute('opacity', i<on?1:0));
+  }
+  raf(()=>{ shown=lerp(shown,target,0.10);
+    const y=EC.sy(shown); bar.setAttribute('y2',y); pt.setAttribute('cx',X);pt.setAttribute('cy',y);
+    vt.setAttribute('x',X+15);vt.setAttribute('y',y+6);vt.textContent=fmt(shown)+' USD/kWe';
+    el.querySelector('#rc-ro').innerHTML=fmt(shown)+'<small>USD/kWe</small>';
+    pt.setAttribute('fill', shown<5200?'var(--ok)':'var(--hot)');
+    bar.setAttribute('stroke', shown<5200?'var(--ok)':'var(--hot)');
+    vt.setAttribute('fill', shown<5200?'var(--ok)':'var(--hot)');
+  });
+  el.querySelectorAll('#rc-btns .btn').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i; if(i<0){on=0;} else {on = (i<on)? i : i+1;} apply(); });
+  apply();
+}});
+</script>
+<script>
+S({tag:'LAYOUT · 루프형', ov:'루프형 대형 경수로 — 대구경 배관이 곧 LBLOCA',
+src:'<b>개념도</b> 자체 작성. 배관 수·기기 배치를 축약한 모식도이며 축척은 임의. <b>GDC 4</b>는 파단확률이 극히 낮으면 동적효과를 배제할 수 있게 한다(LBB 근거)',
+html:`<h2 class="t">루프형 — 대구경 배관 하나가 <s>최악의 설계기준사고</s>를 정의한다</h2>
+<ul class="b">
+  <li>원자로용기와 증기발생기를 잇는 <b class="hot">대구경 고온관·저온관</b>이 존재 → 그 순간 파단이 <b>대형 LOCA</b></li>
+  <li>냉각재는 <b>펌프</b>가 돌린다. 펌프가 멈추면 유량이 곧바로 사라짐</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 700 360" role="img" aria-label="루프형 경수로의 냉각재 순환 경로와 대구경 배관 파단 시 거동">
+    <path id="lp" d="M150,300 L150,110 L480,110 L480,300 Z" fill="none" stroke="var(--rule)" stroke-width="12"/>
+    <rect x="105" y="88" width="90" height="234" rx="18" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.6"/>
+    <rect id="lvl" x="108" y="118" width="84" height="201" fill="var(--cool)" opacity="0.16"/>
+    <rect id="lcore" x="127" y="248" width="46" height="56" rx="3" fill="var(--hot)"/>
+    <text x="150" y="282" text-anchor="middle" font-size="13" font-family="var(--sans)" fill="#fff">노심</text>
+    <text x="150" y="78" text-anchor="middle" class="ttl">원자로용기</text>
+    <rect x="435" y="76" width="90" height="208" rx="10" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.6"/>
+    <text x="480" y="66" text-anchor="middle" class="ttl">증기발생기</text>
+    <circle cx="315" cy="300" r="23" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.6"/>
+    <text x="315" y="345" text-anchor="middle" class="lbl b">냉각재펌프</text>
+    <text x="315" y="98" text-anchor="middle" class="lbl" fill="var(--hot)">고온관 (대구경)</text>
+    <text x="240" y="278" text-anchor="middle" class="lbl">저온관 (대구경)</text>
+    <g id="brk" opacity="0">
+      <circle cx="350" cy="110" r="14" fill="none" stroke="var(--hot)" stroke-width="2"/>
+      <text x="350" y="60" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="var(--hot)">파단</text>
+    </g>
+    <g id="esc"></g>
+    <text id="msg" x="350" y="180" text-anchor="middle" font-family="var(--sans)" font-size="26"
+          font-weight="600" fill="var(--hot)" opacity="0">대형 LOCA — 노심 노출</text>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout hi"><span class="k">순환 구동</span><span class="v" id="lp-drv">펌프</span></div>
+    <div class="readout" id="lp-lvbox"><span class="k">노심 위 수위</span><span class="v" id="lp-lv">100<small>%</small></span></div>
+    <div class="btnrow" style="flex-direction:column;gap:7px">
+      <button class="btn danger" id="lp-break">고온관 파단 (LBLOCA)</button>
+      <button class="btn" id="lp-reset">정상운전으로 복귀</button>
+    </div>
+    <div class="src">파단이 일어나면 감압·수위 하강·열전달 붕괴가 <b>동시에</b> 진행된다. 8장에서 정량화.</div>
+  </div>
+</div>`,
+init(el){
+  const SV='http://www.w3.org/2000/svg';
+  const p=el.querySelector('#lp'), f=flow(p,{n:14,speed:0.13,r:4.2,color:'var(--cool)'});
+  const lvl=el.querySelector('#lvl'), core=el.querySelector('#lcore'),
+        brk=el.querySelector('#brk'), msg=el.querySelector('#msg'), esc=el.querySelector('#esc');
+  let st='ok', lv=1, T=0;
+  function reset(){ st='ok'; lv=1; f.speed=0.13; brk.setAttribute('opacity',0);
+    msg.setAttribute('opacity',0); esc.innerHTML=''; core.setAttribute('fill','var(--hot)');
+    el.querySelector('#lp-drv').textContent='펌프';
+    el.querySelector('#lp-lvbox').className='readout'; }
+  el.querySelector('#lp-reset').onclick=reset;
+  el.querySelector('#lp-break').onclick=()=>{ if(st!=='ok') return; st='brk'; T=0;
+    brk.setAttribute('opacity',1); el.querySelector('#lp-drv').textContent='상실';
+    el.querySelector('#lp-lvbox').className='readout warn';
+    for(let i=0;i<26;i++){ const c=document.createElementNS(SV,'circle');
+      c.setAttribute('r',3.4); c.setAttribute('fill','var(--hot)');
+      c.dataset.a=(-0.25-Math.random()*2.6); c.dataset.v=(70+Math.random()*130);
+      c.dataset.t=(Math.random()*1.4); esc.appendChild(c); } };
+  raf((t,abs)=>{
+    if(st==='brk'){ T+=1/60;
+      lv=Math.max(0.12,1-T*0.30); f.speed=Math.max(0.02,0.13+0.5*Math.exp(-T*1.4)-T*0.05);
+      if(T>1.6) msg.setAttribute('opacity',Math.min(1,(T-1.6)));
+      core.setAttribute('fill', T>2.0?'#ff3b1f':'var(--hot)');
+      [...esc.children].forEach(c=>{ let u=(T-+c.dataset.t); if(u<0){c.setAttribute('opacity',0);return;}
+        u=u%2.0; const a=+c.dataset.a, v=+c.dataset.v;
+        c.setAttribute('cx',350+Math.cos(a)*v*u); c.setAttribute('cy',110+Math.sin(a)*v*u+40*u*u);
+        c.setAttribute('opacity',Math.max(0,1-u/1.6)); });
+    }
+    const y=118+(319-118)*(1-lv)*0.86;
+    lvl.setAttribute('y',y); lvl.setAttribute('height',Math.max(2,319-y));
+    el.querySelector('#lp-lv').innerHTML=fmt(lv*100)+'<small>%</small>';
+  });
+}});
+
+S({tag:'LAYOUT · 일체형', ov:'일체형 SMR — 파단할 배관이 없다',
+src:'<b>개념도</b> 자체 작성. <b>Safety-by-design</b> — 사고를 완화하는 대신 배치로 배제. Westinghouse, <i>IRIS Plant Overview</i>, NRC ADAMS ML033600086 (2003)',
+html:`<h2 class="t">일체형 — 사고를 완화하는 대신 <em>설계에서 배제</em>한다</h2>
+<ul class="b">
+  <li>노심 · 증기발생기 · 가압기를 <b>하나의 용기</b>에 담음 → 대구경 배관이 존재하지 않음</li>
+  <li>펌프 없이 <b class="ok">밀도차</b>로 순환. 구동수두는 대형 PWR 펌프의 <code>약 1/50</code> (2장에서 계산)</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 700 360" role="img" aria-label="일체형 SMR의 단일 용기 내부 자연순환 경로">
+    <rect x="248" y="62" width="204" height="272" rx="30" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.8"/>
+    <rect x="252" y="72" width="196" height="256" rx="26" fill="var(--cool)" opacity="0.10"/>
+    <line x1="256" y1="120" x2="444" y2="120" stroke="var(--ink-3)" stroke-width="1" stroke-dasharray="4 4"/>
+    <text x="350" y="100" text-anchor="middle" class="lbl b">가압기 증기공간</text>
+    <path id="ig-l" d="M350,268 L350,150 L286,150 L286,268 Z" fill="none" stroke="var(--rule)" stroke-width="9"/>
+    <path id="ig-r" d="M350,268 L350,150 L414,150 L414,268 Z" fill="none" stroke="var(--rule)" stroke-width="9"/>
+    <rect x="268" y="152" width="36" height="102" rx="4" fill="var(--panel-2)" stroke="var(--amber)" stroke-width="1.4"/>
+    <rect x="396" y="152" width="36" height="102" rx="4" fill="var(--panel-2)" stroke="var(--amber)" stroke-width="1.4"/>
+    <text x="350" y="200" text-anchor="middle" class="lbl" fill="var(--amber)">증기발생기</text>
+    <text x="350" y="218" text-anchor="middle" class="lbl" fill="var(--amber)">(용기 내장)</text>
+    <rect x="320" y="266" width="60" height="52" rx="3" fill="var(--hot)"/>
+    <text x="350" y="298" text-anchor="middle" font-size="13" font-family="var(--sans)" fill="#fff">노심</text>
+    <text x="350" y="52" text-anchor="middle" class="ttl">단일 원자로용기</text>
+    <g id="ig-x" opacity="0">
+      <text x="110" y="150" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="var(--ink-3)">고온관</text>
+      <text x="110" y="176" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="var(--ink-3)">저온관</text>
+      <line x1="62" y1="143" x2="158" y2="183" stroke="var(--ok)" stroke-width="2"/>
+      <line x1="158" y1="143" x2="62" y2="183" stroke="var(--ok)" stroke-width="2"/>
+      <text x="110" y="216" text-anchor="middle" font-family="var(--sans)" font-size="17" fill="var(--ok)">존재하지 않음</text>
+    </g>
+    <g id="ig-heat"><path d="M350,262 V236" stroke="var(--hot)" stroke-width="2" marker-end="url(#igar)"/>
+      <defs><marker id="igar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="var(--hot)"/></marker></defs></g>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout good"><span class="k">순환 구동</span><span class="v">밀도차</span></div>
+    <div class="readout"><span class="k">대구경 배관 파단</span><span class="v ok" style="font-size:22px">설계에서 배제</span></div>
+    <div class="btnrow" style="flex-direction:column;gap:7px">
+      <button class="btn danger" id="ig-break">파단시켜 보기</button>
+    </div>
+    <div class="src">단, 대가가 있다 — 대형 단조 용기, 관통부 증가, 용기 내장 증기발생기의 정비 접근성.</div>
+  </div>
+</div>`,
+init(el){
+  const L=el.querySelector('#ig-l'), R=el.querySelector('#ig-r');
+  flow(L,{n:8,speed:0.10,r:4,color:'var(--cool)'});
+  flow(R,{n:8,speed:0.10,r:4,color:'var(--cool)'});
+  const x=el.querySelector('#ig-x');
+  el.querySelector('#ig-break').onclick=()=>{ x.setAttribute('opacity',1);
+    if(!RM) x.animate([{opacity:0,transform:'scale(.85)'},{opacity:1,transform:'none'}],
+      {duration:400,fill:'forwards',easing:'cubic-bezier(.2,.8,.3,1.2)'}); };
+  if(RM) return;
+  const hp=el.querySelector('#ig-heat path');
+  raf(t=>{ hp.setAttribute('opacity',0.45+0.55*Math.abs(Math.sin(t*1.8))); });
+}});
+
+S({tag:'SUMMARY', ov:'SMR의 특징을 물리적 근거로 다시 쓰기',
+src:'<b>왼쪽 열</b> 2025-2학기 강의자료 「Design Specification and Requirement for SMR」의 항목. <b>오른쪽 두 열</b>은 본 교재에서 근거를 붙인 것',
+html:`<h2 class="t">홍보 문장을 <em>근거</em>로 바꿔 읽기</h2>
+<div class="body col">
+<table class="d">
+<tr><th style="width:26%">흔히 말하는 특징</th><th style="width:37%">실제 근거</th><th>유의할 점</th></tr>
+<tr><td>작아서 운반·설치가 쉽다</td><td>운반 한계 안에 드는 크기 → 공장 제작 가능</td><td>운반 가능한 크기가 곧 경제적 크기는 아님</td></tr>
+<tr><td>규모를 늘리고 줄이기 쉽다</td><td>모듈 추가로 출력 증설, 수요 성장에 대응</td><td>다수 모듈 동시 운전의 인허가·운전원 배치는 별도 문제</td></tr>
+<tr><td>안전성이 향상된다</td><td>붕괴열 절대량 감소, 자연순환 성립, 대구경 배관 배제</td><td><span class="cool">“더 안전”이 아니라 “다른 방식으로 안전”</span> — 2장에서 정량 확인</td></tr>
+<tr class="mark"><td>자본비가 낮다</td><td>총 자본비(절대액)는 낮음 → 투자 위험 감소</td><td><b>kW당 비용은 오히려 높다.</b> 두 값을 반드시 구분</td></tr>
+<tr><td>적용처가 넓다</td><td>열·전기 동시 공급, 오지·산업단지·선박</td><td>대부분 아직 실증 전 단계</td></tr>
+</table>
+</div>`});
+</script>
+<script>
+SECT('02 · 작아지면 무엇이 달라지는가');
+S({bare:true, cls:'div', ov:'§02 작아지면 무엇이 달라지는가',
+html:`<div class="no">02</div><h2>작아지면 무엇이 달라지는가</h2><div class="ln"></div>
+<p>SMR의 안전 논리를 지탱하는 두 개의 물리. 하나는 붕괴열의 <b>절대량</b>이고, 다른 하나는 자연순환의 <b>구동수두</b>다.
+이 두 숫자가 이후 모든 계통 설계를 규정한다.</p>`});
+
+S({tag:'DECAY HEAT', ov:'붕괴열 — 비율은 같고 절대량이 준다',
+src:'<b>계산</b> Way–Wigner 근사 <span class="mono">P_d/P₀ = 0.0622 [ t<sup>−0.2</sup> − (t+t₀)<sup>−0.2</sup> ]</span>, t₀ = 10⁸ s. 인허가 해석에는 ANSI/ANS-5.1을 쓴다 · 정격 열출력 출처 IAEA SMR Booklet 2022 · KHNP',
+html:`<h2 class="t">비율은 같다. <em>절대량</em>이 다르다 — 슬라이더로 시간을 흘려보자</h2>
+<ul class="b">
+  <li>붕괴열 <b>비율</b>은 노심 크기와 거의 무관. 정지 1시간 뒤 어느 노형이든 정격의 약 <code>1 %</code></li>
+  <li>달라지는 건 <b class="hot">절대량</b> — 3,983 MWt의 1 %는 40 MW, 250 MWt의 1 %는 2.6 MW. <b>15배</b> 차이</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 1120 330" role="img" aria-label="정지 후 시간에 따른 붕괴열 비율 곡선과 세 노형의 절대 붕괴열 비교">
+    <g id="dk-ax"></g>
+    <path id="dk-c" d="" fill="none" stroke="var(--cool)" stroke-width="2.4"/>
+    <line id="dk-v" y1="292" y2="40" stroke="var(--hot)" stroke-width="1.2"/>
+    <circle id="dk-p" r="6.5" fill="var(--hot)"/>
+    <text x="300" y="18" text-anchor="middle" class="lbl b">붕괴열 / 정격 열출력</text>
+    <text x="860" y="18" text-anchor="middle" class="lbl b">붕괴열 절대량 (MW, 로그 눈금)</text>
+    <g id="dk-bars"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">정지 후 경과</span><span class="v" id="dk-t">1<small>시간</small></span></div>
+    <div class="readout hi"><span class="k">정격 대비 비율</span><span class="v" id="dk-f">1.05<small>%</small></span></div>
+    <div class="ctl"><label>시간 <span id="dk-s">1 시간</span></label>
+      <input type="range" id="dk-sl" min="0" max="600" step="1" value="257"></div>
+    <div class="src">1 초 → 1 주. 로그 눈금이라 슬라이더 한 칸이 뒤로 갈수록 긴 시간을 뜻한다.</div>
+  </div>
+</div>`,
+init(el){
+  const SV='http://www.w3.org/2000/svg';
+  const LX=t=>70+(Math.log10(t))/6*450;               // 1 .. 1e6 s → 70..520
+  const LY=f=>292-(Math.log10(f)-Math.log10(0.1))/(Math.log10(20)-Math.log10(0.1))*252;
+  const BX=mw=>640+(Math.log10(Math.max(mw,0.1))+1)/(Math.log10(300)+1)*430;
+  let ax='';
+  [[1,'1 s'],[60,'1 분'],[3600,'1 시간'],[86400,'1 일'],[604800,'1 주']].forEach(d=>{
+    const x=LX(d[0]); ax+=`<line x1="${x}" y1="292" x2="${x}" y2="40" class="grid"/>`
+      +`<text x="${x}" y="312" class="lbl" text-anchor="middle">${d[1]}</text>`; });
+  [0.1,1,10].forEach(f=>{ const y=LY(f);
+    ax+=`<line x1="70" y1="${y}" x2="520" y2="${y}" class="grid"/>`
+      +`<text x="62" y="${y+4}" class="lbl" text-anchor="end">${f} %</text>`; });
+  ax+='<line x1="70" y1="292" x2="520" y2="292" class="axis"/><line x1="70" y1="292" x2="70" y2="34" class="axis"/>';
+  [0.1,1,10,100].forEach(m=>{ const x=BX(m);
+    ax+=`<line x1="${x}" y1="60" x2="${x}" y2="300" class="grid"/>`
+      +`<text x="${x}" y="318" class="lbl" text-anchor="middle">${m}</text>`; });
+  el.querySelector('#dk-ax').innerHTML=ax;
+  let d=''; for(let i=0;i<=300;i++){ const t=Math.pow(10,i/300*6);
+    d+=(d?'L':'M')+LX(t).toFixed(1)+','+LY(decay(t)*100).toFixed(1); }
+  el.querySelector('#dk-c').setAttribute('d',d);
+  const REA=[['APR1400',3983,'var(--ink-2)'],['BWRX-300',870,'var(--amber)'],['NuScale NPM',250,'var(--ok)']];
+  const bg=el.querySelector('#dk-bars'); const bars=[];
+  REA.forEach((r,i)=>{ const y=110+i*62;
+    bg.insertAdjacentHTML('beforeend',
+      `<text x="640" y="${y-10}" class="lbl b">${r[0]} · ${fmt(r[1])} MWt</text>`
+      +`<rect x="640" y="${y}" height="22" width="0" fill="${r[2]}" opacity=".85" data-b="${i}"/>`
+      +`<text x="646" y="${y+40}" class="val" fill="${r[2]}" data-v="${i}"></text>`); });
+  const sl=el.querySelector('#dk-sl'), vl=el.querySelector('#dk-v'), pt=el.querySelector('#dk-p');
+  function upd(v){
+    const t=Math.pow(10,v/600*6), f=decay(t);
+    vl.setAttribute('x1',LX(t));vl.setAttribute('x2',LX(t));
+    vl.setAttribute('y2',LY(f*100));
+    pt.setAttribute('cx',LX(t));pt.setAttribute('cy',LY(f*100));
+    const lab = t<90? fmt(t,0)+' 초' : t<5400? fmt(t/60,0)+' 분' : t<172800? fmt(t/3600,1)+' 시간' : fmt(t/86400,1)+' 일';
+    el.querySelector('#dk-t').innerHTML=lab.split(' ')[0]+'<small>'+lab.split(' ')[1]+'</small>';
+    el.querySelector('#dk-f').innerHTML=(f*100).toFixed(2)+'<small>%</small>';
+    el.querySelector('#dk-s').textContent=lab;
+    REA.forEach((r,i)=>{ const mw=f*r[1];
+      el.querySelector(`[data-b="${i}"]`).setAttribute('width',Math.max(0,BX(mw)-640));
+      el.querySelector(`[data-v="${i}"]`).textContent=(mw>=10?fmt(mw,0):mw.toFixed(2))+' MW'; });
+  }
+  sl.oninput=()=>upd(+sl.value); upd(257);
+  if(RM) return;
+  const c=el.querySelector('#dk-c'), L=c.getTotalLength();
+  c.style.strokeDasharray=L;c.style.strokeDashoffset=L;
+  c.animate([{strokeDashoffset:L},{strokeDashoffset:0}],{duration:900,fill:'forwards'});
+  raf(t=>{ if(t<1.1||t>4.6) return; const u=(t-1.1)/3.5; sl.value=Math.round(u*600); upd(+sl.value); });
+}});
+
+S({tag:'NATURAL CIRCULATION', ov:'자연순환 — 구동수두 인터랙티브',
+src:'<b>계산</b> Δp = (ρ_c − ρ_h) g H, u = √[2Δp / ρ(fL/D + ΣK)] · 압축수 밀도 근사(10~16 MPa) · 유로 K = 25, 단면적 2 m², 저온측 250 °C 기준. 펌프 양정 600 kPa는 대형 PWR의 개념적 대표값',
+html:`<h2 class="t">펌프가 없으면 <em>밀도차</em>가 밀어야 한다 — 그 힘은 얼마인가</h2>
+<ul class="b">
+  <li>열중심 높이차 <code>H</code>와 온도차 <code>ΔT</code>가 만드는 부력이 유일한 구동력</li>
+  <li>구동수두가 작으니 <b>유량도 작다</b> → 같은 출력을 빼려면 노심 출입구 <b class="hot">온도차가 커진다</b></li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 700 340" role="img" aria-label="자연순환 루프의 구동수두와 유속이 높이차·온도차에 따라 변하는 모습">
+    <path id="nc-p" d="M260,300 L260,90 L470,90 L470,300 Z" fill="none" stroke="var(--rule)" stroke-width="11"/>
+    <rect x="222" y="238" width="76" height="74" rx="4" fill="var(--hot)"/>
+    <text x="260" y="282" text-anchor="middle" font-size="13" fill="#fff" font-family="var(--sans)">노심</text>
+    <rect x="432" y="72" width="76" height="96" rx="4" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.5"/>
+    <text x="470" y="126" text-anchor="middle" class="lbl" fill="var(--cool)">열교환기</text>
+    <line id="nc-h" x1="150" x2="150" stroke="var(--ok)" stroke-width="1.6"/>
+    <path id="nc-h1" d="" stroke="var(--ok)" stroke-width="1.6"/>
+    <text id="nc-ht" x="140" y="190" text-anchor="end" class="val" fill="var(--ok)">H</text>
+    <text x="365" y="72" text-anchor="middle" class="lbl" fill="var(--hot)">뜨거운 쪽 (가벼움)</text>
+    <text x="365" y="326" text-anchor="middle" class="lbl" fill="var(--cool)">차가운 쪽 (무거움)</text>
+    <g id="nc-cmp">
+      <text x="560" y="200" class="lbl b">구동 압력 비교</text>
+      <rect x="560" y="212" width="110" height="16" fill="var(--ink-3)" opacity=".5"/>
+      <text x="560" y="246" class="lbl">대형 PWR 펌프 600 kPa</text>
+      <rect id="nc-bar" x="560" y="262" width="4" height="16" fill="var(--ok)"/>
+      <text id="nc-bart" x="560" y="296" class="lbl" fill="var(--ok)">자연순환</text>
+    </g>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout good"><span class="k">구동수두 Δp</span><span class="v" id="nc-dp">11.3<small>kPa</small></span></div>
+    <div class="readout hi"><span class="k">자연순환 유속</span><span class="v" id="nc-u">0.87<small>m/s</small></span></div>
+    <div class="readout warn"><span class="k">노심 ΔT · 250 MWt</span><span class="v" id="nc-dt">36<small>K</small></span></div>
+    <div class="ctl"><label>열중심 높이차 <span id="nc-hs">10.0 m</span></label>
+      <input type="range" id="nc-sh" min="2" max="14" step="0.2" value="10"></div>
+    <div class="ctl"><label>노심 출입구 온도차 <span id="nc-ts">67 K</span></label>
+      <input type="range" id="nc-st" min="20" max="110" step="1" value="67"></div>
+  </div>
+</div>`,
+init(el){
+  const p=el.querySelector('#nc-p'), f=flow(p,{n:16,speed:0.12,r:4.2,color:'var(--cool)'});
+  const sh=el.querySelector('#nc-sh'), stt=el.querySelector('#nc-st');
+  const hl=el.querySelector('#nc-h'), h1=el.querySelector('#nc-h1');
+  let target=0.12;
+  function upd(){
+    const H=+sh.value, dT=+stt.value, Tc=250;
+    const drho=rhoW(Tc)-rhoW(Tc+dT), dp=drho*9.81*H, u=Math.sqrt(2*dp/(750*25));
+    const mdot=750*u*2, dTc=250e6/(mdot*5300);
+    el.querySelector('#nc-dp').innerHTML=(dp/1000).toFixed(1)+'<small>kPa</small>';
+    el.querySelector('#nc-u').innerHTML=u.toFixed(2)+'<small>m/s</small>';
+    el.querySelector('#nc-dt').innerHTML=fmt(dTc,0)+'<small>K</small>';
+    el.querySelector('#nc-hs').textContent=H.toFixed(1)+' m';
+    el.querySelector('#nc-ts').textContent=dT+' K';
+    // 높이 치수선 (H = 2..14 m → 화면 210 px 내에서)
+    const y0=290, y1=290-(H/14)*200;
+    hl.setAttribute('y1',y0);hl.setAttribute('y2',y1);
+    h1.setAttribute('d',`M142,${y0} H158 M142,${y1} H158`);
+    el.querySelector('#nc-ht').setAttribute('y',(y0+y1)/2+5);
+    el.querySelector('#nc-ht').textContent='H '+H.toFixed(1)+' m';
+    const w=Math.max(3,(dp/1000)/600*110);
+    el.querySelector('#nc-bar').setAttribute('width',w);
+    el.querySelector('#nc-bart').textContent='자연순환 '+(dp/1000).toFixed(1)+' kPa';
+    target=0.030+u*0.115;
+  }
+  sh.oninput=upd; stt.oninput=upd; upd();
+  raf(()=>{ f.speed=lerp(f.speed,target,0.08); });
+  if(RM) return;
+  raf(t=>{ if(t>2.4) return; const u=clamp(t/2.2,0,1);
+    sh.value=(lerp(3,10,u)).toFixed(1); stt.value=Math.round(lerp(30,67,u)); upd(); });
+}});
+
+S({tag:'THERMAL INERTIA', ov:'열관성 — 5배 느리게 데워진다',
+src:'<b>계산</b> dT/dt = P_d /(M c_p), c_p = 5.3 kJ/(kg·K), 정지 1시간 후 붕괴열(SMR 2.6 MW / 대형로 41.8 MW) 기준. 냉각이 <b>완전히 끊긴</b> 가장 보수적인 상한이며 실제로는 용기 열손실과 잔열제거계통이 함께 작동한다',
+html:`<h2 class="t">대처시간이 길다는 말의 <em>물리적 내용</em></h2>
+<ul class="b">
+  <li>붕괴열이 적고 물이 많으면 온도가 <b>천천히</b> 오른다 — 그 느림이 운전원과 피동계통이 쓰는 시간</li>
+  <li>SMR <code>17.7 K/h</code> vs 대형 경수로 <code>94.6 K/h</code> — <b class="ok">약 5배</b></li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 1120 320" role="img" aria-label="냉각이 끊긴 뒤 SMR과 대형 경수로의 1차계통 온도 상승 속도 비교">
+    <g id="ti-ax"></g>
+    <polyline id="ti-a" points="" fill="none" stroke="var(--ok)" stroke-width="3"/>
+    <polyline id="ti-b" points="" fill="none" stroke="var(--hot)" stroke-width="3"/>
+    <line id="ti-sat" x1="120" x2="1030" stroke="var(--amber)" stroke-width="1.2" stroke-dasharray="6 5"/>
+    <text id="ti-satt" x="1030" class="lbl" fill="var(--amber)" text-anchor="end">포화온도 약 330 °C (12.8 MPa)</text>
+    <circle id="ti-pa" r="6" fill="var(--ok)"/><circle id="ti-pb" r="6" fill="var(--hot)"/>
+    <text x="140" y="40" class="lbl" fill="var(--ok)">250 MWt 일체형 SMR · 1차계통 물 100 t</text>
+    <text x="140" y="62" class="lbl" fill="var(--hot)">3,983 MWt 대형 경수로 · 1차계통 물 300 t</text>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout good"><span class="k">SMR 온도</span><span class="v" id="ti-ta">250<small>°C</small></span></div>
+    <div class="readout warn"><span class="k">대형 경수로 온도</span><span class="v" id="ti-tb">250<small>°C</small></span></div>
+    <div class="readout"><span class="k">경과 시간</span><span class="v" id="ti-cl">0.0<small>시간</small></span></div>
+    <div class="src">두 곡선이 같은 포화온도 선에 닿는 데 걸리는 시간의 차이가 곧 <b>대처시간의 차이</b>다.</div>
+  </div>
+</div>`,
+init(el){
+  const X=h=>120+h/3.2*910, Y=T=>270-(T-250)/110*220;
+  let ax='<line x1="120" y1="270" x2="1035" y2="270" class="axis"/><line x1="120" y1="270" x2="120" y2="70" class="axis"/>';
+  [0,1,2,3].forEach(h=>{ ax+=`<line x1="${X(h)}" y1="270" x2="${X(h)}" y2="76" class="grid"/>`
+    +`<text x="${X(h)}" y="292" class="lbl" text-anchor="middle">${h} 시간</text>`; });
+  [250,290,330,350].forEach(T=>{ ax+=`<text x="112" y="${Y(T)+4}" class="lbl" text-anchor="end">${T} °C</text>`; });
+  ax+='<text x="1035" y="310" class="lbl" text-anchor="end">냉각이 끊긴 뒤 경과시간</text>';
+  el.querySelector('#ti-ax').innerHTML=ax;
+  el.querySelector('#ti-sat').setAttribute('y1',Y(330));
+  el.querySelector('#ti-sat').setAttribute('y2',Y(330));
+  el.querySelector('#ti-satt').setAttribute('y',Y(330)-8);
+  const RA=17.7, RB=94.6;
+  const A=el.querySelector('#ti-a'), B=el.querySelector('#ti-b'),
+        pa=el.querySelector('#ti-pa'), pb=el.querySelector('#ti-pb');
+  function draw(h){
+    const ha=Math.min(h,(330-250)/RA), hb=Math.min(h,(330-250)/RB);
+    A.setAttribute('points',poly([[X(0),Y(250)],[X(ha),Y(250+RA*ha)]]));
+    B.setAttribute('points',poly([[X(0),Y(250)],[X(hb),Y(250+RB*hb)]]));
+    pa.setAttribute('cx',X(ha));pa.setAttribute('cy',Y(250+RA*ha));
+    pb.setAttribute('cx',X(hb));pb.setAttribute('cy',Y(250+RB*hb));
+    el.querySelector('#ti-ta').innerHTML=fmt(250+RA*ha,0)+'<small>°C</small>';
+    el.querySelector('#ti-tb').innerHTML=fmt(250+RB*hb,0)+'<small>°C</small>';
+    el.querySelector('#ti-cl').innerHTML=h.toFixed(1)+'<small>시간</small>';
+  }
+  if(RM){ draw(3.2); return; }
+  draw(0);
+  raf(t=>{ const c=(t%9)/9*3.2; draw(c); });
+}});
+</script>
+<script>
+SECT('03 · SMR의 쟁점');
+S({bare:true, cls:'div', ov:'§03 SMR의 쟁점',
+html:`<div class="no">03</div><h2>SMR의 쟁점</h2><div class="ln"></div>
+<p>경제성 · 규제 · 안전 · 실현성. 지금 무엇이 해결되었고 무엇이 남았는가.
+이 장의 모든 현황은 <b>2026년 9월 기준</b>이며, 그 시점을 밝히지 않은 서술은 반년 뒤 틀린 문장이 된다.</p>`});
+
+S({tag:'ECONOMY · FOAK', ov:'FOAK의 벽 — 실적치와 목표치',
+src:'<b>출처</b> WNISR, “Ontario’s Darlington SMR project to cost nearly $21 billion” (2025) · World Nuclear News, “Final investment decision taken for Romania’s SMRs” (2026) · IEA, <i>The Path to a New Era for Nuclear Energy</i> (2025). <b>유의</b> 사업비 포함 범위(송전·부지·금융비용)와 통화가 서로 달라 단순 비교는 주의',
+html:`<h2 class="t">저감 인자는 전부 <em>반복</em>을 전제한다 — 그런데 아직 <s>FOAK뿐</s>이다</h2>
+<ul class="b">
+  <li>Darlington BWRX-300 4기 <code>C$20.9억</code> · 약 1,200 MWe → kW당 <b class="hot">약 C$17,400</b></li>
+  <li>Doicești NuScale 6모듈 <code>USD 60~70억</code> · 462 MWe → kW당 <b class="hot">약 13,000~15,200 USD</b></li>
+  <li>IEA 2040년 목표는 미국·유럽 <code>USD 4,500/kW</code> · LCOE <code>60~80 USD/MWh</code></li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 300" role="img" aria-label="SMR 실적 사업비와 IEA 2040년 목표 단가 비교">
+  <g id="fk-ax"></g>
+  <g id="fk-bars"></g>
+</svg>
+</div></div>`,
+init(el){
+  const X=v=>230+v/18000*820;
+  let ax='<line x1="230" y1="248" x2="1060" y2="248" class="axis"/>';
+  [0,4500,9000,13500,18000].forEach(v=>{ ax+=`<line x1="${X(v)}" y1="40" x2="${X(v)}" y2="248" class="grid"/>`
+    +`<text x="${X(v)}" y="270" class="lbl" text-anchor="middle">${fmt(v)}</text>`; });
+  ax+='<text x="1060" y="292" class="lbl" text-anchor="end">kW당 자본비 (현지 통화)</text>';
+  ax+=`<line x1="${X(4500)}" y1="34" x2="${X(4500)}" y2="248" stroke="var(--ok)" stroke-width="1.6" stroke-dasharray="5 4"/>`
+     +`<text x="${X(4500)+10}" y="30" class="lbl" fill="var(--ok)">IEA 2040년 목표 4,500</text>`;
+  el.querySelector('#fk-ax').innerHTML=ax;
+  const B=[['Darlington · BWRX-300 4기',17400,'C$','var(--hot)'],
+           ['Doicești · NuScale 6모듈',14100,'USD','var(--hot)'],
+           ['IEA 2040년 목표',4500,'USD','var(--ok)']];
+  const g=el.querySelector('#fk-bars');
+  B.forEach((b,i)=>{ const y=62+i*62;
+    g.insertAdjacentHTML('beforeend',
+      `<text x="218" y="${y+22}" class="lbl b" text-anchor="end">${b[0]}</text>`
+      +`<rect x="230" y="${y}" height="30" width="0" fill="${b[3]}" opacity=".8" data-b="${i}"/>`
+      +`<text x="0" y="${y+21}" class="val" fill="${b[3]}" data-t="${i}"></text>`); });
+  function set(k){ B.forEach((b,i)=>{ const w=X(b[1]*k)-230;
+    el.querySelector(`[data-b="${i}"]`).setAttribute('width',Math.max(0,w));
+    const t=el.querySelector(`[data-t="${i}"]`);
+    t.setAttribute('x',230+w+12); t.textContent=b[2]+' '+fmt(b[1]*k); }); }
+  if(RM){ set(1); return; }
+  set(0); raf(t=>{ const u=clamp(t/1.3,0,1); set(1-Math.pow(1-u,3)); });
+}});
+
+S({tag:'REGULATION', ov:'규제 — 아직 만들어지는 중',
+src:'<b>출처</b> IAEA, “Five Reports of the SMR Regulators’ Forum Published” · IAEA, “SMR Platform and NHSI” · 원자력안전위원회 「SMR 규제체계 구축 로드맵(안)」(2026-02-12) · 에너지데일리 (2026-08-28)',
+html:`<h2 class="t">기존 규제는 <em>대형 경수로</em>를 전제로 만들어졌다</h2>
+<ul class="b">
+  <li>격납 크기 · 비상계획구역(EPZ) 반경 · 운전원 정원 · 다수호기 취급 — 전부 대형로 기준</li>
+  <li>국내 i-SMR 심사에서 <b class="amb">모듈 설계와 피동안전계통의 안전성</b>이 중점 검토 대상으로 명시됨</li>
+</ul>
+<div class="body">
+  <div class="fig" style="justify-content:flex-start">
+    <table class="d sm">
+      <tr><th style="width:30%">활동</th><th style="width:16%">시작</th><th>현재 상태 (2026년 9월)</th></tr>
+      <tr><td>SMR Regulators’ Forum</td><td class="n">2015</td><td>Phase 1 등급별 접근·심층방어·EPZ → Phase 2 인허가·피동 설계특성 → Phase 3 보고서 5건 → <b>Phase 4 진행 중</b></td></tr>
+      <tr><td>IAEA NHSI</td><td class="n">2022</td><td>규제 트랙(중복 심사 축소) + 산업 트랙(표준화) · <b>Phase II 이행 단계</b></td></tr>
+      <tr class="mark"><td>원안위 SMR 규제체계 로드맵</td><td class="n">2026.2</td><td>2030년까지 SMR 포괄 인허가 체계 구축 목표</td></tr>
+      <tr class="mark"><td>i-SMR 표준설계인가(SDA)</td><td class="n">2026.2</td><td>신청 완료 → 2026.8 KINS 심사계획 보고 · 법정 24개월 · <b>인가 목표 2028년</b></td></tr>
+      <tr><td>SMART100 SDA</td><td class="n">2019.12</td><td><b class="ok">2024년 9월 26일 취득 완료</b></td></tr>
+    </table>
+  </div>
+  <div class="side">
+    <blockquote class="q">규제가 “아직 없다”가 아니라 <b>“대형로용은 있고 SMR용은 만드는 중”</b>이다.
+      설계자는 없는 규정을 기다리는 대신 <b>왜 이 설계가 기존 요건을 만족하는지</b>를 스스로 논증해야 한다.
+      <span class="cite">→ 4장 요건, 5장 ESF 설계특성</span></blockquote>
+  </div>
+</div>`});
+
+S({tag:'STATUS · 2026.09', ov:'인허가·건설 타임라인',
+src:'<b>출처</b> NRC 보도자료(2025) · World Nuclear News(2024·2026) · CNSC·OPG 공개자료 · IAEA SMR Booklet 2022 · EconoJournal(2026). <b>목표 시점은 사업자 발표값</b>이므로 변동 가능성이 크다',
+html:`<h2 class="t">지금 어디까지 왔는가 — <em>붉은 선이 현재</em></h2>
+<ul class="b">
+  <li>전력 생산에 가장 가까운 것은 <b class="ok">BWRX-300</b> — 2025년 4월 G7 최초 건설허가, 2026년 4월 운영허가 신청·토건 착수</li>
+  <li>CAREM-25는 기술이 아니라 <b class="hot">자금·조직의 연속성</b> 때문에 멈췄다</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 372" role="img" aria-label="주요 SMR 사업의 인허가와 건설 일정, 2026년 9월 현재 시점 표시">
+  <g id="tl-ax"></g><g id="tl-rows"></g>
+  <line id="tl-now" y1="24" y2="330" stroke="var(--hot)" stroke-width="1.8"/>
+  <text id="tl-nowt" y="18" class="lbl" fill="var(--hot)" text-anchor="middle">2026.9</text>
+</svg>
+</div></div>`,
+init(el){
+  const X=y=>180+(y-2012)/25*880;
+  let ax='<line x1="180" y1="330" x2="1062" y2="330" class="axis"/>';
+  [2015,2020,2025,2030,2035].forEach(y=>{ ax+=`<line x1="${X(y)}" y1="30" x2="${X(y)}" y2="330" class="grid"/>`
+    +`<text x="${X(y)}" y="352" class="lbl" text-anchor="middle">${y}</text>`; });
+  el.querySelector('#tl-ax').innerHTML=ax;
+  const R=[
+    ['NuScale VOYGR',2020.7,2033,'var(--cool)',[[2020.7,'US600 DC',1],[2025.4,'US460 SDA',-1],[2026.1,'루마니아 FID',1],[2033,'상업운전 목표',-1]]],
+    ['BWRX-300 · Darlington',2025.3,2030.9,'var(--ok)',[[2025.3,'건설허가',1],[2026.3,'운영허가 신청',-1],[2030.9,'계통연계 목표',1]]],
+    ['SMART100',2024.7,2024.7,'var(--amber)',[[2024.7,'표준설계인가 취득',1]]],
+    ['i-SMR',2026.2,2035,'var(--hot)',[[2026.2,'SDA 신청',1],[2028.5,'SDA 목표',-1],[2035,'1호기 준공 목표',1]]],
+    ['RITM-200N',2023.3,2028,'var(--ink-2)',[[2023.3,'건설허가',1],[2028,'가동 목표',-1]]],
+    ['CAREM-25',2014,2025,'var(--ink-3)',[[2014,'착공',1],[2025,'공사 중단',-1]]]];
+  const g=el.querySelector('#tl-rows'); const marks=[];
+  R.forEach((r,i)=>{ const y=56+i*47;
+    g.insertAdjacentHTML('beforeend',
+      `<text x="170" y="${y+5}" class="lbl b" text-anchor="end">${r[0]}</text>`
+      +`<line x1="${X(r[1])}" y1="${y}" x2="${X(r[2])}" y2="${y}" stroke="${r[3]}" stroke-width="5" opacity=".25"/>`);
+    r[4].forEach(m=>{
+      const mx=X(m[0]);
+      g.insertAdjacentHTML('beforeend',
+        `<circle cx="${mx}" cy="${y}" r="5.5" fill="${r[3]}" opacity="0" data-y="${m[0]}"/>`
+        +`<text x="${mx}" y="${y+(m[2]>0?-13:20)}" class="lbl" font-size="12.5" fill="${r[3]}" text-anchor="middle" opacity="0" data-y="${m[0]}">${m[1]}</text>`);
+    });
+  });
+  const now=el.querySelector('#tl-now'), nowt=el.querySelector('#tl-nowt');
+  const all=[...g.querySelectorAll('[data-y]')];
+  function at(year){
+    now.setAttribute('x1',X(year));now.setAttribute('x2',X(year));nowt.setAttribute('x',X(year));
+    all.forEach(e=>e.setAttribute('opacity', (+e.dataset.y)<=year+0.05 ?1:0.22));
+  }
+  if(RM){ at(2026.7); return; }
+  at(2012); raf(t=>{ const u=clamp(t/3.2,0,1); at(lerp(2012,2026.7,1-Math.pow(1-u,2.2))); });
+}});
+
+/* ================================================================
+   SECTION 04 — 안전요건의 뼈대
+   ================================================================ */
+SECT('04 · 안전요건의 뼈대');
+S({bare:true, cls:'div', ov:'§04 안전요건의 뼈대',
+html:`<div class="no">04</div><h2>안전요건의 뼈대</h2><div class="ln"></div>
+<p>계통 하나하나를 보기 전에, 그 계통들이 왜 존재하는지를 규정하는 상위 틀을 세운다.
+기본안전기능 · 심층방어 · 단일고장기준 — 이 세 개념은 이후 모든 장에서 반복해 등장한다.</p>`});
+
+S({tag:'DEFENCE IN DEPTH', ov:'심층방어 5단계 — 사고가 어디서 멈추는가',
+src:'<b>출처</b> IAEA, <i>Safety of Nuclear Power Plants: Design</i>, SSR-2/1 (Rev.1) Requirement 7 — “The levels of defence in depth shall be <b>independent as far as is practicable</b>.”',
+html:`<h2 class="t">사고는 <em>겹</em>을 하나씩 뚫는다 — 어디서 멈추게 할 것인가</h2>
+<ul class="b">
+  <li>공학적안전설비(ESF)가 지키는 곳은 <b class="cool">Level 3</b>. 이 교재가 다루는 범위다</li>
+  <li>단계를 나눠도 <b class="hot">같은 원인으로 함께 죽으면 겹이 아니다</b> — 후쿠시마가 그랬다</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 860 330" role="img" aria-label="심층방어 5단계를 사고가 통과하는 모습. 정상 설계에서는 Level 3의 공학적안전설비에서 멈춘다">
+    <g id="dd-lv"></g>
+    <circle id="dd-tok" cx="700" cy="6" r="11" fill="var(--hot)"/>
+    <text id="dd-toklbl" x="700" y="-8" class="lbl" fill="var(--hot)" text-anchor="middle">사고</text>
+    <text id="dd-res" x="430" y="318" text-anchor="middle" font-family="var(--sans)" font-size="19"
+          font-weight="600" fill="var(--ok)" opacity="0"></text>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="btnrow" style="flex-direction:column;gap:7px">
+      <button class="btn act" id="dd-n">정상 설계 — 재생</button>
+      <button class="btn danger" id="dd-f">후쿠시마 — 공통원인 재생</button>
+    </div>
+    <blockquote class="q" style="border-left-color:var(--hot)">지진과 쓰나미라는 <b>하나의 사건</b>이 외부전원(Level 1~2 지원),
+      비상디젤발전기(Level 3), 최종 열침원(Level 3~4)을 <b>동시에</b> 무력화했다.
+      <span class="cite">→ 그래서 SMR은 전원을 필요로 하지 않는 계통을 강조한다</span></blockquote>
+  </div>
+</div>`,
+init(el){
+  const LV=[['Level 1','정상운전 이탈 예방','보수적 설계 · 여유도 · 품질보증','var(--cool)'],
+    ['Level 2','이탈의 감지와 제어','제어·감시계통 · 운전절차서','var(--cool)'],
+    ['Level 3','설계기준사고 제어','공학적안전설비 (ESF)','var(--ok)'],
+    ['Level 4','중대사고 완화','중대사고 관리설비 · 격납 건전성','var(--amber)'],
+    ['Level 5','소외 영향 완화','비상대응 · 방재계획','var(--ink-3)']];
+  const g=el.querySelector('#dd-lv');
+  LV.forEach((l,i)=>{ const y=18+i*56;
+    g.insertAdjacentHTML('beforeend',
+      `<g data-l="${i}"><rect x="30" y="${y}" width="800" height="42" fill="var(--panel)" stroke="${l[3]}" stroke-width="${i===2?2:1.2}"/>`
+      +`<text x="48" y="${y+26}" font-family="var(--mono)" font-size="14" fill="${l[3]}">${l[0]}</text>`
+      +`<text x="140" y="${y+26}" font-family="var(--sans)" font-size="17" fill="var(--ink)">${l[1]}</text>`
+      +`<text x="820" y="${y+26}" class="lbl" text-anchor="end">${l[2]}</text></g>`); });
+  const tok=el.querySelector('#dd-tok'), tl=el.querySelector('#dd-toklbl'), res=el.querySelector('#dd-res');
+  const rows=[...g.querySelectorAll('[data-l]')];
+  let mode='n', T=0, run=false;
+  function start(m){ mode=m; T=0; run=true; res.setAttribute('opacity',0);
+    rows.forEach(r=>{ r.setAttribute('opacity',1);
+      r.querySelector('rect').setAttribute('fill','var(--panel)'); });
+    el.querySelector('#dd-n').classList.toggle('act',m==='n');
+    el.querySelector('#dd-f').classList.toggle('act',m==='f'); }
+  el.querySelector('#dd-n').onclick=()=>start('n');
+  el.querySelector('#dd-f').onclick=()=>start('f');
+  if(RM){ tok.setAttribute('cy',18+2*56+21); res.setAttribute('opacity',1);
+    res.textContent='Level 3 공학적안전설비에서 정지'; return; }
+  start('n');
+  raf(()=>{ if(!run) return; T+=1/60;
+    const stopAt = mode==='n'? 2 : 4;
+    if(mode==='f' && T>0.35){ [0,1,2,3].forEach(i=>{
+      rows[i].setAttribute('opacity',0.32);
+      rows[i].querySelector('rect').setAttribute('fill','#1a1010'); }); }
+    const yTarget = 18+stopAt*56+21;
+    const y = Math.min(yTarget, -6 + T*150);
+    tok.setAttribute('cy',y); tl.setAttribute('y',y-18);
+    if(y>=yTarget-0.5){
+      run=false;
+      if(mode==='n'){ res.setAttribute('fill','var(--ok)');
+        res.textContent='Level 3 — 공학적안전설비가 사고를 설계기준 안에서 멈춘다'; }
+      else { res.setAttribute('fill','var(--hot)');
+        res.textContent='단계가 독립이 아니면, 다섯 겹도 한 겹이다'; }
+      res.setAttribute('opacity',1);
+      const r=rows[stopAt].querySelector('rect');
+      r.animate([{strokeWidth:2},{strokeWidth:5},{strokeWidth:2}],{duration:700,iterations:2});
+    }
+  });
+}});
+</script>
+<script>
+S({tag:'SINGLE FAILURE', ov:'단일고장기준 — 원문과 세 가지 함정',
+src:'<b>출처</b> 10 CFR Part 50, Appendix A, “Definitions and Explanations” (eCFR 원문 확인) · IAEA SSR-2/1 (Rev.1) Requirement 25',
+html:`<h2 class="t">하나는 고장 났다고 <em>치고</em> 설계한다 — 단, 세 가지를 정확히</h2>
+<div class="body">
+  <div class="fig" style="justify-content:flex-start;padding-top:4px">
+    <blockquote class="q" style="font-size:15.5px;line-height:1.55">
+      “A single failure means an occurrence which results in the loss of capability of a component to perform its
+      intended safety functions. <b>Multiple failures resulting from a single occurrence are considered to be a
+      single failure.</b> Fluid and electric systems are considered to be designed against an assumed single failure
+      if neither (1) a single failure of any <b>active</b> component (assuming passive components function properly)
+      nor (2) a single failure of a <b>passive</b> component (assuming active components function properly),
+      results in a loss of the capability of the system to perform its safety functions.”
+      <span class="cite">10 CFR 50 Appendix A · Definitions and Explanations</span></blockquote>
+  </div>
+  <div class="side" style="width:420px">
+    <div class="readout"><span class="k">함정 ①</span>
+      <div style="font-size:16px;line-height:1.45;color:var(--ink);font-weight:300;margin-top:4px">
+        단일고장기준은 <b>GDC 본문이 아니라</b> 부록 서두의 <b class="amb">정의</b>에 있다. 조문 인용 시 가장 흔히 틀리는 지점.</div></div>
+    <div class="readout"><span class="k">함정 ②</span>
+      <div style="font-size:16px;line-height:1.45;color:var(--ink);font-weight:300;margin-top:4px">
+        능동 고장과 피동 고장을 <b class="cool">각각 따로</b> 가정한다. 둘을 <b>동시에</b> 가정하지 않는다.</div></div>
+    <div class="readout"><span class="k">함정 ③</span>
+      <div style="font-size:16px;line-height:1.45;color:var(--ink);font-weight:300;margin-top:4px">
+        하나의 사건에서 비롯된 다중 고장은 <b>단일 고장으로 센다</b>. 전원반 하나가 죽어 밸브 여럿이 멈춰도 단일 고장.</div></div>
+    <div class="readout warn"><span class="k">아직 미정</span>
+      <div style="font-size:16px;line-height:1.45;color:var(--ink);font-weight:300;margin-top:4px">
+        유체계통 <b>피동 부품</b>의 단일고장 적용 조건은 원문에 <span class="mono hot">under development</span>로 남아 있다.
+        피동계통에 기대는 SMR이 규제상 새 질문을 만드는 지점.</div></div>
+  </div>
+</div>`});
+
+S({tag:'PLANT STATES', ov:'플랜트 상태 — 빈도가 낮을수록 허용 결과가 느슨해진다',
+src:'<b>출처</b> IAEA SSR-2/1 (Rev.1) Requirement 19(설계기준사고)·Requirement 20(설계확장조건). 빈도 구간은 관례적 크기이며 규제·설계마다 경계가 다르다',
+html:`<h2 class="t">무엇에 대비하는가 — <em>빈도</em>가 <em>허용 결과</em>를 정한다</h2>
+<ul class="b">
+  <li>매년 일어날 수 있는 이탈에서 연료가 손상되면 안 되지만, 백만 년에 한 번은 <b>격납만 지키면</b> 된다</li>
+  <li>심층방어 단계 구분(앞 슬라이드)이 이 <b class="cool">빈도–결과 축</b>과 정확히 대응한다</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 330" role="img" aria-label="발생 빈도에 따른 플랜트 상태 구분과 각 구간에서 허용되는 결과">
+  <g id="ps-ax"></g><g id="ps-b"></g>
+</svg>
+</div></div>`,
+init(el){
+  const X=e=>120+(-e)/7*900;     // 10^0 .. 10^-7 /yr
+  let ax='<line x1="120" y1="266" x2="1030" y2="266" class="axis"/>';
+  for(let e=0;e>=-7;e--){ ax+=`<line x1="${X(e)}" y1="40" x2="${X(e)}" y2="266" class="grid"/>`
+    +`<text x="${X(e)}" y="288" class="lbl" text-anchor="middle">10<tspan dy="-6" font-size="10">${e}</tspan></text>`; }
+  ax+='<text x="1030" y="312" class="lbl" text-anchor="end">발생 빈도 (1/년) — 오른쪽으로 갈수록 드묾</text>';
+  el.querySelector('#ps-ax').innerHTML=ax;
+  const B=[['정상운전',0,-2,'var(--ok)','방사선 방출이 규제 한도 이내',236],
+    ['예상운전과도 · AOO',-2,-4,'var(--cool)','연료설계한계 초과 금지 · 계통 손상 없음',186],
+    ['설계기준사고 · DBA',-4,-6,'var(--amber)','연료 일부 손상 허용 · 방사선 기준 만족',136],
+    ['설계확장조건 · DEC',-6,-7,'var(--hot)','노심용융 포함 · 격납 건전성 유지',86]];
+  const g=el.querySelector('#ps-b');
+  B.forEach((b,i)=>{ const x0=X(b[1]),x1=X(b[2]),y=b[5];
+    g.insertAdjacentHTML('beforeend',
+      `<g data-p="${i}" opacity="0"><rect x="${x0}" y="${y}" width="${x1-x0}" height="${266-y}" fill="${b[3]}" opacity=".12"/>`
+      +`<line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" stroke="${b[3]}" stroke-width="2.5"/>`
+      +`<text x="${(x0+x1)/2}" y="${y-26}" text-anchor="middle" font-family="var(--sans)" font-size="17" fill="${b[3]}" font-weight="500">${b[0]}</text>`
+      +`<text x="${(x0+x1)/2}" y="${y-8}" text-anchor="middle" class="lbl">${b[4]}</text></g>`); });
+  g.insertAdjacentHTML('beforeend',
+    '<text x="120" y="30" class="lbl b">↑ 허용되는 결과가 느슨해진다</text>');
+  const items=[...g.querySelectorAll('[data-p]')];
+  if(RM){ items.forEach(i=>i.setAttribute('opacity',1)); return; }
+  items.forEach((it,i)=>it.animate([{opacity:0},{opacity:1}],{duration:420,delay:220*i,fill:'forwards'}));
+}});
+
+S({tag:'GDC MAP', ov:'GDC 지도 — 요건이 계통을 부른다',
+src:'<b>출처</b> 10 CFR Part 50, Appendix A(eCFR·Cornell LII 확인). 국내 대응은 「원자로시설 등의 기술기준에 관한 규칙」 제20·23·24·29·30조',
+html:`<h2 class="t">막히면 <em>GDC 원문</em>을 찾아 읽는 것이 가장 빠르다</h2>
+<div class="body col">
+<table class="d sm">
+<tr><th style="width:12%">분류</th><th style="width:9%">GDC</th><th style="width:34%">제목</th><th>요구의 핵심</th></tr>
+<tr><td rowspan="4">설계 원칙</td><td class="n">2</td><td>Design Bases for Protection Against Natural Phenomena</td><td>부지 이력상 가장 심한 자연현상 + 여유도 + 복합효과</td></tr>
+<tr><td class="n">4</td><td>Environmental and Dynamic Effects Design Bases</td><td>파단 반력·비산물·제트 대응. 파단확률이 극히 낮으면 동적효과 배제 가능</td></tr>
+<tr><td class="n">17</td><td>Electric Power Systems</td><td>물리적으로 독립된 외부전원 2회선 + 소내전원</td></tr>
+<tr><td class="n">23</td><td>Protection System Failure Modes</td><td>단선·전원상실 시 <b class="ok">안전한 상태로 실패(fail-safe)</b></td></tr>
+<tr class="mark"><td rowspan="2">반응도</td><td class="n">26</td><td>Reactivity Control System Redundancy and Capability</td><td><b>서로 다른 설계원리의 독립 2계통</b> · stuck rod 가정</td></tr>
+<tr class="mark"><td class="n">27</td><td>Combined Reactivity Control Systems Capability</td><td>ECCS 붕산과 조합해 냉각 가능 상태로 정지·유지</td></tr>
+<tr><td rowspan="2">열 제거</td><td class="n">34</td><td>Residual Heat Removal</td><td>소내전원만 / 소외전원만 <b>각각의 경우</b>에 단일고장 가정</td></tr>
+<tr><td class="n">35</td><td>Emergency Core Cooling</td><td>LOCA 시 충분한 노심냉각 · 금속–물 반응 제한</td></tr>
+<tr><td rowspan="3">격납</td><td class="n">16</td><td>Containment Design</td><td>“essentially leak-tight barrier” 제공</td></tr>
+<tr><td class="n">38</td><td>Containment Heat Removal</td><td>사고 후 압력·온도를 신속히 낮추고 유지</td></tr>
+<tr><td class="n">55·56·57</td><td>Containment Isolation Valves</td><td>관통 배관 격리밸브 <b>네 가지 배열</b> 중 하나 (9장)</td></tr>
+</table>
+</div>`});
+
+/* ================================================================
+   SECTION 05 — 공학적안전설비
+   ================================================================ */
+SECT('05 · 공학적안전설비');
+S({bare:true, cls:'div', ov:'§05 공학적안전설비 (ESF)',
+html:`<div class="no">05</div><h2>공학적안전설비</h2><div class="ln"></div>
+<p>ESF의 정의, 능동과 피동의 구분, 설계가 반드시 갖춰야 할 다섯 가지 성질.
+6~9장의 각 계통을 읽기 위한 공통 어휘를 여기서 확보한다.</p>`});
+
+S({tag:'PASSIVE CATEGORIES', ov:'피동 Category A~D — 어디까지가 피동인가',
+src:'<b>출처</b> IAEA-TECDOC-626, <i>Safety Related Terms for Advanced Nuclear Plants</i> (1991)',
+html:`<h2 class="t">“피동”은 <em>이분법이 아니다</em> — 네 등급으로 갈린다</h2>
+<ul class="b">
+  <li>범주가 오른쪽으로 갈수록 <b class="hot">고장 가능성이 있는 요소</b>가 하나씩 늘어난다</li>
+  <li>실제 SMR의 “피동 안전계통”은 대부분 <b>Category C 또는 D</b> — 피동이라고 고장 나지 않는 게 아니다</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 340" role="img" aria-label="IAEA 피동안전계통 Category A부터 D까지의 구성 요소와 예시">
+  <g id="pc-cols"></g>
+  <text x="560" y="332" text-anchor="middle" class="lbl" fill="var(--hot)">← 완전한 피동 &nbsp;&nbsp;·&nbsp;&nbsp; 움직이는 부품과 개시 신호가 늘어난다 →</text>
+</svg>
+</div></div>`,
+init(el){
+  const C=[['Category A',[0,0,0],'연료피복재 · 압력경계\\n복사 · 전도 냉각','var(--ok)'],
+    ['Category B',[1,0,0],'수조 침수 열교환기\\n자연순환 · 자연대류','var(--cool)'],
+    ['Category C',[1,1,0],'축압기 + 체크밸브\\n안전방출밸브 · 파열판','var(--amber)'],
+    ['Category D',[1,1,1],'중력구동 비상냉각\\n중력낙하 제어봉','var(--hot)']];
+  const LAMP=['작동유체 이동','기계 가동부','개시 신호·저장에너지'];
+  const g=el.querySelector('#pc-cols');
+  C.forEach((c,i)=>{ const x=40+i*272, w=248;
+    let h=`<g data-c="${i}" opacity="0">`
+      +`<rect x="${x}" y="24" width="${w}" height="270" fill="var(--panel)" stroke="${c[3]}" stroke-width="1.6"/>`
+      +`<rect x="${x}" y="24" width="${w}" height="40" fill="${c[3]}"/>`
+      +`<text x="${x+w/2}" y="51" text-anchor="middle" font-family="var(--mono)" font-size="16" fill="#071018" font-weight="600">${c[0]}</text>`;
+    c[1].forEach((on,j)=>{ const y=94+j*38;
+      h+=`<circle cx="${x+26}" cy="${y}" r="7" fill="${on?c[3]:'none'}" stroke="${on?c[3]:'var(--rule)'}" stroke-width="1.6"/>`
+        +`<text x="${x+44}" y="${y+5}" class="lbl" fill="${on?'var(--ink)':'var(--ink-3)'}">${LAMP[j]}</text>`; });
+    h+=`<line x1="${x+18}" y1="216" x2="${x+w-18}" y2="216" stroke="var(--rule)"/>`;
+    c[2].split('\\n').forEach((t,k)=>{
+      h+=`<text x="${x+w/2}" y="${248+k*22}" text-anchor="middle" font-family="var(--sans)" font-size="15" fill="var(--ink-2)">${t}</text>`; });
+    h+='</g>'; g.insertAdjacentHTML('beforeend',h);
+    if(i<3) g.insertAdjacentHTML('beforeend',
+      `<path d="M${x+w+6},159 L${x+w+18},159" stroke="var(--rule)" stroke-width="2"/>`);
+  });
+  const cols=[...g.querySelectorAll('[data-c]')];
+  if(RM){ cols.forEach(c=>c.setAttribute('opacity',1)); return; }
+  cols.forEach((c,i)=>c.animate([{opacity:0},{opacity:1}],{duration:400,delay:200*i,fill:'forwards'}));
+}});
+
+S({tag:'ESF DESIGN', ov:'ESF가 갖춰야 할 다섯 가지 성질',
+src:'<b>왼쪽 두 열</b> 2025-2학기 강의자료 「Safety Requirements for SMR」의 “Design Characteristics of ESF” 항목. <b>오른쪽 열</b>은 10 CFR 50 Appendix A 및 IAEA SSR-2/1 (Rev.1)에서 대응시킨 것',
+html:`<h2 class="t">다섯 가지 성질은 <em>각각 조문</em>을 갖고 있다</h2>
+<ul class="b">
+  <li>조문과 함께 외우면 실무에서 훨씬 쓸모 있음 — “왜 이렇게 만들었나”가 곧 “어느 조문 때문인가”</li>
+</ul>
+<div class="body">
+  <div class="fig" style="justify-content:flex-start">
+  <table class="d">
+    <tr><th style="width:20%">성질</th><th style="width:44%">뜻</th><th>대응 요건</th></tr>
+    <tr><td>다중성 Redundancy</td><td>개별 계열(train)이 각각 요구 기능을 만족할 충분한 용량</td><td class="mono" style="font-size:13.5px">단일고장기준 · GDC 34·35·38</td></tr>
+    <tr><td>다양성 Diversity</td><td>서로 다른 원리·제작사·기술로 <b>공통원인고장</b>을 피함</td><td class="mono" style="font-size:13.5px">GDC 22 · GDC 26 · SSR-2/1 Req.24</td></tr>
+    <tr><td>독립성 Independency</td><td>이중화된 계열이 물리적으로 분리되어 서로 영향 없음</td><td class="mono" style="font-size:13.5px">GDC 22·24 · SSR-2/1 Req.21</td></tr>
+    <tr class="mark"><td>Fail-safe 설계</td><td>실패했을 때의 결과가 <b>안전한 쪽</b>이 되도록 체계적으로</td><td class="mono" style="font-size:13.5px">GDC 23 · SSR-2/1 Req.26</td></tr>
+    <tr><td>인터록 Interlock</td><td>정해진 조건에서만, 또는 조건이 성립하면 반드시 작동</td><td class="mono" style="font-size:13.5px">GDC 21·24</td></tr>
+  </table>
+  </div>
+  <div class="side">
+    <blockquote class="q" style="border-left-color:var(--ok)">
+      <b>Fail-safe의 가장 좋은 예 — 제어봉.</b><br>
+      전원이 끊기면 전자석이 풀리고 제어봉이 <b>중력으로</b> 떨어진다.
+      “전원 상실”이라는 고장이 곧 “정지”라는 안전한 결과가 된다.<br><br>
+      반대로 밀어 넣는 데 전기가 필요한 설계였다면 정전이 곧 <b class="hot">정지 불능</b>이다.
+      <span class="cite">같은 부품, 반대의 논리</span></blockquote>
+  </div>
+</div>`});
+</script>
+<script>
+SECT('06 · 정지계통');
+S({bare:true, cls:'div', ov:'§06 정지계통',
+html:`<div class="no">06</div><h2>정지계통</h2><div class="ln"></div>
+<p>기본안전기능 ①. 반응도를 어떻게 <b>확실히</b> 죽이는가.
+제어봉과 붕산 주입이라는 두 수단이 왜 <b>둘 다</b> 필요한지, 그 요구 성능이 어떤 계산으로 정해지는지.</p>`});
+
+S({tag:'SCRAM', ov:'제어봉 낙하 — S-곡선과 stuck rod',
+src:'<b>계산</b> 코사인 중성자속 분포를 가정한 표준 S-곡선 <span class="mono">ρ(x)/ρ_total = x − sin(2πx)/2π</span> · stuck rod 영향 18 % 손실로 예시. 실제 값은 노심 설계·연소도에 따라 다르다',
+html:`<h2 class="t">삽입 초기와 말기는 <s>효율이 낮다</s> — 그래서 낙하 시간이 요건이 된다</h2>
+<ul class="b">
+  <li>중성자속이 높은 <b>노심 중앙부</b>를 지날 때 반응도가 급격히 들어감 — 곡선이 S자인 이유</li>
+  <li><b class="hot">GDC 26</b> — 최대 반응도가 봉 1개가 <b>삽입되지 않는다</b>는 가정에서도 요구 성능을 만족해야 함</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 1120 320" role="img" aria-label="제어봉이 노심에 떨어지면서 삽입 반응도가 S자 곡선을 그리는 모습과 stuck rod의 영향">
+    <rect x="60" y="60" width="290" height="210" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.5"/>
+    <text x="205" y="48" text-anchor="middle" class="ttl">노심 단면</text>
+    <g id="sc-rods"></g>
+    <g id="sc-ax"></g>
+    <path id="sc-a" d="" fill="none" stroke="var(--cool)" stroke-width="2.8"/>
+    <path id="sc-b" d="" fill="none" stroke="var(--hot)" stroke-width="2.2" stroke-dasharray="6 4"/>
+    <circle id="sc-pa" r="6" fill="var(--cool)"/>
+    <text x="470" y="48" class="lbl b">전 제어봉 삽입</text>
+    <text x="640" y="48" class="lbl" fill="var(--hot)">최대 반응도가 1개 미삽입 (stuck rod)</text>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout hi"><span class="k">낙하 경과</span><span class="v" id="sc-t">0.0<small>초</small></span></div>
+    <div class="readout warn"><span class="k">삽입 반응도 (전체 대비)</span><span class="v" id="sc-r">0<small>%</small></span></div>
+    <div class="btnrow" style="flex-direction:column;gap:7px">
+      <button class="btn act" id="sc-go">원자로 트립 — 재생</button>
+      <button class="btn" id="sc-stuck">stuck rod 가정 켜기</button>
+    </div>
+    <div class="src">전원이 끊기면 전자석이 풀려 <b>중력으로</b> 떨어진다 — GDC 23 fail-safe.</div>
+  </div>
+</div>`,
+init(el){
+  const SV='http://www.w3.org/2000/svg';
+  const X=x=>420+x*640, Y=r=>268-r*208;
+  let ax='<line x1="420" y1="268" x2="1075" y2="268" class="axis"/><line x1="420" y1="268" x2="420" y2="56" class="axis"/>';
+  [0,25,50,75,100].forEach(p=>{ ax+=`<text x="${X(p/100)}" y="290" class="lbl" text-anchor="middle">${p}</text>`;
+    ax+=`<line x1="${X(p/100)}" y1="268" x2="${X(p/100)}" y2="60" class="grid"/>`; });
+  [0,50,100].forEach(p=>{ ax+=`<text x="412" y="${Y(p/100)+4}" class="lbl" text-anchor="end">${p} %</text>`; });
+  ax+='<text x="1075" y="312" class="lbl" text-anchor="end">제어봉 삽입 분율 (%)</text>'
+     +'<text x="420" y="44" class="lbl">삽입 반응도</text>';
+  el.querySelector('#sc-ax').innerHTML=ax;
+  const S=x=>x-Math.sin(2*Math.PI*x)/(2*Math.PI);
+  let da='',db=''; for(let i=0;i<=100;i++){ const x=i/100;
+    da+=(da?'L':'M')+X(x)+','+Y(S(x)); db+=(db?'L':'M')+X(x)+','+Y(S(x)*0.82); }
+  el.querySelector('#sc-a').setAttribute('d',da); el.querySelector('#sc-b').setAttribute('d',db);
+  const rg=el.querySelector('#sc-rods'); const rods=[];
+  for(let i=0;i<5;i++){ const x=88+i*54;
+    rg.insertAdjacentHTML('beforeend',
+      `<rect x="${x}" y="62" width="22" height="200" fill="var(--panel-2)" opacity=".7"/>`);
+    const r=document.createElementNS(SV,'rect');
+    r.setAttribute('x',x);r.setAttribute('width',22);r.setAttribute('y',62);r.setAttribute('height',12);
+    r.setAttribute('fill', i===2?'var(--hot)':'var(--cool)'); rg.appendChild(r); rods.push(r); }
+  rg.insertAdjacentHTML('beforeend','<text x="205" y="288" text-anchor="middle" class="lbl">제어봉 5개 · 가운데가 최대 반응도가</text>');
+  let T=0, run=true, stuck=false;
+  const pa=el.querySelector('#sc-pa');
+  el.querySelector('#sc-go').onclick=()=>{T=0;run=true;};
+  el.querySelector('#sc-stuck').onclick=(e)=>{ stuck=!stuck; e.target.classList.toggle('act',stuck);
+    e.target.textContent = stuck?'stuck rod 가정 끄기':'stuck rod 가정 켜기'; T=0; run=true; };
+  if(RM){ rods.forEach(r=>r.setAttribute('height',200)); return; }
+  raf(()=>{ if(!run) return; T+=1/60;
+    const x=clamp(T/3.0,0,1);
+    rods.forEach((r,i)=>{ const f=(stuck&&i===2)?0.12:x; r.setAttribute('height',12+188*f); });
+    const rho=S(x)*(stuck?0.82:1);
+    pa.setAttribute('cx',X(x));pa.setAttribute('cy',Y(rho));
+    pa.setAttribute('fill',stuck?'var(--hot)':'var(--cool)');
+    el.querySelector('#sc-t').innerHTML=Math.min(T,3).toFixed(1)+'<small>초</small>';
+    el.querySelector('#sc-r').innerHTML=fmt(rho*100,0)+'<small>%</small>';
+    if(T>3.4) run=false;
+  });
+}});
+
+S({tag:'SHUTDOWN MARGIN', ov:'정지여유도 계산기',
+src:'<b>식</b> SDM = ρ<sub>rod,total</sub> − ρ<sub>stuck</sub> − ρ<sub>defect</sub> − ρ<sub>uncertainty</sub> · 요구 최소치는 설계별 기술지침서에서 정해지며 흔히 Δρ 기준 1 % 이상',
+html:`<h2 class="t">정지여유도 — <em>확보한 것에서 깎이는 것</em>을 뺀 나머지</h2>
+<ul class="b">
+  <li>냉각이 진행되면 감속재 밀도가 커져 반응도가 <b class="hot">양의 방향으로 되돌아온다</b>. 그 몫까지 미리 덮어야 함</li>
+  <li>슬라이더를 움직여 각 항이 여유도를 어떻게 깎는지 확인 — 교재 연습문제 6.2의 조건이 기본값</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 780 300" role="img" aria-label="정지여유도 계산 — 전 제어봉 반응도가에서 stuck rod, 냉각 되돌아옴, 불확실도를 뺀 나머지">
+    <g id="sd-bars"></g>
+    <line id="sd-req" x1="60" x2="660" stroke="var(--amber)" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text id="sd-reqt" x="668" class="lbl" fill="var(--amber)" text-anchor="start">요구 ≥ 1 %</text>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout good" id="sd-box"><span class="k">정지여유도 SDM</span><span class="v" id="sd-v">7.34<small>% Δρ</small></span></div>
+    <div class="ctl"><label>전 제어봉 반응도가 <span id="sd-l0">12.0 %</span></label>
+      <input type="range" id="sd-0" min="4" max="18" step="0.1" value="12"></div>
+    <div class="ctl"><label>stuck rod 손실 <span id="sd-l1">18 %</span></label>
+      <input type="range" id="sd-1" min="0" max="40" step="1" value="18"></div>
+    <div class="ctl"><label>냉각 되돌아옴 ρ_defect <span id="sd-l2">2.0 %</span></label>
+      <input type="range" id="sd-2" min="0" max="6" step="0.1" value="2"></div>
+    <div class="ctl"><label>불확실도 여유 <span id="sd-l3">0.5 %</span></label>
+      <input type="range" id="sd-3" min="0" max="2" step="0.1" value="0.5"></div>
+  </div>
+</div>`,
+init(el){
+  const Y=v=>250-v/18*210;
+  const g=el.querySelector('#sd-bars');
+  const req=el.querySelector('#sd-req'), reqt=el.querySelector('#sd-reqt');
+  req.setAttribute('y1',Y(1));req.setAttribute('y2',Y(1));reqt.setAttribute('y',Y(1)+4);
+  function upd(){
+    const t=+el.querySelector('#sd-0').value, s=+el.querySelector('#sd-1').value/100,
+          d=+el.querySelector('#sd-2').value, u=+el.querySelector('#sd-3').value;
+    const loss=t*s, sdm=t-loss-d-u;
+    el.querySelector('#sd-l0').textContent=t.toFixed(1)+' %';
+    el.querySelector('#sd-l1').textContent=Math.round(s*100)+' %';
+    el.querySelector('#sd-l2').textContent=d.toFixed(1)+' %';
+    el.querySelector('#sd-l3').textContent=u.toFixed(1)+' %';
+    el.querySelector('#sd-v').innerHTML=sdm.toFixed(2)+'<small>% Δρ</small>';
+    el.querySelector('#sd-box').className='readout '+(sdm>=1?'good':'warn');
+    const seg=[['확보 · 전 제어봉',t,'var(--cool)'],['− stuck rod',loss,'var(--hot)'],
+      ['− 냉각 되돌아옴',d,'var(--hot)'],['− 불확실도',u,'var(--hot)'],['= SDM',Math.max(sdm,0),sdm>=1?'var(--ok)':'var(--hot)']];
+    let h='<line x1="60" y1="250" x2="660" y2="250" class="axis"/>';
+    seg.forEach((s2,i)=>{ const x=76+i*118, hh=Math.max(2,250-Y(s2[1]));
+      h+=`<rect x="${x}" y="${250-hh}" width="72" height="${hh}" fill="${s2[2]}" opacity=".85"/>`
+        +`<text x="${x+36}" y="${250-hh-10}" text-anchor="middle" class="val" font-size="15" fill="${s2[2]}">${s2[1].toFixed(1)}</text>`
+        +`<text x="${x+36}" y="270" text-anchor="middle" class="lbl">${s2[0]}</text>`; });
+    g.innerHTML=h;
+  }
+  [0,1,2,3].forEach(i=>el.querySelector('#sd-'+i).oninput=upd); upd();
+}});
+
+S({tag:'FEEDBACK', ov:'고유안전성 — 반응도 계수와 무붕산 설계',
+src:'<b>대표 크기</b>이며 실제 값은 연소도·붕소 농도·노심 설계에 따라 크게 다르다. 정밀 값은 노심 설계 코드로 계산 · i-SMR 무붕산 운전: IAEA SMR Booklet 2022',
+html:`<h2 class="t">신호보다 <em>먼저</em> 작동하는 것 — 노심 자체의 물리</h2>
+<ul class="b">
+  <li><b>도플러 계수</b> <code>−2~−4 pcm/K</code> — 연료 온도가 곧바로 반응, <b class="hot">즉각적</b>. 급격한 반응도 삽입의 1차 저지선</li>
+  <li><b>감속재온도계수</b> <code>−10~−60 pcm/K</code> — 열이 냉각재로 전달된 뒤 작동, <b class="cool">지연</b></li>
+  <li>붕소가 녹아 있으면 온도 상승 시 <b>흡수체도 함께 빠져나가</b> 음수 크기를 깎는다 → 무붕산 설계의 이점</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 700 250" role="img" aria-label="온도 상승 시 도플러 되먹임이 먼저, 감속재 되먹임이 나중에 작동하는 시간 차이">
+    <g id="fb-ax"></g>
+    <path id="fb-d" d="" fill="none" stroke="var(--hot)" stroke-width="2.6"/>
+    <path id="fb-m" d="" fill="none" stroke="var(--cool)" stroke-width="2.6"/>
+    <text x="120" y="30" class="lbl" fill="var(--hot)">도플러 — 즉각</text>
+    <text x="290" y="30" class="lbl" fill="var(--cool)">감속재 — 지연</text>
+  </svg>
+  </div>
+  <div class="side">
+    <blockquote class="q" style="border-left-color:var(--ok)">
+      <b>무붕산 설계가 얻는 것</b><br>
+      붕산 계통(저장·농도 조절·정화·배관)이 통째로 사라지고, 붕소 희석사고 시나리오도 사라진다.
+      감속재온도계수가 전 주기에 걸쳐 확실히 음수로 유지된다.<br><br>
+      <b class="hot">대신 지는 부담</b> — GDC 26이 요구하는 두 번째 독립 계통을 무엇으로 만족시킬 것인가.
+      그리고 장주기 반응도 변화를 제어봉과 온도 되먹임만으로 흡수해야 한다.
+      <span class="cite">i-SMR · KINS 심사의 쟁점</span></blockquote>
+  </div>
+</div>`,
+init(el){
+  const X=t=>90+t/6*560, Y=r=>190-r*150;
+  let ax='<line x1="90" y1="190" x2="660" y2="190" class="axis"/>';
+  [0,2,4,6].forEach(t=>ax+=`<text x="${X(t)}" y="212" class="lbl" text-anchor="middle">${t} s</text>`);
+  ax+='<text x="660" y="234" class="lbl" text-anchor="end">출력 급증 후 경과시간</text>'
+     +'<text x="84" y="50" class="lbl" text-anchor="end">음의<tspan x="84" dy="16">반응도</tspan></text>';
+  el.querySelector('#fb-ax').innerHTML=ax;
+  let dd='',dm=''; for(let i=0;i<=120;i++){ const t=i/20;
+    dd+=(dd?'L':'M')+X(t)+','+Y(0.62*(1-Math.exp(-t/0.28)));
+    dm+=(dm?'L':'M')+X(t)+','+Y(0.92*(1-Math.exp(-t/2.1))); }
+  const D1=el.querySelector('#fb-d'), M1=el.querySelector('#fb-m');
+  D1.setAttribute('d',dd); M1.setAttribute('d',dm);
+  if(RM) return;
+  [D1,M1].forEach((p,i)=>{ const L=p.getTotalLength(); p.style.strokeDasharray=L;p.style.strokeDashoffset=L;
+    p.animate([{strokeDashoffset:L},{strokeDashoffset:0}],{duration:i?2000:700,delay:i?200:0,fill:'forwards'}); });
+}});
+</script>
+<script>
+SECT('07 · 잔열제거계통');
+S({bare:true, cls:'div', ov:'§07 잔열제거계통',
+html:`<div class="no">07</div><h2>잔열제거계통</h2><div class="ln"></div>
+<p>기본안전기능 ②. 정지 후의 열을 어디에 버리는가.
+얼마나 많은 열을, 얼마나 오래, 어디로 버려야 하는지를 숫자로 확정한 뒤 세 가지 구현을 비교한다.</p>`});
+
+S({tag:'HEAT SINK', ov:'수조 시뮬레이션 — 72시간은 어디서 나온 숫자인가',
+src:'<b>계산</b> Way–Wigner 붕괴열 적분(250 MWt, t₀ = 10⁸ s) · c_p = 4.18 kJ/(kg·K), h_fg = 2,257 kJ/kg, 초기 수온 30 °C. <b>열이 전부 수조로 들어간다고 본 상한 추정</b> — 실제로는 열교환기 성능 한계·성층화·외부 열손실이 작용한다',
+html:`<h2 class="t">“72시간 무조작”은 마법이 아니라 <em>물통 크기를 정하는 계산</em>이다</h2>
+<ul class="b">
+  <li>정지 후 72시간 누적 붕괴 에너지는 <code>약 315 GJ</code> — 현열만으로 받으려면 물 <b class="cool">약 1,000 t</b></li>
+  <li>잠열이 현열의 <b>약 8배</b>. 끓기 시작한 뒤에도 한참을 더 버틴다 — 대신 증기 배출과 보충수가 새 설계 문제</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 700 310" role="img" aria-label="붕괴열을 받는 수조의 온도가 오르고 끓어 증발하는 과정을 수조 체적별로 보여주는 시뮬레이션">
+    <rect x="60" y="40" width="170" height="240" fill="none" stroke="var(--cool)" stroke-width="1.6"/>
+    <rect id="hs-w" x="63" y="43" width="164" height="234" fill="var(--cool)" opacity=".28"/>
+    <g id="hs-bub"></g>
+    <text x="145" y="30" text-anchor="middle" class="ttl">수조</text>
+    <rect x="106" y="200" width="78" height="64" rx="3" fill="var(--hot)"/>
+    <text x="145" y="238" text-anchor="middle" font-size="13" fill="#fff" font-family="var(--sans)">노심 250 MWt</text>
+    <g id="hs-ax"></g>
+    <polyline id="hs-c" points="" fill="none" stroke="var(--cool)" stroke-width="2.6"/>
+    <line id="hs-72" y1="52" y2="256" stroke="var(--amber)" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text id="hs-72t" y="44" class="lbl" fill="var(--amber)" text-anchor="middle">72 h</text>
+    <circle id="hs-p" r="6" fill="var(--hot)"/>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout"><span class="k">경과 시간</span><span class="v" id="hs-t">0<small>시간</small></span></div>
+    <div class="readout hi"><span class="k">수조 온도</span><span class="v" id="hs-T">30<small>°C</small></span></div>
+    <div class="readout good" id="hs-box"><span class="k">남은 물</span><span class="v" id="hs-m">100<small>%</small></span></div>
+    <div class="ctl"><label>수조 체적 <span id="hs-vs">1,000 m³</span></label>
+      <input type="range" id="hs-v" min="200" max="4000" step="100" value="1000"></div>
+  </div>
+</div>`,
+init(el){
+  /* 붕괴 에너지 누적 (0 ~ 1000 h) */
+  const N=1400, ts=[], Es=[]; let E=0, tp=0;
+  for(let i=0;i<=N;i++){ const t=Math.pow(10,i/N*Math.log10(3.6e6));
+    E+= (t-tp)*0.5*(decay(t)+decay(Math.max(tp,1)))*250e6; ts.push(t); Es.push(E); tp=t; }
+  const Eat=h=>{ const t=h*3600; if(t<=1) return 0;
+    let lo=0,hi=N; while(hi-lo>1){const m=(lo+hi)>>1; if(ts[m]<t)lo=m;else hi=m;}
+    return lerp(Es[lo],Es[hi],(t-ts[lo])/(ts[hi]-ts[lo])); };
+  const X=h=>300+h/400*360, Y=T=>256-(T-20)/90*204;
+  let ax='<line x1="300" y1="256" x2="666" y2="256" class="axis"/><line x1="300" y1="256" x2="300" y2="48" class="axis"/>';
+  [0,100,200,300,400].forEach(h=>ax+=`<text x="${X(h)}" y="278" class="lbl" text-anchor="middle">${h}</text>`);
+  [30,60,100].forEach(T=>{ ax+=`<line x1="300" y1="${Y(T)}" x2="666" y2="${Y(T)}" class="grid"/>`
+    +`<text x="294" y="${Y(T)+4}" class="lbl" text-anchor="end">${T} °C</text>`; });
+  ax+='<text x="666" y="298" class="lbl" text-anchor="end">경과시간 (시간)</text>';
+  el.querySelector('#hs-ax').innerHTML=ax;
+  el.querySelector('#hs-72').setAttribute('x1',X(72));el.querySelector('#hs-72').setAttribute('x2',X(72));
+  el.querySelector('#hs-72t').setAttribute('x',X(72));
+  const SV='http://www.w3.org/2000/svg', bg=el.querySelector('#hs-bub'), bub=[];
+  for(let i=0;i<16;i++){ const c=document.createElementNS(SV,'circle');
+    c.setAttribute('r',2+Math.random()*2.6); c.setAttribute('fill','#fff'); c.setAttribute('opacity',0);
+    c.dataset.x=70+Math.random()*150; c.dataset.p=Math.random(); bg.appendChild(c); bub.push(c); }
+  const sl=el.querySelector('#hs-v'); let H=0;
+  function state(h){
+    const V=+sl.value, M=V*1000, Esen=M*4180*70, Elat=M*2.257e6, e=Eat(h);
+    let T, frac;
+    if(e<Esen){ T=30+70*e/Esen; frac=1; } else { T=100; frac=Math.max(0,1-(e-Esen)/Elat); }
+    return {T,frac,V};
+  }
+  function draw(h){
+    const s=state(h);
+    const top=43+234*(1-s.frac);
+    el.querySelector('#hs-w').setAttribute('y',top);
+    el.querySelector('#hs-w').setAttribute('height',Math.max(2,277-top));
+    const hot=(s.T-30)/70;
+    el.querySelector('#hs-w').setAttribute('fill', hot>0.99?'var(--hot)':'var(--cool)');
+    el.querySelector('#hs-w').setAttribute('opacity',0.22+0.22*hot);
+    let pts=[]; for(let k=0;k<=80;k++){ const hh=Math.min(h,400*k/80); pts.push([X(hh),Y(state(hh).T)]); if(hh>=h) break; }
+    el.querySelector('#hs-c').setAttribute('points',poly(pts));
+    el.querySelector('#hs-p').setAttribute('cx',X(h));el.querySelector('#hs-p').setAttribute('cy',Y(s.T));
+    el.querySelector('#hs-t').innerHTML=fmt(h,0)+'<small>시간</small>';
+    el.querySelector('#hs-T').innerHTML=fmt(s.T,0)+'<small>°C</small>';
+    el.querySelector('#hs-m').innerHTML=fmt(s.frac*100,0)+'<small>%</small>';
+    el.querySelector('#hs-box').className='readout '+(s.frac>0.35?'good':(s.frac>0.05?'warn':'warn'));
+    el.querySelector('#hs-vs').textContent=fmt(+sl.value)+' m³';
+    bub.forEach((c,i)=>{ if(s.T<99.5){c.setAttribute('opacity',0);return;}
+      const p=((H*0.5)+ +c.dataset.p)%1;
+      c.setAttribute('cx',+c.dataset.x); c.setAttribute('cy',277-(277-top)*p);
+      c.setAttribute('opacity',0.7*(1-p)); });
+  }
+  sl.oninput=()=>draw(H);
+  if(RM){ H=200; draw(200); return; }
+  raf(t=>{ H=(t*34)%420; draw(Math.min(H,400)); });
+}});
+
+S({tag:'RHR · 구현', ov:'잔열제거의 세 가지 구현',
+src:'<b>개념도</b> 자체 작성. 계통 구성을 원리 수준으로 축약 · <b>사례</b> IRIS EHRS · SMART PRHRS · NuScale DHRS / AP1000 PRHR HX · BWRX-300 ICS / NuScale ECCS',
+html:`<h2 class="t">열을 어디로 옮기는가 — <em>세 갈래</em>의 답</h2>
+<ul class="b">
+  <li>(a)만 <b class="ok">1차 압력경계를 열지 않는다</b>. 대신 증기발생기 자체가 고장난 경우에는 못 쓴다</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 300" role="img" aria-label="잔열제거의 세 가지 구현 — 증기발생기 경유, 피동 응축기, 격납 침수 직접 냉각">
+  <g id="r3"></g>
+</svg>
+</div></div>`,
+init(el){
+  const g=el.querySelector('#r3');
+  const T=[['(a) 증기발생기 + 수조 열교환기','IRIS EHRS · SMART PRHRS · NuScale DHRS'],
+           ['(b) 피동 응축기 (IRWST 침수)','AP1000 PRHR HX · BWRX-300 ICS'],
+           ['(c) 격납 침수 직접 냉각','NuScale ECCS (RVV · RRV 개방)']];
+  T.forEach((t,i)=>{ const x=20+i*372;
+    g.insertAdjacentHTML('beforeend',
+      `<text x="${x+170}" y="22" text-anchor="middle" font-family="var(--sans)" font-size="17" fill="var(--ink)">${t[0]}</text>`
+      +`<text x="${x+170}" y="286" text-anchor="middle" class="lbl">${t[1]}</text>`);
+  });
+  // (a)
+  g.insertAdjacentHTML('beforeend',
+    `<rect x="46" y="66" width="86" height="170" rx="12" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.4"/>
+     <rect x="66" y="186" width="46" height="42" rx="3" fill="var(--hot)"/>
+     <rect x="52" y="96" width="26" height="70" fill="var(--panel-2)" stroke="var(--amber)"/>
+     <rect x="100" y="96" width="26" height="70" fill="var(--panel-2)" stroke="var(--amber)"/>
+     <text x="89" y="136" text-anchor="middle" class="lbl" fill="var(--amber)">SG</text>
+     <rect x="204" y="80" width="130" height="150" fill="var(--cool)" opacity=".12" stroke="var(--cool)" stroke-width="1.2"/>
+     <text x="269" y="72" text-anchor="middle" class="lbl" fill="var(--cool)">수조</text>
+     <path id="ra" d="M132,106 L204,106 L204,204 L132,204 Z" fill="none" stroke="var(--rule)" stroke-width="7"/>
+     <polyline points="222,120 316,142 222,164 316,186" fill="none" stroke="var(--cool)" stroke-width="2.4"/>`);
+  // (b)
+  g.insertAdjacentHTML('beforeend',
+    `<rect x="418" y="66" width="86" height="170" rx="12" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.4"/>
+     <rect x="438" y="186" width="46" height="42" rx="3" fill="var(--hot)"/>
+     <rect x="572" y="70" width="138" height="164" fill="var(--cool)" opacity=".12" stroke="var(--cool)" stroke-width="1.2"/>
+     <text x="641" y="62" text-anchor="middle" class="lbl" fill="var(--cool)">IRWST</text>
+     <path id="rb" d="M504,100 L572,100 L572,206 L504,206 Z" fill="none" stroke="var(--rule)" stroke-width="7"/>
+     <path d="M598,110 q24,16 0,32 q-24,16 0,32 q24,16 0,32 q-24,16 0,26" fill="none" stroke="var(--cool)" stroke-width="2.4"/>
+     <text x="660" y="180" class="lbl" fill="var(--cool)">응축기</text>`);
+  // (c)
+  g.insertAdjacentHTML('beforeend',
+    `<rect x="790" y="52" width="300" height="200" fill="var(--cool)" opacity=".10" stroke="var(--cool)" stroke-width="1.2"/>
+     <text x="940" y="44" text-anchor="middle" class="lbl" fill="var(--cool)">침수 격납용기</text>
+     <rect x="882" y="86" width="116" height="150" rx="14" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.4"/>
+     <rect x="912" y="190" width="56" height="42" rx="3" fill="var(--hot)"/>
+     <path id="rc2" d="M940,190 L940,108 L1050,108 L1050,214 L940,214 Z" fill="none" stroke="var(--rule)" stroke-width="7"/>
+     <rect x="924" y="80" width="10" height="12" fill="var(--ok)"/><rect x="946" y="80" width="10" height="12" fill="var(--ok)"/>
+     <text x="940" y="72" text-anchor="middle" class="lbl" fill="var(--ok)">RVV</text>
+     <rect x="876" y="200" width="12" height="10" fill="var(--ok)"/><rect x="992" y="200" width="12" height="10" fill="var(--ok)"/>
+     <text x="1052" y="238" class="lbl" fill="var(--ok)">RRV 재순환</text>`);
+  flow(el.querySelector('#ra'),{n:7,speed:0.13,r:3.8,color:'var(--hot)'});
+  flow(el.querySelector('#rb'),{n:7,speed:0.13,r:3.8,color:'var(--hot)'});
+  flow(el.querySelector('#rc2'),{n:8,speed:0.14,r:3.8,color:'var(--hot)'});
+}});
+
+S({tag:'GRACE PERIOD', ov:'대처시간 비교 — 무엇을 기준으로 센 값인가',
+src:'<b>출처</b> K.H. Bae et al., <i>Nucl. Eng. Des.</i> <b>379</b> (2021) 111247 (SMART100) · IAEA SMR Booklet 2022 (i-SMR·BWRX-300·CAREM·NuScale) · NRC ADAMS ML15230A043 (AP1000). <b>모두 설계자 제시값</b>',
+html:`<h2 class="t">“72시간”이 설계마다 <s>다른 것을 뜻한다</s></h2>
+<ul class="b">
+  <li>① 운전원 조작 없이 유지하는 시간 · ② 외부 급수 없이 버티는 시간 · ③ 교류전원 없이 버티는 시간</li>
+  <li>세 정의가 주는 숫자는 서로 크게 다르다 — 비교할 때 <b class="hot">반드시 정의를 확인</b></li>
+</ul>
+<div class="body col">
+<table class="d">
+<tr><th style="width:16%">설계</th><th style="width:24%">계통</th><th style="width:36%">원리</th><th>무조작 대처시간</th></tr>
+<tr><td>SMART100</td><td>PRHRS · 4계열</td><td>2차측 + 비상냉각탱크</td><td class="n">36 h 내 안전정지 + 36 h 유지 = <b>72 h</b></td></tr>
+<tr><td>i-SMR</td><td>PAFS / PCCS</td><td>비LOCA는 피동보조급수, LOCA는 피동격납냉각</td><td class="n">전원 없이 <b>72 h</b> · 이후 공기냉각</td></tr>
+<tr class="mark"><td>BWRX-300</td><td>ICS · 3루프 (각 약 33 MW)</td><td>원자로 증기를 대기압 수조 응축기로</td><td class="n"><b>최소 7일</b></td></tr>
+<tr><td>AP1000</td><td>PRHR HX + PCCS</td><td>IRWST 침수 C자형 열교환기 + 외벽 살수</td><td class="n">PCCWST <b>72 h</b> 배수</td></tr>
+<tr><td>CAREM-25</td><td>PRHRS · 2계열</td><td>수평 U-튜브 응축기</td><td class="n">2계열 중 1계열로 <b>36 h</b></td></tr>
+<tr><td>NuScale NPM</td><td>DHRS · 2계열 (각 100 %)</td><td>2상 자연순환 폐루프, 응축기 수조 침수</td><td class="n">원자로 수조로 장기 제열</td></tr>
+</table>
+</div>`});
+</script>
+<script>
+SECT('08 · 안전주입계통');
+S({bare:true, cls:'div', ov:'§08 안전주입계통',
+html:`<div class="no">08</div><h2>안전주입계통</h2><div class="ln"></div>
+<p>기본안전기능 ②의 두 번째. 잃은 냉각재를 어떻게 되채우는가.
+그리고 규제가 요구하는 다섯 개의 정량 판정 기준.</p>`});
+
+S({tag:'10 CFR 50.46', ov:'ECCS 허용기준 — 다섯 개의 합격선',
+src:'<b>출처</b> 10 CFR 50.46 (최종 개정 2007-08-28, 72 FR 49494) eCFR 원문. <b>유의</b> 성능기반 대체기준 50.46c는 2024-04 위원회 반려로 <b>2026년 현재 미제정</b>이며, 50.46a는 ECCS가 아니라 <b>원자로냉각재계통 배기계통</b> 조문이다',
+html:`<h2 class="t">인허가 안전해석의 <em>합격선</em> — 정확히 외울 값</h2>
+<div class="body">
+  <div class="fig" style="justify-content:flex-start">
+  <table class="d">
+    <tr><th style="width:12%">항</th><th style="width:36%">기준</th><th>수치</th></tr>
+    <tr class="mark"><td class="mono">(b)(1)</td><td>최고 피복재 온도 (PCT)</td><td class="n"><b>2,200 °F</b> (약 1,204 °C) 초과 금지</td></tr>
+    <tr><td class="mono">(b)(2)</td><td>최대 국부 산화율</td><td class="n">산화 전 피복재 두께의 <b>0.17배</b>를 어디에서도 초과 금지</td></tr>
+    <tr><td class="mono">(b)(3)</td><td>총 수소 발생량</td><td class="n">전부 반응했을 때 가상 발생량의 <b>0.01배</b> 초과 금지</td></tr>
+    <tr><td class="mono">(b)(4)</td><td>냉각 가능 형상</td><td>노심 형상 변화가 <b>냉각 가능한 상태</b>를 유지</td></tr>
+    <tr><td class="mono">(b)(5)</td><td>장기 냉각</td><td>초기 ECCS 성공 후에도 <b>장기간 붕괴열을 제거</b></td></tr>
+  </table>
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">왜 온도가 기준인가</span>
+      <div style="font-size:16px;line-height:1.5;color:var(--ink);font-weight:300;margin-top:6px">
+        <span class="mono">Zr + 2H₂O → ZrO₂ + 2H₂ + Q</span><br><br>
+        이 반응은 <b>발열</b>이다. 온도가 오르면 빨라지고, 반응열이 다시 온도를 올린다 —
+        <b class="hot">양의 되먹임</b>.<br><br>
+        1,204 °C는 그 폭주가 일어나지 않고 피복재가 급랭 시 부서지지 않을 연성을 유지하는 경계.
+        부산물인 수소는 격납에서 폭발 위험이 되므로 (b)(3)이 총량을 묶는다 —
+        <b class="cool">여기서 8장과 9장이 이어진다</b>.</div></div>
+  </div>
+</div>`});
+
+S({tag:'PRESSURE TIERS', ov:'압력 계층 — 주입계통의 순차 인계',
+src:'<b>개념도</b> 자체 작성. 압력 이력은 소형 파단의 전형적 형태 예시이며 특정 설계의 해석 결과가 아니다. 축압기 충전압 4.9 MPa(약 700 psig)는 AP1000 기준값 (NRC ADAMS ML15230A043)',
+html:`<h2 class="t">압력이 떨어지며 <em>차례로 인계</em>한다 — 하나로는 안 된다</h2>
+<ul class="b">
+  <li>사고 초기에는 압력이 높아 저압 펌프가 못 밀고, 나중에는 고압 계통의 유량이 부족함</li>
+  <li>그래서 <b class="cool">압력 구간마다 다른 주입 수단</b>을 준비한다 — 이것이 ECCS의 기본 골격</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 780 320" role="img" aria-label="냉각재상실사고 중 압력이 떨어지면서 고압주입, 축압기, 저압주입이 순차적으로 작동하는 영역">
+    <g id="pt-band"></g><g id="pt-ax"></g>
+    <path id="pt-c" d="" fill="none" stroke="var(--ink)" stroke-width="2.8"/>
+    <circle id="pt-p" r="7" fill="var(--hot)"/>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">RCS 압력</span><span class="v" id="pt-P">15.5<small>MPa</small></span></div>
+    <div class="readout hi"><span class="k">지금 인계한 계통</span><span class="v" id="pt-S" style="font-size:21px">고압주입 · CMT</span></div>
+    <div class="readout"><span class="k">사고 후 경과</span><span class="v" id="pt-t">1<small>초</small></span></div>
+    <div class="src">축압기는 밸브 조작 없이 <b>체크밸브만으로</b> 열린다 — Category C 피동.
+      CMT는 RCS 전압력에서도 <b>중력</b>으로 흐른다.</div>
+  </div>
+</div>`,
+init(el){
+  const X=t=>70+Math.log10(t)/4*660, Y=p=>270-p/16*228;
+  const B=[[8,16,'고압안전주입 (HPSI) · CMT','var(--cool)'],
+           [3.5,8,'축압기 (Accumulator)','var(--amber)'],
+           [0,3.5,'저압안전주입 (LPSI) · 중력 보충','var(--ok)']];
+  let bh='';
+  B.forEach(b=>{ bh+=`<rect x="70" y="${Y(b[1])}" width="660" height="${Y(b[0])-Y(b[1])}" fill="${b[3]}" opacity=".07"/>`
+    +`<text x="82" y="${(Y(b[0])+Y(b[1]))/2+5}" class="lbl" fill="${b[3]}" font-size="13.5">${b[2]}</text>`; });
+  bh+=`<line x1="70" y1="${Y(4.9)}" x2="730" y2="${Y(4.9)}" stroke="var(--hot)" stroke-width="1.2" stroke-dasharray="5 4"/>`
+     +`<text x="726" y="${Y(4.9)-7}" class="lbl" fill="var(--hot)" text-anchor="end">축압기 질소 충전압 4.9 MPa</text>`;
+  el.querySelector('#pt-band').innerHTML=bh;
+  let ax='<line x1="70" y1="270" x2="736" y2="270" class="axis"/><line x1="70" y1="270" x2="70" y2="34" class="axis"/>';
+  [1,10,100,1000,10000].forEach(t=>ax+=`<text x="${X(t)}" y="292" class="lbl" text-anchor="middle">${t>=1000?fmt(t):t} s</text>`);
+  [0,4,8,12,16].forEach(p=>ax+=`<text x="62" y="${Y(p)+4}" class="lbl" text-anchor="end">${p}</text>`);
+  ax+='<text x="736" y="312" class="lbl" text-anchor="end">사고 후 경과시간</text>'
+     +'<text x="70" y="24" class="lbl">RCS 압력 (MPa)</text>';
+  el.querySelector('#pt-ax').innerHTML=ax;
+  const P=t=>15.5*Math.exp(-Math.pow(Math.log10(t)/1.55,2.2))+0.15;
+  let d=''; for(let i=0;i<=200;i++){ const t=Math.pow(10,i/200*4); d+=(d?'L':'M')+X(t)+','+Y(P(t)); }
+  el.querySelector('#pt-c').setAttribute('d',d);
+  const pt=el.querySelector('#pt-p');
+  function at(t){ const p=P(t);
+    pt.setAttribute('cx',X(t));pt.setAttribute('cy',Y(p));
+    el.querySelector('#pt-P').innerHTML=p.toFixed(1)+'<small>MPa</small>';
+    el.querySelector('#pt-t').innerHTML=(t<1000?fmt(t,0):fmt(t/60,0))+'<small>'+(t<1000?'초':'분')+'</small>';
+    const b=B.find(x=>p>=x[0]&&p<x[1])||B[2];
+    el.querySelector('#pt-S').textContent=b[2].split(' (')[0];
+    el.querySelector('#pt-S').parentNode.className='readout hi';
+    pt.setAttribute('fill',b[3]);
+  }
+  if(RM){ at(300); return; }
+  at(1); raf(t=>{ const u=(t%8)/8; at(Math.pow(10,u*4)); });
+}});
+
+S({tag:'NuScale ECCS', ov:'폐루프 — 물을 밖에서 넣지 않는다',
+src:'<b>개념도</b> 자체 작성. NuScale NPM의 ECCS는 RVV 3개 + RRV 2개로 구성되며 펌프·축압기가 없다 (IAEA SMR Booklet 2022). 8장·9장의 경계가 사라지는 지점',
+html:`<h2 class="t">잃은 물을 밖에서 넣는 대신 <em>가둬 두고 순환</em>시킨다</h2>
+<ul class="b">
+  <li>① <b>RVV</b>를 열어 증기를 격납으로 방출 → ② 침수된 격납 벽면에서 <b class="cool">응축</b>, 열은 수조로 → ③ <b>RRV</b>로 응축수를 용기로 복귀</li>
+  <li>수원이 계 밖에 없어도 순환이 유지되므로 <b class="ok">50.46(b)(5) 장기 냉각</b>이 성립한다</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 760 320" role="img" aria-label="NuScale ECCS의 폐루프 — 원자로 벤트밸브로 증기를 내보내고 격납 벽면에서 응축된 물을 재순환밸브로 되돌린다">
+    <rect x="120" y="34" width="520" height="256" fill="var(--cool)" opacity=".10" stroke="var(--cool)" stroke-width="1.4"/>
+    <text x="380" y="26" text-anchor="middle" class="ttl">침수 격납용기 (CNV) · 정상운전 중 진공</text>
+    <rect x="255" y="68" width="250" height="204" rx="22" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.6"/>
+    <text x="266" y="110" text-anchor="start" class="lbl b">원자로용기</text>
+    <rect x="342" y="216" width="76" height="50" rx="3" fill="var(--hot)"/>
+    <text x="380" y="246" text-anchor="middle" font-size="13" fill="#fff" font-family="var(--sans)">노심</text>
+    <path id="ec-r" d="M380,214 L380,92 L560,92 L560,262 L418,262 Z" fill="none" stroke="var(--rule)" stroke-width="8"/>
+    <path id="ec-l" d="M380,214 L380,92 L200,92 L200,262 L342,262 Z" fill="none" stroke="var(--rule)" stroke-width="8"/>
+    <rect x="356" y="62" width="14" height="12" fill="var(--ok)"/><rect x="390" y="62" width="14" height="12" fill="var(--ok)"/>
+    <text x="380" y="52" text-anchor="middle" class="lbl" fill="var(--ok)">RVV · 증기 방출</text>
+    <rect x="246" y="256" width="12" height="14" fill="var(--ok)"/><rect x="502" y="256" width="12" height="14" fill="var(--ok)"/>
+    <text x="380" y="290" text-anchor="middle" class="lbl" fill="var(--ok)">RRV · 응축수 재순환</text>
+    <g id="ec-drop"></g>
+    <text x="132" y="60" class="lbl" fill="var(--cool)">벽면 응축</text>
+    <text x="648" y="150" class="lbl" fill="var(--cool)" text-anchor="start">열은</text>
+    <text x="648" y="168" class="lbl" fill="var(--cool)" text-anchor="start">수조로</text>
+    <path d="M642,140 L676,140 M642,182 L676,182" stroke="var(--cool)" stroke-width="2"/>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout good"><span class="k">외부 수원</span><span class="v" style="font-size:22px">필요 없음</span></div>
+    <div class="readout"><span class="k">구동력</span><span class="v" style="font-size:22px">응축 압력차</span></div>
+    <blockquote class="q" style="border-left-color:var(--cool)">
+      일체형 SMR에서 <b>안전주입계통과 격납계통은 사실상 하나의 계통</b>이다.
+      나눠 배웠지만 실제 설계에서는 그 경계가 사라진다.
+      <span class="cite">i-SMR의 EDV 3 + ERV 2도 같은 논리</span></blockquote>
+  </div>
+</div>`,
+init(el){
+  flow(el.querySelector('#ec-r'),{n:9,speed:0.13,r:4,color:'var(--hot)'});
+  flow(el.querySelector('#ec-l'),{n:9,speed:0.13,r:4,color:'var(--hot)'});
+  if(RM) return;
+  const SV='http://www.w3.org/2000/svg', g=el.querySelector('#ec-drop'), dr=[];
+  for(let i=0;i<14;i++){ const c=document.createElementNS(SV,'circle');
+    c.setAttribute('r',2.6); c.setAttribute('fill','var(--cool)');
+    c.dataset.x=(i%2? 130+Math.random()*14 : 616+Math.random()*14);
+    c.dataset.p=Math.random(); g.appendChild(c); dr.push(c); }
+  raf(t=>{ dr.forEach(c=>{ const p=((t*0.30)+ +c.dataset.p)%1;
+    c.setAttribute('cx',+c.dataset.x); c.setAttribute('cy',44+236*p);
+    c.setAttribute('opacity',0.85*Math.sin(Math.PI*p)); }); });
+}});
+
+/* ================================================================
+   SECTION 09 — 격납계통
+   ================================================================ */
+SECT('09 · 격납계통');
+S({bare:true, cls:'div', ov:'§09 격납계통',
+html:`<div class="no">09</div><h2>격납계통</h2><div class="ln"></div>
+<p>기본안전기능 ③. 네 겹의 방벽 중 마지막.
+요구되는 성질은 하나다 — <b>새지 않을 것</b>. 그런데 그것을 지키려면 열을 빼야 한다.</p>`});
+
+S({tag:'ISOLATION', ov:'격리밸브 — 구멍 관리가 전부',
+src:'<b>출처</b> 10 CFR 50 Appendix A, GDC 16·50~57. <b>GDC 52</b>는 설계압에서 종합누설률시험(ILRT)을 수행할 수 있도록 요구한다 — “새지 않는다”를 주장이 아니라 <b>측정</b>으로 증명해야 한다',
+html:`<h2 class="t">격납에는 <s>필연적으로 구멍</s>이 뚫린다 — 사고 시 닫히는가</h2>
+<ul class="b">
+  <li>배관 · 전기 관통부 · 인원 출입구. 이 구멍이 닫히지 않으면 아무리 두꺼운 벽도 소용없음</li>
+  <li>단순 <b class="hot">체크밸브</b>는 격납 외부 자동 격리밸브로 인정되지 않음 — 막아야 할 방향으로는 닫히지 않으니까</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <table class="d">
+    <tr><th style="width:14%">배열</th><th>격납 내부 밸브</th><th>격납 외부 밸브</th></tr>
+    <tr><td class="mono">①</td><td>잠금 폐쇄 (locked closed)</td><td>잠금 폐쇄</td></tr>
+    <tr><td class="mono">②</td><td>자동 격리</td><td>잠금 폐쇄</td></tr>
+    <tr><td class="mono">③</td><td>잠금 폐쇄</td><td>자동 격리</td></tr>
+    <tr class="mark"><td class="mono">④</td><td>자동 격리</td><td>자동 격리</td></tr>
+  </table>
+  </div>
+  <div class="side">
+    <div class="readout"><span class="k">GDC 55</span>
+      <div style="font-size:15.5px;line-height:1.45;color:var(--ink-2);font-weight:300;margin-top:5px">
+      원자로냉각재압력경계를 관통하는 배관</div></div>
+    <div class="readout"><span class="k">GDC 56</span>
+      <div style="font-size:15.5px;line-height:1.45;color:var(--ink-2);font-weight:300;margin-top:5px">
+      격납 대기와 직결되는 배관 — 외부 밸브는 격납건물 <b>가까이</b></div></div>
+    <div class="readout"><span class="k">GDC 57</span>
+      <div style="font-size:15.5px;line-height:1.45;color:var(--ink-2);font-weight:300;margin-top:5px">
+      그 밖의 폐회로 관통 배관 — 외부에 자동·잠금폐쇄·원격조작 밸브 <b>최소 1개</b></div></div>
+    <div class="src">①은 정상·사고 시 모두 흐를 필요가 없는 배관(시험·시료·배수)에만 쓸 수 있다.</div>
+  </div>
+</div>`});
+
+S({tag:'CONTAINMENT PRESSURE', ov:'격납 압력 — 계산이 포화압에 막힌다',
+src:'<b>예제 조건</b> 자유체적 3,000 m³ · 초기 공기 1기압 20 °C · 평형 온도 150 °C · R_v = 461.5 J/(kg·K) · 150 °C 포화압 0.476 MPa. 이상기체 근사만으로는 답이 틀린다는 것을 보이기 위한 예제',
+html:`<h2 class="t">이상기체로 계산하면 <s>틀린다</s> — 초과분은 <em>응축</em>한다</h2>
+<ul class="b">
+  <li>계산된 증기 분압이 그 온도의 <b>포화압</b>을 넘으면 물리적으로 불가능 → 증기 일부가 액체가 됨</li>
+  <li>결국 <b class="cool">격납 압력은 증기 질량이 아니라 평형 온도가 결정</b>한다. 그래서 격납 해석의 핵심은 열 균형</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 700 300" role="img" aria-label="방출 증기 질량에 따른 격납 압력 — 이상기체 계산값과 포화압에 의해 제한된 실제 압력 비교">
+    <g id="cp-ax"></g>
+    <rect id="cp-ideal" x="150" width="120" fill="var(--hot)" opacity=".6" stroke="var(--hot)" stroke-width="1.2"/>
+    <rect id="cp-real" x="330" width="120" fill="var(--cool)" opacity=".8"/>
+    <rect id="cp-air" x="330" width="120" fill="var(--ink-3)" opacity=".55"/>
+    <line id="cp-sat" x1="110" x2="620" stroke="var(--amber)" stroke-width="1.6" stroke-dasharray="5 4"/>
+    <text id="cp-satt" x="616" class="lbl" fill="var(--amber)" text-anchor="end">150 °C 포화압 0.476 MPa</text>
+    <text x="210" y="292" text-anchor="middle" class="lbl">이상기체 계산 (증기 분압)</text>
+    <text x="390" y="292" text-anchor="middle" class="lbl">실제 (포화 제한 + 공기)</text>
+    <text id="cp-msg" x="282" y="120" class="lbl" fill="var(--hot)" font-size="14.5"></text>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">이상기체 증기 분압</span><span class="v" id="cp-i">1.30<small>MPa</small></span></div>
+    <div class="readout hi"><span class="k">실제 격납 압력</span><span class="v" id="cp-r">0.62<small>MPa</small></span></div>
+    <div class="ctl"><label>방출 증기 질량 <span id="cp-ms">20 t</span></label>
+      <input type="range" id="cp-m" min="1" max="40" step="0.5" value="20"></div>
+    <div class="src">공기 분압은 온도만 보정 — 0.1013 × 423/293 = <b>0.146 MPa</b>.</div>
+  </div>
+</div>`,
+init(el){
+  const Y=p=>250-p/1.5*210;
+  let ax='<line x1="110" y1="250" x2="626" y2="250" class="axis"/>';
+  [0,0.5,1.0,1.5].forEach(p=>{ ax+=`<line x1="110" y1="${Y(p)}" x2="626" y2="${Y(p)}" class="grid"/>`
+    +`<text x="102" y="${Y(p)+4}" class="lbl" text-anchor="end">${p.toFixed(1)}</text>`; });
+  ax+='<text x="110" y="26" class="lbl">압력 (MPa)</text>';
+  el.querySelector('#cp-ax').innerHTML=ax;
+  const sat=0.476, air=0.146;
+  el.querySelector('#cp-sat').setAttribute('y1',Y(sat));el.querySelector('#cp-sat').setAttribute('y2',Y(sat));
+  el.querySelector('#cp-satt').setAttribute('y',Y(sat)-8);
+  const sl=el.querySelector('#cp-m');
+  function upd(){
+    const m=+sl.value*1000, pv=m*461.5*423/3000/1e6, real=air+Math.min(pv,sat);
+    const I=el.querySelector('#cp-ideal'), R=el.querySelector('#cp-real'), A=el.querySelector('#cp-air');
+    I.setAttribute('y',Y(Math.min(pv,1.5)));I.setAttribute('height',Math.max(1,250-Y(Math.min(pv,1.5))));
+    A.setAttribute('y',Y(air));A.setAttribute('height',250-Y(air));
+    R.setAttribute('y',Y(real));R.setAttribute('height',Y(air)-Y(real));
+    el.querySelector('#cp-i').innerHTML=pv.toFixed(2)+'<small>MPa</small>';
+    el.querySelector('#cp-r').innerHTML=real.toFixed(2)+'<small>MPa</small>';
+    el.querySelector('#cp-ms').textContent=(+sl.value).toFixed(1)+' t';
+    const msg=el.querySelector('#cp-msg');
+    if(pv>sat){ msg.textContent='← 초과분 '+((pv-sat)/pv*100).toFixed(0)+' % 는 응축';
+      msg.setAttribute('x',282); msg.setAttribute('y',Y(Math.min((pv+sat)/2,1.42))); } else msg.textContent='';
+  }
+  sl.oninput=upd; upd();
+  if(RM) return;
+  raf(t=>{ if(t>2.2) return; sl.value=(lerp(4,20,clamp(t/2,0,1))).toFixed(1); upd(); });
+}});
+
+S({tag:'CONTAINMENT TYPES', ov:'격납 3형식 — 에너지를 어디에 흡수시키는가',
+src:'<b>출처</b> IAEA SMR Booklet 2022 (CAREM 설계압 0.5 MPa, 콘크리트 1.2 m · NuScale CNV 외경 4.5 m × 높이 23.1 m) · NRC ADAMS ML15230A043 (AP1000 PCCWST 72시간 배수)',
+html:`<h2 class="t">흡수 방식은 <em>세 가지뿐</em>이다 — 대기 · 물 · 벽</h2>
+<div class="body col">
+<table class="d">
+<tr><th style="width:22%">형식</th><th style="width:30%">에너지를 어디에 흡수시키는가</th><th style="width:22%">능동/피동</th><th>대표 설계</th></tr>
+<tr><td>(a) 대형 건식 콘크리트 + 살수</td><td>큰 <b>자유체적</b>의 대기 + 살수한 물</td><td class="hot">살수펌프 = 능동</td><td>대형 경수로 · CAREM-25(압력억제형, 설계압 0.5 MPa)</td></tr>
+<tr class="mark"><td>(b) 침수 소형 강재</td><td>강재 <b>벽면 응축</b> → 바깥 수조</td><td class="ok">피동 · 정상운전 중 진공</td><td>NuScale CNV — 외경 4.5 m × 높이 23.1 m</td></tr>
+<tr><td>(c) 피동냉각 대형 강재</td><td>외벽 <b>증발</b> + 자연대류 공기유동</td><td class="ok">피동 · PCCWST 72 h 배수</td><td>AP1000 — 물 소진 후 공기냉각만으로 유지</td></tr>
+</table>
+<div style="display:flex;gap:20px;margin-top:16px">
+  <blockquote class="q" style="flex:1;border-left-color:var(--cool)">
+    자유체적을 줄인 설계는 압력이 <b>빨리</b> 오른다. 대신 벽면 응축 열유속이 커진다.
+    두 효과의 균형점은 <b>응축 열전달계수</b>가 결정한다.</blockquote>
+  <blockquote class="q" style="flex:1;border-left-color:var(--hot)">
+    그런데 <b>비응축가스</b>가 조금만 섞여도 응축 열전달계수는 급락한다.
+    NuScale이 격납을 <b class="cool">진공</b>으로 유지하는 이유 — 피동 격납냉각 해석에서 절대 무시할 수 없는 변수.</blockquote>
+</div>
+</div>`});
+</script>
+<script>
+SECT('10 · 정리');
+S({bare:true, cls:'div', ov:'§10 정리 — 요건에서 계통까지',
+html:`<div class="no">10</div><h2>요건에서 계통까지</h2><div class="ln"></div>
+<p>아홉 개의 장을 하나의 추적표로 묶는다. 이 표를 거꾸로 읽으면 설계 검토 체크리스트가 된다.</p>`});
+
+S({tag:'TRACEABILITY', ov:'요건 → 기능 → 계통 추적',
+src:'<b>출처</b> 10 CFR 50 Appendix A의 GDC, IAEA SSR-2/1 (Rev.1)의 기본안전기능, 그리고 6~9장에서 다룬 계통을 대응시킨 것',
+html:`<h2 class="t">설계는 요건에서 시작해 계통으로 끝난다 — <s>거꾸로 읽으면 근거를 잃는다</s></h2>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 320" role="img" aria-label="규제 요건에서 기본안전기능을 거쳐 공학적안전설비로 이어지는 추적 관계">
+  <defs><marker id="tr-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M0,0 L10,5 L0,10 z" fill="var(--rule)"/></marker></defs>
+  <g id="tr-hd">
+    <rect x="40" y="14" width="330" height="38" fill="var(--cool)"/>
+    <text x="205" y="39" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="#071018" font-weight="600">규제 요건</text>
+    <rect x="395" y="14" width="300" height="38" fill="var(--ok)"/>
+    <text x="545" y="39" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="#071018" font-weight="600">기본 안전기능</text>
+    <rect x="720" y="14" width="360" height="38" fill="var(--hot)"/>
+    <text x="900" y="39" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="#071018" font-weight="600">계통 (ESF)</text>
+  </g>
+  <g id="tr-rows"></g>
+</svg>
+</div></div>`,
+init(el){
+  const R=[['GDC 25 · 26 · 27','반응도 제어','제어봉 · 붕산 주입 · (무붕산 설계)'],
+    ['GDC 34','노심 잔열 제거','PRHR · DHRS · ICS · PAFS'],
+    ['GDC 35 · 10 CFR 50.46','노심 냉각재 보충','축압기 · CMT · SI 펌프 · RVV/RRV'],
+    ['GDC 16 · 38 · 41 · 50~57','방사성물질 격납','격납건물 · 살수 · 격리밸브 · PAR']];
+  const g=el.querySelector('#tr-rows');
+  R.forEach((r,i)=>{ const y=74+i*58;
+    g.insertAdjacentHTML('beforeend',
+      `<g data-r="${i}" opacity="0">
+       <rect x="40" y="${y}" width="330" height="44" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.2"/>
+       <text x="58" y="${y+28}" font-family="var(--mono)" font-size="15" fill="var(--cool)">${r[0]}</text>
+       <rect x="395" y="${y}" width="300" height="44" fill="var(--panel)" stroke="var(--ok)" stroke-width="1.2"/>
+       <text x="545" y="${y+28}" text-anchor="middle" font-family="var(--sans)" font-size="18" fill="var(--ok)">${r[1]}</text>
+       <rect x="720" y="${y}" width="360" height="44" fill="var(--panel)" stroke="var(--hot)" stroke-width="1.2"/>
+       <text x="900" y="${y+28}" text-anchor="middle" font-family="var(--sans)" font-size="16" fill="var(--hot)">${r[2]}</text>
+       <path d="M374,${y+22} H391" stroke="var(--rule)" stroke-width="1.4" marker-end="url(#tr-a)"/>
+       <path d="M699,${y+22} H716" stroke="var(--rule)" stroke-width="1.4" marker-end="url(#tr-a)"/></g>`); });
+  g.insertAdjacentHTML('beforeend',
+    '<text x="560" y="314" text-anchor="middle" class="lbl">이 표를 거꾸로 읽으면 설계 검토 체크리스트가 된다</text>');
+  const rows=[...g.querySelectorAll('[data-r]')];
+  if(RM){ rows.forEach(r=>r.setAttribute('opacity',1)); return; }
+  rows.forEach((r,i)=>r.animate([{opacity:0},{opacity:1}],{duration:420,delay:180*i,fill:'forwards'}));
+}});
+
+S({tag:'COMPARISON', ov:'노형별 ESF 구성 비교',
+src:'<b>출처</b> IAEA SMR Booklet 2022 (NuScale·i-SMR·BWRX-300·CAREM) · K.H. Bae et al., <i>Nucl. Eng. Des.</i> <b>379</b> (2021) 111247 (SMART100) · NRC ML15230A043 (AP1000) · Westinghouse ML033600086 (IRIS). <b>모두 설계자 제시 자료 기준</b>',
+html:`<h2 class="t">같은 일을 하는데 <em>이름이 다르다</em> — 나란히 놓고 보기</h2>
+<div class="body col">
+<table class="d sm">
+<tr><th style="width:14%">설계</th><th style="width:16%">정지계통</th><th style="width:24%">잔열제거</th><th style="width:23%">안전주입</th><th>격납</th></tr>
+<tr class="mark"><td>NuScale NPM</td><td>제어봉 + 붕산</td><td>DHRS 2계열(각 100 %) · 2상 자연순환</td><td>별도 수원 없음 · RVV 3 + RRV 2 재순환</td><td>침수 강재 CNV · 진공</td></tr>
+<tr><td>i-SMR</td><td>제어봉 (<b class="cool">무붕산</b>)</td><td>비LOCA: PAFS 피동보조급수</td><td>LOCA: EDV 3 + ERV 2</td><td>소형 강재 CV + PCCS</td></tr>
+<tr><td>SMART100</td><td>제어봉 + 붕산</td><td>PRHRS 4계열 (2차측 + 비상냉각탱크)</td><td>CMT 4기 + SIT 4기 (피동)</td><td>CPRSS · IRWST · PAR</td></tr>
+<tr><td>BWRX-300</td><td>제어봉 + 붕산</td><td>ICS 3루프 (각 약 33 MW) · 최소 7일</td><td>일체형 격리밸브로 대구경 파단 배제</td><td>지하 매설 PCV · 약 16 m × 44 m</td></tr>
+<tr><td>AP1000 <span class="lbl">(비교 기준)</span></td><td>제어봉 + 붕산</td><td>PRHR HX 1기 (IRWST 침수)</td><td>CMT 2기 + 축압기 2기 + IRWST · ADS 4단</td><td>강재 격납 + PCCS</td></tr>
+<tr><td>CAREM-25</td><td>FSS 급속정지봉 + SSS 고압 붕산탱크</td><td>PRHRS 2계열 · 36 h</td><td>MPIS 축압기 2기 · <b>파열판</b>으로 개시</td><td>압력억제형 · 설계압 0.5 MPa</td></tr>
+<tr><td>IRIS <span class="lbl">(역사적 참조)</span></td><td>제어봉 + 비상붕산탱크 2기</td><td>EHRS 피동 4계열 · RWST 내 U-튜브</td><td>EBT + 직접용기주입(DVI)</td><td>구형 강재 · 직경 25 m · 설계압 1.3 MPa</td></tr>
+</table>
+</div>`});
+
+S({tag:'CHECKLIST', ov:'마무리 — 네 줄 체크리스트',
+src:'다음 단계: 5~8주차 계통코드. 이 네 질문에 답할 수 있으면 노드화의 요구사항이 이미 정해진 것이다',
+html:`<h2 class="t">설계 자료를 받았을 때 <em>이 네 줄</em>을 채울 수 있는가</h2>
+<div class="body col">
+  <div style="display:flex;flex-direction:column;gap:12px;margin-top:6px">
+    <div class="readout" style="border-left:3px solid var(--hot)">
+      <span class="k">① 반응도 제어</span>
+      <div style="font-size:19px;color:var(--ink);font-weight:300;margin-top:4px">
+        반응도를 죽이는 <b>두 개의 독립 수단</b>은 무엇인가. stuck rod 가정에서도 정지여유도가 확보되는가</div></div>
+    <div class="readout" style="border-left:3px solid var(--cool)">
+      <span class="k">② 열 제거</span>
+      <div style="font-size:19px;color:var(--ink);font-weight:300;margin-top:4px">
+        정지 후 붕괴열의 <b>최종 열침원</b>은 무엇인가. 무조작으로 며칠을 버티며, 그 며칠은 <b>무슨 계산</b>에서 나왔는가</div></div>
+    <div class="readout" style="border-left:3px solid var(--cool)">
+      <span class="k">③ 냉각재 보충</span>
+      <div style="font-size:19px;color:var(--ink);font-weight:300;margin-top:4px">
+        냉각재를 잃었을 때 <b>압력 구간별 주입 수단</b>은 무엇인가. 장기 냉각은 어떻게 성립하는가</div></div>
+    <div class="readout" style="border-left:3px solid var(--ok)">
+      <span class="k">④ 격납</span>
+      <div style="font-size:19px;color:var(--ink);font-weight:300;margin-top:4px">
+        격납은 방출 에너지를 <b>어디에 흡수</b>시키는가. 수소는 어떻게 처리하는가</div></div>
+  </div>
+</div>`});
+
+S({bare:true, cls:'cover', ov:'맺음',
+html:`<div class="kick">다음 단계 · 5~8주차</div>
+<h1>코드가 답을 주지는<br><span>않는다</span></h1>
+<div class="ln"></div>
+<div class="meta">
+  코드는 여러분이 넣은 가정을 계산할 뿐이다.<br>
+  노드화를 어떻게 나눴는지, 어떤 상관식을 어떤 적용 범위에서 썼는지,<br>
+  붕괴열 곡선에 얼마의 여유를 뒀는지 — <b>이 선택들이 결과를 만든다.</b><br><br>
+  그 선택 하나하나에 근거를 댈 수 있게 하려고 이 자료가 요건과 수식을 함께 실었다.
+</div>
+<div class="hint">THINK LAB · 한양대학교 원자력공학과 · 지도교수 송민섭 · 2026년 9월</div>`,
+init(el){
+  if(RM) return;
+  const h1=el.querySelector('h1');
+  h1.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],
+    {duration:700,easing:'cubic-bezier(.2,.7,.3,1)',fill:'forwards'});
+}});
+
+buildOv(); go(0);
+</script>
+</body>
+</html>

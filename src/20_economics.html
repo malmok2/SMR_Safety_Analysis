@@ -1,0 +1,144 @@
+<script>
+/* ---- 규모의 경제: 공통 스케일 ---- */
+const EC={ x0:150,x1:1500,px0:70,px1:670, y1:12500, py0:300,py1:25,
+  sx:P=>70+(P-150)/1350*600, sy:C=>300-C/12500*275,
+  C:P=>4000*Math.pow(P/1400,-0.49) };
+function ecAxes(){
+  let g='<line x1="70" y1="300" x2="690" y2="300" class="axis"/>'
+       +'<line x1="70" y1="300" x2="70" y2="18" class="axis"/>';
+  [0,3000,6000,9000,12000].forEach(c=>{ const y=EC.sy(c);
+    g+=`<line x1="70" y1="${y}" x2="690" y2="${y}" class="grid"/>`
+      +`<text x="62" y="${y+4}" class="lbl" text-anchor="end">${c?fmt(c):'0'}</text>`; });
+  [300,600,900,1200,1500].forEach(p=>{ const x=EC.sx(p);
+    g+=`<text x="${x}" y="320" class="lbl" text-anchor="middle">${p}</text>`; });
+  g+='<text x="690" y="338" class="lbl" text-anchor="end">정격 전기출력 (MWe)</text>'
+    +'<text x="70" y="12" class="lbl">비 자본비 (USD/kWe)</text>';
+  return g;
+}
+function ecCurve(){ let d=''; for(let P=150;P<=1500;P+=10){ d+=(d?'L':'M')+EC.sx(P).toFixed(1)+','+EC.sy(EC.C(P)).toFixed(1); } return d; }
+
+S({tag:'ECONOMY', ov:'규모의 경제 — 작게 만드는 대가',
+src:'<b>출처</b> L.M. Boldon, P. Sabharwall, INL/EXT-14-32616 (2014) §6.1 — NEA 평균 <i>n</i> = 0.51 채택. <b>유의</b> 상관식 검증 구간은 300~1300 MWe이므로 그 아래에서는 불확실성이 커진다',
+html:`<h2 class="t">출력을 줄이면 <s>kW당 비용이 오른다</s> — 얼마나 오르는지가 전부</h2>
+<ul class="b">
+  <li>용기·배관·구조물 비용은 <b>표면적</b>에 비례하고 출력은 <b>체적</b>에 비례 → 규모지수 <code>n ≈ 0.4~0.7</code></li>
+  <li>총 자본비가 아니라 <b class="cool">kW당 비용</b>을 봐야 함. 두 값은 반대 방향으로 움직임</li>
+</ul>
+<div class="body">
+  <div class="fig">
+    <div class="formula" style="white-space:nowrap;font-size:21px;padding:10px 0 14px">C₂/C₁ <span class="op">=</span> (P₂/P₁)<sup>n</sup>
+      &nbsp;&nbsp;<span class="op">→</span>&nbsp;&nbsp;
+      (C/P)₂/(C/P)₁ <span class="op">=</span> (P₂/P₁)<sup>n−1</sup>,&nbsp; <small>n − 1 &lt; 0</small></div>
+    <svg viewBox="0 0 700 345" role="img" aria-label="정격 출력에 따른 비 자본비 곡선. 출력이 작아질수록 kW당 비용이 급격히 오른다">
+      ${'{AXES}'}
+      <path id="ecc" d="" fill="none" stroke="var(--cool)" stroke-width="2.4"/>
+      <line id="ecref" x1="70" y1="0" x2="690" y2="0" stroke="var(--ink-3)" stroke-width="1" stroke-dasharray="4 4"/>
+      <text id="ecreft" x="686" y="0" class="lbl" text-anchor="end">대형 경수로 기준 1,400 MWe · 4,000</text>
+      <line id="ecvl" x1="0" y1="300" x2="0" y2="0" stroke="var(--hot)" stroke-width="1.2"/>
+      <circle id="ecpt" r="7" fill="var(--hot)"/>
+    </svg>
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">정격 전기출력</span><span class="v" id="ro-p">180<small>MWe</small></span></div>
+    <div class="readout hi"><span class="k">비 자본비</span><span class="v" id="ro-c">10,900<small>USD/kWe</small></span></div>
+    <div class="readout"><span class="k">1,400 MWe 대비</span><span class="v" id="ro-r">2.72<small>배</small></span></div>
+    <div class="ctl"><label>출력 조절 <span id="ro-s">180 MWe</span></label>
+      <input type="range" id="ec-slider" min="150" max="1400" step="10" value="180"></div>
+  </div>
+</div>`.replace('{AXES}',''),
+init(el){
+  const svg=el.querySelector('svg');
+  svg.insertAdjacentHTML('afterbegin', ecAxes());
+  const cv=el.querySelector('#ecc'); cv.setAttribute('d',ecCurve());
+  const L=cv.getTotalLength();
+  const ref=el.querySelector('#ecref'), reft=el.querySelector('#ecreft');
+  ref.setAttribute('y1',EC.sy(4000)); ref.setAttribute('y2',EC.sy(4000));
+  reft.setAttribute('y',EC.sy(4000)-8);
+  const vl=el.querySelector('#ecvl'), pt=el.querySelector('#ecpt');
+  const sl=el.querySelector('#ec-slider');
+  function upd(P){
+    const C=EC.C(P), x=EC.sx(P), y=EC.sy(C);
+    vl.setAttribute('x1',x);vl.setAttribute('x2',x);vl.setAttribute('y2',y);
+    pt.setAttribute('cx',x);pt.setAttribute('cy',y);
+    el.querySelector('#ro-p').innerHTML=fmt(P)+'<small>MWe</small>';
+    el.querySelector('#ro-c').innerHTML=fmt(C)+'<small>USD/kWe</small>';
+    el.querySelector('#ro-r').innerHTML=(C/4000).toFixed(2)+'<small>배</small>';
+    el.querySelector('#ro-s').textContent=fmt(P)+' MWe';
+  }
+  sl.oninput=()=>upd(+sl.value); upd(180);
+  if(RM) return;
+  cv.style.strokeDasharray=L; cv.style.strokeDashoffset=L;
+  cv.animate([{strokeDashoffset:L},{strokeDashoffset:0}],{duration:900,fill:'forwards',easing:'ease-in-out'});
+  // 1400 → 180 으로 미끄러지며 대가를 보여줌
+  let t0=null; sl.value=1400; upd(1400);
+  raf((t)=>{ if(t<1.0) return; const u=clamp((t-1.0)/1.6,0,1);
+    const e=1-Math.pow(1-u,3); const P=lerp(1400,180,e); sl.value=Math.round(P); upd(P); });
+}});
+
+S({tag:'ECONOMY', ov:'2.7배를 되돌리는 네 가지 인자',
+src:'<b>출처</b> Boldon &amp; Sabharwall, INL/EXT-14-32616 (2014) §5.5·§6.1, Eq.3~6·Eq.12 — 원 보고서는 NEA/OECD(2011), Carelli et al.(2010), Wilton(2012)을 인용. <b>모두 반복 건설을 전제</b>한다',
+html:`<h2 class="t">2.7배를 되돌리는 <em>네 가지 인자</em> — 버튼을 눌러 하나씩 적용</h2>
+<ul class="b">
+  <li>네 인자 모두 <b>반복</b>을 전제로 함. 지금 세계 어디에도 SMR 반복 건설 사례가 없음 — 전부 <b class="hot">FOAK</b></li>
+</ul>
+<div class="body">
+  <div class="fig">
+    <svg viewBox="0 0 700 345" role="img" aria-label="180 MWe SMR의 비 자본비가 네 가지 저감 인자를 적용할 때마다 계단식으로 내려가는 그림">
+      <path id="rc-c" d="" fill="none" stroke="var(--rule)" stroke-width="2"/>
+      <line id="rc-ref" x1="70" y1="0" x2="690" y2="0" stroke="var(--ink-3)" stroke-width="1" stroke-dasharray="4 4"/>
+      <text id="rc-reft" x="686" y="0" class="lbl" text-anchor="end">대형 경수로 4,000 USD/kWe</text>
+      <g id="rc-steps"></g>
+      <line id="rc-bar" x1="0" x2="0" stroke="var(--hot)" stroke-width="3"/>
+      <circle id="rc-pt" r="8" fill="var(--hot)"/>
+      <text id="rc-val" class="val" font-size="19" fill="var(--hot)" text-anchor="start"></text>
+    </svg>
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">180 MWe · 현재 추정</span><span class="v" id="rc-ro">10,900<small>USD/kWe</small></span></div>
+    <div class="btnrow" id="rc-btns" style="flex-direction:column;gap:7px">
+      <button class="btn" data-i="0">① Co-siting · 다수호기</button>
+      <button class="btn" data-i="1">② Modular design · 공장제작·학습</button>
+      <button class="btn" data-i="2">③ Plant configuration · 부지 구성</button>
+      <button class="btn" data-i="3">④ NOAK · 성숙 단계</button>
+      <button class="btn danger" data-i="-1">전부 해제</button>
+    </div>
+    <div class="src" style="font-size:12.5px">불가분비 분담 · 1호기 15 %+2~4호기 각 5 % ·
+      4기 부지 학습계수 0.81~0.90 · 정격 2배당 4.5 %</div>
+  </div>
+</div>`,
+init(el){
+  const svg=el.querySelector('svg');
+  svg.insertAdjacentHTML('afterbegin', ecAxes());
+  el.querySelector('#rc-c').setAttribute('d',ecCurve());
+  const ref=el.querySelector('#rc-ref'), reft=el.querySelector('#rc-reft');
+  ref.setAttribute('y1',EC.sy(4000));ref.setAttribute('y2',EC.sy(4000));reft.setAttribute('y',EC.sy(4000)-8);
+  const VAL=[10900,9700,8100,6300,4700];
+  const NAME=['Co-siting','Modular design','Plant configuration','NOAK'];
+  const X=EC.sx(180);
+  const g=el.querySelector('#rc-steps');
+  VAL.slice(1).forEach((v,i)=>{ const y=EC.sy(v);
+    g.insertAdjacentHTML('beforeend',
+      `<g opacity="0" data-s="${i}"><line x1="${X}" y1="${y}" x2="690" y2="${y}" stroke="var(--ok)" stroke-width="1" stroke-dasharray="5 4"/>`
+      +`<text x="686" y="${y-7}" class="lbl" fill="var(--ok)" text-anchor="end">${NAME[i]} → ${fmt(v)}</text></g>`); });
+  const bar=el.querySelector('#rc-bar'), pt=el.querySelector('#rc-pt'), vt=el.querySelector('#rc-val');
+  bar.setAttribute('x1',X);bar.setAttribute('x2',X);bar.setAttribute('y1',EC.sy(10900));
+  let on=0, shown=10900, target=10900;
+  function apply(){
+    target=VAL[on];
+    el.querySelectorAll('#rc-btns .btn').forEach(b=>{
+      const i=+b.dataset.i; if(i>=0) b.classList.toggle('act', i<on); });
+    [...g.children].forEach((c,i)=>c.setAttribute('opacity', i<on?1:0));
+  }
+  raf(()=>{ shown=lerp(shown,target,0.10);
+    const y=EC.sy(shown); bar.setAttribute('y2',y); pt.setAttribute('cx',X);pt.setAttribute('cy',y);
+    vt.setAttribute('x',X+15);vt.setAttribute('y',y+6);vt.textContent=fmt(shown)+' USD/kWe';
+    el.querySelector('#rc-ro').innerHTML=fmt(shown)+'<small>USD/kWe</small>';
+    pt.setAttribute('fill', shown<5200?'var(--ok)':'var(--hot)');
+    bar.setAttribute('stroke', shown<5200?'var(--ok)':'var(--hot)');
+    vt.setAttribute('fill', shown<5200?'var(--ok)':'var(--hot)');
+  });
+  el.querySelectorAll('#rc-btns .btn').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i; if(i<0){on=0;} else {on = (i<on)? i : i+1;} apply(); });
+  apply();
+}});
+</script>

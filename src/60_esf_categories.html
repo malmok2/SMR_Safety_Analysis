@@ -1,0 +1,165 @@
+<script>
+S({tag:'SINGLE FAILURE', ov:'단일고장기준 — 원문과 세 가지 함정',
+src:'<b>출처</b> 10 CFR Part 50, Appendix A, “Definitions and Explanations” (eCFR 원문 확인) · IAEA SSR-2/1 (Rev.1) Requirement 25',
+html:`<h2 class="t">하나는 고장 났다고 <em>치고</em> 설계한다 — 단, 세 가지를 정확히</h2>
+<div class="body">
+  <div class="fig" style="justify-content:flex-start;padding-top:4px">
+    <blockquote class="q" style="font-size:15.5px;line-height:1.55">
+      “A single failure means an occurrence which results in the loss of capability of a component to perform its
+      intended safety functions. <b>Multiple failures resulting from a single occurrence are considered to be a
+      single failure.</b> Fluid and electric systems are considered to be designed against an assumed single failure
+      if neither (1) a single failure of any <b>active</b> component (assuming passive components function properly)
+      nor (2) a single failure of a <b>passive</b> component (assuming active components function properly),
+      results in a loss of the capability of the system to perform its safety functions.”
+      <span class="cite">10 CFR 50 Appendix A · Definitions and Explanations</span></blockquote>
+  </div>
+  <div class="side" style="width:420px">
+    <div class="readout"><span class="k">함정 ①</span>
+      <div style="font-size:16px;line-height:1.45;color:var(--ink);font-weight:300;margin-top:4px">
+        단일고장기준은 <b>GDC 본문이 아니라</b> 부록 서두의 <b class="amb">정의</b>에 있다. 조문 인용 시 가장 흔히 틀리는 지점.</div></div>
+    <div class="readout"><span class="k">함정 ②</span>
+      <div style="font-size:16px;line-height:1.45;color:var(--ink);font-weight:300;margin-top:4px">
+        능동 고장과 피동 고장을 <b class="cool">각각 따로</b> 가정한다. 둘을 <b>동시에</b> 가정하지 않는다.</div></div>
+    <div class="readout"><span class="k">함정 ③</span>
+      <div style="font-size:16px;line-height:1.45;color:var(--ink);font-weight:300;margin-top:4px">
+        하나의 사건에서 비롯된 다중 고장은 <b>단일 고장으로 센다</b>. 전원반 하나가 죽어 밸브 여럿이 멈춰도 단일 고장.</div></div>
+    <div class="readout warn"><span class="k">아직 미정</span>
+      <div style="font-size:16px;line-height:1.45;color:var(--ink);font-weight:300;margin-top:4px">
+        유체계통 <b>피동 부품</b>의 단일고장 적용 조건은 원문에 <span class="mono hot">under development</span>로 남아 있다.
+        피동계통에 기대는 SMR이 규제상 새 질문을 만드는 지점.</div></div>
+  </div>
+</div>`});
+
+S({tag:'PLANT STATES', ov:'플랜트 상태 — 빈도가 낮을수록 허용 결과가 느슨해진다',
+src:'<b>출처</b> IAEA SSR-2/1 (Rev.1) Requirement 19(설계기준사고)·Requirement 20(설계확장조건). 빈도 구간은 관례적 크기이며 규제·설계마다 경계가 다르다',
+html:`<h2 class="t">무엇에 대비하는가 — <em>빈도</em>가 <em>허용 결과</em>를 정한다</h2>
+<ul class="b">
+  <li>매년 일어날 수 있는 이탈에서 연료가 손상되면 안 되지만, 백만 년에 한 번은 <b>격납만 지키면</b> 된다</li>
+  <li>심층방어 단계 구분(앞 슬라이드)이 이 <b class="cool">빈도–결과 축</b>과 정확히 대응한다</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 330" role="img" aria-label="발생 빈도에 따른 플랜트 상태 구분과 각 구간에서 허용되는 결과">
+  <g id="ps-ax"></g><g id="ps-b"></g>
+</svg>
+</div></div>`,
+init(el){
+  const X=e=>120+(-e)/7*900;     // 10^0 .. 10^-7 /yr
+  let ax='<line x1="120" y1="266" x2="1030" y2="266" class="axis"/>';
+  for(let e=0;e>=-7;e--){ ax+=`<line x1="${X(e)}" y1="40" x2="${X(e)}" y2="266" class="grid"/>`
+    +`<text x="${X(e)}" y="288" class="lbl" text-anchor="middle">10<tspan dy="-6" font-size="10">${e}</tspan></text>`; }
+  ax+='<text x="1030" y="312" class="lbl" text-anchor="end">발생 빈도 (1/년) — 오른쪽으로 갈수록 드묾</text>';
+  el.querySelector('#ps-ax').innerHTML=ax;
+  const B=[['정상운전',0,-2,'var(--ok)','방사선 방출이 규제 한도 이내',236],
+    ['예상운전과도 · AOO',-2,-4,'var(--cool)','연료설계한계 초과 금지 · 계통 손상 없음',186],
+    ['설계기준사고 · DBA',-4,-6,'var(--amber)','연료 일부 손상 허용 · 방사선 기준 만족',136],
+    ['설계확장조건 · DEC',-6,-7,'var(--hot)','노심용융 포함 · 격납 건전성 유지',86]];
+  const g=el.querySelector('#ps-b');
+  B.forEach((b,i)=>{ const x0=X(b[1]),x1=X(b[2]),y=b[5];
+    g.insertAdjacentHTML('beforeend',
+      `<g data-p="${i}" opacity="0"><rect x="${x0}" y="${y}" width="${x1-x0}" height="${266-y}" fill="${b[3]}" opacity=".12"/>`
+      +`<line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" stroke="${b[3]}" stroke-width="2.5"/>`
+      +`<text x="${(x0+x1)/2}" y="${y-26}" text-anchor="middle" font-family="var(--sans)" font-size="17" fill="${b[3]}" font-weight="500">${b[0]}</text>`
+      +`<text x="${(x0+x1)/2}" y="${y-8}" text-anchor="middle" class="lbl">${b[4]}</text></g>`); });
+  g.insertAdjacentHTML('beforeend',
+    '<text x="120" y="30" class="lbl b">↑ 허용되는 결과가 느슨해진다</text>');
+  const items=[...g.querySelectorAll('[data-p]')];
+  if(RM){ items.forEach(i=>i.setAttribute('opacity',1)); return; }
+  items.forEach((it,i)=>it.animate([{opacity:0},{opacity:1}],{duration:420,delay:220*i,fill:'forwards'}));
+}});
+
+S({tag:'GDC MAP', ov:'GDC 지도 — 요건이 계통을 부른다',
+src:'<b>출처</b> 10 CFR Part 50, Appendix A(eCFR·Cornell LII 확인). 국내 대응은 「원자로시설 등의 기술기준에 관한 규칙」 제20·23·24·29·30조',
+html:`<h2 class="t">막히면 <em>GDC 원문</em>을 찾아 읽는 것이 가장 빠르다</h2>
+<div class="body col">
+<table class="d sm">
+<tr><th style="width:12%">분류</th><th style="width:9%">GDC</th><th style="width:34%">제목</th><th>요구의 핵심</th></tr>
+<tr><td rowspan="4">설계 원칙</td><td class="n">2</td><td>Design Bases for Protection Against Natural Phenomena</td><td>부지 이력상 가장 심한 자연현상 + 여유도 + 복합효과</td></tr>
+<tr><td class="n">4</td><td>Environmental and Dynamic Effects Design Bases</td><td>파단 반력·비산물·제트 대응. 파단확률이 극히 낮으면 동적효과 배제 가능</td></tr>
+<tr><td class="n">17</td><td>Electric Power Systems</td><td>물리적으로 독립된 외부전원 2회선 + 소내전원</td></tr>
+<tr><td class="n">23</td><td>Protection System Failure Modes</td><td>단선·전원상실 시 <b class="ok">안전한 상태로 실패(fail-safe)</b></td></tr>
+<tr class="mark"><td rowspan="2">반응도</td><td class="n">26</td><td>Reactivity Control System Redundancy and Capability</td><td><b>서로 다른 설계원리의 독립 2계통</b> · stuck rod 가정</td></tr>
+<tr class="mark"><td class="n">27</td><td>Combined Reactivity Control Systems Capability</td><td>ECCS 붕산과 조합해 냉각 가능 상태로 정지·유지</td></tr>
+<tr><td rowspan="2">열 제거</td><td class="n">34</td><td>Residual Heat Removal</td><td>소내전원만 / 소외전원만 <b>각각의 경우</b>에 단일고장 가정</td></tr>
+<tr><td class="n">35</td><td>Emergency Core Cooling</td><td>LOCA 시 충분한 노심냉각 · 금속–물 반응 제한</td></tr>
+<tr><td rowspan="3">격납</td><td class="n">16</td><td>Containment Design</td><td>“essentially leak-tight barrier” 제공</td></tr>
+<tr><td class="n">38</td><td>Containment Heat Removal</td><td>사고 후 압력·온도를 신속히 낮추고 유지</td></tr>
+<tr><td class="n">55·56·57</td><td>Containment Isolation Valves</td><td>관통 배관 격리밸브 <b>네 가지 배열</b> 중 하나 (9장)</td></tr>
+</table>
+</div>`});
+
+/* ================================================================
+   SECTION 05 — 공학적안전설비
+   ================================================================ */
+SECT('05 · 공학적안전설비');
+S({bare:true, cls:'div', ov:'§05 공학적안전설비 (ESF)',
+html:`<div class="no">05</div><h2>공학적안전설비</h2><div class="ln"></div>
+<p>ESF의 정의, 능동과 피동의 구분, 설계가 반드시 갖춰야 할 다섯 가지 성질.
+6~9장의 각 계통을 읽기 위한 공통 어휘를 여기서 확보한다.</p>`});
+
+S({tag:'PASSIVE CATEGORIES', ov:'피동 Category A~D — 어디까지가 피동인가',
+src:'<b>출처</b> IAEA-TECDOC-626, <i>Safety Related Terms for Advanced Nuclear Plants</i> (1991)',
+html:`<h2 class="t">“피동”은 <em>이분법이 아니다</em> — 네 등급으로 갈린다</h2>
+<ul class="b">
+  <li>범주가 오른쪽으로 갈수록 <b class="hot">고장 가능성이 있는 요소</b>가 하나씩 늘어난다</li>
+  <li>실제 SMR의 “피동 안전계통”은 대부분 <b>Category C 또는 D</b> — 피동이라고 고장 나지 않는 게 아니다</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 340" role="img" aria-label="IAEA 피동안전계통 Category A부터 D까지의 구성 요소와 예시">
+  <g id="pc-cols"></g>
+  <text x="560" y="332" text-anchor="middle" class="lbl" fill="var(--hot)">← 완전한 피동 &nbsp;&nbsp;·&nbsp;&nbsp; 움직이는 부품과 개시 신호가 늘어난다 →</text>
+</svg>
+</div></div>`,
+init(el){
+  const C=[['Category A',[0,0,0],'연료피복재 · 압력경계\\n복사 · 전도 냉각','var(--ok)'],
+    ['Category B',[1,0,0],'수조 침수 열교환기\\n자연순환 · 자연대류','var(--cool)'],
+    ['Category C',[1,1,0],'축압기 + 체크밸브\\n안전방출밸브 · 파열판','var(--amber)'],
+    ['Category D',[1,1,1],'중력구동 비상냉각\\n중력낙하 제어봉','var(--hot)']];
+  const LAMP=['작동유체 이동','기계 가동부','개시 신호·저장에너지'];
+  const g=el.querySelector('#pc-cols');
+  C.forEach((c,i)=>{ const x=40+i*272, w=248;
+    let h=`<g data-c="${i}" opacity="0">`
+      +`<rect x="${x}" y="24" width="${w}" height="270" fill="var(--panel)" stroke="${c[3]}" stroke-width="1.6"/>`
+      +`<rect x="${x}" y="24" width="${w}" height="40" fill="${c[3]}"/>`
+      +`<text x="${x+w/2}" y="51" text-anchor="middle" font-family="var(--mono)" font-size="16" fill="#071018" font-weight="600">${c[0]}</text>`;
+    c[1].forEach((on,j)=>{ const y=94+j*38;
+      h+=`<circle cx="${x+26}" cy="${y}" r="7" fill="${on?c[3]:'none'}" stroke="${on?c[3]:'var(--rule)'}" stroke-width="1.6"/>`
+        +`<text x="${x+44}" y="${y+5}" class="lbl" fill="${on?'var(--ink)':'var(--ink-3)'}">${LAMP[j]}</text>`; });
+    h+=`<line x1="${x+18}" y1="216" x2="${x+w-18}" y2="216" stroke="var(--rule)"/>`;
+    c[2].split('\\n').forEach((t,k)=>{
+      h+=`<text x="${x+w/2}" y="${248+k*22}" text-anchor="middle" font-family="var(--sans)" font-size="15" fill="var(--ink-2)">${t}</text>`; });
+    h+='</g>'; g.insertAdjacentHTML('beforeend',h);
+    if(i<3) g.insertAdjacentHTML('beforeend',
+      `<path d="M${x+w+6},159 L${x+w+18},159" stroke="var(--rule)" stroke-width="2"/>`);
+  });
+  const cols=[...g.querySelectorAll('[data-c]')];
+  if(RM){ cols.forEach(c=>c.setAttribute('opacity',1)); return; }
+  cols.forEach((c,i)=>c.animate([{opacity:0},{opacity:1}],{duration:400,delay:200*i,fill:'forwards'}));
+}});
+
+S({tag:'ESF DESIGN', ov:'ESF가 갖춰야 할 다섯 가지 성질',
+src:'<b>왼쪽 두 열</b> 2025-2학기 강의자료 「Safety Requirements for SMR」의 “Design Characteristics of ESF” 항목. <b>오른쪽 열</b>은 10 CFR 50 Appendix A 및 IAEA SSR-2/1 (Rev.1)에서 대응시킨 것',
+html:`<h2 class="t">다섯 가지 성질은 <em>각각 조문</em>을 갖고 있다</h2>
+<ul class="b">
+  <li>조문과 함께 외우면 실무에서 훨씬 쓸모 있음 — “왜 이렇게 만들었나”가 곧 “어느 조문 때문인가”</li>
+</ul>
+<div class="body">
+  <div class="fig" style="justify-content:flex-start">
+  <table class="d">
+    <tr><th style="width:20%">성질</th><th style="width:44%">뜻</th><th>대응 요건</th></tr>
+    <tr><td>다중성 Redundancy</td><td>개별 계열(train)이 각각 요구 기능을 만족할 충분한 용량</td><td class="mono" style="font-size:13.5px">단일고장기준 · GDC 34·35·38</td></tr>
+    <tr><td>다양성 Diversity</td><td>서로 다른 원리·제작사·기술로 <b>공통원인고장</b>을 피함</td><td class="mono" style="font-size:13.5px">GDC 22 · GDC 26 · SSR-2/1 Req.24</td></tr>
+    <tr><td>독립성 Independency</td><td>이중화된 계열이 물리적으로 분리되어 서로 영향 없음</td><td class="mono" style="font-size:13.5px">GDC 22·24 · SSR-2/1 Req.21</td></tr>
+    <tr class="mark"><td>Fail-safe 설계</td><td>실패했을 때의 결과가 <b>안전한 쪽</b>이 되도록 체계적으로</td><td class="mono" style="font-size:13.5px">GDC 23 · SSR-2/1 Req.26</td></tr>
+    <tr><td>인터록 Interlock</td><td>정해진 조건에서만, 또는 조건이 성립하면 반드시 작동</td><td class="mono" style="font-size:13.5px">GDC 21·24</td></tr>
+  </table>
+  </div>
+  <div class="side">
+    <blockquote class="q" style="border-left-color:var(--ok)">
+      <b>Fail-safe의 가장 좋은 예 — 제어봉.</b><br>
+      전원이 끊기면 전자석이 풀리고 제어봉이 <b>중력으로</b> 떨어진다.
+      “전원 상실”이라는 고장이 곧 “정지”라는 안전한 결과가 된다.<br><br>
+      반대로 밀어 넣는 데 전기가 필요한 설계였다면 정전이 곧 <b class="hot">정지 불능</b>이다.
+      <span class="cite">같은 부품, 반대의 논리</span></blockquote>
+  </div>
+</div>`});
+</script>
