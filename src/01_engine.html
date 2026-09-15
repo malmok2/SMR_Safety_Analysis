@@ -48,13 +48,14 @@ function applyStatic(){
   document.title = TX('SMR 설계요건과 공학적안전설비',
                      'SMR Design Requirements and Engineered Safety Features');
   const h=document.getElementById('help');
-  if(h) h.textContent = TX('← → 이동 · O 목차 · L 한/영 · T 배경 · P 인쇄·PDF · F 전체화면',
-                          '← → Move · O Index · L KO/EN · T Theme · P Print·PDF · F Fullscreen');
+  if(h) h.textContent = TX('← → 이동 · O 목차 · R 다시재생 · F 전체화면',
+                          '← → Move · O Index · R Replay · F Fullscreen');
   const q=(id)=>document.getElementById(id);
   if(q('lang-ko')) q('lang-ko').classList.toggle('on', LANG==='ko');
   if(q('lang-en')) q('lang-en').classList.toggle('on', LANG==='en');
   if(q('topdf'))   q('topdf').title = TX('인쇄·PDF 모드로 전환 (P)','Switch to print · PDF mode (P)');
-  if(q('theme')){ q('theme').textContent = THEME==='dark' ? 'LIGHT' : 'DARK';
+  if(q('theme')){ q('theme').textContent = THEME==='dark' ? TX('밝은 배경','Light background')
+                                                          : TX('어두운 배경','Dark background');
                   q('theme').title = TX('배경 밝기 전환 (T)','Switch background (T)'); }
   if(q('pt-theme')) q('pt-theme').textContent = THEME==='dark'
       ? TX('밝은 배경으로','Light background') : TX('어두운 배경으로','Dark background');
@@ -197,13 +198,18 @@ function toDeck(){
   location.href=u.toString();
 }
 
-/* ---------- 스케일 ---------- */
+/* ---------- 스케일 ----------
+   아래 46 px 은 조작 막대 몫으로 비워 둔다. 전체화면에서는 띠를 없애고 화면을 다 쓴다. */
+const BAND = 46;
 function fit(){
   if(PRINT) return;
-  const k=Math.min(innerWidth/1280, innerHeight/720);
-  stage.style.transform='scale('+k+')';
+  const band = document.fullscreenElement ? 0 : BAND;
+  const k = Math.min(innerWidth/1280, (innerHeight-band)/720);
+  stage.style.transform = 'translateY('+(-band/2)+'px) scale('+k+')';
 }
-addEventListener('resize',fit); fit();
+addEventListener('resize',fit);
+document.addEventListener('fullscreenchange',fit);
+fit();
 
 /* ---------- 내비게이션 ---------- */
 addEventListener('keydown',e=>{
@@ -230,16 +236,6 @@ addEventListener('click',e=>{
   if(document.getElementById('ov').classList.contains('on')) return;
   go(cur + (e.clientX < innerWidth*0.28 ? -1 : 1));
 });
-
-/* ---------- 조작 안내·언어/PDF 버튼 자동 숨김 ---------- */
-(function(){
-  const els=['help','hud'].map(id=>document.getElementById(id)).filter(Boolean);
-  if(!els.length) return; let tm;
-  function poke(){ els.forEach(e=>e.style.opacity=.72);
-    clearTimeout(tm); tm=setTimeout(()=>els.forEach(e=>e.style.opacity=0),4000); }
-  els.forEach(e=>e.style.transition='opacity .5s');
-  addEventListener('mousemove',poke); addEventListener('keydown',poke); poke();
-})();
 
 /* ---------- 오버뷰 ---------- */
 function buildOv(){

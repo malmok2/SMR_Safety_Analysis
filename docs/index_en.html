@@ -200,10 +200,9 @@ blockquote.q .cite{display:block;margin-top:9px;font-family:var(--mono);font-siz
 .div .ln{width:90px;height:2px;background:var(--cool);margin:22px 0 0}
 
 /* ---------- 진행 표시 ---------- */
-#prog{position:fixed;left:0;bottom:0;height:2px;background:var(--cool);width:0;
+#prog{position:fixed;left:0;bottom:46px;height:2px;background:var(--cool);width:0;
   transition:width .28s ease;z-index:40}
-#help{position:fixed;right:16px;bottom:7px;font-family:var(--mono);font-size:11px;
-  color:var(--ink-3);letter-spacing:.06em;z-index:40;opacity:.7}
+:root:fullscreen #prog{bottom:0}
 
 /* ---------- 오버뷰 ---------- */
 #ov{position:fixed;inset:0;background:var(--veil);z-index:50;display:none;
@@ -227,16 +226,24 @@ blockquote.q .cite{display:block;margin-top:9px;font-family:var(--mono);font-siz
 .axis{stroke:var(--rule);stroke-width:1}
 .grid{stroke:var(--rule);stroke-width:.6;stroke-dasharray:2 4}
 
-/* ---------- 언어·PDF 조작부 ---------- */
-#hud{position:fixed;left:16px;bottom:5px;z-index:41;display:flex;gap:6px;align-items:center;
-  opacity:.72;transition:opacity .5s}
-#hud:hover{opacity:1!important}
-#hud button{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--ink-3);
-  background:var(--panel);border:1px solid var(--rule);padding:4px 9px;cursor:pointer;
+/* ---------- 조작 막대 ----------
+   무대 아래 46 px 띠. fit() 이 그만큼 자리를 비워 두므로 어떤 화면비에서도 슬라이드를 덮지 않는다.
+   전체화면(F)에서는 띠가 사라지고 슬라이드가 화면을 다 쓴다. */
+#hud{position:fixed;left:0;right:0;bottom:0;height:46px;z-index:41;
+  display:flex;align-items:center;gap:12px;padding:0 18px;
+  background:var(--panel);border-top:1px solid var(--rule)}
+#hud .seg{display:flex;border:1px solid var(--rule);background:var(--ground)}
+#hud .seg button{font-family:var(--sans);font-size:13.5px;font-weight:500;color:var(--ink-3);
+  background:none;border:0;padding:7px 16px;cursor:pointer;transition:color .15s,background .15s}
+#hud .seg button.on{color:var(--on-accent);background:var(--cool)}
+#hud .seg button:hover:not(.on){color:var(--ink)}
+#hud .one{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--ink-2);
+  background:var(--ground);border:1px solid var(--rule);padding:7px 13px;cursor:pointer;
   transition:color .15s,border-color .15s}
-#hud button:hover{color:var(--cool);border-color:var(--cool)}
-#hud button.on{color:var(--cool);border-color:var(--cool);background:var(--act)}
-#hud .gap{width:5px}
+#hud .one:hover{color:var(--cool);border-color:var(--cool)}
+#hud .sp{flex:1}
+#hud .keys{font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.06em}
+:root:fullscreen #hud{display:none}
 
 /* ---------- 인쇄(PDF) 모드 — 46장을 한 번에 지면에 펼친다 ---------- */
 #sheets{display:none}
@@ -276,13 +283,12 @@ body.printing .cover .hint{display:none}   /* 지면에서는 조작키 안내�
 <script>window.SMR_LANG="en"</script>
 <div id="stage"></div>
 <div id="prog"></div>
-<div id="help">← → 이동 · O 목차 · L 한/영 · P 인쇄·PDF · F 전체화면</div>
 <div id="hud" class="noprint">
-  <button id="lang-ko" type="button">KO</button>
-  <button id="lang-en" type="button">EN</button>
-  <span class="gap"></span>
-  <button id="theme" type="button">LIGHT</button>
-  <button id="topdf" type="button">PDF ↓</button>
+  <span class="seg"><button id="lang-ko" type="button">한국어</button><button id="lang-en" type="button">English</button></span>
+  <button class="one" id="theme" type="button">밝은 배경</button>
+  <button class="one" id="topdf" type="button">PDF ↓</button>
+  <span class="sp"></span>
+  <span class="keys" id="help"></span>
 </div>
 <div id="ov"><div class="grid" id="ovg"></div></div>
 <div id="ptool" class="noprint">
@@ -343,13 +349,14 @@ function applyStatic(){
   document.title = TX('SMR 설계요건과 공학적안전설비',
                      'SMR Design Requirements and Engineered Safety Features');
   const h=document.getElementById('help');
-  if(h) h.textContent = TX('← → 이동 · O 목차 · L 한/영 · T 배경 · P 인쇄·PDF · F 전체화면',
-                          '← → Move · O Index · L KO/EN · T Theme · P Print·PDF · F Fullscreen');
+  if(h) h.textContent = TX('← → 이동 · O 목차 · R 다시재생 · F 전체화면',
+                          '← → Move · O Index · R Replay · F Fullscreen');
   const q=(id)=>document.getElementById(id);
   if(q('lang-ko')) q('lang-ko').classList.toggle('on', LANG==='ko');
   if(q('lang-en')) q('lang-en').classList.toggle('on', LANG==='en');
   if(q('topdf'))   q('topdf').title = TX('인쇄·PDF 모드로 전환 (P)','Switch to print · PDF mode (P)');
-  if(q('theme')){ q('theme').textContent = THEME==='dark' ? 'LIGHT' : 'DARK';
+  if(q('theme')){ q('theme').textContent = THEME==='dark' ? TX('밝은 배경','Light background')
+                                                          : TX('어두운 배경','Dark background');
                   q('theme').title = TX('배경 밝기 전환 (T)','Switch background (T)'); }
   if(q('pt-theme')) q('pt-theme').textContent = THEME==='dark'
       ? TX('밝은 배경으로','Light background') : TX('어두운 배경으로','Dark background');
@@ -492,13 +499,18 @@ function toDeck(){
   location.href=u.toString();
 }
 
-/* ---------- 스케일 ---------- */
+/* ---------- 스케일 ----------
+   아래 46 px 은 조작 막대 몫으로 비워 둔다. 전체화면에서는 띠를 없애고 화면을 다 쓴다. */
+const BAND = 46;
 function fit(){
   if(PRINT) return;
-  const k=Math.min(innerWidth/1280, innerHeight/720);
-  stage.style.transform='scale('+k+')';
+  const band = document.fullscreenElement ? 0 : BAND;
+  const k = Math.min(innerWidth/1280, (innerHeight-band)/720);
+  stage.style.transform = 'translateY('+(-band/2)+'px) scale('+k+')';
 }
-addEventListener('resize',fit); fit();
+addEventListener('resize',fit);
+document.addEventListener('fullscreenchange',fit);
+fit();
 
 /* ---------- 내비게이션 ---------- */
 addEventListener('keydown',e=>{
@@ -525,16 +537,6 @@ addEventListener('click',e=>{
   if(document.getElementById('ov').classList.contains('on')) return;
   go(cur + (e.clientX < innerWidth*0.28 ? -1 : 1));
 });
-
-/* ---------- 조작 안내·언어/PDF 버튼 자동 숨김 ---------- */
-(function(){
-  const els=['help','hud'].map(id=>document.getElementById(id)).filter(Boolean);
-  if(!els.length) return; let tm;
-  function poke(){ els.forEach(e=>e.style.opacity=.72);
-    clearTimeout(tm); tm=setTimeout(()=>els.forEach(e=>e.style.opacity=0),4000); }
-  els.forEach(e=>e.style.transition='opacity .5s');
-  addEventListener('mousemove',poke); addEventListener('keydown',poke); poke();
-})();
 
 /* ---------- 오버뷰 ---------- */
 function buildOv(){
