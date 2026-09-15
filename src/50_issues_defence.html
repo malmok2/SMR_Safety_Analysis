@@ -9,37 +9,37 @@ Every status in this chapter is <b>as of September 2026</b>; state it without th
 
 S({tag:'ECONOMY · FOAK', ov:'[[FOAK의 벽 — 실적치와 목표치||The FOAK wall - actuals against targets]]',
 src:'[[<b>출처</b> WNISR, “Ontario’s Darlington SMR project to cost nearly $21 billion” (2025) · World Nuclear News, “Final investment decision taken for Romania’s SMRs” (2026) · IEA, <i>The Path to a New Era for Nuclear Energy</i> (2025). <b>유의</b> 사업비 포함 범위(송전·부지·금융비용)와 통화가 서로 달라 단순 비교는 주의||<b>Source</b> WNISR, &#8220;Ontario&#8217;s Darlington SMR project to cost nearly $21 billion&#8221; (2025) · World Nuclear News, &#8220;Final investment decision taken for Romania&#8217;s SMRs&#8221; (2026) · IEA, <i>The Path to a New Era for Nuclear Energy</i> (2025). <b>Caution</b> the projects differ in scope (transmission, site, financing) and in currency, so the figures are not directly comparable]]',
-html:`<h2 class="t">[[저감 인자는 전부 <em>반복</em>을 전제한다 — 그런데 아직 <s>FOAK뿐</s>이다||Every reduction factor assumes <em>repetition</em> - and so far there is <s>only FOAK</s>]]</h2>
+html:`<h2 class="t">[[저감 인자는 전부 <em>반복</em>을 전제한다 — 그런데 아직 <s>FOAK뿐</s>이다||Every factor assumes <em>repetition</em> - so far there is <s>only FOAK</s>]]</h2>
 <ul class="b">
   <li>[[Darlington BWRX-300 4기 <code>C$20.9억</code> · 약 1,200 MWe → kW당 <b class="hot">약 C$17,400</b>||Darlington, four BWRX-300 units, <code>C$20.9 bn</code> · about 1,200 MWe &#8594; <b class="hot">about C$17,400 per kW</b>]]</li>
   <li>[[Doicești NuScale 6모듈 <code>USD 60~70억</code> · 462 MWe → kW당 <b class="hot">약 13,000~15,200 USD</b>||Doicești, six NuScale modules, <code>USD 6-7 bn</code> · 462 MWe &#8594; <b class="hot">about USD 13,000-15,200 per kW</b>]]</li>
   <li>[[IEA 2040년 목표는 미국·유럽 <code>USD 4,500/kW</code> · LCOE <code>60~80 USD/MWh</code>||The IEA target for 2040 in the US and Europe is <code>USD 4,500/kW</code> with an LCOE of <code>60-80 USD/MWh</code>]]</li>
 </ul>
 <div class="body"><div class="fig">
-<svg viewBox="0 0 1120 300" role="img" aria-label="[[SMR 실적 사업비와 IEA 2040년 목표 단가 비교||Announced SMR project costs against the IEA target for 2040]]">
+<svg viewBox="0 0 1120 350" role="img" aria-label="[[SMR 실적 사업비와 IEA 2040년 목표 단가 비교||Announced SMR project costs against the IEA target for 2040]]">
   <g id="fk-ax"></g>
   <g id="fk-bars"></g>
 </svg>
 </div></div>`,
 init(el){
   const X=v=>230+v/18000*820;
-  let ax='<line x1="230" y1="248" x2="1060" y2="248" class="axis"/>';
-  [0,4500,9000,13500,18000].forEach(v=>{ ax+=`<line x1="${X(v)}" y1="40" x2="${X(v)}" y2="248" class="grid"/>`
-    +`<text x="${X(v)}" y="270" class="lbl" text-anchor="middle">${fmt(v)}</text>`; });
-  ax+='<text x="1060" y="292" class="lbl" text-anchor="end">'
+  let ax='<line x1="230" y1="292" x2="1060" y2="292" class="axis"/>';
+  [0,4500,9000,13500,18000].forEach(v=>{ ax+=`<line x1="${X(v)}" y1="46" x2="${X(v)}" y2="292" class="grid"/>`
+    +`<text x="${X(v)}" y="314" class="lbl" text-anchor="middle">${fmt(v)}</text>`; });
+  ax+='<text x="1060" y="340" class="lbl" text-anchor="end">'
      +TX('kW당 자본비 (현지 통화)','Capital cost per kW (local currency)')+'</text>';
-  ax+=`<line x1="${X(4500)}" y1="34" x2="${X(4500)}" y2="248" stroke="var(--ok)" stroke-width="1.6" stroke-dasharray="5 4"/>`
-     +`<text x="${X(4500)+10}" y="30" class="lbl" fill="var(--ok)">${TX('IEA 2040년 목표 4,500','IEA 2040 target 4,500')}</text>`;
+  ax+=`<line x1="${X(4500)}" y1="40" x2="${X(4500)}" y2="292" stroke="var(--ok)" stroke-width="1.6" stroke-dasharray="5 4"/>`
+     +`<text x="${X(4500)+10}" y="34" class="lbl" fill="var(--ok)">${TX('IEA 2040년 목표 4,500','IEA 2040 target 4,500')}</text>`;
   el.querySelector('#fk-ax').innerHTML=ax;
   const B=[[TX('Darlington · BWRX-300 4기','Darlington · BWRX-300 ×4'),17400,'C$','var(--hot)'],
            [TX('Doicești · NuScale 6모듈','Doicești · NuScale ×6'),14100,'USD','var(--hot)'],
            [TX('IEA 2040년 목표','IEA 2040 target'),4500,'USD','var(--ok)']];
   const g=el.querySelector('#fk-bars');
-  B.forEach((b,i)=>{ const y=62+i*62;
+  B.forEach((b,i)=>{ const y=72+i*76;
     g.insertAdjacentHTML('beforeend',
-      `<text x="218" y="${y+22}" class="lbl b" text-anchor="end">${b[0]}</text>`
-      +`<rect x="230" y="${y}" height="30" width="0" fill="${b[3]}" opacity=".8" data-b="${i}"/>`
-      +`<text x="0" y="${y+21}" class="val" fill="${b[3]}" data-t="${i}"></text>`); });
+      `<text x="218" y="${y+26}" class="lbl b" text-anchor="end">${b[0]}</text>`
+      +`<rect x="230" y="${y}" height="38" width="0" fill="${b[3]}" opacity=".8" data-b="${i}"/>`
+      +`<text x="0" y="${y+26}" class="val" fill="${b[3]}" data-t="${i}"></text>`); });
   function set(k){ B.forEach((b,i)=>{ const w=X(b[1]*k)-230;
     el.querySelector(`[data-b="${i}"]`).setAttribute('width',Math.max(0,w));
     const t=el.querySelector(`[data-t="${i}"]`);
@@ -149,11 +149,11 @@ html:`<h2 class="t">[[사고는 <em>겹</em>을 하나씩 뚫는다 — 어디�
 </ul>
 <div class="body">
   <div class="fig">
-  <svg viewBox="0 0 860 330" role="img" aria-label="[[심층방어 5단계를 사고가 통과하는 모습. 정상 설계에서는 Level 3의 공학적안전설비에서 멈춘다||An accident travelling through the five levels of defence in depth. In a sound design it stops at the Level 3 engineered safety features]]">
+  <svg viewBox="0 0 860 436" role="img" aria-label="[[심층방어 5단계를 사고가 통과하는 모습. 정상 설계에서는 Level 3의 공학적안전설비에서 멈춘다||An accident travelling through the five levels of defence in depth. In a sound design it stops at the Level 3 engineered safety features]]">
     <g id="dd-lv"></g>
     <circle id="dd-tok" cx="416" cy="6" r="11" fill="var(--hot)"/>
     <text id="dd-toklbl" x="416" y="-8" class="lbl" [[fill="var(--hot)" text-anchor="middle">사고</text>||fill="var(--hot)" text-anchor="middle">Accident</text>]]
-    <text id="dd-res" x="430" y="318" text-anchor="middle" font-family="var(--sans)" font-size="19"
+    <text id="dd-res" x="430" y="424" text-anchor="middle" font-family="var(--sans)" font-size="20"
           font-weight="600" fill="var(--ok)" opacity="0"></text>
   </svg>
   </div>
@@ -181,12 +181,12 @@ init(el){
     ['Level 5',TX('소외 영향 완화','Mitigate offsite consequences'),
      TX('비상대응 · 방재계획','Emergency response · protective planning'),'var(--ink-3)']];
   const g=el.querySelector('#dd-lv');
-  LV.forEach((l,i)=>{ const y=18+i*56;
+  LV.forEach((l,i)=>{ const y=16+i*77;
     g.insertAdjacentHTML('beforeend',
-      `<g data-l="${i}"><rect x="30" y="${y}" width="800" height="42" fill="var(--panel)" stroke="${l[3]}" stroke-width="${i===2?2:1.2}"/>`
-      +`<text x="48" y="${y+26}" font-family="var(--mono)" font-size="14" fill="${l[3]}">${l[0]}</text>`
-      +`<text x="140" y="${y+26}" font-family="var(--sans)" font-size="17" fill="var(--ink)">${l[1]}</text>`
-      +`<text x="820" y="${y+26}" class="lbl" text-anchor="end">${l[2]}</text></g>`); });
+      `<g data-l="${i}"><rect x="30" y="${y}" width="800" height="60" fill="var(--panel)" stroke="${l[3]}" stroke-width="${i===2?2:1.2}"/>`
+      +`<text x="48" y="${y+36}" font-family="var(--mono)" font-size="15" fill="${l[3]}">${l[0]}</text>`
+      +`<text x="140" y="${y+36}" font-family="var(--sans)" font-size="18" fill="var(--ink)">${l[1]}</text>`
+      +`<text x="820" y="${y+36}" class="lbl" text-anchor="end">${l[2]}</text></g>`); });
   const tok=el.querySelector('#dd-tok'), tl=el.querySelector('#dd-toklbl'), res=el.querySelector('#dd-res');
   const rows=[...g.querySelectorAll('[data-l]')];
   let mode='n', T=0, run=false;
@@ -197,7 +197,7 @@ init(el){
     el.querySelector('#dd-f').classList.toggle('act',m==='f'); }
   el.querySelector('#dd-n').onclick=()=>start('n');
   el.querySelector('#dd-f').onclick=()=>start('f');
-  if(RM){ tok.setAttribute('cy',18+2*56+21); res.setAttribute('opacity',1);
+  if(RM){ tok.setAttribute('cy',16+2*77+30); res.setAttribute('opacity',1);
     res.textContent=TX('Level 3 공학적안전설비에서 정지','Stopped at the Level 3 engineered safety features'); return; }
   start('n');
   raf(()=>{ if(!run) return; T+=1/60;
@@ -205,8 +205,8 @@ init(el){
     if(mode==='f' && T>0.35){ [0,1,2,3].forEach(i=>{
       rows[i].setAttribute('opacity',0.32);
       rows[i].querySelector('rect').setAttribute('fill','var(--dead)'); }); }
-    const yTarget = 18+stopAt*56+21;
-    const y = Math.min(yTarget, -6 + T*150);
+    const yTarget = 16+stopAt*77+30;
+    const y = Math.min(yTarget, -6 + T*190);
     tok.setAttribute('cy',y); tl.setAttribute('y',y-18);
     if(y>=yTarget-0.5){
       run=false;

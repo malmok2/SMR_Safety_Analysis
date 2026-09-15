@@ -9,7 +9,7 @@ First pin down how much heat, for how long and to where, in numbers; then compar
 
 S({tag:'HEAT SINK', ov:'[[수조 시뮬레이션 — 72시간은 어디서 나온 숫자인가||Pool simulation - where the 72 hours comes from]]',
 src:'[[<b>계산</b> Way–Wigner 붕괴열 적분(250 MWt, t₀ = 10⁸ s) · c_p = 4.18 kJ/(kg·K), h_fg = 2,257 kJ/kg, 초기 수온 30 °C. <b>열이 전부 수조로 들어간다고 본 상한 추정</b> — 실제로는 열교환기 성능 한계·성층화·외부 열손실이 작용한다||<b>Calculation</b> Way-Wigner decay heat integrated (250 MWt, t₀ = 10⁸ s) · c_p = 4.18 kJ/(kg·K), h_fg = 2,257 kJ/kg, initial water temperature 30 °C. <b>A bounding estimate that sends all the heat into the pool</b> - in reality heat exchanger capacity, stratification and heat loss all intervene]]',
-html:`<h2 class="t">[[“72시간 무조작”은 마법이 아니라 <em>물통 크기를 정하는 계산</em>이다||&#8220;72 hours without operator action&#8221; is not magic - it is <em>the calculation that sizes the tank</em>]]</h2>
+html:`<h2 class="t">[[“72시간 무조작”은 마법이 아니라 <em>물통 크기를 정하는 계산</em>이다||&#8220;72 hours&#8221; is not magic - it is <em>what sizes the tank</em>]]</h2>
 <ul class="b">
   <li>[[정지 후 72시간 누적 붕괴 에너지는 <code>약 315 GJ</code> — 현열만으로 받으려면 물 <b class="cool">약 1,000 t</b>||The decay energy accumulated in 72 hours is <code>about 315 GJ</code> - taking it on sensible heat alone needs <b class="cool">about 1,000 t</b> of water]]</li>
   <li>[[잠열이 현열의 <b>약 8배</b>. 끓기 시작한 뒤에도 한참을 더 버틴다 — 대신 증기 배출과 보충수가 새 설계 문제||Latent heat is <b>about eight times</b> the sensible heat, so it holds out far longer once boiling starts - at the price of a new design problem: venting the steam and making up the water]]</li>
@@ -99,7 +99,7 @@ html:`<h2 class="t">[[열을 어디로 옮기는가 — <em>세 갈래</em>의 �
   <li>[[(a)만 <b class="ok">1차 압력경계를 열지 않는다</b>. 대신 증기발생기 자체가 고장난 경우에는 못 쓴다||Only (a) <b class="ok">keeps the primary pressure boundary closed</b>. In exchange, it is useless if the steam generator itself has failed]]</li>
 </ul>
 <div class="body"><div class="fig">
-<svg viewBox="0 0 1120 300" role="img" aria-label="[[잔열제거의 세 가지 구현 — 증기발생기 경유, 피동 응축기, 격납 침수 직접 냉각||Three ways to remove residual heat: through the steam generator, through a passive condenser, and by direct cooling in a flooded containment]]">
+<svg viewBox="0 0 1120 420" role="img" aria-label="[[잔열제거의 세 가지 구현 — 증기발생기 경유, 피동 응축기, 격납 침수 직접 냉각||Three ways to remove residual heat: through the steam generator, through a passive condenser, and by direct cooling in a flooded containment]]">
   <g id="r3"></g>
 </svg>
 </div></div>`,
@@ -113,40 +113,40 @@ init(el){
             TX('NuScale ECCS (RVV · RRV 개방)','NuScale ECCS (RVV and RRV open)')]];
   T.forEach((t,i)=>{ const x=20+i*372;
     g.insertAdjacentHTML('beforeend',
-      `<text x="${x+170}" y="22" text-anchor="middle" font-family="var(--sans)" font-size="17" fill="var(--ink)">${t[0]}</text>`
-      +`<text x="${x+170}" y="286" text-anchor="middle" class="lbl">${t[1]}</text>`);
+      `<text x="${x+170}" y="26" text-anchor="middle" font-family="var(--sans)" font-size="18" fill="var(--ink)">${t[0]}</text>`
+      +`<text x="${x+170}" y="406" text-anchor="middle" class="lbl">${t[1]}</text>`);
   });
   // (a)
   g.insertAdjacentHTML('beforeend',
-    `<rect x="46" y="66" width="86" height="170" rx="12" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.4"/>
-     <rect x="66" y="186" width="46" height="42" rx="3" fill="var(--hot)"/>
-     <rect x="52" y="96" width="26" height="70" fill="var(--panel-2)" stroke="var(--amber)"/>
-     <rect x="100" y="96" width="26" height="70" fill="var(--panel-2)" stroke="var(--amber)"/>
-     <text x="89" y="136" text-anchor="middle" class="lbl" fill="var(--amber)">SG</text>
-     <rect x="204" y="80" width="130" height="150" fill="var(--cool)" opacity=".12" stroke="var(--cool)" stroke-width="1.2"/>
-     <text x="269" y="72" text-anchor="middle" class="lbl" fill="var(--cool)">${TX('수조','Pool')}</text>
-     <path id="ra" d="M132,106 L204,106 L204,204 L132,204 Z" fill="none" stroke="var(--rule)" stroke-width="7"/>
-     <polyline points="222,120 316,142 222,164 316,186" fill="none" stroke="var(--cool)" stroke-width="2.4"/>`);
+    `<rect x="46" y="72" width="86" height="244" rx="12" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.4"/>
+     <rect x="66" y="258" width="46" height="58" rx="3" fill="var(--hot)"/>
+     <rect x="52" y="110" width="26" height="100" fill="var(--panel-2)" stroke="var(--amber)"/>
+     <rect x="100" y="110" width="26" height="100" fill="var(--panel-2)" stroke="var(--amber)"/>
+     <text x="89" y="166" text-anchor="middle" class="lbl" fill="var(--amber)">SG</text>
+     <rect x="204" y="86" width="130" height="216" fill="var(--cool)" opacity=".12" stroke="var(--cool)" stroke-width="1.2"/>
+     <text x="269" y="78" text-anchor="middle" class="lbl" fill="var(--cool)">${TX('수조','Pool')}</text>
+     <path id="ra" d="M132,120 L204,120 L204,286 L132,286 Z" fill="none" stroke="var(--rule)" stroke-width="7"/>
+     <polyline points="222,140 316,180 222,220 316,260" fill="none" stroke="var(--cool)" stroke-width="2.4"/>`);
   // (b)
   g.insertAdjacentHTML('beforeend',
-    `<rect x="418" y="66" width="86" height="170" rx="12" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.4"/>
-     <rect x="438" y="186" width="46" height="42" rx="3" fill="var(--hot)"/>
-     <rect x="572" y="70" width="138" height="164" fill="var(--cool)" opacity=".12" stroke="var(--cool)" stroke-width="1.2"/>
-     <text x="641" y="62" text-anchor="middle" class="lbl" fill="var(--cool)">IRWST</text>
-     <path id="rb" d="M504,100 L572,100 L572,206 L504,206 Z" fill="none" stroke="var(--rule)" stroke-width="7"/>
-     <path d="M598,110 q24,16 0,32 q-24,16 0,32 q24,16 0,32 q-24,16 0,26" fill="none" stroke="var(--cool)" stroke-width="2.4"/>
-     <text x="660" y="180" class="lbl" fill="var(--cool)">${TX('응축기','Condenser')}</text>`);
+    `<rect x="418" y="72" width="86" height="244" rx="12" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.4"/>
+     <rect x="438" y="258" width="46" height="58" rx="3" fill="var(--hot)"/>
+     <rect x="572" y="76" width="138" height="236" fill="var(--cool)" opacity=".12" stroke="var(--cool)" stroke-width="1.2"/>
+     <text x="641" y="68" text-anchor="middle" class="lbl" fill="var(--cool)">IRWST</text>
+     <path id="rb" d="M504,114 L572,114 L572,290 L504,290 Z" fill="none" stroke="var(--rule)" stroke-width="7"/>
+     <path d="M598,130 q24,22 0,45 q-24,22 0,45 q24,22 0,45 q-24,22 0,36" fill="none" stroke="var(--cool)" stroke-width="2.4"/>
+     <text x="660" y="250" class="lbl" fill="var(--cool)">${TX('응축기','Condenser')}</text>`);
   // (c)
   g.insertAdjacentHTML('beforeend',
-    `<rect x="790" y="52" width="300" height="200" fill="var(--cool)" opacity=".10" stroke="var(--cool)" stroke-width="1.2"/>
-     <text x="940" y="44" text-anchor="middle" class="lbl" fill="var(--cool)">${TX('침수 격납용기','Flooded containment')}</text>
-     <rect x="882" y="86" width="116" height="150" rx="14" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.4"/>
-     <rect x="912" y="190" width="56" height="42" rx="3" fill="var(--hot)"/>
-     <path id="rc2" d="M940,190 L940,108 L1050,108 L1050,214 L940,214 Z" fill="none" stroke="var(--rule)" stroke-width="7"/>
-     <rect x="924" y="80" width="10" height="12" fill="var(--ok)"/><rect x="946" y="80" width="10" height="12" fill="var(--ok)"/>
-     <text x="940" y="72" text-anchor="middle" class="lbl" fill="var(--ok)">RVV</text>
-     <rect x="876" y="200" width="12" height="10" fill="var(--ok)"/><rect x="992" y="200" width="12" height="10" fill="var(--ok)"/>
-     <text x="1085" y="238" class="lbl" text-anchor="end" fill="var(--ok)">${TX('RRV 재순환','RRV recirculation')}</text>`);
+    `<rect x="790" y="58" width="300" height="288" fill="var(--cool)" opacity=".10" stroke="var(--cool)" stroke-width="1.2"/>
+     <text x="940" y="50" text-anchor="middle" class="lbl" fill="var(--cool)">${TX('침수 격납용기','Flooded containment')}</text>
+     <rect x="882" y="96" width="116" height="216" rx="14" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.4"/>
+     <rect x="912" y="254" width="56" height="58" rx="3" fill="var(--hot)"/>
+     <path id="rc2" d="M940,254 L940,124 L1050,124 L1050,292 L940,292 Z" fill="none" stroke="var(--rule)" stroke-width="7"/>
+     <rect x="924" y="88" width="10" height="14" fill="var(--ok)"/><rect x="946" y="88" width="10" height="14" fill="var(--ok)"/>
+     <text x="940" y="80" text-anchor="middle" class="lbl" fill="var(--ok)">RVV</text>
+     <rect x="876" y="292" width="12" height="12" fill="var(--ok)"/><rect x="992" y="292" width="12" height="12" fill="var(--ok)"/>
+     <text x="1085" y="330" class="lbl" text-anchor="end" fill="var(--ok)">${TX('RRV 재순환','RRV recirculation')}</text>`);
   flow(el.querySelector('#ra'),{n:7,speed:0.13,r:3.8,color:'var(--hot)'});
   flow(el.querySelector('#rb'),{n:7,speed:0.13,r:3.8,color:'var(--hot)'});
   flow(el.querySelector('#rc2'),{n:8,speed:0.14,r:3.8,color:'var(--hot)'});

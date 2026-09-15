@@ -7,18 +7,18 @@ html:`[[<div class="no">10</div><h2>요건에서 계통까지</h2><div class="ln
 
 S({tag:'TRACEABILITY', ov:'[[요건 → 기능 → 계통 추적||Requirement &#8594; function &#8594; system]]',
 src:'[[<b>출처</b> 10 CFR 50 Appendix A의 GDC, IAEA SSR-2/1 (Rev.1)의 기본안전기능, 그리고 6~9장에서 다룬 계통을 대응시킨 것||<b>Source</b> the GDC of 10 CFR 50 Appendix A, the fundamental safety functions of IAEA SSR-2/1 (Rev.1), and the systems covered in Chapters 6 to 9, mapped onto each other]]',
-html:`<h2 class="t">[[설계는 요건에서 시작해 계통으로 끝난다 — <s>거꾸로 읽으면 근거를 잃는다</s>||Design starts at the requirement and ends at the system - <s>read it the other way and you lose the reason</s>]]</h2>
+html:`<h2 class="t">[[설계는 요건에서 시작해 계통으로 끝난다 — <s>거꾸로 읽으면 근거를 잃는다</s>||Requirement &#8594; function &#8594; system - <s>never the other way</s>]]</h2>
 <div class="body"><div class="fig">
-<svg viewBox="0 0 1120 320" role="img" aria-label="[[규제 요건에서 기본안전기능을 거쳐 공학적안전설비로 이어지는 추적 관계||Traceability from regulatory requirement through fundamental safety function to engineered safety feature]]">
+<svg viewBox="0 0 1120 462" role="img" aria-label="[[규제 요건에서 기본안전기능을 거쳐 공학적안전설비로 이어지는 추적 관계||Traceability from regulatory requirement through fundamental safety function to engineered safety feature]]">
   <defs><marker id="tr-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
     <path d="M0,0 L10,5 L0,10 z" fill="var(--rule)"/></marker></defs>
   <g id="tr-hd">
-    <rect x="40" y="14" width="330" height="38" fill="var(--cool)"/>
-    <text x="205" y="39" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="var(--on-accent)" [[font-weight="600">규제 요건</text>||font-weight="600">Requirement</text>]]
-    <rect x="395" y="14" width="300" height="38" fill="var(--ok)"/>
-    <text x="545" y="39" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="var(--on-accent)" [[font-weight="600">기본 안전기능</text>||font-weight="600">Safety function</text>]]
-    <rect x="720" y="14" width="360" height="38" fill="var(--hot)"/>
-    <text x="900" y="39" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="var(--on-accent)" [[font-weight="600">계통 (ESF)</text>||font-weight="600">System (ESF)</text>]]
+    <rect x="40" y="14" width="330" height="44" fill="var(--cool)"/>
+    <text x="205" y="42" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="var(--on-accent)" [[font-weight="600">규제 요건</text>||font-weight="600">Requirement</text>]]
+    <rect x="395" y="14" width="300" height="44" fill="var(--ok)"/>
+    <text x="545" y="42" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="var(--on-accent)" [[font-weight="600">기본 안전기능</text>||font-weight="600">Safety function</text>]]
+    <rect x="720" y="14" width="360" height="44" fill="var(--hot)"/>
+    <text x="900" y="42" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="var(--on-accent)" [[font-weight="600">계통 (ESF)</text>||font-weight="600">System (ESF)</text>]]
   </g>
   <g id="tr-rows"></g>
 </svg>
@@ -32,19 +32,19 @@ init(el){
     [TX('GDC 16 · 38 · 41 · 50~57','GDC 16 · 38 · 41 · 50-57'),TX('방사성물질 격납','Confining radioactivity'),
      TX('격납건물 · 살수 · 격리밸브 · PAR','Containment · spray · isolation valves · PAR')]];
   const g=el.querySelector('#tr-rows');
-  R.forEach((r,i)=>{ const y=74+i*58;
+  R.forEach((r,i)=>{ const y=84+i*88;
     g.insertAdjacentHTML('beforeend',
       `<g data-r="${i}" opacity="0">
-       <rect x="40" y="${y}" width="330" height="44" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.2"/>
-       <text x="58" y="${y+28}" font-family="var(--mono)" font-size="15" fill="var(--cool)">${r[0]}</text>
-       <rect x="395" y="${y}" width="300" height="44" fill="var(--panel)" stroke="var(--ok)" stroke-width="1.2"/>
-       <text x="545" y="${y+28}" text-anchor="middle" font-family="var(--sans)" font-size="18" fill="var(--ok)">${r[1]}</text>
-       <rect x="720" y="${y}" width="360" height="44" fill="var(--panel)" stroke="var(--hot)" stroke-width="1.2"/>
-       <text x="900" y="${y+28}" text-anchor="middle" font-family="var(--sans)" font-size="16" fill="var(--hot)">${r[2]}</text>
-       <path d="M374,${y+22} H391" stroke="var(--rule)" stroke-width="1.4" marker-end="url(#tr-a)"/>
-       <path d="M699,${y+22} H716" stroke="var(--rule)" stroke-width="1.4" marker-end="url(#tr-a)"/></g>`); });
+       <rect x="40" y="${y}" width="330" height="64" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.2"/>
+       <text x="58" y="${y+39}" font-family="var(--mono)" font-size="16" fill="var(--cool)">${r[0]}</text>
+       <rect x="395" y="${y}" width="300" height="64" fill="var(--panel)" stroke="var(--ok)" stroke-width="1.2"/>
+       <text x="545" y="${y+39}" text-anchor="middle" font-family="var(--sans)" font-size="19" fill="var(--ok)">${r[1]}</text>
+       <rect x="720" y="${y}" width="360" height="64" fill="var(--panel)" stroke="var(--hot)" stroke-width="1.2"/>
+       <text x="900" y="${y+39}" text-anchor="middle" font-family="var(--sans)" font-size="17" fill="var(--hot)">${r[2]}</text>
+       <path d="M374,${y+32} H391" stroke="var(--rule)" stroke-width="1.4" marker-end="url(#tr-a)"/>
+       <path d="M699,${y+32} H716" stroke="var(--rule)" stroke-width="1.4" marker-end="url(#tr-a)"/></g>`); });
   g.insertAdjacentHTML('beforeend',
-    '<text x="560" y="314" text-anchor="middle" class="lbl">'
+    '<text x="560" y="452" text-anchor="middle" class="lbl">'
     +TX('이 표를 거꾸로 읽으면 설계 검토 체크리스트가 된다',
         'Read this table backwards and it becomes a design review checklist')+'</text>');
   const rows=[...g.querySelectorAll('[data-r]')];

@@ -19,7 +19,7 @@ function ecCurve(){ let d=''; for(let P=150;P<=1500;P+=10){ d+=(d?'L':'M')+EC.sx
 
 S({tag:'ECONOMY', ov:'[[규모의 경제 — 작게 만드는 대가||Economies of scale - the price of going small]]',
 src:'[[<b>출처</b> L.M. Boldon, P. Sabharwall, INL/EXT-14-32616 (2014) §6.1 — NEA 평균 <i>n</i> = 0.51 채택. <b>유의</b> 상관식 검증 구간은 300~1300 MWe이므로 그 아래에서는 불확실성이 커진다||<b>Source</b> L.M. Boldon, P. Sabharwall, INL/EXT-14-32616 (2014) &#167;6.1 - NEA average <i>n</i> = 0.51 adopted. <b>Caution</b> the correlation is validated over 300-1300 MWe, so uncertainty grows below that range]]',
-html:`<h2 class="t">[[출력을 줄이면 <s>kW당 비용이 오른다</s> — 얼마나 오르는지가 전부||Shrink the output and <s>cost per kW rises</s> - how much it rises is the whole question]]</h2>
+html:`<h2 class="t">[[출력을 줄이면 <s>kW당 비용이 오른다</s> — 얼마나 오르는지가 전부||Smaller output, <s>higher cost per kW</s> - by how much is everything]]</h2>
 <ul class="b">
   <li>[[용기·배관·구조물 비용은 <b>표면적</b>에 비례하고 출력은 <b>체적</b>에 비례 → 규모지수 <code>n ≈ 0.4~0.7</code>||Vessel, piping and structure cost follows <b>surface area</b> while power follows <b>volume</b> &#8594; scaling exponent <code>n &#8776; 0.4-0.7</code>]]</li>
   <li>[[총 자본비가 아니라 <b class="cool">kW당 비용</b>을 봐야 함. 두 값은 반대 방향으로 움직임||Watch <b class="cool">cost per kW</b>, not total capital cost. The two move in opposite directions]]</li>
@@ -76,8 +76,8 @@ init(el){
 }});
 
 S({tag:'ECONOMY', ov:'[[2.7배를 되돌리는 네 가지 인자||Four factors that claw back the 2.7x]]',
-src:'[[<b>출처</b> Boldon &amp; Sabharwall, INL/EXT-14-32616 (2014) §5.5·§6.1, Eq.3~6·Eq.12 — 원 보고서는 NEA/OECD(2011), Carelli et al.(2010), Wilton(2012)을 인용. <b>모두 반복 건설을 전제</b>한다||<b>Source</b> Boldon &amp; Sabharwall, INL/EXT-14-32616 (2014) &#167;5.5·&#167;6.1, Eq.3-6·Eq.12 - the original report cites NEA/OECD (2011), Carelli et al. (2010) and Wilton (2012). <b>All of them assume repeated construction</b>]]',
-html:`<h2 class="t">[[2.7배를 되돌리는 <em>네 가지 인자</em> — 버튼을 눌러 하나씩 적용||<em>Four factors</em> that claw back the 2.7x - press a button to apply them one by one]]</h2>
+src:'[[<b>출처</b> Boldon &amp; Sabharwall, INL/EXT-14-32616 (2014) §5.5·§6.1, Eq.3~6·Eq.12 — 원 보고서는 NEA/OECD(2011), Carelli et al.(2010), Wilton(2012)을 인용. <b>모두 반복 건설을 전제</b>한다||<b>Source</b> Boldon &amp; Sabharwall, INL/EXT-14-32616 (2014) &#167;5.5·&#167;6.1, citing NEA/OECD (2011), Carelli et al. (2010), Wilton (2012). <b>All assume repeated construction</b>]]',
+html:`<h2 class="t">[[2.7배를 되돌리는 <em>네 가지 인자</em> — 버튼을 눌러 하나씩 적용||<em>Four factors</em> that claw back the 2.7x - apply them one by one]]</h2>
 <ul class="b">
   <li>[[네 인자 모두 <b>반복</b>을 전제로 함. 지금 세계 어디에도 SMR 반복 건설 사례가 없음 — 전부 <b class="hot">FOAK</b>||Every one of them assumes <b>repetition</b>. Nowhere in the world is an SMR being built repeatedly yet - all of them are <b class="hot">FOAK</b>]]</li>
 </ul>

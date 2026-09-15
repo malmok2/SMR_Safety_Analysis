@@ -39,35 +39,35 @@ html:`<h2 class="t">[[무엇에 대비하는가 — <em>빈도</em>가 <em>허�
   <li>[[심층방어 단계 구분(앞 슬라이드)이 이 <b class="cool">빈도–결과 축</b>과 정확히 대응한다||The levels of defence in depth from the previous slide map exactly onto this <b class="cool">frequency-consequence axis</b>]]</li>
 </ul>
 <div class="body"><div class="fig">
-<svg viewBox="0 0 1120 330" role="img" aria-label="[[발생 빈도에 따른 플랜트 상태 구분과 각 구간에서 허용되는 결과||Plant states by frequency of occurrence and the outcome allowed in each band]]">
+<svg viewBox="0 0 1120 395" role="img" aria-label="[[발생 빈도에 따른 플랜트 상태 구분과 각 구간에서 허용되는 결과||Plant states by frequency of occurrence and the outcome allowed in each band]]">
   <g id="ps-ax"></g><g id="ps-b"></g>
 </svg>
 </div></div>`,
 init(el){
   const X=e=>120+(-e)/7*900;     // 10^0 .. 10^-7 /yr
-  let ax='<line x1="120" y1="266" x2="1030" y2="266" class="axis"/>';
-  for(let e=0;e>=-7;e--){ ax+=`<line x1="${X(e)}" y1="40" x2="${X(e)}" y2="266" class="grid"/>`
-    +`<text x="${X(e)}" y="288" class="lbl" text-anchor="middle">10<tspan dy="-6" font-size="10">${e}</tspan></text>`; }
-  ax+='<text x="1030" y="312" class="lbl" text-anchor="end">'
+  let ax='<line x1="120" y1="330" x2="1030" y2="330" class="axis"/>';
+  for(let e=0;e>=-7;e--){ ax+=`<line x1="${X(e)}" y1="46" x2="${X(e)}" y2="330" class="grid"/>`
+    +`<text x="${X(e)}" y="352" class="lbl" text-anchor="middle">10<tspan dy="-6" font-size="10">${e}</tspan></text>`; }
+  ax+='<text x="1030" y="378" class="lbl" text-anchor="end">'
      +TX('발생 빈도 (1/년) — 오른쪽으로 갈수록 드묾','Frequency (per year) - rarer towards the right')+'</text>';
   el.querySelector('#ps-ax').innerHTML=ax;
   const B=[[TX('정상운전','Normal operation'),0,-2,'var(--ok)',
-     TX('방사선 방출이 규제 한도 이내','Releases stay inside the regulatory limit'),236],
+     TX('방사선 방출이 규제 한도 이내','Releases stay inside the regulatory limit'),296],
     [TX('예상운전과도 · AOO','Anticipated operational occurrence · AOO'),-2,-4,'var(--cool)',
-     TX('연료설계한계 초과 금지 · 계통 손상 없음','No fuel design limit exceeded · no system damage'),186],
+     TX('연료설계한계 초과 금지 · 계통 손상 없음','No fuel design limit exceeded · no system damage'),224],
     [TX('설계기준사고 · DBA','Design basis accident · DBA'),-4,-6,'var(--amber)',
-     TX('연료 일부 손상 허용 · 방사선 기준 만족','Some fuel damage allowed · dose criteria met'),136],
+     TX('연료 일부 손상 허용 · 방사선 기준 만족','Some fuel damage allowed · dose criteria met'),152],
     [TX('설계확장조건 · DEC','Design extension condition · DEC'),-6,-7,'var(--hot)',
-     TX('노심용융 포함 · 격납 건전성 유지','Core melt included · containment holds'),86]];
+     TX('노심용융 포함 · 격납 건전성 유지','Core melt included · containment holds'),80]];
   const g=el.querySelector('#ps-b');
   B.forEach((b,i)=>{ const x0=X(b[1]),x1=X(b[2]),y=b[5];
     g.insertAdjacentHTML('beforeend',
-      `<g data-p="${i}" opacity="0"><rect x="${x0}" y="${y}" width="${x1-x0}" height="${266-y}" fill="${b[3]}" opacity=".12"/>`
+      `<g data-p="${i}" opacity="0"><rect x="${x0}" y="${y}" width="${x1-x0}" height="${330-y}" fill="${b[3]}" opacity=".12"/>`
       +`<line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" stroke="${b[3]}" stroke-width="2.5"/>`
       +`<text x="${(x0+x1)/2}" y="${y-26}" text-anchor="middle" font-family="var(--sans)" font-size="17" fill="${b[3]}" font-weight="500">${b[0]}</text>`
       +`<text x="${(x0+x1)/2}" y="${y-8}" text-anchor="middle" class="lbl">${b[4]}</text></g>`); });
   g.insertAdjacentHTML('beforeend',
-    '<text x="120" y="30" class="lbl b">'+TX('↑ 허용되는 결과가 느슨해진다','↑ the allowable outcome loosens')+'</text>');
+    '<text x="120" y="34" class="lbl b">'+TX('↑ 허용되는 결과가 느슨해진다','↑ the allowable outcome loosens')+'</text>');
   const items=[...g.querySelectorAll('[data-p]')];
   if(RM){ items.forEach(i=>i.setAttribute('opacity',1)); return; }
   items.forEach((it,i)=>it.animate([{opacity:0},{opacity:1}],{duration:420,delay:220*i,fill:'forwards'}));
@@ -112,9 +112,9 @@ html:`<h2 class="t">[[“피동”은 <em>이분법이 아니다</em> — 네 �
   <li>[[실제 SMR의 “피동 안전계통”은 대부분 <b>Category C 또는 D</b> — 피동이라고 고장 나지 않는 게 아니다||Most real SMR &#8220;passive safety systems&#8221; are <b>Category C or D</b> - passive does not mean it cannot fail]]</li>
 </ul>
 <div class="body"><div class="fig">
-<svg viewBox="0 0 1120 340" role="img" aria-label="[[IAEA 피동안전계통 Category A부터 D까지의 구성 요소와 예시||Constituent elements and examples of IAEA passive safety system Categories A to D]]">
+<svg viewBox="0 0 1120 396" role="img" aria-label="[[IAEA 피동안전계통 Category A부터 D까지의 구성 요소와 예시||Constituent elements and examples of IAEA passive safety system Categories A to D]]">
   <g id="pc-cols"></g>
-  <text x="560" y="332" text-anchor="middle" class="lbl" fill="var(--hot)">[[← 완전한 피동 &nbsp;&nbsp;·&nbsp;&nbsp; 움직이는 부품과 개시 신호가 늘어난다 →||&#8592; fully passive &nbsp;&nbsp;·&nbsp;&nbsp; moving parts and actuation signals accumulate &#8594;]]</text>
+  <text x="560" y="386" text-anchor="middle" class="lbl" fill="var(--hot)">[[← 완전한 피동 &nbsp;&nbsp;·&nbsp;&nbsp; 움직이는 부품과 개시 신호가 늘어난다 →||&#8592; fully passive &nbsp;&nbsp;·&nbsp;&nbsp; moving parts and actuation signals accumulate &#8594;]]</text>
 </svg>
 </div></div>`,
 init(el){
@@ -131,18 +131,18 @@ init(el){
   const g=el.querySelector('#pc-cols');
   C.forEach((c,i)=>{ const x=40+i*272, w=248;
     let h=`<g data-c="${i}" opacity="0">`
-      +`<rect x="${x}" y="24" width="${w}" height="270" fill="var(--panel)" stroke="${c[3]}" stroke-width="1.6"/>`
-      +`<rect x="${x}" y="24" width="${w}" height="40" fill="${c[3]}"/>`
-      +`<text x="${x+w/2}" y="51" text-anchor="middle" font-family="var(--mono)" font-size="16" fill="var(--on-accent)" font-weight="600">${c[0]}</text>`;
-    c[1].forEach((on,j)=>{ const y=94+j*38;
+      +`<rect x="${x}" y="24" width="${w}" height="336" fill="var(--panel)" stroke="${c[3]}" stroke-width="1.6"/>`
+      +`<rect x="${x}" y="24" width="${w}" height="46" fill="${c[3]}"/>`
+      +`<text x="${x+w/2}" y="56" text-anchor="middle" font-family="var(--mono)" font-size="17" fill="var(--on-accent)" font-weight="600">${c[0]}</text>`;
+    c[1].forEach((on,j)=>{ const y=114+j*52;
       h+=`<circle cx="${x+26}" cy="${y}" r="7" fill="${on?c[3]:'none'}" stroke="${on?c[3]:'var(--rule)'}" stroke-width="1.6"/>`
         +`<text x="${x+44}" y="${y+5}" class="lbl" fill="${on?'var(--ink)':'var(--ink-3)'}">${LAMP[j]}</text>`; });
-    h+=`<line x1="${x+18}" y1="216" x2="${x+w-18}" y2="216" stroke="var(--rule)"/>`;
+    h+=`<line x1="${x+18}" y1="278" x2="${x+w-18}" y2="278" stroke="var(--rule)"/>`;
     c[2].split('\\n').forEach((t,k)=>{
-      h+=`<text x="${x+w/2}" y="${248+k*22}" text-anchor="middle" font-family="var(--sans)" font-size="15" fill="var(--ink-2)">${t}</text>`; });
+      h+=`<text x="${x+w/2}" y="${312+k*26}" text-anchor="middle" font-family="var(--sans)" font-size="16" fill="var(--ink-2)">${t}</text>`; });
     h+='</g>'; g.insertAdjacentHTML('beforeend',h);
     if(i<3) g.insertAdjacentHTML('beforeend',
-      `<path d="M${x+w+6},159 L${x+w+18},159" stroke="var(--rule)" stroke-width="2"/>`);
+      `<path d="M${x+w+6},192 L${x+w+18},192" stroke="var(--rule)" stroke-width="2"/>`);
   });
   const cols=[...g.querySelectorAll('[data-c]')];
   if(RM){ cols.forEach(c=>c.setAttribute('opacity',1)); return; }

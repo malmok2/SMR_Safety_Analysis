@@ -52,6 +52,31 @@ async function svgScan(page, file, lang) {
   });
 }
 
+/* 판면 감사 — 그림이 본문 영역을 얼마나 채우는가, 제목이 몇 줄인가.
+   그림의 viewBox 가로세로비가 실제 배치 칸보다 납작하면 위아래로 죽은 띠가 생긴다.
+   폭은 이미 꽉 차 있으므로, 고치는 방법은 viewBox 높이를 키우고 내용을 다시 앉히는 것뿐이다. */
+async function layoutScan(page) {
+  return page.evaluate(() => {
+    const R = [];
+    document.querySelectorAll('.sheet').forEach((sh, i) => {
+      const sl = sh.querySelector('.slide'); if (!sl) return;
+      const k = 720 / sl.getBoundingClientRect().height;
+      const h2 = sl.querySelector('h2.t');
+      const body = sl.querySelector('.body');
+      const svg = sl.querySelector('.fig svg');
+      const r = { n: i + 1 };
+      if (h2) r.lines = Math.round(h2.getBoundingClientRect().height * k / 43);
+      if (body && svg) {
+        const bb = body.getBoundingClientRect(), sv = svg.getBoundingClientRect();
+        r.fill = +(sv.height / bb.height).toFixed(2);
+        r.dead = Math.round((bb.height - sv.height) * k / 2);
+      }
+      R.push(r);
+    });
+    return R;
+  });
+}
+
 
 (async () => {
   const file = path.resolve(process.argv[2] || path.join(__dirname, '..', 'docs', 'index.html'));
@@ -95,9 +120,14 @@ async function svgScan(page, file, lang) {
     }
   }
 
-  const svg = [];
-  for (const lang of ['ko', 'en'])
+  const svg = [], thin = [], wrap = [];
+  for (const lang of ['ko', 'en']) {
     (await svgScan(p, file, lang)).forEach(x => svg.push([lang, x]));
+    (await layoutScan(p)).forEach(x => {          // svgScan 이 띄워 둔 인쇄 모드를 그대로 쓴다
+      if (x.fill !== undefined && x.fill < 0.8) thin.push([lang, x]);
+      if (x.lines > 1) wrap.push([lang, x]);
+    });
+  }
 
   console.log('slides:', n);
   console.log('console errors:', errs.length);
@@ -108,9 +138,14 @@ async function svgScan(page, file, lang) {
   junk.slice(0, 20).forEach(e => console.log('   ' + e[0], 'slide', e[1], '·', e[2].slice(0, 90)));
   console.log('무대 밖으로 넘친 요소:', over.length);
   over.slice(0, 30).forEach(e => console.log('   ' + e[0], 'slide', e[1], '·', e[2]));
+  console.log('제목이 두 줄로 흐른 슬라이드:', wrap.length);
+  wrap.slice(0, 20).forEach(([l, x]) => console.log('   ' + l, 'slide', x.n, '·', x.lines + '줄'));
+  console.log('그림이 본문의 80 % 미만인 슬라이드:', thin.length);
+  thin.slice(0, 20).forEach(([l, x]) => console.log('   ' + l, 'slide', String(x.n).padStart(2),
+    '· 채움', x.fill, '· 위아래 빈 띠', x.dead + 'px'));
   console.log('SVG 글자 충돌·이탈:', svg.length);
   svg.slice(0, 40).forEach(([l, x]) => console.log('   ' + l, 'slide', String(x.n).padStart(2),
     x.kind, '[' + x.a.slice(0, 44) + ']', x.b ? '× [' + x.b.slice(0, 44) + ']  ' + x.w + '×' + x.h + 'px' : ''));
   await b.close();
-  process.exit(errs.length || left.length || junk.length || over.length || svg.length ? 1 : 0);
+  process.exit(errs.length || left.length || junk.length || over.length || svg.length || wrap.length ? 1 : 0);
 })();

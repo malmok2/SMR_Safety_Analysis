@@ -9,20 +9,20 @@ and the <b>driving head</b> of natural circulation. These two numbers set every 
 
 S({tag:'DECAY HEAT', ov:'[[붕괴열 — 비율은 같고 절대량이 준다||Decay heat - same fraction, smaller absolute load]]',
 src:'[[<b>계산</b> Way–Wigner 근사 <span class="mono">P_d/P₀ = 0.0622 [ t<sup>−0.2</sup> − (t+t₀)<sup>−0.2</sup> ]</span>, t₀ = 10⁸ s. 인허가 해석에는 ANSI/ANS-5.1을 쓴다 · 정격 열출력 출처 IAEA SMR Booklet 2022 · KHNP||<b>Calculation</b> Way-Wigner approximation <span class="mono">P_d/P₀ = 0.0622 [ t<sup>−0.2</sup> − (t+t₀)<sup>−0.2</sup> ]</span>, t₀ = 10⁸ s. Licensing analyses use ANSI/ANS-5.1 · rated thermal power from IAEA SMR Booklet 2022 · KHNP]]',
-html:`<h2 class="t">[[비율은 같다. <em>절대량</em>이 다르다 — 슬라이더로 시간을 흘려보자||The fraction is the same. The <em>absolute amount</em> is not - run the slider and watch]]</h2>
+html:`<h2 class="t">[[비율은 같다. <em>절대량</em>이 다르다 — 슬라이더로 시간을 흘려보자||Same fraction, different <em>absolute load</em> - run the slider]]</h2>
 <ul class="b">
   <li>[[붕괴열 <b>비율</b>은 노심 크기와 거의 무관. 정지 1시간 뒤 어느 노형이든 정격의 약 <code>1 %</code>||The decay heat <b>fraction</b> barely depends on core size. One hour after shutdown any reactor sits near <code>1 %</code> of rating]]</li>
   <li>[[달라지는 건 <b class="hot">절대량</b> — 3,983 MWt의 1 %는 40 MW, 250 MWt의 1 %는 2.6 MW. <b>15배</b> 차이||What differs is the <b class="hot">absolute load</b> - 1 % of 3,983 MWt is 40 MW, 1 % of 250 MWt is 2.6 MW. A factor of <b>15</b>]]</li>
 </ul>
 <div class="body">
   <div class="fig">
-  <svg viewBox="0 0 1120 330" role="img" aria-label="[[정지 후 시간에 따른 붕괴열 비율 곡선과 세 노형의 절대 붕괴열 비교||Decay heat fraction against time after shutdown, with the absolute decay heat of three reactors]]">
+  <svg viewBox="0 0 820 420" role="img" aria-label="[[정지 후 시간에 따른 붕괴열 비율 곡선과 세 노형의 절대 붕괴열 비교||Decay heat fraction against time after shutdown, with the absolute decay heat of three reactors]]">
     <g id="dk-ax"></g>
-    <path id="dk-c" d="" fill="none" stroke="var(--cool)" stroke-width="2.4"/>
-    <line id="dk-v" y1="292" y2="40" stroke="var(--hot)" stroke-width="1.2"/>
-    <circle id="dk-p" r="6.5" fill="var(--hot)"/>
-    <text x="300" y="18" text-anchor="middle" class="lbl b">[[붕괴열 / 정격 열출력||Decay heat / rated thermal power]]</text>
-    <text x="860" y="18" text-anchor="middle" class="lbl b">[[붕괴열 절대량 (MW, 로그 눈금)||Absolute decay heat (MW, log scale)]]</text>
+    <path id="dk-c" d="" fill="none" stroke="var(--cool)" stroke-width="2.6"/>
+    <line id="dk-v" y1="236" y2="46" stroke="var(--hot)" stroke-width="1.2"/>
+    <circle id="dk-p" r="7" fill="var(--hot)"/>
+    <text x="80" y="32" class="lbl b">[[붕괴열 / 정격 열출력||Decay heat / rated thermal power]]</text>
+    <text x="210" y="290" class="lbl b">[[붕괴열 절대량 (MW, 로그 눈금)||Absolute decay heat (MW, log scale)]]</text>
     <g id="dk-bars"></g>
   </svg>
   </div>
@@ -36,32 +36,32 @@ html:`<h2 class="t">[[비율은 같다. <em>절대량</em>이 다르다 — 슬�
 </div>`,
 init(el){
   const SV='http://www.w3.org/2000/svg';
-  const LX=t=>70+(Math.log10(t))/6*450;               // 1 .. 1e6 s → 70..520
-  const LY=f=>292-(Math.log10(f)-Math.log10(0.1))/(Math.log10(20)-Math.log10(0.1))*252;
-  const BX=mw=>640+(Math.log10(Math.max(mw,0.1))+1)/(Math.log10(300)+1)*430;
+  const LX=t=>80+(Math.log10(t))/6*690;               // 1 .. 1e6 s → 80..770
+  const LY=f=>236-(Math.log10(f)-Math.log10(0.1))/(Math.log10(20)-Math.log10(0.1))*190;
+  const BX=mw=>210+(Math.log10(Math.max(mw,0.1))+1)/(Math.log10(300)+1)*510;
   let ax='';
   [[1,'1 s'],[60,TX('1 분','1 min')],[3600,TX('1 시간','1 h')],[86400,TX('1 일','1 day')],
    [604800,TX('1 주','1 week')]].forEach(d=>{
-    const x=LX(d[0]); ax+=`<line x1="${x}" y1="292" x2="${x}" y2="40" class="grid"/>`
-      +`<text x="${x}" y="312" class="lbl" text-anchor="middle">${d[1]}</text>`; });
+    const x=LX(d[0]); ax+=`<line x1="${x}" y1="236" x2="${x}" y2="44" class="grid"/>`
+      +`<text x="${x}" y="256" class="lbl" text-anchor="middle">${d[1]}</text>`; });
   [0.1,1,10].forEach(f=>{ const y=LY(f);
-    ax+=`<line x1="70" y1="${y}" x2="520" y2="${y}" class="grid"/>`
-      +`<text x="62" y="${y+4}" class="lbl" text-anchor="end">${f} %</text>`; });
-  ax+='<line x1="70" y1="292" x2="520" y2="292" class="axis"/><line x1="70" y1="292" x2="70" y2="34" class="axis"/>';
+    ax+=`<line x1="80" y1="${y}" x2="775" y2="${y}" class="grid"/>`
+      +`<text x="72" y="${y+4}" class="lbl" text-anchor="end">${f} %</text>`; });
+  ax+='<line x1="80" y1="236" x2="775" y2="236" class="axis"/><line x1="80" y1="236" x2="80" y2="42" class="axis"/>';
   [0.1,1,10,100].forEach(m=>{ const x=BX(m);
-    ax+=`<line x1="${x}" y1="60" x2="${x}" y2="300" class="grid"/>`
-      +`<text x="${x}" y="318" class="lbl" text-anchor="middle">${m}</text>`; });
+    ax+=`<line x1="${x}" y1="300" x2="${x}" y2="394" class="grid"/>`
+      +`<text x="${x}" y="412" class="lbl" text-anchor="middle">${m}</text>`; });
   el.querySelector('#dk-ax').innerHTML=ax;
   let d=''; for(let i=0;i<=300;i++){ const t=Math.pow(10,i/300*6);
     d+=(d?'L':'M')+LX(t).toFixed(1)+','+LY(decay(t)*100).toFixed(1); }
   el.querySelector('#dk-c').setAttribute('d',d);
   const REA=[['APR1400',3983,'var(--ink-2)'],['BWRX-300',870,'var(--amber)'],['NuScale NPM',250,'var(--ok)']];
   const bg=el.querySelector('#dk-bars'); const bars=[];
-  REA.forEach((r,i)=>{ const y=100+i*68;
+  REA.forEach((r,i)=>{ const y=306+i*32;               // 이름 왼쪽 · 막대 · 값 오른쪽
     bg.insertAdjacentHTML('beforeend',
-      `<text x="640" y="${y-10}" class="lbl b">${r[0]} · ${fmt(r[1])} MWt</text>`
-      +`<rect x="640" y="${y}" height="22" width="0" fill="${r[2]}" opacity=".85" data-b="${i}"/>`
-      +`<text x="646" y="${y+40}" class="val" fill="${r[2]}" data-v="${i}"></text>`); });
+      `<text x="200" y="${y+15}" class="lbl b" text-anchor="end">${r[0]} · ${fmt(r[1])} MWt</text>`
+      +`<rect x="210" y="${y}" height="20" width="0" fill="${r[2]}" opacity=".85" data-b="${i}"/>`
+      +`<text x="0" y="${y+16}" class="val" fill="${r[2]}" data-v="${i}"></text>`); });
   const sl=el.querySelector('#dk-sl'), vl=el.querySelector('#dk-v'), pt=el.querySelector('#dk-p');
   function upd(v){
     const t=Math.pow(10,v/600*6), f=decay(t);
@@ -73,9 +73,11 @@ init(el){
     el.querySelector('#dk-t').innerHTML=lab.split(' ')[0]+'<small>'+lab.split(' ')[1]+'</small>';
     el.querySelector('#dk-f').innerHTML=(f*100).toFixed(2)+'<small>%</small>';
     el.querySelector('#dk-s').textContent=lab;
-    REA.forEach((r,i)=>{ const mw=f*r[1];
-      el.querySelector(`[data-b="${i}"]`).setAttribute('width',Math.max(0,BX(mw)-640));
-      el.querySelector(`[data-v="${i}"]`).textContent=(mw>=10?fmt(mw,0):mw.toFixed(2))+' MW'; });
+    REA.forEach((r,i)=>{ const mw=f*r[1], w=Math.max(0,BX(mw)-210);
+      el.querySelector(`[data-b="${i}"]`).setAttribute('width',w);
+      const t=el.querySelector(`[data-v="${i}"]`);
+      t.setAttribute('x',210+w+10);
+      t.textContent=(mw>=10?fmt(mw,0):mw.toFixed(2))+' MW'; });
   }
   sl.oninput=()=>upd(+sl.value); upd(257);
   if(RM) return;
@@ -94,23 +96,23 @@ html:`<h2 class="t">[[펌프가 없으면 <em>밀도차</em>가 밀어야 한다
 </ul>
 <div class="body">
   <div class="fig">
-  <svg viewBox="0 0 790 340" role="img" aria-label="[[자연순환 루프의 구동수두와 유속이 높이차·온도차에 따라 변하는 모습||How driving head and velocity in a natural circulation loop respond to height and temperature difference]]">
-    <path id="nc-p" d="M260,300 L260,90 L470,90 L470,300 Z" fill="none" stroke="var(--rule)" stroke-width="11"/>
-    <rect x="222" y="238" width="76" height="74" rx="4" fill="var(--hot)"/>
-    <text x="260" y="282" text-anchor="middle" font-size="13" fill="#fff" [[font-family="var(--sans)">노심</text>||font-family="var(--sans)">Core</text>]]
-    <rect x="432" y="72" width="76" height="96" rx="4" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.5"/>
-    <text x="470" y="126" text-anchor="middle" class="lbl" [[fill="var(--cool)">열교환기</text>||fill="var(--cool)">Heat exchanger</text>]]
+  <svg viewBox="0 0 790 400" role="img" aria-label="[[자연순환 루프의 구동수두와 유속이 높이차·온도차에 따라 변하는 모습||How driving head and velocity in a natural circulation loop respond to height and temperature difference]]">
+    <path id="nc-p" d="M260,352 L260,96 L470,96 L470,352 Z" fill="none" stroke="var(--rule)" stroke-width="11"/>
+    <rect x="222" y="284" width="76" height="86" rx="4" fill="var(--hot)"/>
+    <text x="260" y="334" text-anchor="middle" font-size="14" fill="#fff" [[font-family="var(--sans)">노심</text>||font-family="var(--sans)">Core</text>]]
+    <rect x="432" y="78" width="76" height="116" rx="4" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.5"/>
+    <text x="470" y="142" text-anchor="middle" class="lbl" [[fill="var(--cool)">열교환기</text>||fill="var(--cool)">Heat exchanger</text>]]
     <line id="nc-h" x1="150" x2="150" stroke="var(--ok)" stroke-width="1.6"/>
     <path id="nc-h1" d="" stroke="var(--ok)" stroke-width="1.6"/>
     <text id="nc-ht" x="140" y="190" text-anchor="end" class="val" fill="var(--ok)">H</text>
-    <text x="365" y="72" text-anchor="middle" class="lbl" fill="var(--hot)">[[뜨거운 쪽 (가벼움)||Hot side (lighter)]]</text>
-    <text x="365" y="326" text-anchor="middle" class="lbl" fill="var(--cool)">[[차가운 쪽 (무거움)||Cold side (heavier)]]</text>
+    <text x="365" y="80" text-anchor="middle" class="lbl" fill="var(--hot)">[[뜨거운 쪽 (가벼움)||Hot side (lighter)]]</text>
+    <text x="365" y="386" text-anchor="middle" class="lbl" fill="var(--cool)">[[차가운 쪽 (무거움)||Cold side (heavier)]]</text>
     <g id="nc-cmp">
-      <text x="560" y="200" class="lbl b">[[구동 압력 비교||Driving pressure, compared]]</text>
-      <rect x="560" y="212" width="110" height="16" fill="var(--ink-3)" opacity=".5"/>
-      <text x="560" y="246" class="lbl">[[대형 PWR 펌프 600 kPa||Large PWR pump 600 kPa]]</text>
-      <rect id="nc-bar" x="560" y="262" width="4" height="16" fill="var(--ok)"/>
-      <text id="nc-bart" x="560" y="296" class="lbl" [[fill="var(--ok)">자연순환</text>||fill="var(--ok)">Natural circulation</text>]]
+      <text x="560" y="232" class="lbl b">[[구동 압력 비교||Driving pressure, compared]]</text>
+      <rect x="560" y="246" width="110" height="18" fill="var(--ink-3)" opacity=".5"/>
+      <text x="560" y="284" class="lbl">[[대형 PWR 펌프 600 kPa||Large PWR pump 600 kPa]]</text>
+      <rect id="nc-bar" x="560" y="304" width="4" height="18" fill="var(--ok)"/>
+      <text id="nc-bart" x="560" y="342" class="lbl" [[fill="var(--ok)">자연순환</text>||fill="var(--ok)">Natural circulation</text>]]
     </g>
   </svg>
   </div>
@@ -139,7 +141,7 @@ init(el){
     el.querySelector('#nc-hs').textContent=H.toFixed(1)+' m';
     el.querySelector('#nc-ts').textContent=dT+' K';
     // 높이 치수선 (H = 2..14 m → 화면 210 px 내에서)
-    const y0=290, y1=290-(H/14)*200;
+    const y0=346, y1=346-(H/14)*248;
     hl.setAttribute('y1',y0);hl.setAttribute('y2',y1);
     h1.setAttribute('d',`M142,${y0} H158 M142,${y1} H158`);
     el.querySelector('#nc-ht').setAttribute('y',(y0+y1)/2+5);
@@ -165,15 +167,15 @@ html:`<h2 class="t">[[대처시간이 길다는 말의 <em>물리적 내용</em>
 </ul>
 <div class="body">
   <div class="fig">
-  <svg viewBox="0 0 1120 320" role="img" aria-label="[[냉각이 끊긴 뒤 SMR과 대형 경수로의 1차계통 온도 상승 속도 비교||Primary-system heat-up rate of an SMR and a large LWR once cooling is lost]]">
+  <svg viewBox="0 0 820 400" role="img" aria-label="[[냉각이 끊긴 뒤 SMR과 대형 경수로의 1차계통 온도 상승 속도 비교||Primary-system heat-up rate of an SMR and a large LWR once cooling is lost]]">
     <g id="ti-ax"></g>
     <polyline id="ti-a" points="" fill="none" stroke="var(--ok)" stroke-width="3"/>
     <polyline id="ti-b" points="" fill="none" stroke="var(--hot)" stroke-width="3"/>
-    <line id="ti-sat" x1="120" x2="1030" stroke="var(--amber)" stroke-width="1.2" stroke-dasharray="6 5"/>
-    <text id="ti-satt" x="1030" class="lbl" fill="var(--amber)" text-anchor="end">[[포화온도 약 330 °C (12.8 MPa)||Saturation about 330 °C (12.8 MPa)]]</text>
-    <circle id="ti-pa" r="6" fill="var(--ok)"/><circle id="ti-pb" r="6" fill="var(--hot)"/>
-    <text x="140" y="40" class="lbl" fill="var(--ok)">[[250 MWt 일체형 SMR · 1차계통 물 100 t||250 MWt integral SMR · 100 t of primary water]]</text>
-    <text x="140" y="62" class="lbl" fill="var(--hot)">[[3,983 MWt 대형 경수로 · 1차계통 물 300 t||3,983 MWt large LWR · 300 t of primary water]]</text>
+    <line id="ti-sat" x1="110" x2="775" stroke="var(--amber)" stroke-width="1.2" stroke-dasharray="6 5"/>
+    <text id="ti-satt" x="775" class="lbl" fill="var(--amber)" text-anchor="end">[[포화온도 약 330 °C (12.8 MPa)||Saturation about 330 °C (12.8 MPa)]]</text>
+    <circle id="ti-pa" r="7" fill="var(--ok)"/><circle id="ti-pb" r="7" fill="var(--hot)"/>
+    <text x="130" y="36" class="lbl b" fill="var(--ok)">[[250 MWt 일체형 SMR · 1차계통 물 100 t||250 MWt integral SMR · 100 t of primary water]]</text>
+    <text x="130" y="58" class="lbl b" fill="var(--hot)">[[3,983 MWt 대형 경수로 · 1차계통 물 300 t||3,983 MWt large LWR · 300 t of primary water]]</text>
   </svg>
   </div>
   <div class="side">
@@ -184,12 +186,12 @@ html:`<h2 class="t">[[대처시간이 길다는 말의 <em>물리적 내용</em>
   </div>
 </div>`,
 init(el){
-  const X=h=>120+h/3.2*910, Y=T=>270-(T-250)/110*220;
-  let ax='<line x1="120" y1="270" x2="1035" y2="270" class="axis"/><line x1="120" y1="270" x2="120" y2="70" class="axis"/>';
-  [0,1,2,3].forEach(h=>{ ax+=`<line x1="${X(h)}" y1="270" x2="${X(h)}" y2="76" class="grid"/>`
-    +`<text x="${X(h)}" y="292" class="lbl" text-anchor="middle">${h}${TX(' 시간',' h')}</text>`; });
-  [250,290,330,350].forEach(T=>{ ax+=`<text x="112" y="${Y(T)+4}" class="lbl" text-anchor="end">${T} °C</text>`; });
-  ax+='<text x="1035" y="310" class="lbl" text-anchor="end">'
+  const X=h=>110+h/3.2*665, Y=T=>340-(T-250)/110*265;
+  let ax='<line x1="110" y1="340" x2="780" y2="340" class="axis"/><line x1="110" y1="340" x2="110" y2="70" class="axis"/>';
+  [0,1,2,3].forEach(h=>{ ax+=`<line x1="${X(h)}" y1="340" x2="${X(h)}" y2="76" class="grid"/>`
+    +`<text x="${X(h)}" y="364" class="lbl" text-anchor="middle">${h}${TX(' 시간',' h')}</text>`; });
+  [250,290,330,350].forEach(T=>{ ax+=`<text x="102" y="${Y(T)+4}" class="lbl" text-anchor="end">${T} °C</text>`; });
+  ax+='<text x="780" y="390" class="lbl" text-anchor="end">'
      +TX('냉각이 끊긴 뒤 경과시간','Time since cooling was lost')+'</text>';
   el.querySelector('#ti-ax').innerHTML=ax;
   el.querySelector('#ti-sat').setAttribute('y1',Y(330));
