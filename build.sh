@@ -6,7 +6,10 @@ set -e
 cd "$(dirname "$0")"
 OUT=docs/index.html
 OUT_EN=docs/index_en.html
-cat src/*.html > "$OUT"
+cat src/*.html > "$OUT.tmp"
+# 심어 둔 글꼴을 /*@FONTS@*/ 자리에 끼운다 (src/fonts.b64.css · tools/fonts.py 가 만든다)
+sed -e '/\/\*@FONTS@\*\//r src/fonts.b64.css' -e '/\/\*@FONTS@\*\//d' "$OUT.tmp" > "$OUT"
+rm -f "$OUT.tmp"
 sed 's|<!--LANGDEF-->|<script>window.SMR_LANG="en"</script>|' "$OUT" > "$OUT_EN"
 N=$(grep -o 'S({' "$OUT" | wc -l | tr -d ' ')
 echo "built $OUT  ($N slides, $(wc -c < "$OUT") bytes)"

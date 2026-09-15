@@ -1,5 +1,17 @@
 # 변경 이력
 
+## v1.6 — 2026-09-15
+- **모노 문맥의 한글이 Pretendard가 아니었다.** `--mono` 스택(`IBM Plex Mono` → `SFMono` →
+  `D2Coding` → `Consolas`)에 한글을 가진 글꼴이 하나도 없어, 축 라벨·판독기 키·태그·표지 끝줄의
+  한글이 OS 기본 글꼴(맑은 고딕)로 떨어지고 있었다. 스택 뒤에 Pretendard를 넣어 고쳤다.
+- **글꼴을 파일 안에 심었다.** 덱에 쓰인 글자(한글 553자 포함 713자)만 남긴 Pretendard 5벌 ·
+  IBM Plex Mono 4벌 서브셋 388 KB를 base64로 넣었다. 인터넷이 없어도 글꼴까지 그대로 나온다.
+  CDN 링크는 서브셋에 없는 글자를 위한 보조로만 남겼다. 덱 200 KB → 731 KB,
+  한국어 PDF 는 오히려 3.4 MB → 1.4 MB(전체 글꼴 대신 서브셋을 품어서).
+- `tools/fonts.py` 추가 — 서브셋을 다시 만든다. `tools/check.js`가 서브셋에 없는 글자를 잡는다.
+- **PDF 파일 이름을 강의자료 제목으로.** `SMR_설계요건과_공학적안전설비.pdf` ·
+  `SMR_Design_Requirements_and_Engineered_Safety_Features.pdf`.
+
 ## v1.5 — 2026-09-15
 - **조작 막대를 무대 아래 46 px 띠로 꺼냈다.** 한/영 버튼이 11 px 반투명 칩으로 있다가 4초 뒤 사라져
   사실상 없는 것과 같았다. 이제 `한국어 / English` · 배경 전환 · `PDF ↓` 가 늘 떠 있고, `fit()`이

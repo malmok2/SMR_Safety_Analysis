@@ -4,7 +4,9 @@ Set-Location $PSScriptRoot
 $out = 'docs\index.html'
 $outEn = 'docs\index_en.html'
 Get-ChildItem src\*.html | Sort-Object Name | Get-Content -Raw | Set-Content -Encoding UTF8 $out
-$text = Get-Content -Raw $out
+# 심어 둔 글꼴을 /*@FONTS@*/ 자리에 끼운다
+$text = (Get-Content -Raw $out).Replace('/*@FONTS@*/', (Get-Content -Raw 'src\fonts.b64.css'))
+$text | Set-Content -Encoding UTF8 $out
 # 같은 내용에 기본 언어만 영어로 박은 판
 $text.Replace('<!--LANGDEF-->', '<script>window.SMR_LANG="en"</script>') |
   Set-Content -Encoding UTF8 $outEn

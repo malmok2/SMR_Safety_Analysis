@@ -30,8 +30,10 @@ src/          슬라이드 소스 12개. 파일명 사전순 = 슬라이드 순�
 docs/index.html   빌드 산출물(한국어로 열림). 직접 고치지 말 것 — 항상 src를 고치고 다시 빌드한다
 docs/index_en.html               같은 내용, 영어로 열림. build.sh 가 <!--LANGDEF--> 자리에
                                  window.SMR_LANG="en" 을 꽂아 함께 굽는다
-docs/NUE4067_SMR_safety_ko.pdf   미리 구운 PDF(46쪽). tools/pdf.js 가 만든다
-docs/NUE4067_SMR_safety_en.pdf
+docs/SMR_설계요건과_공학적안전설비.pdf                     미리 구운 PDF(46쪽). tools/pdf.js 가 만든다
+docs/SMR_Design_Requirements_and_Engineered_Safety_Features.pdf
+src/fonts.b64.css  덱에 심는 글꼴 서브셋(base64). build.sh 가 /*@FONTS@*/ 자리에 끼운다
+tools/fonts.py     그 서브셋을 다시 만드는 스크립트
 tools/browser.js  크로미움 실행 파일 탐색(CHROME_PATH → PLAYWRIGHT_BROWSERS_PATH → Chrome 채널)
 tools/shot.js     Playwright 스크린샷 검증 도구
 tools/check.js    46장을 한/영으로 전수 점검 — 콘솔 오류 · 번역 누락 · 토큰 찌꺼기 · 레이아웃 넘침
@@ -127,6 +129,28 @@ S({ html:`...`, init(el){ ... } })   // 슬라이드 하나. init은 이 슬라�
 `.side`가 있는 슬라이드는 viewBox 폭을 **780~820**으로 잡는다.
 
 높이는 `viewBox폭 × 본문높이 / 칸폭 × 0.92` 정도가 적당하다. `tools/check.js`가 80 % 미만을 잡아 준다.
+
+### 글꼴
+
+```
+--sans  PretendardSub → Pretendard Variable(CDN) → Pretendard(설치본) → Apple SD Gothic Neo → 맑은 고딕
+--mono  PlexMonoSub → IBM Plex Mono(CDN) → SFMono → Consolas → PretendardSub → …
+```
+
+`PretendardSub` · `PlexMonoSub`가 심어 둔 서브셋이다. 앞자리에 두었으므로 평소엔 이것으로 그리고,
+서브셋에 없는 글자만 뒤로 넘어간다.
+
+**`--mono` 뒤쪽에 Pretendard가 있는 이유** — IBM Plex Mono에는 한글이 없다. 넣지 않으면
+`.lbl` `.tag` `.num` `.val` `.hint` `.brand` 같은 모노 문맥의 한글이 **OS 기본 글꼴(맑은 고딕)로
+떨어진다.** v1.5까지 실제로 그랬다. 라틴은 Plex Mono, 한글은 Pretendard로 나뉘어 렌더된다.
+
+글자를 새로 넣으면 서브셋에 없을 수 있다. `tools/check.js`가 잡아 주고, 고치는 법은
+
+```bash
+pip install fonttools brotli      # 최초 1회
+python3 tools/fonts.py            # src/fonts.b64.css 와 src/fonts.charset.txt 를 다시 만든다
+./build.sh
+```
 
 ### 두 가지 배경
 
@@ -239,7 +263,9 @@ node pdf.js ko                   # 한 언어만
    움직여야 하면 래퍼 `<g>`를 하나 더 두거나, `opacity`·`stroke-dashoffset`만 애니메이션한다.
    `rect`의 `width`·`height`, `circle`의 `cx cy r`은 CSS 기하 속성이라 동작한다.
 2. **단일 파일을 유지한다.** 외부 이미지·JS·CSS 금지. 그림은 전부 인라인 SVG로 그린다.
-   유일한 외부 자원은 Google Fonts(IBM Plex Sans KR)이고, 오프라인이면 Pretendard → 맑은 고딕으로 폴백된다.
+   **글꼴도 파일 안에 있다** — 덱에 쓰인 글자만 남긴 Pretendard·IBM Plex Mono 서브셋(388 KB)을
+   base64로 심었다. 그래서 인터넷이 없어도 글꼴까지 그대로 나온다.
+   CDN 링크는 서브셋에 없는 글자를 위한 보조일 뿐이다.
    **강의실에 인터넷이 없어도 깨지지 않아야 한다**가 기준이다.
 3. **타이머는 `raf()`로만 만든다.** `setInterval`이나 맨 `requestAnimationFrame`은 슬라이드를 떠나도 계속 돌아
    누수·중복 애니메이션을 만든다.
@@ -275,6 +301,7 @@ console errors: 0          콘솔 오류(폰트 요청 실패는 걸러냈다)
 제목이 두 줄로 흐른 슬라이드: 0   한 줄이 기준. 두 줄이 되면 본문이 43 px 밀린다
 그림이 본문의 80 % 미만: 0      viewBox 비율이 칸보다 납작하다는 뜻(위 3절)
 SVG 글자 충돌·이탈: 0        <text> 끼리 겹치거나 그림 밖으로 나간 것
+심어 둔 글꼴에 없는 글자: 0    있으면 그 글자만 OS 기본 글꼴로 떨어진다 → tools/fonts.py 재실행
 index_en.html 이 영어로 열림: 예
 ```
 

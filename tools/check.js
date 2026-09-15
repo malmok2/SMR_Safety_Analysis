@@ -146,6 +146,21 @@ async function layoutScan(page) {
   console.log('SVG 글자 충돌·이탈:', svg.length);
   svg.slice(0, 40).forEach(([l, x]) => console.log('   ' + l, 'slide', String(x.n).padStart(2),
     x.kind, '[' + x.a.slice(0, 44) + ']', x.b ? '× [' + x.b.slice(0, 44) + ']  ' + x.w + '×' + x.h + 'px' : ''));
+  /* 심어 둔 글꼴 서브셋에 없는 글자가 소스에 들어왔는지.
+     있으면 그 글자만 OS 기본 글꼴로 떨어진다 — tools/fonts.py 를 다시 돌려야 한다. */
+  let miss = '';
+  try {
+    const fs = require('fs'), pathm = require('path');
+    const srcDir = pathm.join(pathm.dirname(file), '..', 'src');
+    const have = new Set(fs.readFileSync(pathm.join(srcDir, 'fonts.charset.txt'), 'utf8'));
+    const used = new Set();
+    for (const f of fs.readdirSync(srcDir).filter(f => f.endsWith('.html')))
+      for (const ch of fs.readFileSync(pathm.join(srcDir, f), 'utf8')) used.add(ch);
+    miss = [...used].filter(c => c.charCodeAt(0) >= 0x20 && !have.has(c)).join('');
+  } catch (e) { miss = ''; }
+  console.log('심어 둔 글꼴에 없는 글자:', miss.length ? miss.length + '자 → ' + miss.slice(0, 40)
+              + '   (python3 tools/fonts.py 를 다시 돌릴 것)' : '0');
+
   /* 영문판 파일이 그냥 열었을 때 영어로 뜨는지 */
   let enFile = 0;
   const enPath = file.replace(/index\.html$/, 'index_en.html');
@@ -163,5 +178,5 @@ async function layoutScan(page) {
   }
 
   await b.close();
-  process.exit(errs.length || left.length || junk.length || over.length || svg.length || wrap.length || enFile ? 1 : 0);
+  process.exit(errs.length || left.length || junk.length || over.length || svg.length || wrap.length || enFile || miss.length ? 1 : 0);
 })();

@@ -13,8 +13,8 @@
 |---|---|
 | 슬라이드 (한국어) | <https://malmok2.github.io/SMR_Safety_Analysis/> |
 | 슬라이드 (English) | <https://malmok2.github.io/SMR_Safety_Analysis/index_en.html> |
-| PDF (한국어, 46쪽) | <https://malmok2.github.io/SMR_Safety_Analysis/NUE4067_SMR_safety_ko.pdf> |
-| PDF (English, 46 p) | <https://malmok2.github.io/SMR_Safety_Analysis/NUE4067_SMR_safety_en.pdf> |
+| PDF (한국어, 46쪽) | [SMR_설계요건과_공학적안전설비.pdf](https://malmok2.github.io/SMR_Safety_Analysis/SMR_%EC%84%A4%EA%B3%84%EC%9A%94%EA%B1%B4%EA%B3%BC_%EA%B3%B5%ED%95%99%EC%A0%81%EC%95%88%EC%A0%84%EC%84%A4%EB%B9%84.pdf) |
+| PDF (English, 46 p) | [SMR_Design_Requirements_and_Engineered_Safety_Features.pdf](https://malmok2.github.io/SMR_Safety_Analysis/SMR_Design_Requirements_and_Engineered_Safety_Features.pdf) |
 
 ## 무엇이 들어 있나
 
@@ -91,9 +91,12 @@ node pdf.js                      # docs/NUE4067_SMR_safety_{ko,en}.pdf 다시 �
 
 ## 폰트
 
-본문은 **Pretendard**(jsDelivr의 dynamic-subset), 라벨·수치는 **IBM Plex Mono**(Google Fonts)다.
-받아오지 못하면 설치된 Pretendard → Apple SD Gothic Neo → 맑은 고딕 순으로 떨어진다.
-글자 모양만 조금 달라질 뿐 레이아웃은 유지된다.
+본문은 **Pretendard**, 라벨·수치의 라틴은 **IBM Plex Mono**다. 둘 다 **파일 안에 심어 두었다** —
+덱에 실제로 쓰인 글자만 남긴 서브셋(388 KB)이라, 인터넷이 없어도 글꼴까지 그대로 나온다.
+IBM Plex Mono에는 한글이 없으므로 모노 문맥의 한글도 Pretendard로 그린다.
+
+글꼴 원본은 둘 다 SIL Open Font License 1.1이다.
+Pretendard © 길형진(orioncactus) · IBM Plex Mono © IBM Corp.
 
 ---
 지도교수 송민섭 · Hanyang University, Department of Nuclear Engineering
