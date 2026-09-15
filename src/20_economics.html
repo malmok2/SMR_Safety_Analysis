@@ -11,38 +11,38 @@ function ecAxes(){
       +`<text x="62" y="${y+4}" class="lbl" text-anchor="end">${c?fmt(c):'0'}</text>`; });
   [300,600,900,1200,1500].forEach(p=>{ const x=EC.sx(p);
     g+=`<text x="${x}" y="320" class="lbl" text-anchor="middle">${p}</text>`; });
-  g+='<text x="690" y="338" class="lbl" text-anchor="end">정격 전기출력 (MWe)</text>'
-    +'<text x="70" y="12" class="lbl">비 자본비 (USD/kWe)</text>';
-  return g;
+  g+='<text x="690" y="338" class="lbl" text-anchor="end">[[정격 전기출력 (MWe)||Rated electrical output (MWe)]]</text>'
+    +'<text x="70" y="12" class="lbl">[[비 자본비 (USD/kWe)||Specific capital cost (USD/kWe)]]</text>';
+  return tr(g);
 }
 function ecCurve(){ let d=''; for(let P=150;P<=1500;P+=10){ d+=(d?'L':'M')+EC.sx(P).toFixed(1)+','+EC.sy(EC.C(P)).toFixed(1); } return d; }
 
-S({tag:'ECONOMY', ov:'규모의 경제 — 작게 만드는 대가',
-src:'<b>출처</b> L.M. Boldon, P. Sabharwall, INL/EXT-14-32616 (2014) §6.1 — NEA 평균 <i>n</i> = 0.51 채택. <b>유의</b> 상관식 검증 구간은 300~1300 MWe이므로 그 아래에서는 불확실성이 커진다',
-html:`<h2 class="t">출력을 줄이면 <s>kW당 비용이 오른다</s> — 얼마나 오르는지가 전부</h2>
+S({tag:'ECONOMY', ov:'[[규모의 경제 — 작게 만드는 대가||Economies of scale - the price of going small]]',
+src:'[[<b>출처</b> L.M. Boldon, P. Sabharwall, INL/EXT-14-32616 (2014) §6.1 — NEA 평균 <i>n</i> = 0.51 채택. <b>유의</b> 상관식 검증 구간은 300~1300 MWe이므로 그 아래에서는 불확실성이 커진다||<b>Source</b> L.M. Boldon, P. Sabharwall, INL/EXT-14-32616 (2014) &#167;6.1 - NEA average <i>n</i> = 0.51 adopted. <b>Caution</b> the correlation is validated over 300-1300 MWe, so uncertainty grows below that range]]',
+html:`<h2 class="t">[[출력을 줄이면 <s>kW당 비용이 오른다</s> — 얼마나 오르는지가 전부||Shrink the output and <s>cost per kW rises</s> - how much it rises is the whole question]]</h2>
 <ul class="b">
-  <li>용기·배관·구조물 비용은 <b>표면적</b>에 비례하고 출력은 <b>체적</b>에 비례 → 규모지수 <code>n ≈ 0.4~0.7</code></li>
-  <li>총 자본비가 아니라 <b class="cool">kW당 비용</b>을 봐야 함. 두 값은 반대 방향으로 움직임</li>
+  <li>[[용기·배관·구조물 비용은 <b>표면적</b>에 비례하고 출력은 <b>체적</b>에 비례 → 규모지수 <code>n ≈ 0.4~0.7</code>||Vessel, piping and structure cost follows <b>surface area</b> while power follows <b>volume</b> &#8594; scaling exponent <code>n &#8776; 0.4-0.7</code>]]</li>
+  <li>[[총 자본비가 아니라 <b class="cool">kW당 비용</b>을 봐야 함. 두 값은 반대 방향으로 움직임||Watch <b class="cool">cost per kW</b>, not total capital cost. The two move in opposite directions]]</li>
 </ul>
 <div class="body">
   <div class="fig">
     <div class="formula" style="white-space:nowrap;font-size:21px;padding:10px 0 14px">C₂/C₁ <span class="op">=</span> (P₂/P₁)<sup>n</sup>
       &nbsp;&nbsp;<span class="op">→</span>&nbsp;&nbsp;
       (C/P)₂/(C/P)₁ <span class="op">=</span> (P₂/P₁)<sup>n−1</sup>,&nbsp; <small>n − 1 &lt; 0</small></div>
-    <svg viewBox="0 0 700 345" role="img" aria-label="정격 출력에 따른 비 자본비 곡선. 출력이 작아질수록 kW당 비용이 급격히 오른다">
+    <svg viewBox="0 0 700 345" role="img" aria-label="[[정격 출력에 따른 비 자본비 곡선. 출력이 작아질수록 kW당 비용이 급격히 오른다||Specific capital cost against rated output. The smaller the output, the steeper the cost per kW]]">
       ${'{AXES}'}
       <path id="ecc" d="" fill="none" stroke="var(--cool)" stroke-width="2.4"/>
       <line id="ecref" x1="70" y1="0" x2="690" y2="0" stroke="var(--ink-3)" stroke-width="1" stroke-dasharray="4 4"/>
-      <text id="ecreft" x="686" y="0" class="lbl" text-anchor="end">대형 경수로 기준 1,400 MWe · 4,000</text>
+      <text id="ecreft" x="686" y="0" class="lbl" text-anchor="end">[[대형 경수로 기준 1,400 MWe · 4,000||Large LWR reference 1,400 MWe · 4,000]]</text>
       <line id="ecvl" x1="0" y1="300" x2="0" y2="0" stroke="var(--hot)" stroke-width="1.2"/>
       <circle id="ecpt" r="7" fill="var(--hot)"/>
     </svg>
   </div>
   <div class="side">
-    <div class="readout warn"><span class="k">정격 전기출력</span><span class="v" id="ro-p">180<small>MWe</small></span></div>
-    <div class="readout hi"><span class="k">비 자본비</span><span class="v" id="ro-c">10,900<small>USD/kWe</small></span></div>
-    <div class="readout"><span class="k">1,400 MWe 대비</span><span class="v" id="ro-r">2.72<small>배</small></span></div>
-    <div class="ctl"><label>출력 조절 <span id="ro-s">180 MWe</span></label>
+    <div class="readout warn"><span class="k">[[정격 전기출력||Rated electrical output]]</span><span class="v" id="ro-p">180<small>MWe</small></span></div>
+    <div class="readout hi"><span class="k">[[비 자본비||Specific capital cost]]</span><span class="v" id="ro-c">10,900<small>USD/kWe</small></span></div>
+    <div class="readout"><span class="k">[[1,400 MWe 대비||Relative to 1,400 MWe]]</span><span class="v" id="ro-r">2.72<small>[[배||x]]</small></span></div>
+    <div class="ctl"><label>[[출력 조절 ||Output ]]<span id="ro-s">180 MWe</span></label>
       <input type="range" id="ec-slider" min="150" max="1400" step="10" value="180"></div>
   </div>
 </div>`.replace('{AXES}',''),
@@ -62,7 +62,7 @@ init(el){
     pt.setAttribute('cx',x);pt.setAttribute('cy',y);
     el.querySelector('#ro-p').innerHTML=fmt(P)+'<small>MWe</small>';
     el.querySelector('#ro-c').innerHTML=fmt(C)+'<small>USD/kWe</small>';
-    el.querySelector('#ro-r').innerHTML=(C/4000).toFixed(2)+'<small>배</small>';
+    el.querySelector('#ro-r').innerHTML=(C/4000).toFixed(2)+'<small>'+TX('배','x')+'</small>';
     el.querySelector('#ro-s').textContent=fmt(P)+' MWe';
   }
   sl.oninput=()=>upd(+sl.value); upd(180);
@@ -75,18 +75,18 @@ init(el){
     const e=1-Math.pow(1-u,3); const P=lerp(1400,180,e); sl.value=Math.round(P); upd(P); });
 }});
 
-S({tag:'ECONOMY', ov:'2.7배를 되돌리는 네 가지 인자',
-src:'<b>출처</b> Boldon &amp; Sabharwall, INL/EXT-14-32616 (2014) §5.5·§6.1, Eq.3~6·Eq.12 — 원 보고서는 NEA/OECD(2011), Carelli et al.(2010), Wilton(2012)을 인용. <b>모두 반복 건설을 전제</b>한다',
-html:`<h2 class="t">2.7배를 되돌리는 <em>네 가지 인자</em> — 버튼을 눌러 하나씩 적용</h2>
+S({tag:'ECONOMY', ov:'[[2.7배를 되돌리는 네 가지 인자||Four factors that claw back the 2.7x]]',
+src:'[[<b>출처</b> Boldon &amp; Sabharwall, INL/EXT-14-32616 (2014) §5.5·§6.1, Eq.3~6·Eq.12 — 원 보고서는 NEA/OECD(2011), Carelli et al.(2010), Wilton(2012)을 인용. <b>모두 반복 건설을 전제</b>한다||<b>Source</b> Boldon &amp; Sabharwall, INL/EXT-14-32616 (2014) &#167;5.5·&#167;6.1, Eq.3-6·Eq.12 - the original report cites NEA/OECD (2011), Carelli et al. (2010) and Wilton (2012). <b>All of them assume repeated construction</b>]]',
+html:`<h2 class="t">[[2.7배를 되돌리는 <em>네 가지 인자</em> — 버튼을 눌러 하나씩 적용||<em>Four factors</em> that claw back the 2.7x - press a button to apply them one by one]]</h2>
 <ul class="b">
-  <li>네 인자 모두 <b>반복</b>을 전제로 함. 지금 세계 어디에도 SMR 반복 건설 사례가 없음 — 전부 <b class="hot">FOAK</b></li>
+  <li>[[네 인자 모두 <b>반복</b>을 전제로 함. 지금 세계 어디에도 SMR 반복 건설 사례가 없음 — 전부 <b class="hot">FOAK</b>||Every one of them assumes <b>repetition</b>. Nowhere in the world is an SMR being built repeatedly yet - all of them are <b class="hot">FOAK</b>]]</li>
 </ul>
 <div class="body">
   <div class="fig">
-    <svg viewBox="0 0 700 345" role="img" aria-label="180 MWe SMR의 비 자본비가 네 가지 저감 인자를 적용할 때마다 계단식으로 내려가는 그림">
+    <svg viewBox="0 0 700 345" role="img" aria-label="[[180 MWe SMR의 비 자본비가 네 가지 저감 인자를 적용할 때마다 계단식으로 내려가는 그림||Specific capital cost of a 180 MWe SMR stepping down as each of the four reduction factors is applied]]">
       <path id="rc-c" d="" fill="none" stroke="var(--rule)" stroke-width="2"/>
       <line id="rc-ref" x1="70" y1="0" x2="690" y2="0" stroke="var(--ink-3)" stroke-width="1" stroke-dasharray="4 4"/>
-      <text id="rc-reft" x="686" y="0" class="lbl" text-anchor="end">대형 경수로 4,000 USD/kWe</text>
+      <text id="rc-reft" x="686" y="0" class="lbl" text-anchor="end">[[대형 경수로 4,000 USD/kWe||Large LWR 4,000 USD/kWe]]</text>
       <g id="rc-steps"></g>
       <line id="rc-bar" x1="0" x2="0" stroke="var(--hot)" stroke-width="3"/>
       <circle id="rc-pt" r="8" fill="var(--hot)"/>
@@ -94,16 +94,17 @@ html:`<h2 class="t">2.7배를 되돌리는 <em>네 가지 인자</em> — 버튼
     </svg>
   </div>
   <div class="side">
-    <div class="readout warn"><span class="k">180 MWe · 현재 추정</span><span class="v" id="rc-ro">10,900<small>USD/kWe</small></span></div>
+    <div class="readout warn"><span class="k">[[180 MWe · 현재 추정||180 MWe · current estimate]]</span><span class="v" id="rc-ro">10,900<small>USD/kWe</small></span></div>
     <div class="btnrow" id="rc-btns" style="flex-direction:column;gap:7px">
-      <button class="btn" data-i="0">① Co-siting · 다수호기</button>
-      <button class="btn" data-i="1">② Modular design · 공장제작·학습</button>
-      <button class="btn" data-i="2">③ Plant configuration · 부지 구성</button>
-      <button class="btn" data-i="3">④ NOAK · 성숙 단계</button>
-      <button class="btn danger" data-i="-1">전부 해제</button>
+      <button class="btn" data-i="0">[[① Co-siting · 다수호기||&#9312; Co-siting · multiple units]]</button>
+      <button class="btn" data-i="1">[[② Modular design · 공장제작·학습||&#9313; Modular design · factory build and learning]]</button>
+      <button class="btn" data-i="2">[[③ Plant configuration · 부지 구성||&#9314; Plant configuration · site layout]]</button>
+      <button class="btn" data-i="3">[[④ NOAK · 성숙 단계||&#9315; NOAK · mature stage]]</button>
+      <button class="btn danger" data-i="-1">[[전부 해제||Reset all]]</button>
     </div>
-    <div class="src" style="font-size:12.5px">불가분비 분담 · 1호기 15 %+2~4호기 각 5 % ·
-      4기 부지 학습계수 0.81~0.90 · 정격 2배당 4.5 %</div>
+    <div class="src" style="font-size:12.5px">[[불가분비 분담 · 1호기 15 %+2~4호기 각 5 % ·
+      4기 부지 학습계수 0.81~0.90 · 정격 2배당 4.5 %||Shared indivisible cost · 15 % on unit 1 plus 5 % each on units 2-4 ·
+      learning factor 0.81-0.90 for a four-unit site · 4.5 % per doubling of rating]]</div>
   </div>
 </div>`,
 init(el){

@@ -7,15 +7,13 @@
  */
 const path = require('path');
 const { chromium } = require('playwright-core');
+const { findChromium } = require('./browser');
 
 (async () => {
   const file = path.resolve(process.argv[2] || '../docs/index.html');
   const only = process.argv[3] ? process.argv[3].split(',').map(Number) : null;
 
-  const opt = process.env.CHROME_PATH
-    ? { executablePath: process.env.CHROME_PATH }
-    : { channel: 'chrome' };
-  const b = await chromium.launch(opt);
+  const b = await chromium.launch(findChromium());
   const p = await b.newPage({ viewport: { width: 1440, height: 810 } });
 
   const errs = [];

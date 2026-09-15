@@ -108,6 +108,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;heigh
 input[type=range]::-moz-range-thumb{width:15px;height:15px;background:var(--cool);border:0;
   border-radius:50%}
 input[type=range]:focus-visible{outline:2px solid var(--cool);outline-offset:4px}
+a.btn{text-decoration:none;display:inline-block}
 .btn{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;color:var(--ink);
   background:var(--panel);border:1px solid var(--rule);padding:8px 13px;cursor:pointer;
   transition:border-color .15s,color .15s}
@@ -194,6 +195,45 @@ blockquote.q .cite{display:block;margin-top:9px;font-family:var(--mono);font-siz
 .axis{stroke:var(--rule);stroke-width:1}
 .grid{stroke:var(--rule);stroke-width:.6;stroke-dasharray:2 4}
 
+/* ---------- 언어·PDF 조작부 ---------- */
+#hud{position:fixed;right:14px;bottom:30px;z-index:41;display:flex;gap:6px;align-items:center;
+  opacity:.72;transition:opacity .5s}
+#hud:hover{opacity:1!important}
+#hud button{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--ink-3);
+  background:var(--panel);border:1px solid var(--rule);padding:4px 9px;cursor:pointer;
+  transition:color .15s,border-color .15s}
+#hud button:hover{color:var(--cool);border-color:var(--cool)}
+#hud button.on{color:var(--cool);border-color:var(--cool);background:#0d2438}
+#hud .gap{width:5px}
+
+/* ---------- 인쇄(PDF) 모드 — 46장을 한 번에 지면에 펼친다 ---------- */
+#sheets{display:none}
+#ptool{display:none}
+body.printing{display:block;place-items:initial;overflow:auto;height:auto}
+body.printing #stage,body.printing #prog,body.printing #help,body.printing #ov,
+body.printing #hud{display:none}
+body.printing #sheets{display:block;padding:0 0 40px}
+body.printing #ptool{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:16px 26px;border-bottom:1px solid var(--rule);background:var(--panel);
+  position:sticky;top:0;z-index:5}
+#ptool .msg{font-size:13.5px;color:var(--ink-2);font-weight:300;line-height:1.5;flex:1;min-width:280px}
+#ptool .msg b{color:var(--ink);font-weight:600}
+#ptool .sp{flex:1}
+.sheet{width:1280px;height:720px;position:relative;overflow:hidden;background:var(--ground);
+  margin:22px auto 0;border:1px solid var(--rule);
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.sheet .slide{position:absolute;inset:0;display:flex;opacity:1;transition:none}
+body.printing .cover .hint{display:none}   /* 지면에서는 조작키 안내가 의미 없다 */
+
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{overflow:visible;height:auto;background:var(--ground)}
+  .noprint{display:none!important}
+  body.printing #sheets{padding:0}
+  .sheet{margin:0;border:0;break-after:page;page-break-after:always;break-inside:avoid}
+  .sheet:last-child{break-after:auto;page-break-after:auto}
+}
+
 @media (prefers-reduced-motion:reduce){
   .slide{transition:none}
   #prog{transition:none}
@@ -203,5 +243,18 @@ blockquote.q .cite{display:block;margin-top:9px;font-family:var(--mono);font-siz
 <body>
 <div id="stage"></div>
 <div id="prog"></div>
-<div id="help">← → 이동 · O 목차 · F 전체화면 · R 다시재생</div>
+<div id="help">← → 이동 · O 목차 · L 한/영 · P 인쇄·PDF · F 전체화면</div>
+<div id="hud" class="noprint">
+  <button id="lang-ko" type="button">KO</button>
+  <button id="lang-en" type="button">EN</button>
+  <span class="gap"></span>
+  <button id="topdf" type="button">PDF ↓</button>
+</div>
 <div id="ov"><div class="grid" id="ovg"></div></div>
+<div id="ptool" class="noprint">
+  <span class="msg" id="pt-msg"></span>
+  <button class="btn" id="pt-print" type="button">Ctrl+P · PDF로 저장</button>
+  <a class="btn" id="pt-dl" href="NUE4067_SMR_safety_ko.pdf" download>미리 만든 PDF 내려받기</a>
+  <button class="btn" id="pt-back" type="button">슬라이드로 돌아가기</button>
+</div>
+<div id="sheets"></div>

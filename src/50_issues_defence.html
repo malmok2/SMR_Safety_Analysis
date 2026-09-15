@@ -1,20 +1,22 @@
 <script>
-SECT('03 · SMR의 쟁점');
-S({bare:true, cls:'div', ov:'§03 SMR의 쟁점',
-html:`<div class="no">03</div><h2>SMR의 쟁점</h2><div class="ln"></div>
+SECT('03 · [[SMR의 쟁점||Open issues]]');
+S({bare:true, cls:'div', ov:'[[§03 SMR의 쟁점||&#167;03 Open issues]]',
+html:`[[<div class="no">03</div><h2>SMR의 쟁점</h2><div class="ln"></div>
 <p>경제성 · 규제 · 안전 · 실현성. 지금 무엇이 해결되었고 무엇이 남았는가.
-이 장의 모든 현황은 <b>2026년 9월 기준</b>이며, 그 시점을 밝히지 않은 서술은 반년 뒤 틀린 문장이 된다.</p>`});
+이 장의 모든 현황은 <b>2026년 9월 기준</b>이며, 그 시점을 밝히지 않은 서술은 반년 뒤 틀린 문장이 된다.</p>||<div class="no">03</div><h2>Open issues</h2><div class="ln"></div>
+<p>Economics, regulation, safety, feasibility - what has been settled and what has not.
+Every status in this chapter is <b>as of September 2026</b>; state it without that date and it will be wrong in six months.</p>]]`});
 
-S({tag:'ECONOMY · FOAK', ov:'FOAK의 벽 — 실적치와 목표치',
-src:'<b>출처</b> WNISR, “Ontario’s Darlington SMR project to cost nearly $21 billion” (2025) · World Nuclear News, “Final investment decision taken for Romania’s SMRs” (2026) · IEA, <i>The Path to a New Era for Nuclear Energy</i> (2025). <b>유의</b> 사업비 포함 범위(송전·부지·금융비용)와 통화가 서로 달라 단순 비교는 주의',
-html:`<h2 class="t">저감 인자는 전부 <em>반복</em>을 전제한다 — 그런데 아직 <s>FOAK뿐</s>이다</h2>
+S({tag:'ECONOMY · FOAK', ov:'[[FOAK의 벽 — 실적치와 목표치||The FOAK wall - actuals against targets]]',
+src:'[[<b>출처</b> WNISR, “Ontario’s Darlington SMR project to cost nearly $21 billion” (2025) · World Nuclear News, “Final investment decision taken for Romania’s SMRs” (2026) · IEA, <i>The Path to a New Era for Nuclear Energy</i> (2025). <b>유의</b> 사업비 포함 범위(송전·부지·금융비용)와 통화가 서로 달라 단순 비교는 주의||<b>Source</b> WNISR, &#8220;Ontario&#8217;s Darlington SMR project to cost nearly $21 billion&#8221; (2025) · World Nuclear News, &#8220;Final investment decision taken for Romania&#8217;s SMRs&#8221; (2026) · IEA, <i>The Path to a New Era for Nuclear Energy</i> (2025). <b>Caution</b> the projects differ in scope (transmission, site, financing) and in currency, so the figures are not directly comparable]]',
+html:`<h2 class="t">[[저감 인자는 전부 <em>반복</em>을 전제한다 — 그런데 아직 <s>FOAK뿐</s>이다||Every reduction factor assumes <em>repetition</em> - and so far there is <s>only FOAK</s>]]</h2>
 <ul class="b">
-  <li>Darlington BWRX-300 4기 <code>C$20.9억</code> · 약 1,200 MWe → kW당 <b class="hot">약 C$17,400</b></li>
-  <li>Doicești NuScale 6모듈 <code>USD 60~70억</code> · 462 MWe → kW당 <b class="hot">약 13,000~15,200 USD</b></li>
-  <li>IEA 2040년 목표는 미국·유럽 <code>USD 4,500/kW</code> · LCOE <code>60~80 USD/MWh</code></li>
+  <li>[[Darlington BWRX-300 4기 <code>C$20.9억</code> · 약 1,200 MWe → kW당 <b class="hot">약 C$17,400</b>||Darlington, four BWRX-300 units, <code>C$20.9 bn</code> · about 1,200 MWe &#8594; <b class="hot">about C$17,400 per kW</b>]]</li>
+  <li>[[Doicești NuScale 6모듈 <code>USD 60~70억</code> · 462 MWe → kW당 <b class="hot">약 13,000~15,200 USD</b>||Doicești, six NuScale modules, <code>USD 6-7 bn</code> · 462 MWe &#8594; <b class="hot">about USD 13,000-15,200 per kW</b>]]</li>
+  <li>[[IEA 2040년 목표는 미국·유럽 <code>USD 4,500/kW</code> · LCOE <code>60~80 USD/MWh</code>||The IEA target for 2040 in the US and Europe is <code>USD 4,500/kW</code> with an LCOE of <code>60-80 USD/MWh</code>]]</li>
 </ul>
 <div class="body"><div class="fig">
-<svg viewBox="0 0 1120 300" role="img" aria-label="SMR 실적 사업비와 IEA 2040년 목표 단가 비교">
+<svg viewBox="0 0 1120 300" role="img" aria-label="[[SMR 실적 사업비와 IEA 2040년 목표 단가 비교||Announced SMR project costs against the IEA target for 2040]]">
   <g id="fk-ax"></g>
   <g id="fk-bars"></g>
 </svg>
@@ -24,13 +26,14 @@ init(el){
   let ax='<line x1="230" y1="248" x2="1060" y2="248" class="axis"/>';
   [0,4500,9000,13500,18000].forEach(v=>{ ax+=`<line x1="${X(v)}" y1="40" x2="${X(v)}" y2="248" class="grid"/>`
     +`<text x="${X(v)}" y="270" class="lbl" text-anchor="middle">${fmt(v)}</text>`; });
-  ax+='<text x="1060" y="292" class="lbl" text-anchor="end">kW당 자본비 (현지 통화)</text>';
+  ax+='<text x="1060" y="292" class="lbl" text-anchor="end">'
+     +TX('kW당 자본비 (현지 통화)','Capital cost per kW (local currency)')+'</text>';
   ax+=`<line x1="${X(4500)}" y1="34" x2="${X(4500)}" y2="248" stroke="var(--ok)" stroke-width="1.6" stroke-dasharray="5 4"/>`
-     +`<text x="${X(4500)+10}" y="30" class="lbl" fill="var(--ok)">IEA 2040년 목표 4,500</text>`;
+     +`<text x="${X(4500)+10}" y="30" class="lbl" fill="var(--ok)">${TX('IEA 2040년 목표 4,500','IEA 2040 target 4,500')}</text>`;
   el.querySelector('#fk-ax').innerHTML=ax;
-  const B=[['Darlington · BWRX-300 4기',17400,'C$','var(--hot)'],
-           ['Doicești · NuScale 6모듈',14100,'USD','var(--hot)'],
-           ['IEA 2040년 목표',4500,'USD','var(--ok)']];
+  const B=[[TX('Darlington · BWRX-300 4기','Darlington · 4 × BWRX-300'),17400,'C$','var(--hot)'],
+           [TX('Doicești · NuScale 6모듈','Doicești · 6 × NuScale module'),14100,'USD','var(--hot)'],
+           [TX('IEA 2040년 목표','IEA 2040 target'),4500,'USD','var(--ok)']];
   const g=el.querySelector('#fk-bars');
   B.forEach((b,i)=>{ const y=62+i*62;
     g.insertAdjacentHTML('beforeend',
@@ -45,40 +48,42 @@ init(el){
   set(0); raf(t=>{ const u=clamp(t/1.3,0,1); set(1-Math.pow(1-u,3)); });
 }});
 
-S({tag:'REGULATION', ov:'규제 — 아직 만들어지는 중',
-src:'<b>출처</b> IAEA, “Five Reports of the SMR Regulators’ Forum Published” · IAEA, “SMR Platform and NHSI” · 원자력안전위원회 「SMR 규제체계 구축 로드맵(안)」(2026-02-12) · 에너지데일리 (2026-08-28)',
-html:`<h2 class="t">기존 규제는 <em>대형 경수로</em>를 전제로 만들어졌다</h2>
+S({tag:'REGULATION', ov:'[[규제 — 아직 만들어지는 중||Regulation - still being written]]',
+src:'[[<b>출처</b> IAEA, “Five Reports of the SMR Regulators’ Forum Published” · IAEA, “SMR Platform and NHSI” · 원자력안전위원회 「SMR 규제체계 구축 로드맵(안)」(2026-02-12) · 에너지데일리 (2026-08-28)||<b>Source</b> IAEA, &#8220;Five Reports of the SMR Regulators&#8217; Forum Published&#8221; · IAEA, &#8220;SMR Platform and NHSI&#8221; · Nuclear Safety and Security Commission (Korea), <i>Draft roadmap for an SMR regulatory framework</i> (2026-02-12) · Energy Daily (2026-08-28)]]',
+html:`<h2 class="t">[[기존 규제는 <em>대형 경수로</em>를 전제로 만들어졌다||The existing rules were written around <em>large light water reactors</em>]]</h2>
 <ul class="b">
-  <li>격납 크기 · 비상계획구역(EPZ) 반경 · 운전원 정원 · 다수호기 취급 — 전부 대형로 기준</li>
-  <li>국내 i-SMR 심사에서 <b class="amb">모듈 설계와 피동안전계통의 안전성</b>이 중점 검토 대상으로 명시됨</li>
+  <li>[[격납 크기 · 비상계획구역(EPZ) 반경 · 운전원 정원 · 다수호기 취급 — 전부 대형로 기준||Containment size, emergency planning zone radius, operator staffing, treatment of multiple units - all sized for large plants]]</li>
+  <li>[[국내 i-SMR 심사에서 <b class="amb">모듈 설계와 피동안전계통의 안전성</b>이 중점 검토 대상으로 명시됨||In the Korean i-SMR review, <b class="amb">the module design and the safety of the passive safety systems</b> are named as focal points]]</li>
 </ul>
 <div class="body">
   <div class="fig" style="justify-content:flex-start">
     <table class="d sm">
-      <tr><th style="width:30%">활동</th><th style="width:16%">시작</th><th>현재 상태 (2026년 9월)</th></tr>
-      <tr><td>SMR Regulators’ Forum</td><td class="n">2015</td><td>Phase 1 등급별 접근·심층방어·EPZ → Phase 2 인허가·피동 설계특성 → Phase 3 보고서 5건 → <b>Phase 4 진행 중</b></td></tr>
-      <tr><td>IAEA NHSI</td><td class="n">2022</td><td>규제 트랙(중복 심사 축소) + 산업 트랙(표준화) · <b>Phase II 이행 단계</b></td></tr>
-      <tr class="mark"><td>원안위 SMR 규제체계 로드맵</td><td class="n">2026.2</td><td>2030년까지 SMR 포괄 인허가 체계 구축 목표</td></tr>
-      <tr class="mark"><td>i-SMR 표준설계인가(SDA)</td><td class="n">2026.2</td><td>신청 완료 → 2026.8 KINS 심사계획 보고 · 법정 24개월 · <b>인가 목표 2028년</b></td></tr>
-      <tr><td>SMART100 SDA</td><td class="n">2019.12</td><td><b class="ok">2024년 9월 26일 취득 완료</b></td></tr>
+      [[<tr><th style="width:30%">활동</th><th style="width:16%">시작</th><th>현재 상태 (2026년 9월)</th></tr>||<tr><th style="width:30%">Activity</th><th style="width:16%">Started</th><th>Status (September 2026)</th></tr>]]
+      <tr><td>SMR Regulators’ Forum</td><td class="n">2015</td><td>[[Phase 1 등급별 접근·심층방어·EPZ → Phase 2 인허가·피동 설계특성 → Phase 3 보고서 5건 → <b>Phase 4 진행 중</b>||Phase 1 graded approach, defence in depth, EPZ &#8594; Phase 2 licensing and passive design features &#8594; Phase 3 five reports &#8594; <b>Phase 4 under way</b>]]</td></tr>
+      <tr><td>IAEA NHSI</td><td class="n">2022</td><td>[[규제 트랙(중복 심사 축소) + 산업 트랙(표준화) · <b>Phase II 이행 단계</b>||A regulatory track (less duplicated review) plus an industry track (standardisation) · <b>Phase II implementation</b>]]</td></tr>
+      <tr class="mark"><td>[[원안위 SMR 규제체계 로드맵||NSSC roadmap for SMR regulation]]</td><td class="n">2026.2</td><td>[[2030년까지 SMR 포괄 인허가 체계 구축 목표||Aims for a comprehensive SMR licensing framework by 2030]]</td></tr>
+      <tr class="mark"><td>[[i-SMR 표준설계인가(SDA)||i-SMR standard design approval (SDA)]]</td><td class="n">2026.2</td><td>[[신청 완료 → 2026.8 KINS 심사계획 보고 · 법정 24개월 · <b>인가 목표 2028년</b>||Application filed &#8594; KINS review plan reported 2026.8 · 24 months by statute · <b>approval targeted for 2028</b>]]</td></tr>
+      <tr><td>SMART100 SDA</td><td class="n">2019.12</td><td>[[<b class="ok">2024년 9월 26일 취득 완료</b>||<b class="ok">Granted on 26 September 2024</b>]]</td></tr>
     </table>
   </div>
   <div class="side">
-    <blockquote class="q">규제가 “아직 없다”가 아니라 <b>“대형로용은 있고 SMR용은 만드는 중”</b>이다.
+    <blockquote class="q">[[규제가 “아직 없다”가 아니라 <b>“대형로용은 있고 SMR용은 만드는 중”</b>이다.
       설계자는 없는 규정을 기다리는 대신 <b>왜 이 설계가 기존 요건을 만족하는지</b>를 스스로 논증해야 한다.
-      <span class="cite">→ 4장 요건, 5장 ESF 설계특성</span></blockquote>
+      <span class="cite">→ 4장 요건, 5장 ESF 설계특성</span>||It is not that regulation is &#8220;missing&#8221;; it is that <b>the large-plant rules exist and the SMR rules are being written</b>.
+      Rather than waiting for a rule that is not there, the designer has to argue <b>why this design meets the requirements that do exist</b>.
+      <span class="cite">&#8594; Ch. 4 requirements, Ch. 5 ESF design features</span>]]</blockquote>
   </div>
 </div>`});
 
-S({tag:'STATUS · 2026.09', ov:'인허가·건설 타임라인',
-src:'<b>출처</b> NRC 보도자료(2025) · World Nuclear News(2024·2026) · CNSC·OPG 공개자료 · IAEA SMR Booklet 2022 · EconoJournal(2026). <b>목표 시점은 사업자 발표값</b>이므로 변동 가능성이 크다',
-html:`<h2 class="t">지금 어디까지 왔는가 — <em>붉은 선이 현재</em></h2>
+S({tag:'STATUS · 2026.09', ov:'[[인허가·건설 타임라인||Licensing and construction timeline]]',
+src:'[[<b>출처</b> NRC 보도자료(2025) · World Nuclear News(2024·2026) · CNSC·OPG 공개자료 · IAEA SMR Booklet 2022 · EconoJournal(2026). <b>목표 시점은 사업자 발표값</b>이므로 변동 가능성이 크다||<b>Source</b> NRC press releases (2025) · World Nuclear News (2024, 2026) · CNSC and OPG public material · IAEA SMR Booklet 2022 · EconoJournal (2026). <b>Target dates are the vendors&#8217; own</b> and are liable to move]]',
+html:`<h2 class="t">[[지금 어디까지 왔는가 — <em>붉은 선이 현재</em>||Where things actually stand - <em>the red line is now</em>]]</h2>
 <ul class="b">
-  <li>전력 생산에 가장 가까운 것은 <b class="ok">BWRX-300</b> — 2025년 4월 G7 최초 건설허가, 2026년 4월 운영허가 신청·토건 착수</li>
-  <li>CAREM-25는 기술이 아니라 <b class="hot">자금·조직의 연속성</b> 때문에 멈췄다</li>
+  <li>[[전력 생산에 가장 가까운 것은 <b class="ok">BWRX-300</b> — 2025년 4월 G7 최초 건설허가, 2026년 4월 운영허가 신청·토건 착수||Closest to generating power is <b class="ok">BWRX-300</b> - the first G7 construction licence in April 2025, operating licence applied for and civil works started in April 2026]]</li>
+  <li>[[CAREM-25는 기술이 아니라 <b class="hot">자금·조직의 연속성</b> 때문에 멈췄다||CAREM-25 stalled not on technology but on <b class="hot">continuity of funding and organisation</b>]]</li>
 </ul>
 <div class="body"><div class="fig">
-<svg viewBox="0 0 1120 372" role="img" aria-label="주요 SMR 사업의 인허가와 건설 일정, 2026년 9월 현재 시점 표시">
+<svg viewBox="0 0 1120 372" role="img" aria-label="[[주요 SMR 사업의 인허가와 건설 일정, 2026년 9월 현재 시점 표시||Licensing and construction schedules of major SMR projects, with the present date of September 2026 marked]]">
   <g id="tl-ax"></g><g id="tl-rows"></g>
   <line id="tl-now" y1="24" y2="330" stroke="var(--hot)" stroke-width="1.8"/>
   <text id="tl-nowt" y="18" class="lbl" fill="var(--hot)" text-anchor="middle">2026.9</text>
@@ -91,12 +96,17 @@ init(el){
     +`<text x="${X(y)}" y="352" class="lbl" text-anchor="middle">${y}</text>`; });
   el.querySelector('#tl-ax').innerHTML=ax;
   const R=[
-    ['NuScale VOYGR',2020.7,2033,'var(--cool)',[[2020.7,'US600 DC',1],[2025.4,'US460 SDA',-1],[2026.1,'루마니아 FID',1],[2033,'상업운전 목표',-1]]],
-    ['BWRX-300 · Darlington',2025.3,2030.9,'var(--ok)',[[2025.3,'건설허가',1],[2026.3,'운영허가 신청',-1],[2030.9,'계통연계 목표',1]]],
-    ['SMART100',2024.7,2024.7,'var(--amber)',[[2024.7,'표준설계인가 취득',1]]],
-    ['i-SMR',2026.2,2035,'var(--hot)',[[2026.2,'SDA 신청',1],[2028.5,'SDA 목표',-1],[2035,'1호기 준공 목표',1]]],
-    ['RITM-200N',2023.3,2028,'var(--ink-2)',[[2023.3,'건설허가',1],[2028,'가동 목표',-1]]],
-    ['CAREM-25',2014,2025,'var(--ink-3)',[[2014,'착공',1],[2025,'공사 중단',-1]]]];
+    ['NuScale VOYGR',2020.7,2033,'var(--cool)',[[2020.7,'US600 DC',1],[2025.4,'US460 SDA',-1],
+      [2026.1,TX('루마니아 FID','Romania FID'),1],[2033,TX('상업운전 목표','Commercial operation, target'),-1]]],
+    ['BWRX-300 · Darlington',2025.3,2030.9,'var(--ok)',[[2025.3,TX('건설허가','Construction licence'),1],
+      [2026.3,TX('운영허가 신청','Operating licence applied'),-1],[2030.9,TX('계통연계 목표','Grid connection, target'),1]]],
+    ['SMART100',2024.7,2024.7,'var(--amber)',[[2024.7,TX('표준설계인가 취득','Standard design approval granted'),1]]],
+    ['i-SMR',2026.2,2035,'var(--hot)',[[2026.2,TX('SDA 신청','SDA applied'),1],
+      [2028.5,TX('SDA 목표','SDA target'),-1],[2035,TX('1호기 준공 목표','Unit 1 completion, target'),1]]],
+    ['RITM-200N',2023.3,2028,'var(--ink-2)',[[2023.3,TX('건설허가','Construction licence'),1],
+      [2028,TX('가동 목표','Start-up target'),-1]]],
+    ['CAREM-25',2014,2025,'var(--ink-3)',[[2014,TX('착공','Construction start'),1],
+      [2025,TX('공사 중단','Work suspended'),-1]]]];
   const g=el.querySelector('#tl-rows'); const marks=[];
   R.forEach((r,i)=>{ const y=56+i*47;
     g.insertAdjacentHTML('beforeend',
@@ -122,45 +132,54 @@ init(el){
 /* ================================================================
    SECTION 04 — 안전요건의 뼈대
    ================================================================ */
-SECT('04 · 안전요건의 뼈대');
-S({bare:true, cls:'div', ov:'§04 안전요건의 뼈대',
-html:`<div class="no">04</div><h2>안전요건의 뼈대</h2><div class="ln"></div>
+SECT('04 · [[안전요건의 뼈대||The frame of safety requirements]]');
+S({bare:true, cls:'div', ov:'[[§04 안전요건의 뼈대||&#167;04 The frame of safety requirements]]',
+html:`[[<div class="no">04</div><h2>안전요건의 뼈대</h2><div class="ln"></div>
 <p>계통 하나하나를 보기 전에, 그 계통들이 왜 존재하는지를 규정하는 상위 틀을 세운다.
-기본안전기능 · 심층방어 · 단일고장기준 — 이 세 개념은 이후 모든 장에서 반복해 등장한다.</p>`});
+기본안전기능 · 심층방어 · 단일고장기준 — 이 세 개념은 이후 모든 장에서 반복해 등장한다.</p>||<div class="no">04</div><h2>The frame of safety requirements</h2><div class="ln"></div>
+<p>Before looking at individual systems, set up the frame that says why those systems exist at all.
+Fundamental safety functions, defence in depth, the single failure criterion - these three come back in every chapter that follows.</p>]]`});
 
-S({tag:'DEFENCE IN DEPTH', ov:'심층방어 5단계 — 사고가 어디서 멈추는가',
-src:'<b>출처</b> IAEA, <i>Safety of Nuclear Power Plants: Design</i>, SSR-2/1 (Rev.1) Requirement 7 — “The levels of defence in depth shall be <b>independent as far as is practicable</b>.”',
-html:`<h2 class="t">사고는 <em>겹</em>을 하나씩 뚫는다 — 어디서 멈추게 할 것인가</h2>
+S({tag:'DEFENCE IN DEPTH', ov:'[[심층방어 5단계 — 사고가 어디서 멈추는가||Five levels of defence in depth - where the accident stops]]',
+src:'[[<b>출처</b> IAEA, <i>Safety of Nuclear Power Plants: Design</i>, SSR-2/1 (Rev.1) Requirement 7 — “The levels of defence in depth shall be <b>independent as far as is practicable</b>.”||<b>Source</b> IAEA, <i>Safety of Nuclear Power Plants: Design</i>, SSR-2/1 (Rev.1) Requirement 7 - &#8220;The levels of defence in depth shall be <b>independent as far as is practicable</b>.&#8221;]]',
+html:`<h2 class="t">[[사고는 <em>겹</em>을 하나씩 뚫는다 — 어디서 멈추게 할 것인가||An accident pierces the <em>layers</em> one at a time - where do you make it stop]]</h2>
 <ul class="b">
-  <li>공학적안전설비(ESF)가 지키는 곳은 <b class="cool">Level 3</b>. 이 교재가 다루는 범위다</li>
-  <li>단계를 나눠도 <b class="hot">같은 원인으로 함께 죽으면 겹이 아니다</b> — 후쿠시마가 그랬다</li>
+  <li>[[공학적안전설비(ESF)가 지키는 곳은 <b class="cool">Level 3</b>. 이 교재가 다루는 범위다||Engineered safety features hold <b class="cool">Level 3</b>. That is the scope of this text]]</li>
+  <li>[[단계를 나눠도 <b class="hot">같은 원인으로 함께 죽으면 겹이 아니다</b> — 후쿠시마가 그랬다||Splitting into levels means nothing if <b class="hot">one cause kills them together</b> - which is what happened at Fukushima]]</li>
 </ul>
 <div class="body">
   <div class="fig">
-  <svg viewBox="0 0 860 330" role="img" aria-label="심층방어 5단계를 사고가 통과하는 모습. 정상 설계에서는 Level 3의 공학적안전설비에서 멈춘다">
+  <svg viewBox="0 0 860 330" role="img" aria-label="[[심층방어 5단계를 사고가 통과하는 모습. 정상 설계에서는 Level 3의 공학적안전설비에서 멈춘다||An accident travelling through the five levels of defence in depth. In a sound design it stops at the Level 3 engineered safety features]]">
     <g id="dd-lv"></g>
     <circle id="dd-tok" cx="700" cy="6" r="11" fill="var(--hot)"/>
-    <text id="dd-toklbl" x="700" y="-8" class="lbl" fill="var(--hot)" text-anchor="middle">사고</text>
+    <text id="dd-toklbl" x="700" y="-8" class="lbl" [[fill="var(--hot)" text-anchor="middle">사고</text>||fill="var(--hot)" text-anchor="middle">Accident</text>]]
     <text id="dd-res" x="430" y="318" text-anchor="middle" font-family="var(--sans)" font-size="19"
           font-weight="600" fill="var(--ok)" opacity="0"></text>
   </svg>
   </div>
   <div class="side">
     <div class="btnrow" style="flex-direction:column;gap:7px">
-      <button class="btn act" id="dd-n">정상 설계 — 재생</button>
-      <button class="btn danger" id="dd-f">후쿠시마 — 공통원인 재생</button>
+      <button class="btn act" id="dd-n">[[정상 설계 — 재생||Sound design - replay]]</button>
+      <button class="btn danger" id="dd-f">[[후쿠시마 — 공통원인 재생||Fukushima - common cause replay]]</button>
     </div>
-    <blockquote class="q" style="border-left-color:var(--hot)">지진과 쓰나미라는 <b>하나의 사건</b>이 외부전원(Level 1~2 지원),
+    <blockquote class="q" style="border-left-color:var(--hot)">[[지진과 쓰나미라는 <b>하나의 사건</b>이 외부전원(Level 1~2 지원),
       비상디젤발전기(Level 3), 최종 열침원(Level 3~4)을 <b>동시에</b> 무력화했다.
-      <span class="cite">→ 그래서 SMR은 전원을 필요로 하지 않는 계통을 강조한다</span></blockquote>
+      <span class="cite">→ 그래서 SMR은 전원을 필요로 하지 않는 계통을 강조한다</span>||<b>One event</b>, an earthquake and a tsunami, disabled offsite power (support for Levels 1-2),
+      the emergency diesel generators (Level 3) and the ultimate heat sink (Levels 3-4) <b>at the same time</b>.
+      <span class="cite">&#8594; hence the SMR emphasis on systems that need no electrical power</span>]]</blockquote>
   </div>
 </div>`,
 init(el){
-  const LV=[['Level 1','정상운전 이탈 예방','보수적 설계 · 여유도 · 품질보증','var(--cool)'],
-    ['Level 2','이탈의 감지와 제어','제어·감시계통 · 운전절차서','var(--cool)'],
-    ['Level 3','설계기준사고 제어','공학적안전설비 (ESF)','var(--ok)'],
-    ['Level 4','중대사고 완화','중대사고 관리설비 · 격납 건전성','var(--amber)'],
-    ['Level 5','소외 영향 완화','비상대응 · 방재계획','var(--ink-3)']];
+  const LV=[['Level 1',TX('정상운전 이탈 예방','Prevent departure from normal operation'),
+     TX('보수적 설계 · 여유도 · 품질보증','Conservative design · margin · quality assurance'),'var(--cool)'],
+    ['Level 2',TX('이탈의 감지와 제어','Detect and control the departure'),
+     TX('제어·감시계통 · 운전절차서','Control and monitoring · operating procedures'),'var(--cool)'],
+    ['Level 3',TX('설계기준사고 제어','Control design basis accidents'),
+     TX('공학적안전설비 (ESF)','Engineered safety features (ESF)'),'var(--ok)'],
+    ['Level 4',TX('중대사고 완화','Mitigate severe accidents'),
+     TX('중대사고 관리설비 · 격납 건전성','Severe accident equipment · containment integrity'),'var(--amber)'],
+    ['Level 5',TX('소외 영향 완화','Mitigate offsite consequences'),
+     TX('비상대응 · 방재계획','Emergency response · protective planning'),'var(--ink-3)']];
   const g=el.querySelector('#dd-lv');
   LV.forEach((l,i)=>{ const y=18+i*56;
     g.insertAdjacentHTML('beforeend',
@@ -179,7 +198,7 @@ init(el){
   el.querySelector('#dd-n').onclick=()=>start('n');
   el.querySelector('#dd-f').onclick=()=>start('f');
   if(RM){ tok.setAttribute('cy',18+2*56+21); res.setAttribute('opacity',1);
-    res.textContent='Level 3 공학적안전설비에서 정지'; return; }
+    res.textContent=TX('Level 3 공학적안전설비에서 정지','Stopped at the Level 3 engineered safety features'); return; }
   start('n');
   raf(()=>{ if(!run) return; T+=1/60;
     const stopAt = mode==='n'? 2 : 4;
@@ -192,9 +211,11 @@ init(el){
     if(y>=yTarget-0.5){
       run=false;
       if(mode==='n'){ res.setAttribute('fill','var(--ok)');
-        res.textContent='Level 3 — 공학적안전설비가 사고를 설계기준 안에서 멈춘다'; }
+        res.textContent=TX('Level 3 — 공학적안전설비가 사고를 설계기준 안에서 멈춘다',
+                           'Level 3 - the engineered safety features hold the accident inside the design basis'); }
       else { res.setAttribute('fill','var(--hot)');
-        res.textContent='단계가 독립이 아니면, 다섯 겹도 한 겹이다'; }
+        res.textContent=TX('단계가 독립이 아니면, 다섯 겹도 한 겹이다',
+                           'If the levels are not independent, five layers are one layer'); }
       res.setAttribute('opacity',1);
       const r=rows[stopAt].querySelector('rect');
       r.animate([{strokeWidth:2},{strokeWidth:5},{strokeWidth:2}],{duration:700,iterations:2});

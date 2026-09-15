@@ -1,39 +1,41 @@
 <script>
-SECT('06 · 정지계통');
-S({bare:true, cls:'div', ov:'§06 정지계통',
-html:`<div class="no">06</div><h2>정지계통</h2><div class="ln"></div>
+SECT('06 · [[정지계통||Shutdown systems]]');
+S({bare:true, cls:'div', ov:'[[§06 정지계통||&#167;06 Shutdown systems]]',
+html:`[[<div class="no">06</div><h2>정지계통</h2><div class="ln"></div>
 <p>기본안전기능 ①. 반응도를 어떻게 <b>확실히</b> 죽이는가.
-제어봉과 붕산 주입이라는 두 수단이 왜 <b>둘 다</b> 필요한지, 그 요구 성능이 어떤 계산으로 정해지는지.</p>`});
+제어봉과 붕산 주입이라는 두 수단이 왜 <b>둘 다</b> 필요한지, 그 요구 성능이 어떤 계산으로 정해지는지.</p>||<div class="no">06</div><h2>Shutdown systems</h2><div class="ln"></div>
+<p>Safety function &#9312;: how to kill reactivity <b>for certain</b>.
+Why control rods and boron injection are <b>both</b> needed, and what calculation fixes the performance each must deliver.</p>]]`});
 
-S({tag:'SCRAM', ov:'제어봉 낙하 — S-곡선과 stuck rod',
-src:'<b>계산</b> 코사인 중성자속 분포를 가정한 표준 S-곡선 <span class="mono">ρ(x)/ρ_total = x − sin(2πx)/2π</span> · stuck rod 영향 18 % 손실로 예시. 실제 값은 노심 설계·연소도에 따라 다르다',
-html:`<h2 class="t">삽입 초기와 말기는 <s>효율이 낮다</s> — 그래서 낙하 시간이 요건이 된다</h2>
+S({tag:'SCRAM', ov:'[[제어봉 낙하 — S-곡선과 stuck rod||Rod drop - the S-curve and the stuck rod]]',
+src:'[[<b>계산</b> 코사인 중성자속 분포를 가정한 표준 S-곡선 <span class="mono">ρ(x)/ρ_total = x − sin(2πx)/2π</span> · stuck rod 영향 18 % 손실로 예시. 실제 값은 노심 설계·연소도에 따라 다르다||<b>Calculation</b> the standard S-curve for an assumed cosine flux shape, <span class="mono">ρ(x)/ρ_total = x − sin(2πx)/2π</span> · the stuck rod is shown as an 18 % loss. Real values depend on core design and burn-up]]',
+html:`<h2 class="t">[[삽입 초기와 말기는 <s>효율이 낮다</s> — 그래서 낙하 시간이 요건이 된다||The first and last part of the stroke are <s>inefficient</s> - which is why drop time becomes a requirement]]</h2>
 <ul class="b">
-  <li>중성자속이 높은 <b>노심 중앙부</b>를 지날 때 반응도가 급격히 들어감 — 곡선이 S자인 이유</li>
-  <li><b class="hot">GDC 26</b> — 최대 반응도가 봉 1개가 <b>삽입되지 않는다</b>는 가정에서도 요구 성능을 만족해야 함</li>
+  <li>[[중성자속이 높은 <b>노심 중앙부</b>를 지날 때 반응도가 급격히 들어감 — 곡선이 S자인 이유||Reactivity goes in fastest while the rod crosses the <b>high-flux centre</b> of the core - that is why the curve is S-shaped]]</li>
+  <li>[[<b class="hot">GDC 26</b> — 최대 반응도가 봉 1개가 <b>삽입되지 않는다</b>는 가정에서도 요구 성능을 만족해야 함||<b class="hot">GDC 26</b> - the requirement must still be met assuming the single most reactive rod <b>fails to insert</b>]]</li>
 </ul>
 <div class="body">
   <div class="fig">
-  <svg viewBox="0 0 1120 320" role="img" aria-label="제어봉이 노심에 떨어지면서 삽입 반응도가 S자 곡선을 그리는 모습과 stuck rod의 영향">
+  <svg viewBox="0 0 1120 320" role="img" aria-label="[[제어봉이 노심에 떨어지면서 삽입 반응도가 S자 곡선을 그리는 모습과 stuck rod의 영향||Reactivity inserted as the rods fall into the core, tracing an S-curve, and the effect of a stuck rod]]">
     <rect x="60" y="60" width="290" height="210" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.5"/>
-    <text x="205" y="48" text-anchor="middle" class="ttl">노심 단면</text>
+    <text x="205" y="48" text-anchor="middle" [[class="ttl">노심 단면</text>||class="ttl">Core cross-section</text>]]
     <g id="sc-rods"></g>
     <g id="sc-ax"></g>
     <path id="sc-a" d="" fill="none" stroke="var(--cool)" stroke-width="2.8"/>
     <path id="sc-b" d="" fill="none" stroke="var(--hot)" stroke-width="2.2" stroke-dasharray="6 4"/>
     <circle id="sc-pa" r="6" fill="var(--cool)"/>
-    <text x="470" y="48" class="lbl b">전 제어봉 삽입</text>
-    <text x="640" y="48" class="lbl" fill="var(--hot)">최대 반응도가 1개 미삽입 (stuck rod)</text>
+    <text x="470" y="48" class="lbl b">[[전 제어봉 삽입||All rods inserted]]</text>
+    <text x="640" y="48" class="lbl" fill="var(--hot)">[[최대 반응도가 1개 미삽입 (stuck rod)||Most reactive rod not inserted (stuck rod)]]</text>
   </svg>
   </div>
   <div class="side">
-    <div class="readout hi"><span class="k">낙하 경과</span><span class="v" id="sc-t">0.0<small>초</small></span></div>
-    <div class="readout warn"><span class="k">삽입 반응도 (전체 대비)</span><span class="v" id="sc-r">0<small>%</small></span></div>
+    <div class="readout hi"><span class="k">[[낙하 경과||Time since release]]</span><span class="v" id="sc-t">0.0<small>[[초||s]]</small></span></div>
+    <div class="readout warn"><span class="k">[[삽입 반응도 (전체 대비)||Reactivity inserted (of total)]]</span><span class="v" id="sc-r">0<small>%</small></span></div>
     <div class="btnrow" style="flex-direction:column;gap:7px">
-      <button class="btn act" id="sc-go">원자로 트립 — 재생</button>
-      <button class="btn" id="sc-stuck">stuck rod 가정 켜기</button>
+      <button class="btn act" id="sc-go">[[원자로 트립 — 재생||Reactor trip - replay]]</button>
+      <button class="btn" id="sc-stuck">[[stuck rod 가정 켜기||Assume a stuck rod]]</button>
     </div>
-    <div class="src">전원이 끊기면 전자석이 풀려 <b>중력으로</b> 떨어진다 — GDC 23 fail-safe.</div>
+    <div class="src">[[전원이 끊기면 전자석이 풀려 <b>중력으로</b> 떨어진다 — GDC 23 fail-safe.||Cut the power, the magnet lets go and the rod falls <b>under gravity</b> - GDC 23 fail-safe.]]</div>
   </div>
 </div>`,
 init(el){
@@ -43,8 +45,8 @@ init(el){
   [0,25,50,75,100].forEach(p=>{ ax+=`<text x="${X(p/100)}" y="290" class="lbl" text-anchor="middle">${p}</text>`;
     ax+=`<line x1="${X(p/100)}" y1="268" x2="${X(p/100)}" y2="60" class="grid"/>`; });
   [0,50,100].forEach(p=>{ ax+=`<text x="412" y="${Y(p/100)+4}" class="lbl" text-anchor="end">${p} %</text>`; });
-  ax+='<text x="1075" y="312" class="lbl" text-anchor="end">제어봉 삽입 분율 (%)</text>'
-     +'<text x="420" y="44" class="lbl">삽입 반응도</text>';
+  ax+='<text x="1075" y="312" class="lbl" text-anchor="end">'+TX('제어봉 삽입 분율 (%)','Rod insertion (%)')+'</text>'
+     +'<text x="420" y="44" class="lbl">'+TX('삽입 반응도','Reactivity inserted')+'</text>';
   el.querySelector('#sc-ax').innerHTML=ax;
   const S=x=>x-Math.sin(2*Math.PI*x)/(2*Math.PI);
   let da='',db=''; for(let i=0;i<=100;i++){ const x=i/100;
@@ -57,12 +59,14 @@ init(el){
     const r=document.createElementNS(SV,'rect');
     r.setAttribute('x',x);r.setAttribute('width',22);r.setAttribute('y',62);r.setAttribute('height',12);
     r.setAttribute('fill', i===2?'var(--hot)':'var(--cool)'); rg.appendChild(r); rods.push(r); }
-  rg.insertAdjacentHTML('beforeend','<text x="205" y="288" text-anchor="middle" class="lbl">제어봉 5개 · 가운데가 최대 반응도가</text>');
+  rg.insertAdjacentHTML('beforeend','<text x="205" y="288" text-anchor="middle" class="lbl">'
+    +TX('제어봉 5개 · 가운데가 최대 반응도가','Five rods · the centre one is the most reactive')+'</text>');
   let T=0, run=true, stuck=false;
   const pa=el.querySelector('#sc-pa');
   el.querySelector('#sc-go').onclick=()=>{T=0;run=true;};
   el.querySelector('#sc-stuck').onclick=(e)=>{ stuck=!stuck; e.target.classList.toggle('act',stuck);
-    e.target.textContent = stuck?'stuck rod 가정 끄기':'stuck rod 가정 켜기'; T=0; run=true; };
+    e.target.textContent = stuck?TX('stuck rod 가정 끄기','Drop the stuck rod assumption')
+                                 :TX('stuck rod 가정 켜기','Assume a stuck rod'); T=0; run=true; };
   if(RM){ rods.forEach(r=>r.setAttribute('height',200)); return; }
   raf(()=>{ if(!run) return; T+=1/60;
     const x=clamp(T/3.0,0,1);
@@ -70,36 +74,36 @@ init(el){
     const rho=S(x)*(stuck?0.82:1);
     pa.setAttribute('cx',X(x));pa.setAttribute('cy',Y(rho));
     pa.setAttribute('fill',stuck?'var(--hot)':'var(--cool)');
-    el.querySelector('#sc-t').innerHTML=Math.min(T,3).toFixed(1)+'<small>초</small>';
+    el.querySelector('#sc-t').innerHTML=Math.min(T,3).toFixed(1)+'<small>'+TX('초','s')+'</small>';
     el.querySelector('#sc-r').innerHTML=fmt(rho*100,0)+'<small>%</small>';
     if(T>3.4) run=false;
   });
 }});
 
-S({tag:'SHUTDOWN MARGIN', ov:'정지여유도 계산기',
-src:'<b>식</b> SDM = ρ<sub>rod,total</sub> − ρ<sub>stuck</sub> − ρ<sub>defect</sub> − ρ<sub>uncertainty</sub> · 요구 최소치는 설계별 기술지침서에서 정해지며 흔히 Δρ 기준 1 % 이상',
-html:`<h2 class="t">정지여유도 — <em>확보한 것에서 깎이는 것</em>을 뺀 나머지</h2>
+S({tag:'SHUTDOWN MARGIN', ov:'[[정지여유도 계산기||Shutdown margin calculator]]',
+src:'[[<b>식</b> SDM = ρ<sub>rod,total</sub> − ρ<sub>stuck</sub> − ρ<sub>defect</sub> − ρ<sub>uncertainty</sub> · 요구 최소치는 설계별 기술지침서에서 정해지며 흔히 Δρ 기준 1 % 이상||<b>Equation</b> SDM = ρ<sub>rod,total</sub> − ρ<sub>stuck</sub> − ρ<sub>defect</sub> − ρ<sub>uncertainty</sub> · the minimum is set in each plant&#8217;s technical specifications, commonly at least 1 % Δρ]]',
+html:`<h2 class="t">[[정지여유도 — <em>확보한 것에서 깎이는 것</em>을 뺀 나머지||Shutdown margin - <em>what you have</em> minus <em>what gets taken away</em>]]</h2>
 <ul class="b">
-  <li>냉각이 진행되면 감속재 밀도가 커져 반응도가 <b class="hot">양의 방향으로 되돌아온다</b>. 그 몫까지 미리 덮어야 함</li>
-  <li>슬라이더를 움직여 각 항이 여유도를 어떻게 깎는지 확인 — 교재 연습문제 6.2의 조건이 기본값</li>
+  <li>[[냉각이 진행되면 감속재 밀도가 커져 반응도가 <b class="hot">양의 방향으로 되돌아온다</b>. 그 몫까지 미리 덮어야 함||As the plant cools the moderator gets denser and reactivity <b class="hot">comes back positive</b>. That much has to be covered in advance]]</li>
+  <li>[[슬라이더를 움직여 각 항이 여유도를 어떻게 깎는지 확인 — 교재 연습문제 6.2의 조건이 기본값||Move the sliders to see how each term eats into the margin - the defaults are the conditions of Exercise 6.2 in the text]]</li>
 </ul>
 <div class="body">
   <div class="fig">
-  <svg viewBox="0 0 780 300" role="img" aria-label="정지여유도 계산 — 전 제어봉 반응도가에서 stuck rod, 냉각 되돌아옴, 불확실도를 뺀 나머지">
+  <svg viewBox="0 0 780 300" role="img" aria-label="[[정지여유도 계산 — 전 제어봉 반응도가에서 stuck rod, 냉각 되돌아옴, 불확실도를 뺀 나머지||Shutdown margin - total rod worth less the stuck rod, the cool-down return and the uncertainty allowance]]">
     <g id="sd-bars"></g>
     <line id="sd-req" x1="60" x2="660" stroke="var(--amber)" stroke-width="1.4" stroke-dasharray="5 4"/>
-    <text id="sd-reqt" x="668" class="lbl" fill="var(--amber)" text-anchor="start">요구 ≥ 1 %</text>
+    <text id="sd-reqt" x="668" class="lbl" fill="var(--amber)" text-anchor="start">[[요구 ≥ 1 %||Required ≥ 1 %]]</text>
   </svg>
   </div>
   <div class="side">
-    <div class="readout good" id="sd-box"><span class="k">정지여유도 SDM</span><span class="v" id="sd-v">7.34<small>% Δρ</small></span></div>
-    <div class="ctl"><label>전 제어봉 반응도가 <span id="sd-l0">12.0 %</span></label>
+    <div class="readout good" id="sd-box"><span class="k">[[정지여유도 SDM||Shutdown margin SDM]]</span><span class="v" id="sd-v">7.34<small>% Δρ</small></span></div>
+    <div class="ctl">[[<label>전 제어봉 반응도가 <span||<label>Total rod worth <span]] id="sd-l0">12.0 %</span></label>
       <input type="range" id="sd-0" min="4" max="18" step="0.1" value="12"></div>
-    <div class="ctl"><label>stuck rod 손실 <span id="sd-l1">18 %</span></label>
+    <div class="ctl">[[<label>stuck rod 손실 <span||<label>Stuck rod loss <span]] id="sd-l1">18 %</span></label>
       <input type="range" id="sd-1" min="0" max="40" step="1" value="18"></div>
-    <div class="ctl"><label>냉각 되돌아옴 ρ_defect <span id="sd-l2">2.0 %</span></label>
+    <div class="ctl">[[<label>냉각 되돌아옴 ρ_defect <span||<label>Cool-down return ρ_defect <span]] id="sd-l2">2.0 %</span></label>
       <input type="range" id="sd-2" min="0" max="6" step="0.1" value="2"></div>
-    <div class="ctl"><label>불확실도 여유 <span id="sd-l3">0.5 %</span></label>
+    <div class="ctl">[[<label>불확실도 여유 <span||<label>Uncertainty allowance <span]] id="sd-l3">0.5 %</span></label>
       <input type="range" id="sd-3" min="0" max="2" step="0.1" value="0.5"></div>
   </div>
 </div>`,
@@ -118,8 +122,10 @@ init(el){
     el.querySelector('#sd-l3').textContent=u.toFixed(1)+' %';
     el.querySelector('#sd-v').innerHTML=sdm.toFixed(2)+'<small>% Δρ</small>';
     el.querySelector('#sd-box').className='readout '+(sdm>=1?'good':'warn');
-    const seg=[['확보 · 전 제어봉',t,'var(--cool)'],['− stuck rod',loss,'var(--hot)'],
-      ['− 냉각 되돌아옴',d,'var(--hot)'],['− 불확실도',u,'var(--hot)'],['= SDM',Math.max(sdm,0),sdm>=1?'var(--ok)':'var(--hot)']];
+    const seg=[[TX('확보 · 전 제어봉','Available · all rods'),t,'var(--cool)'],['− stuck rod',loss,'var(--hot)'],
+      [TX('− 냉각 되돌아옴','− cool-down return'),d,'var(--hot)'],
+      [TX('− 불확실도','− uncertainty'),u,'var(--hot)'],
+      ['= SDM',Math.max(sdm,0),sdm>=1?'var(--ok)':'var(--hot)']];
     let h='<line x1="60" y1="250" x2="660" y2="250" class="axis"/>';
     seg.forEach((s2,i)=>{ const x=76+i*118, hh=Math.max(2,250-Y(s2[1]));
       h+=`<rect x="${x}" y="${250-hh}" width="72" height="${hh}" fill="${s2[2]}" opacity=".85"/>`
@@ -130,40 +136,46 @@ init(el){
   [0,1,2,3].forEach(i=>el.querySelector('#sd-'+i).oninput=upd); upd();
 }});
 
-S({tag:'FEEDBACK', ov:'고유안전성 — 반응도 계수와 무붕산 설계',
-src:'<b>대표 크기</b>이며 실제 값은 연소도·붕소 농도·노심 설계에 따라 크게 다르다. 정밀 값은 노심 설계 코드로 계산 · i-SMR 무붕산 운전: IAEA SMR Booklet 2022',
-html:`<h2 class="t">신호보다 <em>먼저</em> 작동하는 것 — 노심 자체의 물리</h2>
+S({tag:'FEEDBACK', ov:'[[고유안전성 — 반응도 계수와 무붕산 설계||Inherent safety - reactivity coefficients and boron-free design]]',
+src:'[[<b>대표 크기</b>이며 실제 값은 연소도·붕소 농도·노심 설계에 따라 크게 다르다. 정밀 값은 노심 설계 코드로 계산 · i-SMR 무붕산 운전: IAEA SMR Booklet 2022||<b>Representative magnitudes</b>; actual values vary widely with burn-up, boron concentration and core design, and are computed with core design codes · i-SMR boron-free operation: IAEA SMR Booklet 2022]]',
+html:`<h2 class="t">[[신호보다 <em>먼저</em> 작동하는 것 — 노심 자체의 물리||What acts <em>before</em> any signal - the physics of the core itself]]</h2>
 <ul class="b">
-  <li><b>도플러 계수</b> <code>−2~−4 pcm/K</code> — 연료 온도가 곧바로 반응, <b class="hot">즉각적</b>. 급격한 반응도 삽입의 1차 저지선</li>
-  <li><b>감속재온도계수</b> <code>−10~−60 pcm/K</code> — 열이 냉각재로 전달된 뒤 작동, <b class="cool">지연</b></li>
-  <li>붕소가 녹아 있으면 온도 상승 시 <b>흡수체도 함께 빠져나가</b> 음수 크기를 깎는다 → 무붕산 설계의 이점</li>
+  <li>[[<b>도플러 계수</b> <code>−2~−4 pcm/K</code> — 연료 온도가 곧바로 반응, <b class="hot">즉각적</b>. 급격한 반응도 삽입의 1차 저지선||<b>Doppler coefficient</b> <code>−2 to −4 pcm/K</code> - the fuel temperature responds at once, <b class="hot">immediate</b>. The first line against a rapid reactivity insertion]]</li>
+  <li>[[<b>감속재온도계수</b> <code>−10~−60 pcm/K</code> — 열이 냉각재로 전달된 뒤 작동, <b class="cool">지연</b>||<b>Moderator temperature coefficient</b> <code>−10 to −60 pcm/K</code> - acts only after the heat reaches the coolant, <b class="cool">delayed</b>]]</li>
+  <li>[[붕소가 녹아 있으면 온도 상승 시 <b>흡수체도 함께 빠져나가</b> 음수 크기를 깎는다 → 무붕산 설계의 이점||With boron dissolved, a temperature rise <b>drives absorber out along with the water</b> and eats into that negative value &#8594; the case for a boron-free design]]</li>
 </ul>
 <div class="body">
   <div class="fig">
-  <svg viewBox="0 0 700 250" role="img" aria-label="온도 상승 시 도플러 되먹임이 먼저, 감속재 되먹임이 나중에 작동하는 시간 차이">
+  <svg viewBox="0 0 700 250" role="img" aria-label="[[온도 상승 시 도플러 되먹임이 먼저, 감속재 되먹임이 나중에 작동하는 시간 차이||The time gap between the Doppler feedback, which acts first, and the moderator feedback, which follows]]">
     <g id="fb-ax"></g>
     <path id="fb-d" d="" fill="none" stroke="var(--hot)" stroke-width="2.6"/>
     <path id="fb-m" d="" fill="none" stroke="var(--cool)" stroke-width="2.6"/>
-    <text x="120" y="30" class="lbl" fill="var(--hot)">도플러 — 즉각</text>
-    <text x="290" y="30" class="lbl" fill="var(--cool)">감속재 — 지연</text>
+    <text x="120" y="30" class="lbl" fill="var(--hot)">[[도플러 — 즉각||Doppler - immediate]]</text>
+    <text x="290" y="30" class="lbl" fill="var(--cool)">[[감속재 — 지연||Moderator - delayed]]</text>
   </svg>
   </div>
   <div class="side">
     <blockquote class="q" style="border-left-color:var(--ok)">
-      <b>무붕산 설계가 얻는 것</b><br>
+      [[<b>무붕산 설계가 얻는 것</b><br>
       붕산 계통(저장·농도 조절·정화·배관)이 통째로 사라지고, 붕소 희석사고 시나리오도 사라진다.
       감속재온도계수가 전 주기에 걸쳐 확실히 음수로 유지된다.<br><br>
       <b class="hot">대신 지는 부담</b> — GDC 26이 요구하는 두 번째 독립 계통을 무엇으로 만족시킬 것인가.
       그리고 장주기 반응도 변화를 제어봉과 온도 되먹임만으로 흡수해야 한다.
-      <span class="cite">i-SMR · KINS 심사의 쟁점</span></blockquote>
+      <span class="cite">i-SMR · KINS 심사의 쟁점</span>||<b>What a boron-free design gains</b><br>
+      The whole boron system - storage, concentration control, purification, piping - goes,
+      and the boron dilution accident goes with it. The moderator coefficient stays firmly negative all cycle.<br><br>
+      <b class="hot">What it takes on</b>: what satisfies the second independent system GDC 26 demands,
+      and how to absorb a whole cycle of reactivity on rods and feedback alone.
+      <span class="cite">i-SMR · a focal point of the KINS review</span>]]</blockquote>
   </div>
 </div>`,
 init(el){
   const X=t=>90+t/6*560, Y=r=>190-r*150;
   let ax='<line x1="90" y1="190" x2="660" y2="190" class="axis"/>';
   [0,2,4,6].forEach(t=>ax+=`<text x="${X(t)}" y="212" class="lbl" text-anchor="middle">${t} s</text>`);
-  ax+='<text x="660" y="234" class="lbl" text-anchor="end">출력 급증 후 경과시간</text>'
-     +'<text x="84" y="50" class="lbl" text-anchor="end">음의<tspan x="84" dy="16">반응도</tspan></text>';
+  ax+='<text x="660" y="234" class="lbl" text-anchor="end">'+TX('출력 급증 후 경과시간','Time after the power excursion')+'</text>'
+     +'<text x="84" y="50" class="lbl" text-anchor="end">'+TX('음의','Negative')
+     +'<tspan x="84" dy="16">'+TX('반응도','reactivity')+'</tspan></text>';
   el.querySelector('#fb-ax').innerHTML=ax;
   let dd='',dm=''; for(let i=0;i<=120;i++){ const t=i/20;
     dd+=(dd?'L':'M')+X(t)+','+Y(0.62*(1-Math.exp(-t/0.28)));

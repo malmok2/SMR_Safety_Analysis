@@ -1,26 +1,28 @@
 <script>
-SECT('07 · 잔열제거계통');
-S({bare:true, cls:'div', ov:'§07 잔열제거계통',
-html:`<div class="no">07</div><h2>잔열제거계통</h2><div class="ln"></div>
+SECT('07 · [[잔열제거계통||Residual heat removal]]');
+S({bare:true, cls:'div', ov:'[[§07 잔열제거계통||&#167;07 Residual heat removal]]',
+html:`[[<div class="no">07</div><h2>잔열제거계통</h2><div class="ln"></div>
 <p>기본안전기능 ②. 정지 후의 열을 어디에 버리는가.
-얼마나 많은 열을, 얼마나 오래, 어디로 버려야 하는지를 숫자로 확정한 뒤 세 가지 구현을 비교한다.</p>`});
+얼마나 많은 열을, 얼마나 오래, 어디로 버려야 하는지를 숫자로 확정한 뒤 세 가지 구현을 비교한다.</p>||<div class="no">07</div><h2>Residual heat removal</h2><div class="ln"></div>
+<p>Safety function &#9313;: where the heat goes after shutdown.
+First pin down how much heat, for how long and to where, in numbers; then compare three ways of doing it.</p>]]`});
 
-S({tag:'HEAT SINK', ov:'수조 시뮬레이션 — 72시간은 어디서 나온 숫자인가',
-src:'<b>계산</b> Way–Wigner 붕괴열 적분(250 MWt, t₀ = 10⁸ s) · c_p = 4.18 kJ/(kg·K), h_fg = 2,257 kJ/kg, 초기 수온 30 °C. <b>열이 전부 수조로 들어간다고 본 상한 추정</b> — 실제로는 열교환기 성능 한계·성층화·외부 열손실이 작용한다',
-html:`<h2 class="t">“72시간 무조작”은 마법이 아니라 <em>물통 크기를 정하는 계산</em>이다</h2>
+S({tag:'HEAT SINK', ov:'[[수조 시뮬레이션 — 72시간은 어디서 나온 숫자인가||Pool simulation - where the 72 hours comes from]]',
+src:'[[<b>계산</b> Way–Wigner 붕괴열 적분(250 MWt, t₀ = 10⁸ s) · c_p = 4.18 kJ/(kg·K), h_fg = 2,257 kJ/kg, 초기 수온 30 °C. <b>열이 전부 수조로 들어간다고 본 상한 추정</b> — 실제로는 열교환기 성능 한계·성층화·외부 열손실이 작용한다||<b>Calculation</b> Way-Wigner decay heat integrated (250 MWt, t₀ = 10⁸ s) · c_p = 4.18 kJ/(kg·K), h_fg = 2,257 kJ/kg, initial water temperature 30 °C. <b>A bounding estimate that sends all the heat into the pool</b> - in reality heat exchanger capacity, stratification and heat loss all intervene]]',
+html:`<h2 class="t">[[“72시간 무조작”은 마법이 아니라 <em>물통 크기를 정하는 계산</em>이다||&#8220;72 hours without operator action&#8221; is not magic - it is <em>the calculation that sizes the tank</em>]]</h2>
 <ul class="b">
-  <li>정지 후 72시간 누적 붕괴 에너지는 <code>약 315 GJ</code> — 현열만으로 받으려면 물 <b class="cool">약 1,000 t</b></li>
-  <li>잠열이 현열의 <b>약 8배</b>. 끓기 시작한 뒤에도 한참을 더 버틴다 — 대신 증기 배출과 보충수가 새 설계 문제</li>
+  <li>[[정지 후 72시간 누적 붕괴 에너지는 <code>약 315 GJ</code> — 현열만으로 받으려면 물 <b class="cool">약 1,000 t</b>||The decay energy accumulated in 72 hours is <code>about 315 GJ</code> - taking it on sensible heat alone needs <b class="cool">about 1,000 t</b> of water]]</li>
+  <li>[[잠열이 현열의 <b>약 8배</b>. 끓기 시작한 뒤에도 한참을 더 버틴다 — 대신 증기 배출과 보충수가 새 설계 문제||Latent heat is <b>about eight times</b> the sensible heat, so it holds out far longer once boiling starts - at the price of a new design problem: venting the steam and making up the water]]</li>
 </ul>
 <div class="body">
   <div class="fig">
-  <svg viewBox="0 0 700 310" role="img" aria-label="붕괴열을 받는 수조의 온도가 오르고 끓어 증발하는 과정을 수조 체적별로 보여주는 시뮬레이션">
+  <svg viewBox="0 0 700 310" role="img" aria-label="[[붕괴열을 받는 수조의 온도가 오르고 끓어 증발하는 과정을 수조 체적별로 보여주는 시뮬레이션||A pool taking decay heat: how it warms, boils and evaporates for a given pool volume]]">
     <rect x="60" y="40" width="170" height="240" fill="none" stroke="var(--cool)" stroke-width="1.6"/>
     <rect id="hs-w" x="63" y="43" width="164" height="234" fill="var(--cool)" opacity=".28"/>
     <g id="hs-bub"></g>
-    <text x="145" y="30" text-anchor="middle" class="ttl">수조</text>
+    <text x="145" y="30" text-anchor="middle" [[class="ttl">수조</text>||class="ttl">Pool</text>]]
     <rect x="106" y="200" width="78" height="64" rx="3" fill="var(--hot)"/>
-    <text x="145" y="238" text-anchor="middle" font-size="13" fill="#fff" font-family="var(--sans)">노심 250 MWt</text>
+    <text x="145" y="238" text-anchor="middle" font-size="13" fill="#fff" font-family="var(--sans)">[[노심 250 MWt||Core 250 MWt]]</text>
     <g id="hs-ax"></g>
     <polyline id="hs-c" points="" fill="none" stroke="var(--cool)" stroke-width="2.6"/>
     <line id="hs-72" y1="52" y2="256" stroke="var(--amber)" stroke-width="1.4" stroke-dasharray="5 4"/>
@@ -29,10 +31,10 @@ html:`<h2 class="t">“72시간 무조작”은 마법이 아니라 <em>물통 �
   </svg>
   </div>
   <div class="side">
-    <div class="readout"><span class="k">경과 시간</span><span class="v" id="hs-t">0<small>시간</small></span></div>
-    <div class="readout hi"><span class="k">수조 온도</span><span class="v" id="hs-T">30<small>°C</small></span></div>
-    <div class="readout good" id="hs-box"><span class="k">남은 물</span><span class="v" id="hs-m">100<small>%</small></span></div>
-    <div class="ctl"><label>수조 체적 <span id="hs-vs">1,000 m³</span></label>
+    <div class="readout"><span class="k">[[경과 시간||Elapsed time]]</span><span class="v" id="hs-t">0<small>[[시간||h]]</small></span></div>
+    <div class="readout hi"><span class="k">[[수조 온도||Pool temperature]]</span><span class="v" id="hs-T">30<small>°C</small></span></div>
+    <div class="readout good" id="hs-box"><span class="k">[[남은 물||Water remaining]]</span><span class="v" id="hs-m">100<small>%</small></span></div>
+    <div class="ctl">[[<label>수조 체적 <span||<label>Pool volume <span]] id="hs-vs">1,000 m³</span></label>
       <input type="range" id="hs-v" min="200" max="4000" step="100" value="1000"></div>
   </div>
 </div>`,
@@ -49,7 +51,7 @@ init(el){
   [0,100,200,300,400].forEach(h=>ax+=`<text x="${X(h)}" y="278" class="lbl" text-anchor="middle">${h}</text>`);
   [30,60,100].forEach(T=>{ ax+=`<line x1="300" y1="${Y(T)}" x2="666" y2="${Y(T)}" class="grid"/>`
     +`<text x="294" y="${Y(T)+4}" class="lbl" text-anchor="end">${T} °C</text>`; });
-  ax+='<text x="666" y="298" class="lbl" text-anchor="end">경과시간 (시간)</text>';
+  ax+='<text x="666" y="298" class="lbl" text-anchor="end">'+TX('경과시간 (시간)','Elapsed time (h)')+'</text>';
   el.querySelector('#hs-ax').innerHTML=ax;
   el.querySelector('#hs-72').setAttribute('x1',X(72));el.querySelector('#hs-72').setAttribute('x2',X(72));
   el.querySelector('#hs-72t').setAttribute('x',X(72));
@@ -75,7 +77,7 @@ init(el){
     let pts=[]; for(let k=0;k<=80;k++){ const hh=Math.min(h,400*k/80); pts.push([X(hh),Y(state(hh).T)]); if(hh>=h) break; }
     el.querySelector('#hs-c').setAttribute('points',poly(pts));
     el.querySelector('#hs-p').setAttribute('cx',X(h));el.querySelector('#hs-p').setAttribute('cy',Y(s.T));
-    el.querySelector('#hs-t').innerHTML=fmt(h,0)+'<small>시간</small>';
+    el.querySelector('#hs-t').innerHTML=fmt(h,0)+'<small>'+TX('시간','h')+'</small>';
     el.querySelector('#hs-T').innerHTML=fmt(s.T,0)+'<small>°C</small>';
     el.querySelector('#hs-m').innerHTML=fmt(s.frac*100,0)+'<small>%</small>';
     el.querySelector('#hs-box').className='readout '+(s.frac>0.35?'good':(s.frac>0.05?'warn':'warn'));
@@ -90,22 +92,25 @@ init(el){
   raf(t=>{ H=(t*34)%420; draw(Math.min(H,400)); });
 }});
 
-S({tag:'RHR · 구현', ov:'잔열제거의 세 가지 구현',
-src:'<b>개념도</b> 자체 작성. 계통 구성을 원리 수준으로 축약 · <b>사례</b> IRIS EHRS · SMART PRHRS · NuScale DHRS / AP1000 PRHR HX · BWRX-300 ICS / NuScale ECCS',
-html:`<h2 class="t">열을 어디로 옮기는가 — <em>세 갈래</em>의 답</h2>
+S({tag:'RHR · [[구현||Implementations]]', ov:'[[잔열제거의 세 가지 구현||Three ways to remove residual heat]]',
+src:'[[<b>개념도</b> 자체 작성. 계통 구성을 원리 수준으로 축약 · <b>사례</b> IRIS EHRS · SMART PRHRS · NuScale DHRS / AP1000 PRHR HX · BWRX-300 ICS / NuScale ECCS||<b>Schematic</b> drawn for this course, reduced to the level of principle · <b>Examples</b> IRIS EHRS · SMART PRHRS · NuScale DHRS / AP1000 PRHR HX · BWRX-300 ICS / NuScale ECCS]]',
+html:`<h2 class="t">[[열을 어디로 옮기는가 — <em>세 갈래</em>의 답||Where do you move the heat - <em>three</em> answers]]</h2>
 <ul class="b">
-  <li>(a)만 <b class="ok">1차 압력경계를 열지 않는다</b>. 대신 증기발생기 자체가 고장난 경우에는 못 쓴다</li>
+  <li>[[(a)만 <b class="ok">1차 압력경계를 열지 않는다</b>. 대신 증기발생기 자체가 고장난 경우에는 못 쓴다||Only (a) <b class="ok">keeps the primary pressure boundary closed</b>. In exchange, it is useless if the steam generator itself has failed]]</li>
 </ul>
 <div class="body"><div class="fig">
-<svg viewBox="0 0 1120 300" role="img" aria-label="잔열제거의 세 가지 구현 — 증기발생기 경유, 피동 응축기, 격납 침수 직접 냉각">
+<svg viewBox="0 0 1120 300" role="img" aria-label="[[잔열제거의 세 가지 구현 — 증기발생기 경유, 피동 응축기, 격납 침수 직접 냉각||Three ways to remove residual heat: through the steam generator, through a passive condenser, and by direct cooling in a flooded containment]]">
   <g id="r3"></g>
 </svg>
 </div></div>`,
 init(el){
   const g=el.querySelector('#r3');
-  const T=[['(a) 증기발생기 + 수조 열교환기','IRIS EHRS · SMART PRHRS · NuScale DHRS'],
-           ['(b) 피동 응축기 (IRWST 침수)','AP1000 PRHR HX · BWRX-300 ICS'],
-           ['(c) 격납 침수 직접 냉각','NuScale ECCS (RVV · RRV 개방)']];
+  const T=[[TX('(a) 증기발생기 + 수조 열교환기','(a) Steam generator + pool heat exchanger'),
+            'IRIS EHRS · SMART PRHRS · NuScale DHRS'],
+           [TX('(b) 피동 응축기 (IRWST 침수)','(b) Passive condenser, submerged in the IRWST'),
+            'AP1000 PRHR HX · BWRX-300 ICS'],
+           [TX('(c) 격납 침수 직접 냉각','(c) Direct cooling in a flooded containment'),
+            TX('NuScale ECCS (RVV · RRV 개방)','NuScale ECCS (RVV and RRV open)')]];
   T.forEach((t,i)=>{ const x=20+i*372;
     g.insertAdjacentHTML('beforeend',
       `<text x="${x+170}" y="22" text-anchor="middle" font-family="var(--sans)" font-size="17" fill="var(--ink)">${t[0]}</text>`
@@ -119,7 +124,7 @@ init(el){
      <rect x="100" y="96" width="26" height="70" fill="var(--panel-2)" stroke="var(--amber)"/>
      <text x="89" y="136" text-anchor="middle" class="lbl" fill="var(--amber)">SG</text>
      <rect x="204" y="80" width="130" height="150" fill="var(--cool)" opacity=".12" stroke="var(--cool)" stroke-width="1.2"/>
-     <text x="269" y="72" text-anchor="middle" class="lbl" fill="var(--cool)">수조</text>
+     <text x="269" y="72" text-anchor="middle" class="lbl" fill="var(--cool)">${TX('수조','Pool')}</text>
      <path id="ra" d="M132,106 L204,106 L204,204 L132,204 Z" fill="none" stroke="var(--rule)" stroke-width="7"/>
      <polyline points="222,120 316,142 222,164 316,186" fill="none" stroke="var(--cool)" stroke-width="2.4"/>`);
   // (b)
@@ -130,39 +135,39 @@ init(el){
      <text x="641" y="62" text-anchor="middle" class="lbl" fill="var(--cool)">IRWST</text>
      <path id="rb" d="M504,100 L572,100 L572,206 L504,206 Z" fill="none" stroke="var(--rule)" stroke-width="7"/>
      <path d="M598,110 q24,16 0,32 q-24,16 0,32 q24,16 0,32 q-24,16 0,26" fill="none" stroke="var(--cool)" stroke-width="2.4"/>
-     <text x="660" y="180" class="lbl" fill="var(--cool)">응축기</text>`);
+     <text x="660" y="180" class="lbl" fill="var(--cool)">${TX('응축기','Condenser')}</text>`);
   // (c)
   g.insertAdjacentHTML('beforeend',
     `<rect x="790" y="52" width="300" height="200" fill="var(--cool)" opacity=".10" stroke="var(--cool)" stroke-width="1.2"/>
-     <text x="940" y="44" text-anchor="middle" class="lbl" fill="var(--cool)">침수 격납용기</text>
+     <text x="940" y="44" text-anchor="middle" class="lbl" fill="var(--cool)">${TX('침수 격납용기','Flooded containment')}</text>
      <rect x="882" y="86" width="116" height="150" rx="14" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.4"/>
      <rect x="912" y="190" width="56" height="42" rx="3" fill="var(--hot)"/>
      <path id="rc2" d="M940,190 L940,108 L1050,108 L1050,214 L940,214 Z" fill="none" stroke="var(--rule)" stroke-width="7"/>
      <rect x="924" y="80" width="10" height="12" fill="var(--ok)"/><rect x="946" y="80" width="10" height="12" fill="var(--ok)"/>
      <text x="940" y="72" text-anchor="middle" class="lbl" fill="var(--ok)">RVV</text>
      <rect x="876" y="200" width="12" height="10" fill="var(--ok)"/><rect x="992" y="200" width="12" height="10" fill="var(--ok)"/>
-     <text x="1052" y="238" class="lbl" fill="var(--ok)">RRV 재순환</text>`);
+     <text x="1052" y="238" class="lbl" fill="var(--ok)">${TX('RRV 재순환','RRV recirculation')}</text>`);
   flow(el.querySelector('#ra'),{n:7,speed:0.13,r:3.8,color:'var(--hot)'});
   flow(el.querySelector('#rb'),{n:7,speed:0.13,r:3.8,color:'var(--hot)'});
   flow(el.querySelector('#rc2'),{n:8,speed:0.14,r:3.8,color:'var(--hot)'});
 }});
 
-S({tag:'GRACE PERIOD', ov:'대처시간 비교 — 무엇을 기준으로 센 값인가',
-src:'<b>출처</b> K.H. Bae et al., <i>Nucl. Eng. Des.</i> <b>379</b> (2021) 111247 (SMART100) · IAEA SMR Booklet 2022 (i-SMR·BWRX-300·CAREM·NuScale) · NRC ADAMS ML15230A043 (AP1000). <b>모두 설계자 제시값</b>',
-html:`<h2 class="t">“72시간”이 설계마다 <s>다른 것을 뜻한다</s></h2>
+S({tag:'GRACE PERIOD', ov:'[[대처시간 비교 — 무엇을 기준으로 센 값인가||Grace period compared - counted against what]]',
+src:'[[<b>출처</b> K.H. Bae et al., <i>Nucl. Eng. Des.</i> <b>379</b> (2021) 111247 (SMART100) · IAEA SMR Booklet 2022 (i-SMR·BWRX-300·CAREM·NuScale) · NRC ADAMS ML15230A043 (AP1000). <b>모두 설계자 제시값</b>||<b>Source</b> K.H. Bae et al., <i>Nucl. Eng. Des.</i> <b>379</b> (2021) 111247 (SMART100) · IAEA SMR Booklet 2022 (i-SMR, BWRX-300, CAREM, NuScale) · NRC ADAMS ML15230A043 (AP1000). <b>All are vendor-stated values</b>]]',
+html:`<h2 class="t">[[“72시간”이 설계마다 <s>다른 것을 뜻한다</s>||&#8220;72 hours&#8221; <s>means different things</s> in different designs]]</h2>
 <ul class="b">
-  <li>① 운전원 조작 없이 유지하는 시간 · ② 외부 급수 없이 버티는 시간 · ③ 교류전원 없이 버티는 시간</li>
-  <li>세 정의가 주는 숫자는 서로 크게 다르다 — 비교할 때 <b class="hot">반드시 정의를 확인</b></li>
+  <li>[[① 운전원 조작 없이 유지하는 시간 · ② 외부 급수 없이 버티는 시간 · ③ 교류전원 없이 버티는 시간||&#9312; time held without operator action · &#9313; time held without external water · &#9314; time held without AC power]]</li>
+  <li>[[세 정의가 주는 숫자는 서로 크게 다르다 — 비교할 때 <b class="hot">반드시 정의를 확인</b>||The three definitions give very different numbers - when comparing, <b class="hot">always check which one is meant</b>]]</li>
 </ul>
 <div class="body col">
 <table class="d">
-<tr><th style="width:16%">설계</th><th style="width:24%">계통</th><th style="width:36%">원리</th><th>무조작 대처시간</th></tr>
-<tr><td>SMART100</td><td>PRHRS · 4계열</td><td>2차측 + 비상냉각탱크</td><td class="n">36 h 내 안전정지 + 36 h 유지 = <b>72 h</b></td></tr>
-<tr><td>i-SMR</td><td>PAFS / PCCS</td><td>비LOCA는 피동보조급수, LOCA는 피동격납냉각</td><td class="n">전원 없이 <b>72 h</b> · 이후 공기냉각</td></tr>
-<tr class="mark"><td>BWRX-300</td><td>ICS · 3루프 (각 약 33 MW)</td><td>원자로 증기를 대기압 수조 응축기로</td><td class="n"><b>최소 7일</b></td></tr>
-<tr><td>AP1000</td><td>PRHR HX + PCCS</td><td>IRWST 침수 C자형 열교환기 + 외벽 살수</td><td class="n">PCCWST <b>72 h</b> 배수</td></tr>
-<tr><td>CAREM-25</td><td>PRHRS · 2계열</td><td>수평 U-튜브 응축기</td><td class="n">2계열 중 1계열로 <b>36 h</b></td></tr>
-<tr><td>NuScale NPM</td><td>DHRS · 2계열 (각 100 %)</td><td>2상 자연순환 폐루프, 응축기 수조 침수</td><td class="n">원자로 수조로 장기 제열</td></tr>
+[[<tr><th style="width:16%">설계</th><th style="width:24%">계통</th><th style="width:36%">원리</th><th>무조작 대처시간</th></tr>||<tr><th style="width:16%">Design</th><th style="width:24%">System</th><th style="width:36%">Principle</th><th>Grace period, no action</th></tr>]]
+<tr><td>SMART100</td><td>[[PRHRS · 4계열||PRHRS · 4 trains]]</td><td>[[2차측 + 비상냉각탱크||Secondary side plus an emergency cooldown tank]]</td><td class="n">[[36 h 내 안전정지 + 36 h 유지 = <b>72 h</b>||Safe shutdown within 36 h plus 36 h held = <b>72 h</b>]]</td></tr>
+<tr><td>i-SMR</td><td>PAFS / PCCS</td><td>[[비LOCA는 피동보조급수, LOCA는 피동격납냉각||Passive auxiliary feedwater for non-LOCA, passive containment cooling for LOCA]]</td><td class="n">[[전원 없이 <b>72 h</b> · 이후 공기냉각||<b>72 h</b> without power, then air cooling]]</td></tr>
+<tr class="mark"><td>BWRX-300</td><td>[[ICS · 3루프 (각 약 33 MW)||ICS · 3 loops (about 33 MW each)]]</td><td>[[원자로 증기를 대기압 수조 응축기로||Reactor steam to a condenser in an atmospheric pool]]</td><td class="n">[[<b>최소 7일</b>||<b>7 days minimum</b>]]</td></tr>
+<tr><td>AP1000</td><td>PRHR HX + PCCS</td><td>[[IRWST 침수 C자형 열교환기 + 외벽 살수||A C-shaped heat exchanger submerged in the IRWST plus external shell spray]]</td><td class="n">[[PCCWST <b>72 h</b> 배수||PCCWST drains over <b>72 h</b>]]</td></tr>
+<tr><td>CAREM-25</td><td>[[PRHRS · 2계열||PRHRS · 2 trains]]</td><td>[[수평 U-튜브 응축기||Horizontal U-tube condenser]]</td><td class="n">[[2계열 중 1계열로 <b>36 h</b>||<b>36 h</b> on one of the two trains]]</td></tr>
+<tr><td>NuScale NPM</td><td>[[DHRS · 2계열 (각 100 %)||DHRS · 2 trains (100 % each)]]</td><td>[[2상 자연순환 폐루프, 응축기 수조 침수||A two-phase natural circulation closed loop with the condenser submerged in the pool]]</td><td class="n">[[원자로 수조로 장기 제열||Long-term heat removal into the reactor pool]]</td></tr>
 </table>
 </div>`});
 </script>

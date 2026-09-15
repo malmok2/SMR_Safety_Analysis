@@ -1,43 +1,43 @@
 <script>
-S({tag:'LAYOUT · 루프형', ov:'루프형 대형 경수로 — 대구경 배관이 곧 LBLOCA',
-src:'<b>개념도</b> 자체 작성. 배관 수·기기 배치를 축약한 모식도이며 축척은 임의. <b>GDC 4</b>는 파단확률이 극히 낮으면 동적효과를 배제할 수 있게 한다(LBB 근거)',
-html:`<h2 class="t">루프형 — 대구경 배관 하나가 <s>최악의 설계기준사고</s>를 정의한다</h2>
+S({tag:'LAYOUT · [[루프형||Loop type]]', ov:'[[루프형 대형 경수로 — 대구경 배관이 곧 LBLOCA||Loop-type large LWR - the large pipe is the LBLOCA]]',
+src:'[[<b>개념도</b> 자체 작성. 배관 수·기기 배치를 축약한 모식도이며 축척은 임의. <b>GDC 4</b>는 파단확률이 극히 낮으면 동적효과를 배제할 수 있게 한다(LBB 근거)||<b>Schematic</b> drawn for this course. Pipe count and equipment layout are simplified and the scale is arbitrary. <b>GDC 4</b> allows dynamic effects to be excluded where break probability is extremely low (the basis for LBB)]]',
+html:`<h2 class="t">[[루프형 — 대구경 배관 하나가 <s>최악의 설계기준사고</s>를 정의한다||Loop type - a single large pipe defines <s>the worst design basis accident</s>]]</h2>
 <ul class="b">
-  <li>원자로용기와 증기발생기를 잇는 <b class="hot">대구경 고온관·저온관</b>이 존재 → 그 순간 파단이 <b>대형 LOCA</b></li>
-  <li>냉각재는 <b>펌프</b>가 돌린다. 펌프가 멈추면 유량이 곧바로 사라짐</li>
+  <li>[[원자로용기와 증기발생기를 잇는 <b class="hot">대구경 고온관·저온관</b>이 존재 → 그 순간 파단이 <b>대형 LOCA</b>||A <b class="hot">large-bore hot leg and cold leg</b> join the vessel to the steam generator &#8594; break one and you have a <b>large LOCA</b>]]</li>
+  <li>[[냉각재는 <b>펌프</b>가 돌린다. 펌프가 멈추면 유량이 곧바로 사라짐||The coolant is driven by <b>pumps</b>. Stop the pumps and the flow is gone at once]]</li>
 </ul>
 <div class="body">
   <div class="fig">
-  <svg viewBox="0 0 700 360" role="img" aria-label="루프형 경수로의 냉각재 순환 경로와 대구경 배관 파단 시 거동">
+  <svg viewBox="0 0 700 360" role="img" aria-label="[[루프형 경수로의 냉각재 순환 경로와 대구경 배관 파단 시 거동||Coolant circulation path of a loop-type LWR and its behaviour when a large pipe breaks]]">
     <path id="lp" d="M150,300 L150,110 L480,110 L480,300 Z" fill="none" stroke="var(--rule)" stroke-width="12"/>
     <rect x="105" y="88" width="90" height="234" rx="18" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.6"/>
     <rect id="lvl" x="108" y="118" width="84" height="201" fill="var(--cool)" opacity="0.16"/>
     <rect id="lcore" x="127" y="248" width="46" height="56" rx="3" fill="var(--hot)"/>
-    <text x="150" y="282" text-anchor="middle" font-size="13" font-family="var(--sans)" fill="#fff">노심</text>
-    <text x="150" y="78" text-anchor="middle" class="ttl">원자로용기</text>
+    <text x="150" y="282" text-anchor="middle" font-size="13" font-family="var(--sans)" [[fill="#fff">노심</text>||fill="#fff">Core</text>]]
+    <text x="150" y="78" text-anchor="middle" [[class="ttl">원자로용기</text>||class="ttl">Reactor vessel</text>]]
     <rect x="435" y="76" width="90" height="208" rx="10" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.6"/>
-    <text x="480" y="66" text-anchor="middle" class="ttl">증기발생기</text>
+    <text x="480" y="66" text-anchor="middle" [[class="ttl">증기발생기</text>||class="ttl">Steam generator</text>]]
     <circle cx="315" cy="300" r="23" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.6"/>
-    <text x="315" y="345" text-anchor="middle" class="lbl b">냉각재펌프</text>
-    <text x="315" y="98" text-anchor="middle" class="lbl" fill="var(--hot)">고온관 (대구경)</text>
-    <text x="240" y="278" text-anchor="middle" class="lbl">저온관 (대구경)</text>
+    <text x="315" y="345" text-anchor="middle" class="lbl b">[[냉각재펌프||Coolant pump]]</text>
+    <text x="315" y="98" text-anchor="middle" class="lbl" fill="var(--hot)">[[고온관 (대구경)||Hot leg (large bore)]]</text>
+    <text x="240" y="278" text-anchor="middle" class="lbl">[[저온관 (대구경)||Cold leg (large bore)]]</text>
     <g id="brk" opacity="0">
       <circle cx="350" cy="110" r="14" fill="none" stroke="var(--hot)" stroke-width="2"/>
-      <text x="350" y="60" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="var(--hot)">파단</text>
+      <text x="350" y="60" text-anchor="middle" font-family="var(--mono)" font-size="15" [[fill="var(--hot)">파단</text>||fill="var(--hot)">Break</text>]]
     </g>
     <g id="esc"></g>
     <text id="msg" x="350" y="180" text-anchor="middle" font-family="var(--sans)" font-size="26"
-          font-weight="600" fill="var(--hot)" opacity="0">대형 LOCA — 노심 노출</text>
+          font-weight="600" fill="var(--hot)" opacity="0">[[대형 LOCA — 노심 노출||Large LOCA - core uncovered]]</text>
   </svg>
   </div>
   <div class="side">
-    <div class="readout hi"><span class="k">순환 구동</span><span class="v" id="lp-drv">펌프</span></div>
-    <div class="readout" id="lp-lvbox"><span class="k">노심 위 수위</span><span class="v" id="lp-lv">100<small>%</small></span></div>
+    <div class="readout hi"><span class="k">[[순환 구동||Circulation driven by]]</span><span class="v" id="lp-drv">[[펌프||Pumps]]</span></div>
+    <div class="readout" id="lp-lvbox"><span class="k">[[노심 위 수위||Level above core]]</span><span class="v" id="lp-lv">100<small>%</small></span></div>
     <div class="btnrow" style="flex-direction:column;gap:7px">
-      <button class="btn danger" id="lp-break">고온관 파단 (LBLOCA)</button>
-      <button class="btn" id="lp-reset">정상운전으로 복귀</button>
+      <button class="btn danger" id="lp-break">[[고온관 파단 (LBLOCA)||Break the hot leg (LBLOCA)]]</button>
+      <button class="btn" id="lp-reset">[[정상운전으로 복귀||Back to normal operation]]</button>
     </div>
-    <div class="src">파단이 일어나면 감압·수위 하강·열전달 붕괴가 <b>동시에</b> 진행된다. 8장에서 정량화.</div>
+    <div class="src">[[파단이 일어나면 감압·수위 하강·열전달 붕괴가 <b>동시에</b> 진행된다. 8장에서 정량화.||Once it breaks, depressurisation, level drop and loss of heat transfer proceed <b>at the same time</b>. Quantified in Ch. 8.]]</div>
   </div>
 </div>`,
 init(el){
@@ -48,11 +48,11 @@ init(el){
   let st='ok', lv=1, T=0;
   function reset(){ st='ok'; lv=1; f.speed=0.13; brk.setAttribute('opacity',0);
     msg.setAttribute('opacity',0); esc.innerHTML=''; core.setAttribute('fill','var(--hot)');
-    el.querySelector('#lp-drv').textContent='펌프';
+    el.querySelector('#lp-drv').textContent=TX('펌프','Pumps');
     el.querySelector('#lp-lvbox').className='readout'; }
   el.querySelector('#lp-reset').onclick=reset;
   el.querySelector('#lp-break').onclick=()=>{ if(st!=='ok') return; st='brk'; T=0;
-    brk.setAttribute('opacity',1); el.querySelector('#lp-drv').textContent='상실';
+    brk.setAttribute('opacity',1); el.querySelector('#lp-drv').textContent=TX('상실','Lost');
     el.querySelector('#lp-lvbox').className='readout warn';
     for(let i=0;i<26;i++){ const c=document.createElementNS(SV,'circle');
       c.setAttribute('r',3.4); c.setAttribute('fill','var(--hot)');
@@ -74,35 +74,35 @@ init(el){
   });
 }});
 
-S({tag:'LAYOUT · 일체형', ov:'일체형 SMR — 파단할 배관이 없다',
-src:'<b>개념도</b> 자체 작성. <b>Safety-by-design</b> — 사고를 완화하는 대신 배치로 배제. Westinghouse, <i>IRIS Plant Overview</i>, NRC ADAMS ML033600086 (2003)',
-html:`<h2 class="t">일체형 — 사고를 완화하는 대신 <em>설계에서 배제</em>한다</h2>
+S({tag:'LAYOUT · [[일체형||Integral type]]', ov:'[[일체형 SMR — 파단할 배관이 없다||Integral SMR - no pipe left to break]]',
+src:'[[<b>개념도</b> 자체 작성. <b>Safety-by-design</b> — 사고를 완화하는 대신 배치로 배제. Westinghouse, <i>IRIS Plant Overview</i>, NRC ADAMS ML033600086 (2003)||<b>Schematic</b> drawn for this course. <b>Safety by design</b> - the accident is excluded by layout rather than mitigated. Westinghouse, <i>IRIS Plant Overview</i>, NRC ADAMS ML033600086 (2003)]]',
+html:`<h2 class="t">[[일체형 — 사고를 완화하는 대신 <em>설계에서 배제</em>한다||Integral type - the accident is <em>designed out</em> rather than mitigated]]</h2>
 <ul class="b">
-  <li>노심 · 증기발생기 · 가압기를 <b>하나의 용기</b>에 담음 → 대구경 배관이 존재하지 않음</li>
-  <li>펌프 없이 <b class="ok">밀도차</b>로 순환. 구동수두는 대형 PWR 펌프의 <code>약 1/50</code> (2장에서 계산)</li>
+  <li>[[노심 · 증기발생기 · 가압기를 <b>하나의 용기</b>에 담음 → 대구경 배관이 존재하지 않음||Core, steam generator and pressuriser all sit in <b>one vessel</b> &#8594; no large-bore pipe exists]]</li>
+  <li>[[펌프 없이 <b class="ok">밀도차</b>로 순환. 구동수두는 대형 PWR 펌프의 <code>약 1/50</code> (2장에서 계산)||Circulation without pumps, driven by <b class="ok">density difference</b>. The driving head is <code>about 1/50</code> of a large PWR pump (calculated in Ch. 2)]]</li>
 </ul>
 <div class="body">
   <div class="fig">
-  <svg viewBox="0 0 700 360" role="img" aria-label="일체형 SMR의 단일 용기 내부 자연순환 경로">
+  <svg viewBox="0 0 700 360" role="img" aria-label="[[일체형 SMR의 단일 용기 내부 자연순환 경로||Natural circulation path inside the single vessel of an integral SMR]]">
     <rect x="248" y="62" width="204" height="272" rx="30" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.8"/>
     <rect x="252" y="72" width="196" height="256" rx="26" fill="var(--cool)" opacity="0.10"/>
     <line x1="256" y1="120" x2="444" y2="120" stroke="var(--ink-3)" stroke-width="1" stroke-dasharray="4 4"/>
-    <text x="350" y="100" text-anchor="middle" class="lbl b">가압기 증기공간</text>
+    <text x="350" y="100" text-anchor="middle" class="lbl b">[[가압기 증기공간||Pressuriser steam space]]</text>
     <path id="ig-l" d="M350,268 L350,150 L286,150 L286,268 Z" fill="none" stroke="var(--rule)" stroke-width="9"/>
     <path id="ig-r" d="M350,268 L350,150 L414,150 L414,268 Z" fill="none" stroke="var(--rule)" stroke-width="9"/>
     <rect x="268" y="152" width="36" height="102" rx="4" fill="var(--panel-2)" stroke="var(--amber)" stroke-width="1.4"/>
     <rect x="396" y="152" width="36" height="102" rx="4" fill="var(--panel-2)" stroke="var(--amber)" stroke-width="1.4"/>
-    <text x="350" y="200" text-anchor="middle" class="lbl" fill="var(--amber)">증기발생기</text>
-    <text x="350" y="218" text-anchor="middle" class="lbl" fill="var(--amber)">(용기 내장)</text>
+    <text x="350" y="200" text-anchor="middle" class="lbl" [[fill="var(--amber)">증기발생기</text>||fill="var(--amber)">Steam generator</text>]]
+    <text x="350" y="218" text-anchor="middle" class="lbl" fill="var(--amber)">[[(용기 내장)||(inside the vessel)]]</text>
     <rect x="320" y="266" width="60" height="52" rx="3" fill="var(--hot)"/>
-    <text x="350" y="298" text-anchor="middle" font-size="13" font-family="var(--sans)" fill="#fff">노심</text>
-    <text x="350" y="52" text-anchor="middle" class="ttl">단일 원자로용기</text>
+    <text x="350" y="298" text-anchor="middle" font-size="13" font-family="var(--sans)" [[fill="#fff">노심</text>||fill="#fff">Core</text>]]
+    <text x="350" y="52" text-anchor="middle" class="ttl">[[단일 원자로용기||Single reactor vessel]]</text>
     <g id="ig-x" opacity="0">
-      <text x="110" y="150" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="var(--ink-3)">고온관</text>
-      <text x="110" y="176" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="var(--ink-3)">저온관</text>
+      <text x="110" y="150" text-anchor="middle" font-family="var(--mono)" font-size="15" [[fill="var(--ink-3)">고온관</text>||fill="var(--ink-3)">Hot leg</text>]]
+      <text x="110" y="176" text-anchor="middle" font-family="var(--mono)" font-size="15" [[fill="var(--ink-3)">저온관</text>||fill="var(--ink-3)">Cold leg</text>]]
       <line x1="62" y1="143" x2="158" y2="183" stroke="var(--ok)" stroke-width="2"/>
       <line x1="158" y1="143" x2="62" y2="183" stroke="var(--ok)" stroke-width="2"/>
-      <text x="110" y="216" text-anchor="middle" font-family="var(--sans)" font-size="17" fill="var(--ok)">존재하지 않음</text>
+      <text x="110" y="216" text-anchor="middle" font-family="var(--sans)" [[font-size="17" fill="var(--ok)">존재하지 않음</text>||font-size="17" fill="var(--ok)">Does not exist</text>]]
     </g>
     <g id="ig-heat"><path d="M350,262 V236" stroke="var(--hot)" stroke-width="2" marker-end="url(#igar)"/>
       <defs><marker id="igar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
@@ -110,12 +110,12 @@ html:`<h2 class="t">일체형 — 사고를 완화하는 대신 <em>설계에서
   </svg>
   </div>
   <div class="side">
-    <div class="readout good"><span class="k">순환 구동</span><span class="v">밀도차</span></div>
-    <div class="readout"><span class="k">대구경 배관 파단</span><span class="v ok" style="font-size:22px">설계에서 배제</span></div>
+    <div class="readout good"><span class="k">[[순환 구동||Circulation driven by]]</span><span class="v">[[밀도차||Density difference]]</span></div>
+    <div class="readout"><span class="k">[[대구경 배관 파단||Large-pipe break]]</span><span class="v ok" style="font-size:22px">[[설계에서 배제||Designed out]]</span></div>
     <div class="btnrow" style="flex-direction:column;gap:7px">
-      <button class="btn danger" id="ig-break">파단시켜 보기</button>
+      <button class="btn danger" id="ig-break">[[파단시켜 보기||Try breaking it]]</button>
     </div>
-    <div class="src">단, 대가가 있다 — 대형 단조 용기, 관통부 증가, 용기 내장 증기발생기의 정비 접근성.</div>
+    <div class="src">[[단, 대가가 있다 — 대형 단조 용기, 관통부 증가, 용기 내장 증기발생기의 정비 접근성.||There is a price: a large forged vessel, more penetrations, and poor maintenance access to the in-vessel steam generator.]]</div>
   </div>
 </div>`,
 init(el){
@@ -131,17 +131,17 @@ init(el){
   raf(t=>{ hp.setAttribute('opacity',0.45+0.55*Math.abs(Math.sin(t*1.8))); });
 }});
 
-S({tag:'SUMMARY', ov:'SMR의 특징을 물리적 근거로 다시 쓰기',
-src:'<b>왼쪽 열</b> 2025-2학기 강의자료 「Design Specification and Requirement for SMR」의 항목. <b>오른쪽 두 열</b>은 본 교재에서 근거를 붙인 것',
-html:`<h2 class="t">홍보 문장을 <em>근거</em>로 바꿔 읽기</h2>
+S({tag:'SUMMARY', ov:'[[SMR의 특징을 물리적 근거로 다시 쓰기||Rewriting SMR claims as physical arguments]]',
+src:'[[<b>왼쪽 열</b> 2025-2학기 강의자료 「Design Specification and Requirement for SMR」의 항목. <b>오른쪽 두 열</b>은 본 교재에서 근거를 붙인 것||<b>Left column</b> items from the 2025 fall lecture notes <i>Design Specification and Requirement for SMR</i>. <b>The two right columns</b> are the supporting arguments added in this text]]',
+html:`<h2 class="t">[[홍보 문장을 <em>근거</em>로 바꿔 읽기||Reading the sales pitch as an <em>argument</em>]]</h2>
 <div class="body col">
 <table class="d">
-<tr><th style="width:26%">흔히 말하는 특징</th><th style="width:37%">실제 근거</th><th>유의할 점</th></tr>
-<tr><td>작아서 운반·설치가 쉽다</td><td>운반 한계 안에 드는 크기 → 공장 제작 가능</td><td>운반 가능한 크기가 곧 경제적 크기는 아님</td></tr>
-<tr><td>규모를 늘리고 줄이기 쉽다</td><td>모듈 추가로 출력 증설, 수요 성장에 대응</td><td>다수 모듈 동시 운전의 인허가·운전원 배치는 별도 문제</td></tr>
-<tr><td>안전성이 향상된다</td><td>붕괴열 절대량 감소, 자연순환 성립, 대구경 배관 배제</td><td><span class="cool">“더 안전”이 아니라 “다른 방식으로 안전”</span> — 2장에서 정량 확인</td></tr>
-<tr class="mark"><td>자본비가 낮다</td><td>총 자본비(절대액)는 낮음 → 투자 위험 감소</td><td><b>kW당 비용은 오히려 높다.</b> 두 값을 반드시 구분</td></tr>
-<tr><td>적용처가 넓다</td><td>열·전기 동시 공급, 오지·산업단지·선박</td><td>대부분 아직 실증 전 단계</td></tr>
+<tr><th style="width:26%">[[흔히 말하는 특징||Common claim]]</th><th style="width:37%">[[실제 근거||What actually supports it]]</th><th>[[유의할 점||What to watch]]</th></tr>
+<tr><td>[[작아서 운반·설치가 쉽다||Small, so easy to ship and install]]</td><td>[[운반 한계 안에 드는 크기 → 공장 제작 가능||Size fits inside transport limits &#8594; factory fabrication becomes possible]]</td><td>[[운반 가능한 크기가 곧 경제적 크기는 아님||A shippable size is not automatically an economic size]]</td></tr>
+<tr><td>[[규모를 늘리고 줄이기 쉽다||Easy to scale up or down]]</td><td>[[모듈 추가로 출력 증설, 수요 성장에 대응||Add modules to add output and follow demand growth]]</td><td>[[다수 모듈 동시 운전의 인허가·운전원 배치는 별도 문제||Licensing and operator staffing for many modules at once is a separate problem]]</td></tr>
+<tr><td>[[안전성이 향상된다||Safety improves]]</td><td>[[붕괴열 절대량 감소, 자연순환 성립, 대구경 배관 배제||Less decay heat in absolute terms, natural circulation becomes viable, large pipes are eliminated]]</td><td>[[<span class="cool">“더 안전”이 아니라 “다른 방식으로 안전”</span> — 2장에서 정량 확인||<span class="cool">Not &#8220;safer&#8221; but &#8220;safe in a different way&#8221;</span> - quantified in Ch. 2]]</td></tr>
+<tr class="mark"><td>[[자본비가 낮다||Capital cost is lower]]</td><td>[[총 자본비(절대액)는 낮음 → 투자 위험 감소||Total capital cost in absolute terms is lower &#8594; less investment risk]]</td><td>[[<b>kW당 비용은 오히려 높다.</b> 두 값을 반드시 구분||<b>Cost per kW is in fact higher.</b> Always keep the two apart]]</td></tr>
+<tr><td>[[적용처가 넓다||Wider range of applications]]</td><td>[[열·전기 동시 공급, 오지·산업단지·선박||Heat and power together; remote sites, industrial parks, ships]]</td><td>[[대부분 아직 실증 전 단계||Most of it is still short of demonstration]]</td></tr>
 </table>
 </div>`});
 </script>

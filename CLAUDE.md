@@ -3,6 +3,7 @@
 한양대 원자력공학과 THINK Lab(지도교수 송민섭), 대학원 과목 **NUE4067 「소형모듈원자로 안전해석」**의
 발표용 HTML 슬라이드 저장소다. 교재 `THINK Lab SMR 설계요건과 공학적안전설비 (Rev1.0).docx`(60쪽)를
 브라우저에서 도는 46장 애니메이션 슬라이드로 옮긴 것이며, 여기서 계속 개정한다.
+본문은 **한국어와 영어를 함께** 담고 있고(`L` 키로 전환), 46장을 그대로 **PDF로 내려받을** 수 있다.
 
 교재 원본과 그림 소스는 이 저장소에 없다. `C:\Claude\Documents\THINK Lab SMR 설계요건과 공학적안전설비 Rev1.0`
 (별도 저장소 `malmok2/Documents`)에 있다. 수치를 바꿔야 하면 **교재가 기준**이고, 양쪽을 같이 고친다.
@@ -26,7 +27,12 @@ src/          슬라이드 소스 12개. 파일명 사전순 = 슬라이드 순�
   90_eccs_containment.html  §08 안전주입 · §09 격납
   99_wrap.html              §10 정리 (끝에 buildOv(); go(0); 호출)
 docs/index.html   빌드 산출물. 직접 고치지 말 것 — 항상 src를 고치고 다시 빌드한다
+docs/NUE4067_SMR_safety_ko.pdf   미리 구운 PDF(46쪽). tools/pdf.js 가 만든다
+docs/NUE4067_SMR_safety_en.pdf
+tools/browser.js  크로미움 실행 파일 탐색(CHROME_PATH → PLAYWRIGHT_BROWSERS_PATH → Chrome 채널)
 tools/shot.js     Playwright 스크린샷 검증 도구
+tools/check.js    46장을 한/영으로 전수 점검 — 콘솔 오류 · 번역 누락 · 토큰 찌꺼기 · 레이아웃 넘침
+tools/pdf.js      docs/*.pdf 를 다시 굽는다
 build.sh / build.ps1
 ```
 
@@ -65,9 +71,15 @@ S({ html:`...`, init(el){ ... } })   // 슬라이드 하나. init은 이 슬라�
 | `decay(t)` | Way–Wigner 붕괴열 비율. `0.0622(t^-0.2 − (t+10^8)^-0.2)` |
 | `rhoW(T)` | 물 밀도 `1006.0 − 0.2646T − 0.002424T²` (kg/m³, T는 °C) |
 | `clamp` `lerp` `fmt` | 수치 유틸 |
+| `TX(ko,en)` | 현재 언어의 문자열. **init 안에서 JS로 만드는 글자는 전부 이걸 쓴다** |
+| `tr(s)` | 문자열 속 `[[한국어\|\|English]]` 토큰을 현재 언어로 치환. `go()`가 알아서 부른다 |
+| `setLang('en')` | 언어 전환. 현재 슬라이드를 다시 그리고 주소·localStorage에 남긴다 |
 
-조작키: `←/→` `Space` `PageUp/Down` 이동 · `Home/End` · `O` 개요 · `R` 재생 · `F` 전체화면 · `Esc`.
-화면 왼쪽 28 % 클릭은 뒤로, 나머지는 앞으로.
+조작키: `←/→` `Space` `PageUp/Down` 이동 · `Home/End` · `O` 개요 · `L` 한/영 · `P` 인쇄·PDF ·
+`R` 재생 · `F` 전체화면 · `Esc`. 화면 왼쪽 28 % 클릭은 뒤로, 나머지는 앞으로.
+
+슬라이드 등록이 끝난 뒤 `99_wrap.html` 끝에서 **`boot()`** 를 부른다. `boot()`이 언어를 읽고
+평소에는 `buildOv(); go(0)`, 주소에 `?print=1` 이 있으면 `buildPrint()` 를 부른다.
 
 ---
 
@@ -94,7 +106,71 @@ S({ html:`...`, init(el){ ... } })   // 슬라이드 하나. init은 이 슬라�
 
 ---
 
-## 4. 반드시 지킬 것
+## 4. 한국어 · 영어
+
+한 파일에 두 언어가 **나란히** 들어 있다. 별도 번역 파일을 만들지 않는다 — 수치를 고칠 때
+양쪽이 같은 줄에 보여야 한쪽만 낡는 일이 없다.
+
+### 마크업 안의 글자 — 토큰
+
+```html
+<li>[[붕괴열 <b>비율</b>은 노심 크기와 거의 무관||The decay heat <b>fraction</b> barely depends on core size]]</li>
+```
+
+`go()`가 슬라이드를 그리기 직전에 `tr()`로 치환한다. `html` · `src` · `ov` · `tag` · `SECT()` 의
+문자열이 모두 이 경로를 지나므로, SVG `<text>` 안이든 표 칸 안이든 똑같이 동작한다.
+
+- 토큰은 **문장 단위**로 건다. 태그를 사이에 두고 잘라 붙이면 영어 어순이 망가진다.
+- **토큰 안에 토큰을 넣지 말 것.** 정규식이 non-greedy라 안쪽에서 끊긴다. 빌드가 개수를 세고,
+  `tools/check.js`가 화면에 남은 `[[` `||` `]]` 찌꺼기를 잡는다.
+- 영문에 `→ ← ① “ ”` 같은 글자를 쓸 때는 `&#8594;` `&#8592;` `&#9312;` `&#8220;` `&#8221;` 로 쓴다.
+- 토큰이 태그 경계를 삼키지 않게 한다. `>[[가||A]]</span>` 가 옳고 `[[>가</span>||>A</span>]]` 는 피한다.
+
+### init 안에서 JS로 만드는 글자 — `TX()`
+
+`init()`이 `insertAdjacentHTML`·`textContent`로 넣는 글자는 `tr()`을 거치지 않는다. 반드시 `TX()`를 쓴다.
+
+```js
+el.querySelector('#lp-drv').textContent = TX('펌프','Pumps');
+const B=[[8,16, TX('고압안전주입 (HPSI) · CMT','High-pressure injection (HPSI) · CMT'), 'var(--cool)']];
+```
+
+축 라벨처럼 **함수가 마크업을 통째로 만들어 돌려주는 경우**에는 그 함수가 `return tr(g)` 하게 하고
+안에서는 토큰을 그대로 써도 된다(`20_economics.html`의 `ecAxes()`가 그 예).
+
+`TX`라는 이름을 쓰는 이유 — 슬라이드 코드가 `T`를 온도·시간 변수로 이미 쓰고 있어서 가려진다.
+
+### 영문 용어
+
+NRC·IAEA 표기를 따른다. 기본안전기능 = fundamental safety function, 심층방어 = defence in depth,
+단일고장기준 = single failure criterion, 정지여유도 = shutdown margin, 잔열제거 = residual heat removal,
+붕괴열 = decay heat, 자연순환 = natural circulation, 공학적안전설비 = engineered safety features.
+
+영문은 한국어보다 길어지기 쉽다. 표와 인용문이 넘치면 **문장을 줄인다** — 글자 크기를 줄이지 않는다.
+넘침은 `tools/check.js`가 잡아 준다.
+
+---
+
+## 5. PDF · 인쇄
+
+주소에 `?print=1` 을 붙이거나 `P` 키를 누르면 46장이 한 지면에 한 장씩 펼쳐진다(`buildPrint()`).
+
+- 무대 대신 `.sheet` 46개를 만들고 각 슬라이드의 `init()`을 **한 번씩** 부른다.
+- 이때 엔진의 `FREEZE` 가 3.4초로 설정되어 모든 `raf()`가 그 시점에 멎는다. 그래서 인쇄본은
+  애니메이션이 **끝난 장면**으로 굳는다. 버튼으로 켜는 상태는 기본값으로 나온다.
+- 멎으면 `<html data-print-ready>` 가 붙는다. `tools/pdf.js`는 이 신호를 기다렸다가 인쇄한다.
+- 지면은 `@page{size:1280px 720px;margin:0}` — 슬라이드와 1:1이다. 배율을 건드리지 않는다.
+
+```bash
+cd tools && node pdf.js          # ko·en 둘 다 → docs/NUE4067_SMR_safety_{ko,en}.pdf
+node pdf.js ko                   # 한 언어만
+```
+
+**슬라이드를 고쳤으면 PDF를 다시 굽고 같이 커밋한다.** 안 그러면 공개 링크의 PDF가 낡는다.
+
+---
+
+## 6. 반드시 지킬 것
 
 1. **Web Animations API로 SVG `<g>`의 `transform`을 애니메이션하지 말 것.**
    `transform` 속성이 통째로 날아가 요소가 원점으로 튄다(이 덱에서 실제로 겪었다).
@@ -106,27 +182,44 @@ S({ html:`...`, init(el){ ... } })   // 슬라이드 하나. init은 이 슬라�
    누수·중복 애니메이션을 만든다.
 4. **수치는 교재와 일치시킨다.** 붕괴열·자연순환·SDM·격납 압력의 계수는 교재 본문 값이다. 임의로 바꾸지 않는다.
 5. **인허가 현황은 낡는다.** `50_issues_defence.html`의 타임라인·현황은 2026-09 기준이다. 반년마다 확인한다.
+6. **글자를 새로 넣으면 영문도 같이 넣는다.** 한국어만 넣으면 영문판에 한글이 그대로 남는다 —
+   `tools/check.js`가 잡지만, 잡히기 전에 넣는 것이 맞다.
+7. **`raf()`의 경과시간은 0 아래로 내려가지 않는다.** 첫 프레임의 타임스탬프가 `t0`보다 이를 수 있어
+   엔진에서 막아 두었다. `log`·`pow`를 쓰는 슬라이드가 NaN으로 깨지던 문제였다.
 
 ---
 
-## 5. 검증
+## 7. 검증
 
 ```bash
 cd tools && npm install playwright-core      # 최초 1회
+node check.js                                # 전수 점검 — 이것부터 돌린다
 node shot.js "../docs/index.html" "1,16,23,36"   # 슬라이드 번호 지정, 생략하면 전수
 ```
-콘솔 오류와 슬라이드 수를 출력하고 `shot_N.png`를 남긴다.
-**Google Fonts 요청 실패(`ERR_CONNECTION_RESET`) 1건은 오프라인 환경의 정상 동작이다.** 그 외 오류는 고친다.
+
+`check.js`는 46장을 **한국어와 영어로 각각** 넘기며 네 가지를 센다. 넷 다 0이어야 한다.
+
+```
+console errors: 0          콘솔 오류(폰트 요청 실패는 걸러냈다)
+영문판에 남은 한글: 0        번역 누락
+화면에 남은 토큰 찌꺼기: 0    [[ || ]] 가 화면에 보이면 토큰이 깨진 것
+무대 밖으로 넘친 요소: 0      1280×720 밖으로 나간 글자 — 영문이 길어질 때 잘 생긴다
+```
+
+`shot.js`는 `shot_N.png`를 남긴다.
+**Google Fonts 요청 실패(`ERR_CONNECTION_RESET` · `ERR_CERT_AUTHORITY_INVALID`)는 오프라인 환경의
+정상 동작이다.** 그 외 오류는 고친다.
 
 손으로 볼 때의 최소 확인: 46장 전부 넘어가는가 · 글자가 서로 겹치지 않는가 · 슬라이더를 끝까지 밀어도
-숫자가 NaN이나 음수로 깨지지 않는가.
+숫자가 NaN이나 음수로 깨지지 않는가 · `L`로 언어를 바꿔도 레이아웃이 버티는가.
 
 ---
 
-## 6. 개정·커밋
+## 8. 개정·커밋
 
 - 한 커밋 = 한 가지 변경. `src/`와 `docs/index.html`을 **같이** 커밋한다(빌드 산출물도 추적한다 —
   GitHub Pages가 `docs/`를 그대로 서빙하므로, 커밋하지 않으면 공개 링크가 낡는다).
+- 슬라이드 내용이 바뀌었으면 `docs/*.pdf`도 다시 굽고 같은 커밋에 넣는다.
 - 커밋 메시지는 한국어로, 무엇이 왜 바뀌었는지 한 줄. 예: `SDM 요구선 라벨이 막대 뒤로 들어가 우측 여백으로 이동`
 - 슬라이드를 더하거나 빼면 `CHANGELOG.md`에 한 줄 남긴다.
 - 강의에 실제로 쓴 판은 태그를 단다: `git tag 2026-2-w2 && git push --tags`.

@@ -1,8 +1,14 @@
-# src\*.html 을 순서대로 이어 붙여 docs\index.html 을 만든다 (build.sh 의 윈도우판).
+# src\*.html 을 순서대로 이어 붙여 docs\index.html 을 만든다.
 $ErrorActionPreference = 'Stop'
 Set-Location $PSScriptRoot
 $out = 'docs\index.html'
-Get-ChildItem src\*.html | Sort-Object Name | Get-Content -Raw -Encoding UTF8 |
-    Set-Content $out -Encoding UTF8 -NoNewline
-$n = ([regex]::Matches((Get-Content $out -Raw -Encoding UTF8), 'S\(\{')).Count
+Get-ChildItem src\*.html | Sort-Object Name | Get-Content -Raw | Set-Content -Encoding UTF8 $out
+$text = Get-Content -Raw $out
+$n = ([regex]::Matches($text, 'S\(\{')).Count
 Write-Host "built $out  ($n slides, $((Get-Item $out).Length) bytes)"
+
+# 한/영 토큰 [[한국어||English]] 개수 - 렌더 결과 검증은 tools\check.js 가 한다
+$hits = [regex]::Matches($text, '(?s)\[\[(.*?)\|\|(.*?)\]\]') |
+        Where-Object { $_.Groups[1].Value -match '[\uAC00-\uD7A3]' }
+Write-Host "  한/영 토큰 $($hits.Count)개"
+Write-Host "  검증:  cd tools; node check.js        PDF 굽기:  cd tools; node pdf.js"

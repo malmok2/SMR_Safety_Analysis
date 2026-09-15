@@ -2,15 +2,16 @@
 /* ================================================================
    표지 · 여정 지도
    ================================================================ */
-S({bare:true, cls:'cover', ov:'표지',
-html:`<div class="kick">한양대학교 원자력공학과 · THINK Lab · NUE4067</div>
-<h1>SMR <span>설계요건</span>과<br>공학적안전설비</h1>
+S({bare:true, cls:'cover', ov:'[[표지||Cover]]',
+html:`<div class="kick">[[한양대학교 원자력공학과 · THINK Lab · NUE4067||Hanyang University · Dept. of Nuclear Engineering · THINK Lab · NUE4067]]</div>
+<h1>[[SMR <span>설계요건</span>과<br>공학적안전설비||SMR <span>Design Requirements</span><br>and Engineered Safety Features]]</h1>
 <div class="ln"></div>
 <div class="meta">
-  왜 이렇게 설계했는가를 <b>계산으로</b> 답하기 위한 최소 원리<br>
-  2~3주차 강의 · 지도교수 <b>송민섭</b> · Rev1.0 · 2026년 9월
+  [[왜 이렇게 설계했는가를 <b>계산으로</b> 답하기 위한 최소 원리<br>
+  2~3주차 강의 · 지도교수 <b>송민섭</b> · Rev1.0 · 2026년 9월||The minimum set of principles needed to answer <b>with numbers</b> why the design looks the way it does<br>
+  Weeks 2-3 · Instructor <b>Minseop Song</b> · Rev1.0 · September 2026]]
 </div>
-<div class="hint"><kbd>→</kbd> 다음 &nbsp; <kbd>←</kbd> 이전 &nbsp; <kbd>O</kbd> 목차 &nbsp; <kbd>F</kbd> 전체화면 &nbsp; <kbd>R</kbd> 애니메이션 다시재생</div>`,
+<div class="hint">[[<kbd>→</kbd> 다음 &nbsp; <kbd>←</kbd> 이전 &nbsp; <kbd>O</kbd> 목차 &nbsp; <kbd>L</kbd> 한/영 &nbsp; <kbd>P</kbd> 인쇄·PDF &nbsp; <kbd>F</kbd> 전체화면||<kbd>→</kbd> Next &nbsp; <kbd>←</kbd> Prev &nbsp; <kbd>O</kbd> Index &nbsp; <kbd>L</kbd> KO/EN &nbsp; <kbd>P</kbd> Print·PDF &nbsp; <kbd>F</kbd> Fullscreen]]</div>`,
 init(el){
   if(RM) return;
   const h1=el.querySelector('h1'), ln=el.querySelector('.ln');
@@ -20,32 +21,32 @@ init(el){
   ln.animate([{width:'0px'},{width:'120px'}],{duration:600,delay:500,fill:'forwards'});
 }});
 
-S({tag:'ROADMAP', ov:'이 발표의 구조 — 기능이 계통을 부른다',
+S({tag:'ROADMAP', ov:'[[이 발표의 구조 — 기능이 계통을 부른다||How this deck is built - functions call for systems]]',
 src:'IAEA SSR-2/1 (Rev.1) Requirement 4 · 10 CFR 50 Appendix A',
-html:`<h2 class="t">원자로가 반드시 해야 하는 <em>세 가지</em> — 그것이 계통을 부른다</h2>
+html:`<h2 class="t">[[원자로가 반드시 해야 하는 <em>세 가지</em> — 그것이 계통을 부른다||The <em>three things</em> a reactor must do - and they call for the systems]]</h2>
 <ul class="b">
-  <li>계통 이름부터 외우면 왜 거기 있는지 알 수 없음. <b>요건 → 기능 → 계통</b> 순서로 읽음</li>
-  <li>앞 기능이 실패하면 뒤 기능의 부담이 커지는 <b>사슬</b>임 — 순서에 의미가 있음</li>
+  <li>[[계통 이름부터 외우면 왜 거기 있는지 알 수 없음. <b>요건 → 기능 → 계통</b> 순서로 읽음||Memorising system names first tells you nothing about why they exist. Read it as <b>requirement &#8594; function &#8594; system</b>]]</li>
+  <li>[[앞 기능이 실패하면 뒤 기능의 부담이 커지는 <b>사슬</b>임 — 순서에 의미가 있음||It is a <b>chain</b>: when an upstream function fails the burden on the next one grows - the order carries meaning]]</li>
 </ul>
 <div class="body"><div class="fig">
-<svg viewBox="0 0 1120 330" role="img" aria-label="세 가지 기본안전기능과 그것을 담당하는 공학적안전설비의 대응 관계">
+<svg viewBox="0 0 1120 330" role="img" aria-label="[[세 가지 기본안전기능과 그것을 담당하는 공학적안전설비의 대응 관계||The three fundamental safety functions and the engineered safety features that carry them out]]">
   <defs><marker id="ar1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
     <path d="M0,0 L10,5 L0,10 z" fill="var(--rule)"/></marker></defs>
   <g id="rm-fn">
     <g transform="translate(0,10)">
       <rect x="30" y="20" width="300" height="86" fill="var(--panel)" stroke="var(--hot)" stroke-width="1.5"/>
-      <text x="48" y="50" class="lbl" fill="var(--hot)">기본안전기능 ①</text>
-      <text x="48" y="80" font-family="var(--sans)" font-size="23" fill="var(--ink)" font-weight="500">반응도 제어</text>
+      <text x="48" y="50" class="lbl" fill="var(--hot)">[[기본안전기능 ①||Safety function &#9312;]]</text>
+      <text x="48" y="80" font-family="var(--sans)" font-size="23" fill="var(--ink)" font-weight="500">[[반응도 제어||Reactivity control]]</text>
     </g>
     <g transform="translate(0,122)">
       <rect x="30" y="20" width="300" height="86" fill="var(--panel)" stroke="var(--cool)" stroke-width="1.5"/>
-      <text x="48" y="50" class="lbl" fill="var(--cool)">기본안전기능 ②</text>
-      <text x="48" y="80" font-family="var(--sans)" font-size="23" fill="var(--ink)" font-weight="500">노심 열 제거</text>
+      <text x="48" y="50" class="lbl" fill="var(--cool)">[[기본안전기능 ②||Safety function &#9313;]]</text>
+      <text x="48" y="80" font-family="var(--sans)" font-size="23" fill="var(--ink)" font-weight="500">[[노심 열 제거||Core heat removal]]</text>
     </g>
     <g transform="translate(0,234)">
       <rect x="30" y="20" width="300" height="86" fill="var(--panel)" stroke="var(--ok)" stroke-width="1.5"/>
-      <text x="48" y="50" class="lbl" fill="var(--ok)">기본안전기능 ③</text>
-      <text x="48" y="80" font-family="var(--sans)" font-size="23" fill="var(--ink)" font-weight="500">방사성물질 격납</text>
+      <text x="48" y="50" class="lbl" fill="var(--ok)">[[기본안전기능 ③||Safety function &#9314;]]</text>
+      <text x="48" y="80" font-family="var(--sans)" font-size="23" fill="var(--ink)" font-weight="500">[[방사성물질 격납||Confining radioactivity]]</text>
     </g>
   </g>
   <g id="rm-ln" stroke="var(--rule)" stroke-width="1.4" fill="none" marker-end="url(#ar1)">
@@ -53,22 +54,22 @@ html:`<h2 class="t">원자로가 반드시 해야 하는 <em>세 가지</em> —
   </g>
   <g id="rm-sys">
     <g transform="translate(480,30)"><rect width="300" height="60" fill="none" stroke="var(--rule)"/>
-      <text x="18" y="25" class="lbl">6장</text>
-      <text x="18" y="46" font-family="var(--sans)" font-size="18" fill="var(--ink-2)">제어봉 · 붕산 주입</text></g>
+      <text x="18" y="25" class="lbl">[[6장||Ch. 6]]</text>
+      <text x="18" y="46" font-family="var(--sans)" font-size="18" fill="var(--ink-2)">[[제어봉 · 붕산 주입||Control rods · boron injection]]</text></g>
     <g transform="translate(480,142)"><rect width="300" height="60" fill="none" stroke="var(--rule)"/>
-      <text x="18" y="25" class="lbl">7장</text>
-      <text x="18" y="46" font-family="var(--sans)" font-size="18" fill="var(--ink-2)">잔열제거 · PRHR · DHRS</text></g>
+      <text x="18" y="25" class="lbl">[[7장||Ch. 7]]</text>
+      <text x="18" y="46" font-family="var(--sans)" font-size="18" fill="var(--ink-2)">[[잔열제거 · PRHR · DHRS||Residual heat removal · PRHR · DHRS]]</text></g>
     <g transform="translate(480,254)"><rect width="300" height="60" fill="none" stroke="var(--rule)"/>
-      <text x="18" y="25" class="lbl">8장</text>
-      <text x="18" y="46" font-family="var(--sans)" font-size="18" fill="var(--ink-2)">안전주입 · 축압기 · CMT</text></g>
+      <text x="18" y="25" class="lbl">[[8장||Ch. 8]]</text>
+      <text x="18" y="46" font-family="var(--sans)" font-size="18" fill="var(--ink-2)">[[안전주입 · 축압기 · CMT||Safety injection · accumulator · CMT]]</text></g>
     <g transform="translate(800,254)"><rect width="290" height="60" fill="none" stroke="var(--rule)"/>
-      <text x="18" y="25" class="lbl">9장</text>
-      <text x="18" y="46" font-family="var(--sans)" font-size="18" fill="var(--ink-2)">격납건물 · 살수 · PAR</text></g>
+      <text x="18" y="25" class="lbl">[[9장||Ch. 9]]</text>
+      <text x="18" y="46" font-family="var(--sans)" font-size="18" fill="var(--ink-2)">[[격납건물 · 살수 · PAR||Containment · spray · PAR]]</text></g>
   </g>
   <path id="rm-chain" d="M180,116 V142 M180,228 V254" stroke="var(--ink-3)" stroke-width="1.2"
         stroke-dasharray="3 4" fill="none"/>
-  <text x="196" y="135" class="lbl">실패하면 부담 증가</text>
-  <text x="196" y="247" class="lbl">실패하면 부담 증가</text>
+  <text x="196" y="135" class="lbl">[[실패하면 부담 증가||failure &#8594; heavier burden]]</text>
+  <text x="196" y="247" class="lbl">[[실패하면 부담 증가||failure &#8594; heavier burden]]</text>
 </svg>
 </div></div>`,
 init(el){
@@ -87,32 +88,34 @@ init(el){
 /* ================================================================
    SECTION 01 — SMR이란 무엇인가
    ================================================================ */
-SECT('01 · SMR이란 무엇인가');
-S({bare:true, cls:'div', ov:'§01 SMR이란 무엇인가',
-html:`<div class="no">01</div><h2>SMR이란 무엇인가</h2><div class="ln"></div>
+SECT('01 · [[SMR이란 무엇인가||What is an SMR]]');
+S({bare:true, cls:'div', ov:'[[§01 SMR이란 무엇인가||&#167;01 What is an SMR]]',
+html:`[[<div class="no">01</div><h2>SMR이란 무엇인가</h2><div class="ln"></div>
 <p>이름에 담긴 두 단어, 그리고 “작게 만든다”는 선택이 치르는 대가.
-이 장을 이해하지 못하면 이후 모든 설계 선택의 동기를 놓친다.</p>`});
+이 장을 이해하지 못하면 이후 모든 설계 선택의 동기를 놓친다.</p>||<div class="no">01</div><h2>What is an SMR</h2><div class="ln"></div>
+<p>Two words in the name, and the price paid for the choice to build it small.
+Miss this chapter and you miss the motive behind every design choice that follows.</p>]]`});
 
-S({tag:'DEFINITION', ov:'Small + Modular — 300 MWe 경계',
-src:'<b>출처</b> IAEA, <i>Advances in SMR Technology Developments</i>, 2022 Edition · 300 MWe는 법적 정의가 아니라 분류를 위한 관례적 상한',
-html:`<h2 class="t">Small은 <em>결과가 아니라 선택</em>이다</h2>
+S({tag:'DEFINITION', ov:'[[Small + Modular — 300 MWe 경계||Small + Modular - the 300 MWe line]]',
+src:'[[<b>출처</b> IAEA, <i>Advances in SMR Technology Developments</i>, 2022 Edition · 300 MWe는 법적 정의가 아니라 분류를 위한 관례적 상한||<b>Source</b> IAEA, <i>Advances in SMR Technology Developments</i>, 2022 Edition · 300 MWe is not a legal definition but a conventional upper bound used for classification]]',
+html:`<h2 class="t">[[Small은 <em>결과가 아니라 선택</em>이다||Small is <em>a choice, not an outcome</em>]]</h2>
 <ul class="b">
-  <li><b>Small</b> — 전기출력 <code>300 MWe</code> 이하. 열출력이 아니라 <b>전기출력</b> 기준임에 주의</li>
-  <li><b>Modular</b> — ① 공장에서 만들어 옮기는 <b>제작 단위</b>, ② 여러 대를 이어 붙이는 <b>출력 단위</b></li>
-  <li>공장 제작이 가능하려면 운반 한계 안에 들어와야 하고, 그러려면 작아야 함 — <b class="cool">모듈화를 가능하게 하려는 선택</b></li>
+  <li>[[<b>Small</b> — 전기출력 <code>300 MWe</code> 이하. 열출력이 아니라 <b>전기출력</b> 기준임에 주의||<b>Small</b> - <code>300 MWe</code> or less. Note the yardstick is <b>electrical</b> output, not thermal]]</li>
+  <li>[[<b>Modular</b> — ① 공장에서 만들어 옮기는 <b>제작 단위</b>, ② 여러 대를 이어 붙이는 <b>출력 단위</b>||<b>Modular</b> - &#9312; a <b>fabrication unit</b> built in a factory and shipped, &#9313; a <b>power unit</b> added one at a time]]</li>
+  <li>[[공장 제작이 가능하려면 운반 한계 안에 들어와야 하고, 그러려면 작아야 함 — <b class="cool">모듈화를 가능하게 하려는 선택</b>||Factory fabrication demands it fit inside transport limits, which demands it be small - <b class="cool">small is what makes modular possible</b>]]</li>
 </ul>
 <div class="body"><div class="fig">
-<svg viewBox="0 0 1120 300" role="img" aria-label="주요 원자로의 전기출력 분포와 300 MWe SMR 경계">
+<svg viewBox="0 0 1120 300" role="img" aria-label="[[주요 원자로의 전기출력 분포와 300 MWe SMR 경계||Electrical output of representative reactors and the 300 MWe SMR boundary]]">
   <line x1="60" y1="215" x2="1075" y2="215" class="axis"/>
   <g class="lbl" text-anchor="middle" fill="var(--ink-3)">
     <text x="60" y="240">0</text><text x="262" y="240">300</text><text x="464" y="240">600</text>
     <text x="666" y="240">900</text><text x="868" y="240">1200</text><text x="1070" y="240">1500</text>
   </g>
-  <text x="1075" y="268" class="lbl" text-anchor="end">정격 전기출력 (MWe)</text>
+  <text x="1075" y="268" class="lbl" text-anchor="end">[[정격 전기출력 (MWe)||Rated electrical output (MWe)]]</text>
   <rect id="smrzone" x="60" y="60" width="0" height="155" fill="var(--cool)" opacity="0.07"/>
   <line id="bline" x1="262" y1="215" x2="262" y2="215" stroke="var(--cool)" stroke-width="2" stroke-dasharray="5 4"/>
   <text id="blbl" x="262" y="48" text-anchor="middle" font-family="var(--mono)" font-size="14"
-        fill="var(--cool)" opacity="0">SMR 경계 · 300 MWe</text>
+        fill="var(--cool)" opacity="0">[[SMR 경계 · 300 MWe||SMR boundary · 300 MWe]]</text>
   <g id="dots"></g>
 </svg>
 </div></div>`,

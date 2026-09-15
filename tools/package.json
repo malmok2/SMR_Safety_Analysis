@@ -1,6 +1,8 @@
 {
   "name": "smr-safety-analysis-tools",
   "private": true,
-  "description": "슬라이드 렌더 검증용. node shot.js ../docs/index.html \"1,16,23\"",
-  "dependencies": { "playwright-core": "^1.40.0" }
+  "description": "슬라이드 검증·PDF 도구. node check.js (전수 점검) · node pdf.js (PDF 굽기) · node shot.js ../docs/index.html \"1,16,23\"",
+  "dependencies": {
+    "playwright-core": "^1.63.0"
+  }
 }

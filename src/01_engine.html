@@ -1,6 +1,7 @@
 <script>
 /* ================================================================
    덱 엔진 — 슬라이드 등록·렌더·내비게이션, 애니메이션 프리미티브
+              한/영 전환(i18n) · 인쇄(PDF) 모드
    ================================================================ */
 const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const D = [];                       // 슬라이드 목록
@@ -8,12 +9,70 @@ const SEC = [];                     // 섹션 경계 { at, name }
 function S(o){ D.push(o); return D.length-1; }
 function SECT(name){ SEC.push({at:D.length, name}); }
 
+/* ================================================================
+   언어 — [[한국어||English]] 토큰을 렌더 직전에 치환한다.
+   · 마크업 안의 고정 문구는 토큰으로 쓴다(SVG <text> 안에서도 동작).
+   · init() 안에서 JS로 만드는 문자열은 TX('한국어','English') 로 쓴다.
+   ================================================================ */
+const QS   = new URLSearchParams(location.search);
+const PRINT= QS.has('print');
+let LANG   = QS.get('lang') || store('smrLang') || 'ko';
+if(LANG!=='en') LANG='ko';
+
+function store(k,v){ try{ return v===undefined? localStorage.getItem(k)
+                                               : localStorage.setItem(k,v); }catch(e){ return null; } }
+function TX(ko,en){ return LANG==='en' && en!=null ? en : ko; }
+const I18N = /\[\[([\s\S]*?)\|\|([\s\S]*?)\]\]/g;
+function tr(s){ return String(s).replace(I18N, (m,ko,en)=> LANG==='en' ? en : ko); }
+
+/* 언어에 따라 바뀌는 고정 UI */
+function applyStatic(){
+  document.documentElement.lang = LANG;
+  document.title = TX('SMR 설계요건과 공학적안전설비',
+                     'SMR Design Requirements and Engineered Safety Features');
+  const h=document.getElementById('help');
+  if(h) h.textContent = TX('← → 이동 · O 목차 · L 한/영 · P 인쇄·PDF · F 전체화면',
+                          '← → Move · O Index · L KO/EN · P Print·PDF · F Fullscreen');
+  const q=(id)=>document.getElementById(id);
+  if(q('lang-ko')) q('lang-ko').classList.toggle('on', LANG==='ko');
+  if(q('lang-en')) q('lang-en').classList.toggle('on', LANG==='en');
+  if(q('topdf'))   q('topdf').title = TX('인쇄·PDF 모드로 전환 (P)','Switch to print · PDF mode (P)');
+  if(q('pt-msg'))  q('pt-msg').innerHTML = tr(PT_MSG);
+  if(q('pt-print'))q('pt-print').textContent = TX('Ctrl+P · PDF로 저장','Ctrl+P · Save as PDF');
+  if(q('pt-dl'))   q('pt-dl').textContent = TX('미리 만든 PDF 내려받기','Download prepared PDF');
+  if(q('pt-back')) q('pt-back').textContent = TX('슬라이드로 돌아가기','Back to the slides');
+  if(q('pt-dl'))   q('pt-dl').href = 'NUE4067_SMR_safety_'+LANG+'.pdf';
+}
+const PT_MSG = '[[슬라이드 <b>46장</b>을 한 장씩 지면에 펼쳤음 · 배경색이 나오도록 인쇄 설정에서'
+             + ' <b>배경 그래픽</b>을 켤 것 · 용지는 <b>가로</b>, 배율 <b>기본(100 %)</b>'
+             + '||All <b>46 slides</b> laid out one per page · turn on <b>Background graphics</b>'
+             + ' in the print dialog · paper <b>landscape</b>, scale <b>default (100 %)</b>]]';
+
+function setLang(l){
+  if(l===LANG) return;
+  LANG = (l==='en') ? 'en' : 'ko';
+  store('smrLang', LANG);
+  try{ const u=new URL(location.href); u.searchParams.set('lang',LANG);
+       history.replaceState(null,'',u); }catch(e){}
+  applyStatic();
+  if(PRINT){ buildPrint(); }
+  else { buildOv(); const i=cur; cur=-1; go(i); }
+}
+
 /* ---------- 정리 대상(슬라이드 떠날 때 멈춤) ---------- */
 let CLEAN = [];
+let FREEZE = 0;                     // >0 이면 그 초 뒤 애니메이션 정지(인쇄 모드)
 function onClean(fn){ CLEAN.push(fn); }
 function raf(fn){
   let id, t0 = performance.now(), live = true;
-  function step(t){ if(!live) return; fn((t-t0)/1000, t); id = requestAnimationFrame(step); }
+  function step(t){
+    if(!live) return;
+    /* rAF 타임스탬프가 t0보다 이를 수 있어 첫 프레임의 경과시간이 음수로 나온다.
+       log·pow 를 쓰는 슬라이드가 NaN 으로 깨지므로 0 아래로는 내리지 않는다. */
+    const e=Math.max(0,(t-t0)/1000); fn(e, t);
+    if(FREEZE && e>FREEZE){ live=false; return; }   // 인쇄: 한 장면으로 고정
+    id = requestAnimationFrame(step);
+  }
   id = requestAnimationFrame(step);
   onClean(()=>{ live=false; cancelAnimationFrame(id); });
   return ()=>{ live=false; cancelAnimationFrame(id); };
@@ -56,6 +115,17 @@ function track(obj,key,get,k=6){
 /* ---------- 선 그래프 ---------- */
 function poly(pts){ return pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' '); }
 
+/* ---------- 슬라이드 한 장의 뼈대(레일·본문·푸터) ---------- */
+function frame(s,i){
+  if(s.bare) return s.html;
+  const sec = SEC.filter(x=>x.at<=i).slice(-1)[0];
+  return '<div class="rail"><span class="tag">'+(s.tag||(sec?sec.name:''))+'</span>'
+       + '<span class="sp"></span><span class="num">'+String(i+1).padStart(2,'0')+' / '+D.length+'</span></div>'
+       + s.html
+       + '<div class="foot"><span class="src">'+(s.src||'')+'</span><span class="sp"></span>'
+       + '<span class="brand">THINK LAB · HANYANG</span></div>';
+}
+
 /* ---------- 렌더 ---------- */
 const stage=document.getElementById('stage');
 let cur=-1;
@@ -63,24 +133,51 @@ function go(i,dir){
   i=clamp(i,0,D.length-1); if(i===cur) return;
   CLEAN.forEach(f=>{try{f()}catch(e){}}); CLEAN=[];
   cur=i; const s=D[i];
-  const sec = SEC.filter(x=>x.at<=i).slice(-1)[0];
-  stage.innerHTML =
-    '<div class="slide on'+(s.cls?' '+s.cls:'')+'">'
-    + (s.bare? '' :
-      '<div class="rail"><span class="tag">'+(s.tag||(sec?sec.name:''))+'</span>'
-      +'<span class="sp"></span><span class="num">'+String(i+1).padStart(2,'0')+' / '+D.length+'</span></div>')
-    + s.html
-    + (s.bare? '' :
-      '<div class="foot"><span class="src">'+(s.src||'')+'</span><span class="sp"></span>'
-      +'<span class="brand">THINK LAB · HANYANG</span></div>')
-    + '</div>';
+  stage.innerHTML = tr('<div class="slide on'+(s.cls?' '+s.cls:'')+'">'+frame(s,i)+'</div>');
   document.getElementById('prog').style.width=((i+1)/D.length*100)+'%';
   if(s.init){ try{ s.init(stage.querySelector('.slide')); }catch(e){ console.error(e); } }
 }
 function replay(){ const i=cur; cur=-1; go(i); }
 
+/* ---------- 인쇄(PDF) 모드 — 46장을 한 번에 지면에 펼친다 ---------- */
+function buildPrint(){
+  document.body.classList.add('printing');
+  FREEZE = 3.4;                                   // 3.4 초 뒤 모든 애니메이션 정지
+  const sh=document.getElementById('sheets');
+  let h='';
+  D.forEach((s,i)=>{
+    h+='<div class="sheet"><div class="slide on'+(s.cls?' '+s.cls:'')+'">'+frame(s,i)+'</div></div>';
+  });
+  sh.innerHTML = tr(h);
+  D.forEach((s,i)=>{
+    if(!s.init) return;
+    const root=sh.children[i].firstElementChild;
+    try{ s.init(root); }catch(e){ console.error('slide '+(i+1)+':', e); }
+  });
+  /* 애니메이션이 멎으면 표시 — PDF 생성 스크립트가 이 신호를 기다린다 */
+  document.documentElement.removeAttribute('data-print-ready');
+  const t0=performance.now();
+  (function step(){
+    if(performance.now()-t0 > FREEZE*1000+600){
+      document.documentElement.setAttribute('data-print-ready','1'); return;
+    }
+    requestAnimationFrame(step);
+  })();
+}
+function toPrint(){
+  const u=new URL(location.href);
+  u.searchParams.set('print','1'); u.searchParams.set('lang',LANG);
+  location.href=u.toString();
+}
+function toDeck(){
+  const u=new URL(location.href);
+  u.searchParams.delete('print'); u.searchParams.set('lang',LANG);
+  location.href=u.toString();
+}
+
 /* ---------- 스케일 ---------- */
 function fit(){
+  if(PRINT) return;
   const k=Math.min(innerWidth/1280, innerHeight/720);
   stage.style.transform='scale('+k+')';
 }
@@ -88,6 +185,9 @@ addEventListener('resize',fit); fit();
 
 /* ---------- 내비게이션 ---------- */
 addEventListener('keydown',e=>{
+  if(e.metaKey||e.ctrlKey||e.altKey) return;
+  if(e.key==='l'||e.key==='L'){ setLang(LANG==='ko'?'en':'ko'); return; }
+  if(PRINT){ if(e.key==='Escape') toDeck(); return; }
   const ov=document.getElementById('ov');
   if(e.key==='Escape'){ ov.classList.remove('on'); return; }
   if(e.key==='o'||e.key==='O'){ ov.classList.toggle('on'); return; }
@@ -96,33 +196,48 @@ addEventListener('keydown',e=>{
   else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); go(cur-1); }
   else if(e.key==='Home'){ go(0); } else if(e.key==='End'){ go(D.length-1); }
   else if(e.key==='r'||e.key==='R'){ replay(); }
+  else if(e.key==='p'||e.key==='P'){ toPrint(); }
   else if(e.key==='f'||e.key==='F'){
     if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen();
   }
 });
 addEventListener('click',e=>{
-  if(e.target.closest('input,button,#ov,label')) return;
+  if(PRINT) return;
+  if(e.target.closest('input,button,a,#ov,#hud,label')) return;
   if(document.getElementById('ov').classList.contains('on')) return;
   go(cur + (e.clientX < innerWidth*0.28 ? -1 : 1));
 });
 
-/* ---------- 조작 안내 자동 숨김 ---------- */
-(function(){ const h=document.getElementById('help'); let tm;
-  function poke(){ h.style.opacity=.72; clearTimeout(tm); tm=setTimeout(()=>h.style.opacity=0,4000); }
-  h.style.transition='opacity .5s'; addEventListener('mousemove',poke); addEventListener('keydown',poke); poke();
+/* ---------- 조작 안내·언어/PDF 버튼 자동 숨김 ---------- */
+(function(){
+  const els=['help','hud'].map(id=>document.getElementById(id)).filter(Boolean);
+  if(!els.length) return; let tm;
+  function poke(){ els.forEach(e=>e.style.opacity=.72);
+    clearTimeout(tm); tm=setTimeout(()=>els.forEach(e=>e.style.opacity=0),4000); }
+  els.forEach(e=>e.style.transition='opacity .5s');
+  addEventListener('mousemove',poke); addEventListener('keydown',poke); poke();
 })();
 
 /* ---------- 오버뷰 ---------- */
 function buildOv(){
   const g=document.getElementById('ovg'); let h='';
   D.forEach((s,i)=>{
-    const sec=SEC.filter(x=>x.at===i)[0];
     h+='<div class="it" data-i="'+i+'"><span class="n">'+String(i+1).padStart(2,'0')
       +'</span><span class="t">'+(s.ov||s.tag||'')+'</span></div>';
   });
-  g.innerHTML=h;
+  g.innerHTML=tr(h);
   g.querySelectorAll('.it').forEach(el=>el.onclick=()=>{
     document.getElementById('ov').classList.remove('on'); go(+el.dataset.i);
   });
+}
+
+/* ---------- 시작 ---------- */
+function boot(){
+  const b=(id,fn)=>{ const el=document.getElementById(id); if(el) el.onclick=fn; };
+  b('lang-ko',()=>setLang('ko')); b('lang-en',()=>setLang('en'));
+  b('topdf',toPrint);             b('pt-back',toDeck);
+  b('pt-print',()=>print());
+  applyStatic();
+  if(PRINT){ buildPrint(); } else { buildOv(); go(0); }
 }
 </script>
