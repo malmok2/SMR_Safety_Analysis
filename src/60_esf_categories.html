@@ -133,7 +133,7 @@ init(el){
     let h=`<g data-c="${i}" opacity="0">`
       +`<rect x="${x}" y="24" width="${w}" height="270" fill="var(--panel)" stroke="${c[3]}" stroke-width="1.6"/>`
       +`<rect x="${x}" y="24" width="${w}" height="40" fill="${c[3]}"/>`
-      +`<text x="${x+w/2}" y="51" text-anchor="middle" font-family="var(--mono)" font-size="16" fill="#071018" font-weight="600">${c[0]}</text>`;
+      +`<text x="${x+w/2}" y="51" text-anchor="middle" font-family="var(--mono)" font-size="16" fill="var(--on-accent)" font-weight="600">${c[0]}</text>`;
     c[1].forEach((on,j)=>{ const y=94+j*38;
       h+=`<circle cx="${x+26}" cy="${y}" r="7" fill="${on?c[3]:'none'}" stroke="${on?c[3]:'var(--rule)'}" stroke-width="1.6"/>`
         +`<text x="${x+44}" y="${y+5}" class="lbl" fill="${on?'var(--ink)':'var(--ink-3)'}">${LAMP[j]}</text>`; });

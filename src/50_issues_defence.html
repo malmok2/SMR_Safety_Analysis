@@ -151,8 +151,8 @@ html:`<h2 class="t">[[사고는 <em>겹</em>을 하나씩 뚫는다 — 어디�
   <div class="fig">
   <svg viewBox="0 0 860 330" role="img" aria-label="[[심층방어 5단계를 사고가 통과하는 모습. 정상 설계에서는 Level 3의 공학적안전설비에서 멈춘다||An accident travelling through the five levels of defence in depth. In a sound design it stops at the Level 3 engineered safety features]]">
     <g id="dd-lv"></g>
-    <circle id="dd-tok" cx="700" cy="6" r="11" fill="var(--hot)"/>
-    <text id="dd-toklbl" x="700" y="-8" class="lbl" [[fill="var(--hot)" text-anchor="middle">사고</text>||fill="var(--hot)" text-anchor="middle">Accident</text>]]
+    <circle id="dd-tok" cx="416" cy="6" r="11" fill="var(--hot)"/>
+    <text id="dd-toklbl" x="416" y="-8" class="lbl" [[fill="var(--hot)" text-anchor="middle">사고</text>||fill="var(--hot)" text-anchor="middle">Accident</text>]]
     <text id="dd-res" x="430" y="318" text-anchor="middle" font-family="var(--sans)" font-size="19"
           font-weight="600" fill="var(--ok)" opacity="0"></text>
   </svg>
@@ -170,8 +170,8 @@ html:`<h2 class="t">[[사고는 <em>겹</em>을 하나씩 뚫는다 — 어디�
   </div>
 </div>`,
 init(el){
-  const LV=[['Level 1',TX('정상운전 이탈 예방','Prevent departure from normal operation'),
-     TX('보수적 설계 · 여유도 · 품질보증','Conservative design · margin · quality assurance'),'var(--cool)'],
+  const LV=[['Level 1',TX('정상운전 이탈 예방','Prevent abnormal operation'),
+     TX('보수적 설계 · 여유도 · 품질보증','Conservative design · margin · QA'),'var(--cool)'],
     ['Level 2',TX('이탈의 감지와 제어','Detect and control the departure'),
      TX('제어·감시계통 · 운전절차서','Control and monitoring · operating procedures'),'var(--cool)'],
     ['Level 3',TX('설계기준사고 제어','Control design basis accidents'),
@@ -204,7 +204,7 @@ init(el){
     const stopAt = mode==='n'? 2 : 4;
     if(mode==='f' && T>0.35){ [0,1,2,3].forEach(i=>{
       rows[i].setAttribute('opacity',0.32);
-      rows[i].querySelector('rect').setAttribute('fill','#1a1010'); }); }
+      rows[i].querySelector('rect').setAttribute('fill','var(--dead)'); }); }
     const yTarget = 18+stopAt*56+21;
     const y = Math.min(yTarget, -6 + T*150);
     tok.setAttribute('cy',y); tl.setAttribute('y',y-18);

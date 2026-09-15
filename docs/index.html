@@ -26,8 +26,38 @@
   --hot:#FF7A45;         /* 열·노심·위험 */
   --ok:#5DD39E;          /* 피동·성공 */
   --amber:#FFC55C;       /* 규제 조문 */
+  --on-accent:#071018;   /* 강조색으로 꽉 채운 면 위에 얹는 글자 */
+  --hot-2:#FF3B1F;       /* 과열 — --hot 보다 한 단계 위 */
+  --dead:#1A1010;        /* 무력화된 패널 */
+  --bubble:#FFFFFF;      /* 수조 기포 */
+  --act:#0D2438;         /* 눌린 버튼 바탕 */
+  --veil:rgba(7,14,24,.97);  /* 개요 화면 덮개 */
   --sans:'Pretendard Variable','Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
   --mono:'IBM Plex Mono','SFMono-Regular','D2Coding',Consolas,monospace;
+}
+
+/* ---------- 라이트 테마 (T 키) ----------
+   인쇄·PDF 의 기본값이다. 강의실이 밝거나 프로젝터가 약할 때도 이쪽을 쓴다.
+   색이 지는 의미(냉각재·열·피동·규제)는 그대로 두고 명도만 뒤집었다.
+   강조 4색은 흰 바탕에서 WCAG AA(4.5:1)를 넘도록 어둡게 다시 잡았다. */
+:root[data-theme="light"]{
+  --ground:#FFFFFF;
+  --panel:#F2F6FA;
+  --panel-2:#E4ECF4;
+  --rule:#C3D2E0;
+  --ink:#0B1725;
+  --ink-2:#2C4257;
+  --ink-3:#5A7390;
+  --cool:#0B7FA8;
+  --hot:#C1440E;
+  --ok:#17795A;
+  --amber:#8A6100;
+  --on-accent:#FFFFFF;
+  --hot-2:#A81E00;
+  --dead:#F0DEDA;
+  --bubble:#0B7FA8;
+  --act:#E3F1F7;
+  --veil:rgba(255,255,255,.97);
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;height:100%;background:var(--ground);color:var(--ink);
@@ -115,7 +145,7 @@ a.btn{text-decoration:none;display:inline-block}
   background:var(--panel);border:1px solid var(--rule);padding:8px 13px;cursor:pointer;
   transition:border-color .15s,color .15s}
 .btn:hover{border-color:var(--cool);color:var(--cool)}
-.btn.act{border-color:var(--cool);color:var(--cool);background:#0d2438}
+.btn.act{border-color:var(--cool);color:var(--cool);background:var(--act)}
 .btn.danger:hover{border-color:var(--hot);color:var(--hot)}
 .btn:focus-visible{outline:2px solid var(--cool);outline-offset:3px}
 .btnrow{display:flex;gap:8px;flex-wrap:wrap}
@@ -176,7 +206,7 @@ blockquote.q .cite{display:block;margin-top:9px;font-family:var(--mono);font-siz
   color:var(--ink-3);letter-spacing:.06em;z-index:40;opacity:.7}
 
 /* ---------- 오버뷰 ---------- */
-#ov{position:fixed;inset:0;background:rgba(7,14,24,.97);z-index:50;display:none;
+#ov{position:fixed;inset:0;background:var(--veil);z-index:50;display:none;
   overflow-y:auto;padding:26px}
 #ov.on{display:block}
 #ov .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:11px}
@@ -205,7 +235,7 @@ blockquote.q .cite{display:block;margin-top:9px;font-family:var(--mono);font-siz
   background:var(--panel);border:1px solid var(--rule);padding:4px 9px;cursor:pointer;
   transition:color .15s,border-color .15s}
 #hud button:hover{color:var(--cool);border-color:var(--cool)}
-#hud button.on{color:var(--cool);border-color:var(--cool);background:#0d2438}
+#hud button.on{color:var(--cool);border-color:var(--cool);background:var(--act)}
 #hud .gap{width:5px}
 
 /* ---------- 인쇄(PDF) 모드 — 46장을 한 번에 지면에 펼친다 ---------- */
@@ -250,11 +280,13 @@ body.printing .cover .hint{display:none}   /* 지면에서는 조작키 안내�
   <button id="lang-ko" type="button">KO</button>
   <button id="lang-en" type="button">EN</button>
   <span class="gap"></span>
+  <button id="theme" type="button">LIGHT</button>
   <button id="topdf" type="button">PDF ↓</button>
 </div>
 <div id="ov"><div class="grid" id="ovg"></div></div>
 <div id="ptool" class="noprint">
   <span class="msg" id="pt-msg"></span>
+  <button class="btn" id="pt-theme" type="button">어두운 배경으로</button>
   <button class="btn" id="pt-print" type="button">Ctrl+P · PDF로 저장</button>
   <a class="btn" id="pt-dl" href="NUE4067_SMR_safety_ko.pdf" download>미리 만든 PDF 내려받기</a>
   <button class="btn" id="pt-back" type="button">슬라이드로 돌아가기</button>
@@ -283,6 +315,21 @@ if(LANG!=='en') LANG='ko';
 
 function store(k,v){ try{ return v===undefined? localStorage.getItem(k)
                                                : localStorage.setItem(k,v); }catch(e){ return null; } }
+
+/* ---------- 배경 테마 ----------
+   발표는 다크가 기본, 인쇄·PDF 는 라이트가 기본이다. 주소에 theme= 이 있으면 그것이 이긴다.
+   토큰만 갈아끼우므로 슬라이드를 다시 그릴 필요가 없다. */
+let THEME = QS.get('theme') || (PRINT ? 'light' : (store('smrTheme') || 'dark'));
+if(THEME!=='light') THEME='dark';
+document.documentElement.setAttribute('data-theme', THEME);
+function setTheme(t){
+  THEME = (t==='light') ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', THEME);
+  if(!PRINT) store('smrTheme', THEME);          // 인쇄 모드의 선택은 기억하지 않는다
+  try{ const u=new URL(location.href); u.searchParams.set('theme',THEME);
+       history.replaceState(null,'',u); }catch(e){}
+  applyStatic();
+}
 function TX(ko,en){ return LANG==='en' && en!=null ? en : ko; }
 const I18N = /\[\[([\s\S]*?)\|\|([\s\S]*?)\]\]/g;
 function tr(s){ return String(s).replace(I18N, (m,ko,en)=> LANG==='en' ? en : ko); }
@@ -293,22 +340,26 @@ function applyStatic(){
   document.title = TX('SMR 설계요건과 공학적안전설비',
                      'SMR Design Requirements and Engineered Safety Features');
   const h=document.getElementById('help');
-  if(h) h.textContent = TX('← → 이동 · O 목차 · L 한/영 · P 인쇄·PDF · F 전체화면',
-                          '← → Move · O Index · L KO/EN · P Print·PDF · F Fullscreen');
+  if(h) h.textContent = TX('← → 이동 · O 목차 · L 한/영 · T 배경 · P 인쇄·PDF · F 전체화면',
+                          '← → Move · O Index · L KO/EN · T Theme · P Print·PDF · F Fullscreen');
   const q=(id)=>document.getElementById(id);
   if(q('lang-ko')) q('lang-ko').classList.toggle('on', LANG==='ko');
   if(q('lang-en')) q('lang-en').classList.toggle('on', LANG==='en');
   if(q('topdf'))   q('topdf').title = TX('인쇄·PDF 모드로 전환 (P)','Switch to print · PDF mode (P)');
+  if(q('theme')){ q('theme').textContent = THEME==='dark' ? 'LIGHT' : 'DARK';
+                  q('theme').title = TX('배경 밝기 전환 (T)','Switch background (T)'); }
+  if(q('pt-theme')) q('pt-theme').textContent = THEME==='dark'
+      ? TX('밝은 배경으로','Light background') : TX('어두운 배경으로','Dark background');
   if(q('pt-msg'))  q('pt-msg').innerHTML = tr(PT_MSG);
   if(q('pt-print'))q('pt-print').textContent = TX('Ctrl+P · PDF로 저장','Ctrl+P · Save as PDF');
   if(q('pt-dl'))   q('pt-dl').textContent = TX('미리 만든 PDF 내려받기','Download prepared PDF');
   if(q('pt-back')) q('pt-back').textContent = TX('슬라이드로 돌아가기','Back to the slides');
   if(q('pt-dl'))   q('pt-dl').href = 'NUE4067_SMR_safety_'+LANG+'.pdf';
 }
-const PT_MSG = '[[슬라이드 <b>46장</b>을 한 장씩 지면에 펼쳤음 · 배경색이 나오도록 인쇄 설정에서'
-             + ' <b>배경 그래픽</b>을 켤 것 · 용지는 <b>가로</b>, 배율 <b>기본(100 %)</b>'
-             + '||All <b>46 slides</b> laid out one per page · turn on <b>Background graphics</b>'
-             + ' in the print dialog · paper <b>landscape</b>, scale <b>default (100 %)</b>]]';
+const PT_MSG = '[[슬라이드 <b>46장</b>을 한 장씩 지면에 펼쳤음 · 인쇄용이라 <b>밝은 배경</b>이 기본임 ·'
+             + ' 용지는 <b>가로</b>, 배율 <b>기본(100 %)</b> · 색을 살리려면 인쇄 설정에서 <b>배경 그래픽</b>을 켤 것'
+             + '||All <b>46 slides</b> laid out one per page · a <b>light background</b> by default, for printing ·'
+             + ' paper <b>landscape</b>, scale <b>default (100 %)</b> · turn on <b>Background graphics</b> to keep the colours]]';
 
 function setLang(l){
   if(l===LANG) return;
@@ -429,6 +480,7 @@ function buildPrint(){
 function toPrint(){
   const u=new URL(location.href);
   u.searchParams.set('print','1'); u.searchParams.set('lang',LANG);
+  u.searchParams.delete('theme');          // 인쇄는 라이트가 기본 — 지면에서 되돌린다
   location.href=u.toString();
 }
 function toDeck(){
@@ -449,6 +501,7 @@ addEventListener('resize',fit); fit();
 addEventListener('keydown',e=>{
   if(e.metaKey||e.ctrlKey||e.altKey) return;
   if(e.key==='l'||e.key==='L'){ setLang(LANG==='ko'?'en':'ko'); return; }
+  if(e.key==='t'||e.key==='T'){ setTheme(THEME==='dark'?'light':'dark'); return; }
   if(PRINT){ if(e.key==='Escape') toDeck(); return; }
   const ov=document.getElementById('ov');
   if(e.key==='Escape'){ ov.classList.remove('on'); return; }
@@ -498,6 +551,8 @@ function boot(){
   const b=(id,fn)=>{ const el=document.getElementById(id); if(el) el.onclick=fn; };
   b('lang-ko',()=>setLang('ko')); b('lang-en',()=>setLang('en'));
   b('topdf',toPrint);             b('pt-back',toDeck);
+  b('theme',   ()=>setTheme(THEME==='dark'?'light':'dark'));
+  b('pt-theme',()=>setTheme(THEME==='dark'?'light':'dark'));
   b('pt-print',()=>print());
   applyStatic();
   if(PRINT){ buildPrint(); } else { buildOv(); go(0); }
@@ -859,7 +914,7 @@ init(el){
     if(st==='brk'){ T+=1/60;
       lv=Math.max(0.12,1-T*0.30); f.speed=Math.max(0.02,0.13+0.5*Math.exp(-T*1.4)-T*0.05);
       if(T>1.6) msg.setAttribute('opacity',Math.min(1,(T-1.6)));
-      core.setAttribute('fill', T>2.0?'#ff3b1f':'var(--hot)');
+      core.setAttribute('fill', T>2.0?'var(--hot-2)':'var(--hot)');
       [...esc.children].forEach(c=>{ let u=(T-+c.dataset.t); if(u<0){c.setAttribute('opacity',0);return;}
         u=u%2.0; const a=+c.dataset.a, v=+c.dataset.v;
         c.setAttribute('cx',350+Math.cos(a)*v*u); c.setAttribute('cy',110+Math.sin(a)*v*u+40*u*u);
@@ -1310,8 +1365,8 @@ html:`<h2 class="t">[[사고는 <em>겹</em>을 하나씩 뚫는다 — 어디�
   <div class="fig">
   <svg viewBox="0 0 860 330" role="img" aria-label="[[심층방어 5단계를 사고가 통과하는 모습. 정상 설계에서는 Level 3의 공학적안전설비에서 멈춘다||An accident travelling through the five levels of defence in depth. In a sound design it stops at the Level 3 engineered safety features]]">
     <g id="dd-lv"></g>
-    <circle id="dd-tok" cx="700" cy="6" r="11" fill="var(--hot)"/>
-    <text id="dd-toklbl" x="700" y="-8" class="lbl" [[fill="var(--hot)" text-anchor="middle">사고</text>||fill="var(--hot)" text-anchor="middle">Accident</text>]]
+    <circle id="dd-tok" cx="416" cy="6" r="11" fill="var(--hot)"/>
+    <text id="dd-toklbl" x="416" y="-8" class="lbl" [[fill="var(--hot)" text-anchor="middle">사고</text>||fill="var(--hot)" text-anchor="middle">Accident</text>]]
     <text id="dd-res" x="430" y="318" text-anchor="middle" font-family="var(--sans)" font-size="19"
           font-weight="600" fill="var(--ok)" opacity="0"></text>
   </svg>
@@ -1329,8 +1384,8 @@ html:`<h2 class="t">[[사고는 <em>겹</em>을 하나씩 뚫는다 — 어디�
   </div>
 </div>`,
 init(el){
-  const LV=[['Level 1',TX('정상운전 이탈 예방','Prevent departure from normal operation'),
-     TX('보수적 설계 · 여유도 · 품질보증','Conservative design · margin · quality assurance'),'var(--cool)'],
+  const LV=[['Level 1',TX('정상운전 이탈 예방','Prevent abnormal operation'),
+     TX('보수적 설계 · 여유도 · 품질보증','Conservative design · margin · QA'),'var(--cool)'],
     ['Level 2',TX('이탈의 감지와 제어','Detect and control the departure'),
      TX('제어·감시계통 · 운전절차서','Control and monitoring · operating procedures'),'var(--cool)'],
     ['Level 3',TX('설계기준사고 제어','Control design basis accidents'),
@@ -1363,7 +1418,7 @@ init(el){
     const stopAt = mode==='n'? 2 : 4;
     if(mode==='f' && T>0.35){ [0,1,2,3].forEach(i=>{
       rows[i].setAttribute('opacity',0.32);
-      rows[i].querySelector('rect').setAttribute('fill','#1a1010'); }); }
+      rows[i].querySelector('rect').setAttribute('fill','var(--dead)'); }); }
     const yTarget = 18+stopAt*56+21;
     const y = Math.min(yTarget, -6 + T*150);
     tok.setAttribute('cy',y); tl.setAttribute('y',y-18);
@@ -1517,7 +1572,7 @@ init(el){
     let h=`<g data-c="${i}" opacity="0">`
       +`<rect x="${x}" y="24" width="${w}" height="270" fill="var(--panel)" stroke="${c[3]}" stroke-width="1.6"/>`
       +`<rect x="${x}" y="24" width="${w}" height="40" fill="${c[3]}"/>`
-      +`<text x="${x+w/2}" y="51" text-anchor="middle" font-family="var(--mono)" font-size="16" fill="#071018" font-weight="600">${c[0]}</text>`;
+      +`<text x="${x+w/2}" y="51" text-anchor="middle" font-family="var(--mono)" font-size="16" fill="var(--on-accent)" font-weight="600">${c[0]}</text>`;
     c[1].forEach((on,j)=>{ const y=94+j*38;
       h+=`<circle cx="${x+26}" cy="${y}" r="7" fill="${on?c[3]:'none'}" stroke="${on?c[3]:'var(--rule)'}" stroke-width="1.6"/>`
         +`<text x="${x+44}" y="${y+5}" class="lbl" fill="${on?'var(--ink)':'var(--ink-3)'}">${LAMP[j]}</text>`; });
@@ -1812,7 +1867,7 @@ init(el){
   el.querySelector('#hs-72t').setAttribute('x',X(72));
   const SV='http://www.w3.org/2000/svg', bg=el.querySelector('#hs-bub'), bub=[];
   for(let i=0;i<16;i++){ const c=document.createElementNS(SV,'circle');
-    c.setAttribute('r',2+Math.random()*2.6); c.setAttribute('fill','#fff'); c.setAttribute('opacity',0);
+    c.setAttribute('r',2+Math.random()*2.6); c.setAttribute('fill','var(--bubble)'); c.setAttribute('opacity',0);
     c.dataset.x=70+Math.random()*150; c.dataset.p=Math.random(); bg.appendChild(c); bub.push(c); }
   const sl=el.querySelector('#hs-v'); let H=0;
   function state(h){
@@ -2217,11 +2272,11 @@ html:`<h2 class="t">[[설계는 요건에서 시작해 계통으로 끝난다 �
     <path d="M0,0 L10,5 L0,10 z" fill="var(--rule)"/></marker></defs>
   <g id="tr-hd">
     <rect x="40" y="14" width="330" height="38" fill="var(--cool)"/>
-    <text x="205" y="39" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="#071018" [[font-weight="600">규제 요건</text>||font-weight="600">Requirement</text>]]
+    <text x="205" y="39" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="var(--on-accent)" [[font-weight="600">규제 요건</text>||font-weight="600">Requirement</text>]]
     <rect x="395" y="14" width="300" height="38" fill="var(--ok)"/>
-    <text x="545" y="39" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="#071018" [[font-weight="600">기본 안전기능</text>||font-weight="600">Safety function</text>]]
+    <text x="545" y="39" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="var(--on-accent)" [[font-weight="600">기본 안전기능</text>||font-weight="600">Safety function</text>]]
     <rect x="720" y="14" width="360" height="38" fill="var(--hot)"/>
-    <text x="900" y="39" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="#071018" [[font-weight="600">계통 (ESF)</text>||font-weight="600">System (ESF)</text>]]
+    <text x="900" y="39" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="var(--on-accent)" [[font-weight="600">계통 (ESF)</text>||font-weight="600">System (ESF)</text>]]
   </g>
   <g id="tr-rows"></g>
 </svg>

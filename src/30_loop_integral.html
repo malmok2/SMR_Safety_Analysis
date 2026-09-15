@@ -62,7 +62,7 @@ init(el){
     if(st==='brk'){ T+=1/60;
       lv=Math.max(0.12,1-T*0.30); f.speed=Math.max(0.02,0.13+0.5*Math.exp(-T*1.4)-T*0.05);
       if(T>1.6) msg.setAttribute('opacity',Math.min(1,(T-1.6)));
-      core.setAttribute('fill', T>2.0?'#ff3b1f':'var(--hot)');
+      core.setAttribute('fill', T>2.0?'var(--hot-2)':'var(--hot)');
       [...esc.children].forEach(c=>{ let u=(T-+c.dataset.t); if(u<0){c.setAttribute('opacity',0);return;}
         u=u%2.0; const a=+c.dataset.a, v=+c.dataset.v;
         c.setAttribute('cx',350+Math.cos(a)*v*u); c.setAttribute('cy',110+Math.sin(a)*v*u+40*u*u);

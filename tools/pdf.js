@@ -4,6 +4,7 @@
  *   node pdf.js ko ../docs      출력 폴더 지정
  * 덱을 ?print=1&lang=… 로 열면 46장이 지면에 펼쳐지고, 애니메이션은 3.4 초 뒤
  * 멎으면서 <html data-print-ready>가 붙는다. 그 신호를 기다렸다가 인쇄한다.
+ * 지면은 배포·인쇄용이라 <b>밝은 배경</b>으로 굽는다(?theme=light). 어두운 판이 필요하면 theme=dark.
  * 결과: <out>/NUE4067_SMR_safety_<lang>.pdf  — index.html 의 내려받기 링크와 같은 이름이다.
  */
 const path = require('path');
@@ -25,7 +26,7 @@ const DECK = path.resolve(__dirname, '..', 'docs', 'index.html');
     p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
     p.on('pageerror', e => errs.push('PAGEERROR: ' + e.message));
 
-    await p.goto('file://' + DECK + '?print=1&lang=' + lang);
+    await p.goto('file://' + DECK + '?print=1&theme=light&lang=' + lang);
     await p.waitForSelector('html[data-print-ready]', { timeout: 90000 });
 
     const n = await p.evaluate(() => document.querySelectorAll('.sheet').length);
@@ -33,7 +34,7 @@ const DECK = path.resolve(__dirname, '..', 'docs', 'index.html');
     await p.pdf({ path: file, width: '1280px', height: '720px', printBackground: true,
                   margin: { top: 0, right: 0, bottom: 0, left: 0 } });
 
-    const real = errs.filter(e => !/ERR_CERT_AUTHORITY_INVALID|ERR_CONNECTION|fonts\.g/i.test(e));
+    const real = errs.filter(e => !/ERR_CERT|ERR_CONNECTION|ERR_NAME|ERR_TUNNEL|ERR_PROXY|fonts\.g|jsdelivr/i.test(e));
     console.log(`${lang}: ${n} pages → ${path.relative(process.cwd(), file)}`
               + ` (${(fs.statSync(file).size / 1048576).toFixed(1)} MB)`
               + (real.length ? `  ⚠ 오류 ${real.length}건` : ''));

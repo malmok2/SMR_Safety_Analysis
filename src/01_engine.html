@@ -21,6 +21,21 @@ if(LANG!=='en') LANG='ko';
 
 function store(k,v){ try{ return v===undefined? localStorage.getItem(k)
                                                : localStorage.setItem(k,v); }catch(e){ return null; } }
+
+/* ---------- 배경 테마 ----------
+   발표는 다크가 기본, 인쇄·PDF 는 라이트가 기본이다. 주소에 theme= 이 있으면 그것이 이긴다.
+   토큰만 갈아끼우므로 슬라이드를 다시 그릴 필요가 없다. */
+let THEME = QS.get('theme') || (PRINT ? 'light' : (store('smrTheme') || 'dark'));
+if(THEME!=='light') THEME='dark';
+document.documentElement.setAttribute('data-theme', THEME);
+function setTheme(t){
+  THEME = (t==='light') ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', THEME);
+  if(!PRINT) store('smrTheme', THEME);          // 인쇄 모드의 선택은 기억하지 않는다
+  try{ const u=new URL(location.href); u.searchParams.set('theme',THEME);
+       history.replaceState(null,'',u); }catch(e){}
+  applyStatic();
+}
 function TX(ko,en){ return LANG==='en' && en!=null ? en : ko; }
 const I18N = /\[\[([\s\S]*?)\|\|([\s\S]*?)\]\]/g;
 function tr(s){ return String(s).replace(I18N, (m,ko,en)=> LANG==='en' ? en : ko); }
@@ -31,22 +46,26 @@ function applyStatic(){
   document.title = TX('SMR 설계요건과 공학적안전설비',
                      'SMR Design Requirements and Engineered Safety Features');
   const h=document.getElementById('help');
-  if(h) h.textContent = TX('← → 이동 · O 목차 · L 한/영 · P 인쇄·PDF · F 전체화면',
-                          '← → Move · O Index · L KO/EN · P Print·PDF · F Fullscreen');
+  if(h) h.textContent = TX('← → 이동 · O 목차 · L 한/영 · T 배경 · P 인쇄·PDF · F 전체화면',
+                          '← → Move · O Index · L KO/EN · T Theme · P Print·PDF · F Fullscreen');
   const q=(id)=>document.getElementById(id);
   if(q('lang-ko')) q('lang-ko').classList.toggle('on', LANG==='ko');
   if(q('lang-en')) q('lang-en').classList.toggle('on', LANG==='en');
   if(q('topdf'))   q('topdf').title = TX('인쇄·PDF 모드로 전환 (P)','Switch to print · PDF mode (P)');
+  if(q('theme')){ q('theme').textContent = THEME==='dark' ? 'LIGHT' : 'DARK';
+                  q('theme').title = TX('배경 밝기 전환 (T)','Switch background (T)'); }
+  if(q('pt-theme')) q('pt-theme').textContent = THEME==='dark'
+      ? TX('밝은 배경으로','Light background') : TX('어두운 배경으로','Dark background');
   if(q('pt-msg'))  q('pt-msg').innerHTML = tr(PT_MSG);
   if(q('pt-print'))q('pt-print').textContent = TX('Ctrl+P · PDF로 저장','Ctrl+P · Save as PDF');
   if(q('pt-dl'))   q('pt-dl').textContent = TX('미리 만든 PDF 내려받기','Download prepared PDF');
   if(q('pt-back')) q('pt-back').textContent = TX('슬라이드로 돌아가기','Back to the slides');
   if(q('pt-dl'))   q('pt-dl').href = 'NUE4067_SMR_safety_'+LANG+'.pdf';
 }
-const PT_MSG = '[[슬라이드 <b>46장</b>을 한 장씩 지면에 펼쳤음 · 배경색이 나오도록 인쇄 설정에서'
-             + ' <b>배경 그래픽</b>을 켤 것 · 용지는 <b>가로</b>, 배율 <b>기본(100 %)</b>'
-             + '||All <b>46 slides</b> laid out one per page · turn on <b>Background graphics</b>'
-             + ' in the print dialog · paper <b>landscape</b>, scale <b>default (100 %)</b>]]';
+const PT_MSG = '[[슬라이드 <b>46장</b>을 한 장씩 지면에 펼쳤음 · 인쇄용이라 <b>밝은 배경</b>이 기본임 ·'
+             + ' 용지는 <b>가로</b>, 배율 <b>기본(100 %)</b> · 색을 살리려면 인쇄 설정에서 <b>배경 그래픽</b>을 켤 것'
+             + '||All <b>46 slides</b> laid out one per page · a <b>light background</b> by default, for printing ·'
+             + ' paper <b>landscape</b>, scale <b>default (100 %)</b> · turn on <b>Background graphics</b> to keep the colours]]';
 
 function setLang(l){
   if(l===LANG) return;
@@ -167,6 +186,7 @@ function buildPrint(){
 function toPrint(){
   const u=new URL(location.href);
   u.searchParams.set('print','1'); u.searchParams.set('lang',LANG);
+  u.searchParams.delete('theme');          // 인쇄는 라이트가 기본 — 지면에서 되돌린다
   location.href=u.toString();
 }
 function toDeck(){
@@ -187,6 +207,7 @@ addEventListener('resize',fit); fit();
 addEventListener('keydown',e=>{
   if(e.metaKey||e.ctrlKey||e.altKey) return;
   if(e.key==='l'||e.key==='L'){ setLang(LANG==='ko'?'en':'ko'); return; }
+  if(e.key==='t'||e.key==='T'){ setTheme(THEME==='dark'?'light':'dark'); return; }
   if(PRINT){ if(e.key==='Escape') toDeck(); return; }
   const ov=document.getElementById('ov');
   if(e.key==='Escape'){ ov.classList.remove('on'); return; }
@@ -236,6 +257,8 @@ function boot(){
   const b=(id,fn)=>{ const el=document.getElementById(id); if(el) el.onclick=fn; };
   b('lang-ko',()=>setLang('ko')); b('lang-en',()=>setLang('en'));
   b('topdf',toPrint);             b('pt-back',toDeck);
+  b('theme',   ()=>setTheme(THEME==='dark'?'light':'dark'));
+  b('pt-theme',()=>setTheme(THEME==='dark'?'light':'dark'));
   b('pt-print',()=>print());
   applyStatic();
   if(PRINT){ buildPrint(); } else { buildOv(); go(0); }

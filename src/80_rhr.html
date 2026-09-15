@@ -57,7 +57,7 @@ init(el){
   el.querySelector('#hs-72t').setAttribute('x',X(72));
   const SV='http://www.w3.org/2000/svg', bg=el.querySelector('#hs-bub'), bub=[];
   for(let i=0;i<16;i++){ const c=document.createElementNS(SV,'circle');
-    c.setAttribute('r',2+Math.random()*2.6); c.setAttribute('fill','#fff'); c.setAttribute('opacity',0);
+    c.setAttribute('r',2+Math.random()*2.6); c.setAttribute('fill','var(--bubble)'); c.setAttribute('opacity',0);
     c.dataset.x=70+Math.random()*150; c.dataset.p=Math.random(); bg.appendChild(c); bub.push(c); }
   const sl=el.querySelector('#hs-v'); let H=0;
   function state(h){
