@@ -27,7 +27,9 @@ src/          슬라이드 소스 12개. 파일명 사전순 = 슬라이드 순�
   80_rhr.html               §07 잔열제거
   90_eccs_containment.html  §08 안전주입 · §09 격납
   99_wrap.html              §10 정리 (끝에 buildOv(); go(0); 호출)
-docs/index.html   빌드 산출물. 직접 고치지 말 것 — 항상 src를 고치고 다시 빌드한다
+docs/index.html   빌드 산출물(한국어로 열림). 직접 고치지 말 것 — 항상 src를 고치고 다시 빌드한다
+docs/index_en.html               같은 내용, 영어로 열림. build.sh 가 <!--LANGDEF--> 자리에
+                                 window.SMR_LANG="en" 을 꽂아 함께 굽는다
 docs/NUE4067_SMR_safety_ko.pdf   미리 구운 PDF(46쪽). tools/pdf.js 가 만든다
 docs/NUE4067_SMR_safety_en.pdf
 tools/browser.js  크로미움 실행 파일 탐색(CHROME_PATH → PLAYWRIGHT_BROWSERS_PATH → Chrome 채널)
@@ -151,6 +153,18 @@ S({ html:`...`, init(el){ ... } })   // 슬라이드 하나. init은 이 슬라�
 한 파일에 두 언어가 **나란히** 들어 있다. 별도 번역 파일을 만들지 않는다 — 수치를 고칠 때
 양쪽이 같은 줄에 보여야 한쪽만 낡는 일이 없다.
 
+### 파일이 둘이다
+
+`index.html`은 한국어로, `index_en.html`은 영어로 열린다. 내용은 같고 기본 언어만 다르다 —
+받는 사람이 아무것도 누르지 않아도 제 언어로 보게 하려는 것이다. 우선순위는
+
+```
+?lang=  >  window.SMR_LANG(파일의 기본값)  >  localStorage  >  ko
+```
+
+파일의 기본값이 기억된 선택보다 세다. 영문판을 건넸는데 예전에 한국어를 본 적이 있다고
+한국어로 열리면 안 되기 때문이다.
+
 ### 마크업 안의 글자 — 토큰
 
 ```html
@@ -255,6 +269,7 @@ console errors: 0          콘솔 오류(폰트 요청 실패는 걸러냈다)
 제목이 두 줄로 흐른 슬라이드: 0   한 줄이 기준. 두 줄이 되면 본문이 43 px 밀린다
 그림이 본문의 80 % 미만: 0      viewBox 비율이 칸보다 납작하다는 뜻(위 3절)
 SVG 글자 충돌·이탈: 0        <text> 끼리 겹치거나 그림 밖으로 나간 것
+index_en.html 이 영어로 열림: 예
 ```
 
 마지막 항목은 인쇄 모드에서 46장을 한 번에 펼쳐 놓고 재므로 한/영 두 번에 12초면 끝난다.

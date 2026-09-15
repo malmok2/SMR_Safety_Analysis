@@ -12,7 +12,7 @@
 | | |
 |---|---|
 | 슬라이드 (한국어) | <https://malmok2.github.io/SMR_Safety_Analysis/> |
-| 슬라이드 (English) | <https://malmok2.github.io/SMR_Safety_Analysis/?lang=en> |
+| 슬라이드 (English) | <https://malmok2.github.io/SMR_Safety_Analysis/index_en.html> |
 | PDF (한국어, 46쪽) | <https://malmok2.github.io/SMR_Safety_Analysis/NUE4067_SMR_safety_ko.pdf> |
 | PDF (English, 46 p) | <https://malmok2.github.io/SMR_Safety_Analysis/NUE4067_SMR_safety_en.pdf> |
 
@@ -52,8 +52,11 @@
 
 ## 한국어 · 영어
 
-선택한 언어는 브라우저에 기억되고 주소에도 남는다(`?lang=en`). 강의 중에 `L` 키만 누르면
-그 자리에서 바뀐다 — 슬라이드가 다시 그려질 뿐 위치는 그대로다.
+**파일이 둘이다.** `index.html`은 한국어로, `index_en.html`은 영어로 열린다. 내용은 같고
+기본 언어만 다르다 — 그대로 건네주면 받는 사람이 아무것도 누르지 않아도 제 언어로 본다.
+
+어느 파일에서든 `L` 키로 그 자리에서 바꿀 수 있다. 슬라이드가 다시 그려질 뿐 위치는 그대로다.
+주소로 강제하려면 `?lang=en` / `?lang=ko`.
 
 번역은 소스 안에 `[[한국어||English]]` 형태로 **나란히** 들어 있다. 수치를 고칠 때 양쪽을
 동시에 보게 되므로 한쪽만 낡는 일이 없다. 자세한 규칙은 [`CLAUDE.md`](CLAUDE.md) 4절.

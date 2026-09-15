@@ -2,8 +2,13 @@
 $ErrorActionPreference = 'Stop'
 Set-Location $PSScriptRoot
 $out = 'docs\index.html'
+$outEn = 'docs\index_en.html'
 Get-ChildItem src\*.html | Sort-Object Name | Get-Content -Raw | Set-Content -Encoding UTF8 $out
 $text = Get-Content -Raw $out
+# 같은 내용에 기본 언어만 영어로 박은 판
+$text.Replace('<!--LANGDEF-->', '<script>window.SMR_LANG="en"</script>') |
+  Set-Content -Encoding UTF8 $outEn
+Write-Host "built $outEn  (기본 언어 영어)"
 $n = ([regex]::Matches($text, 'S\(\{')).Count
 Write-Host "built $out  ($n slides, $((Get-Item $out).Length) bytes)"
 

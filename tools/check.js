@@ -146,6 +146,22 @@ async function layoutScan(page) {
   console.log('SVG 글자 충돌·이탈:', svg.length);
   svg.slice(0, 40).forEach(([l, x]) => console.log('   ' + l, 'slide', String(x.n).padStart(2),
     x.kind, '[' + x.a.slice(0, 44) + ']', x.b ? '× [' + x.b.slice(0, 44) + ']  ' + x.w + '×' + x.h + 'px' : ''));
+  /* 영문판 파일이 그냥 열었을 때 영어로 뜨는지 */
+  let enFile = 0;
+  const enPath = file.replace(/index\.html$/, 'index_en.html');
+  if (enPath !== file && require('fs').existsSync(enPath)) {
+    await p.goto('file://' + enPath);
+    await p.waitForTimeout(800);
+    const got = await p.evaluate(() => [LANG, document.documentElement.lang,
+                                        document.querySelector('.slide h1,.slide h2')?.textContent || '']);
+    const bad = got[0] !== 'en' || HANGUL.test(got[2]);
+    if (bad) enFile = 1;
+    console.log('index_en.html 이 영어로 열림:', bad ? '아니오 · ' + got.join(' / ') : '예');
+  } else {
+    console.log('index_en.html 없음 — build.sh 를 돌릴 것');
+    enFile = 1;
+  }
+
   await b.close();
-  process.exit(errs.length || left.length || junk.length || over.length || svg.length || wrap.length ? 1 : 0);
+  process.exit(errs.length || left.length || junk.length || over.length || svg.length || wrap.length || enFile ? 1 : 0);
 })();

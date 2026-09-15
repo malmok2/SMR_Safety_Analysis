@@ -16,7 +16,9 @@ function SECT(name){ SEC.push({at:D.length, name}); }
    ================================================================ */
 const QS   = new URLSearchParams(location.search);
 const PRINT= QS.has('print');
-let LANG   = QS.get('lang') || store('smrLang') || 'ko';
+/* 주소(?lang=) > 이 파일의 기본값 > 기억된 선택 > 한국어.
+   index_en.html 은 window.SMR_LANG='en' 을 달고 나오므로, 건네받은 사람이 그냥 열면 영문이다. */
+let LANG   = QS.get('lang') || window.SMR_LANG || store('smrLang') || 'ko';
 if(LANG!=='en') LANG='ko';
 
 function store(k,v){ try{ return v===undefined? localStorage.getItem(k)
