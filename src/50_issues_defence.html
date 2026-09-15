@@ -31,8 +31,8 @@ init(el){
   ax+=`<line x1="${X(4500)}" y1="34" x2="${X(4500)}" y2="248" stroke="var(--ok)" stroke-width="1.6" stroke-dasharray="5 4"/>`
      +`<text x="${X(4500)+10}" y="30" class="lbl" fill="var(--ok)">${TX('IEA 2040년 목표 4,500','IEA 2040 target 4,500')}</text>`;
   el.querySelector('#fk-ax').innerHTML=ax;
-  const B=[[TX('Darlington · BWRX-300 4기','Darlington · 4 × BWRX-300'),17400,'C$','var(--hot)'],
-           [TX('Doicești · NuScale 6모듈','Doicești · 6 × NuScale module'),14100,'USD','var(--hot)'],
+  const B=[[TX('Darlington · BWRX-300 4기','Darlington · BWRX-300 ×4'),17400,'C$','var(--hot)'],
+           [TX('Doicești · NuScale 6모듈','Doicești · NuScale ×6'),14100,'USD','var(--hot)'],
            [TX('IEA 2040년 목표','IEA 2040 target'),4500,'USD','var(--ok)']];
   const g=el.querySelector('#fk-bars');
   B.forEach((b,i)=>{ const y=62+i*62;

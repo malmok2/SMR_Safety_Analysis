@@ -58,7 +58,7 @@ init(el){
     [TX('설계기준사고 · DBA','Design basis accident · DBA'),-4,-6,'var(--amber)',
      TX('연료 일부 손상 허용 · 방사선 기준 만족','Some fuel damage allowed · dose criteria met'),136],
     [TX('설계확장조건 · DEC','Design extension condition · DEC'),-6,-7,'var(--hot)',
-     TX('노심용융 포함 · 격납 건전성 유지','Core melt included · containment integrity kept'),86]];
+     TX('노심용융 포함 · 격납 건전성 유지','Core melt included · containment holds'),86]];
   const g=el.querySelector('#ps-b');
   B.forEach((b,i)=>{ const x0=X(b[1]),x1=X(b[2]),y=b[5];
     g.insertAdjacentHTML('beforeend',
@@ -127,7 +127,7 @@ init(el){
     ['Category D',[1,1,1],
      TX('중력구동 비상냉각\\n중력낙하 제어봉','Gravity-driven emergency cooling\\nGravity-drop control rods'),'var(--hot)']];
   const LAMP=[TX('작동유체 이동','Working fluid moves'),TX('기계 가동부','Moving mechanical part'),
-              TX('개시 신호·저장에너지','Actuation signal · stored energy')];
+              TX('개시 신호·저장에너지','Signal · stored energy')];
   const g=el.querySelector('#pc-cols');
   C.forEach((c,i)=>{ const x=40+i*272, w=248;
     let h=`<g data-c="${i}" opacity="0">`

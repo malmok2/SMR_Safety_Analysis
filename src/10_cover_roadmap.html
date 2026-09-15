@@ -56,13 +56,13 @@ html:`<h2 class="t">[[원자로가 반드시 해야 하는 <em>세 가지</em> �
     <g transform="translate(480,30)"><rect width="300" height="60" fill="none" stroke="var(--rule)"/>
       <text x="18" y="25" class="lbl">[[6장||Ch. 6]]</text>
       <text x="18" y="46" font-family="var(--sans)" font-size="18" fill="var(--ink-2)">[[제어봉 · 붕산 주입||Control rods · boron injection]]</text></g>
-    <g transform="translate(480,142)"><rect width="300" height="60" fill="none" stroke="var(--rule)"/>
+    <g transform="translate(480,142)"><rect width="400" height="60" fill="none" stroke="var(--rule)"/>
       <text x="18" y="25" class="lbl">[[7장||Ch. 7]]</text>
       <text x="18" y="46" font-family="var(--sans)" font-size="18" fill="var(--ink-2)">[[잔열제거 · PRHR · DHRS||Residual heat removal · PRHR · DHRS]]</text></g>
-    <g transform="translate(480,254)"><rect width="300" height="60" fill="none" stroke="var(--rule)"/>
+    <g transform="translate(480,254)"><rect width="330" height="60" fill="none" stroke="var(--rule)"/>
       <text x="18" y="25" class="lbl">[[8장||Ch. 8]]</text>
       <text x="18" y="46" font-family="var(--sans)" font-size="18" fill="var(--ink-2)">[[안전주입 · 축압기 · CMT||Safety injection · accumulator · CMT]]</text></g>
-    <g transform="translate(800,254)"><rect width="290" height="60" fill="none" stroke="var(--rule)"/>
+    <g transform="translate(826,254)"><rect width="264" height="60" fill="none" stroke="var(--rule)"/>
       <text x="18" y="25" class="lbl">[[9장||Ch. 9]]</text>
       <text x="18" y="46" font-family="var(--sans)" font-size="18" fill="var(--ink-2)">[[격납건물 · 살수 · PAR||Containment · spray · PAR]]</text></g>
   </g>
@@ -105,52 +105,43 @@ html:`<h2 class="t">[[Small은 <em>결과가 아니라 선택</em>이다||Small 
   <li>[[공장 제작이 가능하려면 운반 한계 안에 들어와야 하고, 그러려면 작아야 함 — <b class="cool">모듈화를 가능하게 하려는 선택</b>||Factory fabrication demands it fit inside transport limits, which demands it be small - <b class="cool">small is what makes modular possible</b>]]</li>
 </ul>
 <div class="body"><div class="fig">
-<svg viewBox="0 0 1120 300" role="img" aria-label="[[주요 원자로의 전기출력 분포와 300 MWe SMR 경계||Electrical output of representative reactors and the 300 MWe SMR boundary]]">
-  <line x1="60" y1="215" x2="1075" y2="215" class="axis"/>
-  <g class="lbl" text-anchor="middle" fill="var(--ink-3)">
-    <text x="60" y="240">0</text><text x="262" y="240">300</text><text x="464" y="240">600</text>
-    <text x="666" y="240">900</text><text x="868" y="240">1200</text><text x="1070" y="240">1500</text>
-  </g>
-  <text x="1075" y="268" class="lbl" text-anchor="end">[[정격 전기출력 (MWe)||Rated electrical output (MWe)]]</text>
-  <rect id="smrzone" x="60" y="60" width="0" height="155" fill="var(--cool)" opacity="0.07"/>
-  <line id="bline" x1="262" y1="215" x2="262" y2="215" stroke="var(--cool)" stroke-width="2" stroke-dasharray="5 4"/>
-  <text id="blbl" x="262" y="48" text-anchor="middle" font-family="var(--mono)" font-size="14"
-        fill="var(--cool)" opacity="0">[[SMR 경계 · 300 MWe||SMR boundary · 300 MWe]]</text>
+<svg viewBox="0 0 1120 300" role="img" aria-label="[[주요 원자로의 정격 전기출력을 한 행씩 늘어놓고 300 MWe SMR 경계를 표시한 그림||Rated electrical output of representative reactors, one per row, against the 300 MWe SMR boundary]]">
+  <rect id="smrzone" x="200" y="18" width="0" height="240" fill="var(--cool)" opacity="0.10"/>
   <g id="dots"></g>
+  <line x1="200" y1="258" x2="1010" y2="258" class="axis"/>
+  <g class="lbl" text-anchor="middle" fill="var(--ink-3)" id="ticks"></g>
+  <text x="1010" y="294" class="lbl" text-anchor="end">[[정격 전기출력 (MWe)||Rated electrical output (MWe)]]</text>
+  <line id="bline" x1="360" y1="258" x2="360" y2="258" stroke="var(--cool)" stroke-width="2" stroke-dasharray="5 4"/>
+  <text id="blbl" x="360" y="16" text-anchor="middle" font-family="var(--mono)" font-size="14"
+        fill="var(--cool)" opacity="0">[[SMR 경계 · 300 MWe||SMR boundary · 300 MWe]]</text>
 </svg>
 </div></div>`,
 init(el){
-  const SV='http://www.w3.org/2000/svg';
-  const X=p=>60+p*(1015/1500);
-  const data=[
-    ['CAREM-25',30,-108],['RITM-200N',55,-82],['NuScale NPM',77,-56],['SMART100',110,-30],
-    ['i-SMR',170,-108],['BWRX-300',300,-82],['IRIS',335,-56],['AP1000',1110,-56],['APR1400',1400,-82]];
+  const X=p=>200+p/1500*800;                 // 0..1500 MWe → 200..1000 px
+  const data=[['CAREM-25',30],['RITM-200N',55],['NuScale NPM',77],['SMART100',110],
+    ['i-SMR',170],['BWRX-300',300],['IRIS',335],['AP1000',1110],['APR1400',1400]];
+  let tk=''; [0,300,600,900,1200,1500].forEach(v=>{ tk+=`<text x="${X(v)}" y="278">${v}</text>`; });
+  el.querySelector('#ticks').innerHTML=tk;
   const g=el.querySelector('#dots');
-  data.forEach((d,i)=>{
-    const smr=d[1]<=300, x=X(d[1]), y=215, col=smr?'var(--cool)':'var(--hot)', ty=y+d[2];
-    const c=document.createElementNS(SV,'circle');
-    c.setAttribute('cx',x); c.setAttribute('cy',y); c.setAttribute('r',7);
-    c.setAttribute('fill',col); c.setAttribute('opacity',0); g.appendChild(c);
-    const stem=document.createElementNS(SV,'line');
-    stem.setAttribute('x1',x);stem.setAttribute('y1',y-8);stem.setAttribute('x2',x);
-    stem.setAttribute('y2',ty+7);
-    stem.setAttribute('stroke','var(--rule)');stem.setAttribute('stroke-width',1);
-    stem.setAttribute('opacity',0); g.appendChild(stem);
-    const t=document.createElementNS(SV,'text');
-    t.setAttribute('x',x); t.setAttribute('y',ty);
-    t.setAttribute('text-anchor', x>950?'end':(x<150?'start':'middle'));
-    t.setAttribute('font-family','var(--mono)');
-    t.setAttribute('font-size','13.5'); t.setAttribute('fill',smr?'var(--cool)':'var(--ink-2)');
-    t.setAttribute('opacity',0);
-    t.textContent=d[0]+'  '+d[1]+' MWe'; g.appendChild(t);
-    if(RM){c.setAttribute('opacity',1);t.setAttribute('opacity',1);stem.setAttribute('opacity',1);return;}
-    const dl=700+i*90;
-    [c,t,stem].forEach(e=>e.animate([{opacity:0},{opacity:1}],{duration:340,delay:dl,fill:'forwards'}));
-  });
+  data.forEach((d,i)=>{                      // 한 노형에 한 행 — 라벨이 겹칠 자리가 없다
+    const y=34+i*25, smr=d[1]<=300, x=X(d[1]);
+    const col=smr?'var(--cool)':'var(--hot)', tc=smr?'var(--cool)':'var(--ink-2)';
+    g.insertAdjacentHTML('beforeend',
+      `<g data-r="${i}" opacity="0">`
+      +`<text x="188" y="${y+4}" text-anchor="end" font-family="var(--mono)" font-size="13" fill="${tc}">${d[0]}</text>`
+      +`<line x1="200" y1="${y}" x2="${x}" y2="${y}" stroke="var(--rule)" stroke-width="1.2"/>`
+      +`<circle cx="${x}" cy="${y}" r="5.5" fill="${col}"/>`
+      +`<text x="${x+11}" y="${y+4}" font-family="var(--mono)" font-size="13" fill="${tc}">${fmt(d[1])} MWe</text>`
+      +`</g>`); });
+  const rows=[...g.querySelectorAll('[data-r]')];
   const b=el.querySelector('#bline'), z=el.querySelector('#smrzone'), bl=el.querySelector('#blbl');
-  if(RM){ b.setAttribute('y2',44); z.setAttribute('width',202); bl.setAttribute('opacity',1); return; }
-  b.animate([{y2:215},{y2:44}],{duration:520,fill:'forwards',easing:'ease-out'});
+  if(RM){ rows.forEach(r=>r.setAttribute('opacity',1)); b.setAttribute('y2',18);
+          z.setAttribute('width',160); bl.setAttribute('opacity',1); return; }
+  b.setAttribute('opacity',0);
+  rows.forEach((r,i)=>r.animate([{opacity:0},{opacity:1}],{duration:340,delay:420+i*70,fill:'forwards'}));
+  b.setAttribute('y2',18);
+  b.animate([{opacity:0},{opacity:1}],{duration:420,delay:380,fill:'forwards'});
   bl.animate([{opacity:0},{opacity:1}],{duration:300,delay:480,fill:'forwards'});
-  z.animate([{width:0},{width:202}],{duration:600,delay:520,fill:'forwards',easing:'ease-out'});
+  z.animate([{width:0},{width:160}],{duration:600,delay:520,fill:'forwards',easing:'ease-out'});
 }});
 </script>

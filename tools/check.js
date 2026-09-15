@@ -11,6 +11,48 @@ const { findChromium } = require('./browser');
 
 const HANGUL = /[가-힣]/;
 
+/* 인쇄 모드(46장 동시 렌더 · 3.4초에 정지)에서 SVG 글자끼리 겹치는지, 그림 밖으로 나갔는지 본다.
+   화면 모드로 한 장씩 보려면 46장 × 대기시간이 들지만, 인쇄 모드는 한 번에 끝난다. */
+async function svgScan(page, file, lang) {
+  await page.goto('file://' + file + '?print=1&lang=' + lang);
+  await page.waitForSelector('html[data-print-ready]', { timeout: 90000 });
+  return page.evaluate(() => {
+    const eff = e => {                       // 조상까지 곱한 실효 투명도
+      let o = 1, n = e;
+      while (n && n !== document.body) {
+        const s = getComputedStyle(n);
+        o *= parseFloat(s.opacity || 1);
+        if (s.display === 'none' || s.visibility === 'hidden') return 0;
+        n = n.parentElement || n.parentNode;
+      }
+      return o;
+    };
+    const out = [];
+    document.querySelectorAll('.sheet').forEach((sh, idx) => {
+      const n = idx + 1;
+      const box = [...sh.querySelectorAll('svg text')]
+        .filter(t => eff(t) > 0.08)
+        .map(t => ({ r: t.getBoundingClientRect(), s: (t.textContent || '').trim(),
+                     v: t.ownerSVGElement.getBoundingClientRect() }))
+        .filter(x => x.r.width > 0 && x.s);
+      for (let i = 0; i < box.length; i++) {
+        const A = box[i].r, V = box[i].v;
+        if (A.right > V.right + 1 || A.left < V.left - 1 || A.bottom > V.bottom + 1 || A.top < V.top - 1)
+          out.push({ n, kind: '그림 밖', a: box[i].s, b: '' });
+        for (let j = i + 1; j < box.length; j++) {
+          const B = box[j].r;
+          const w = Math.min(A.right, B.right) - Math.max(A.left, B.left);
+          const h = Math.min(A.bottom, B.bottom) - Math.max(A.top, B.top);
+          if (w > 2.5 && h > 2.5) out.push({ n, kind: '겹침', a: box[i].s, b: box[j].s,
+                                             w: Math.round(w), h: Math.round(h) });
+        }
+      }
+    });
+    return out;
+  });
+}
+
+
 (async () => {
   const file = path.resolve(process.argv[2] || path.join(__dirname, '..', 'docs', 'index.html'));
   const b = await chromium.launch(findChromium());
@@ -18,7 +60,7 @@ const HANGUL = /[가-힣]/;
 
   let at = 0;
   const errs = [];
-  const skip = t => /ERR_CERT|ERR_CONNECTION|ERR_NAME|fonts\.g/i.test(t);
+  const skip = t => /ERR_CERT|ERR_CONNECTION|ERR_NAME|ERR_TUNNEL|ERR_PROXY|fonts\.g|jsdelivr/i.test(t);
   p.on('console', m => { if (m.type() === 'error' && !skip(m.text())) errs.push([at, m.text()]); });
   p.on('pageerror', e => errs.push([at, 'PAGEERROR: ' + e.message]));
 
@@ -53,6 +95,10 @@ const HANGUL = /[가-힣]/;
     }
   }
 
+  const svg = [];
+  for (const lang of ['ko', 'en'])
+    (await svgScan(p, file, lang)).forEach(x => svg.push([lang, x]));
+
   console.log('slides:', n);
   console.log('console errors:', errs.length);
   errs.slice(0, 20).forEach(e => console.log('   slide', e[0], '·', e[1].slice(0, 120)));
@@ -62,6 +108,9 @@ const HANGUL = /[가-힣]/;
   junk.slice(0, 20).forEach(e => console.log('   ' + e[0], 'slide', e[1], '·', e[2].slice(0, 90)));
   console.log('무대 밖으로 넘친 요소:', over.length);
   over.slice(0, 30).forEach(e => console.log('   ' + e[0], 'slide', e[1], '·', e[2]));
+  console.log('SVG 글자 충돌·이탈:', svg.length);
+  svg.slice(0, 40).forEach(([l, x]) => console.log('   ' + l, 'slide', String(x.n).padStart(2),
+    x.kind, '[' + x.a.slice(0, 44) + ']', x.b ? '× [' + x.b.slice(0, 44) + ']  ' + x.w + '×' + x.h + 'px' : ''));
   await b.close();
-  process.exit(errs.length || left.length || junk.length || over.length ? 1 : 0);
+  process.exit(errs.length || left.length || junk.length || over.length || svg.length ? 1 : 0);
 })();

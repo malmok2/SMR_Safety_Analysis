@@ -57,7 +57,7 @@ init(el){
   el.querySelector('#dk-c').setAttribute('d',d);
   const REA=[['APR1400',3983,'var(--ink-2)'],['BWRX-300',870,'var(--amber)'],['NuScale NPM',250,'var(--ok)']];
   const bg=el.querySelector('#dk-bars'); const bars=[];
-  REA.forEach((r,i)=>{ const y=110+i*62;
+  REA.forEach((r,i)=>{ const y=100+i*68;
     bg.insertAdjacentHTML('beforeend',
       `<text x="640" y="${y-10}" class="lbl b">${r[0]} · ${fmt(r[1])} MWt</text>`
       +`<rect x="640" y="${y}" height="22" width="0" fill="${r[2]}" opacity=".85" data-b="${i}"/>`
@@ -94,7 +94,7 @@ html:`<h2 class="t">[[펌프가 없으면 <em>밀도차</em>가 밀어야 한다
 </ul>
 <div class="body">
   <div class="fig">
-  <svg viewBox="0 0 700 340" role="img" aria-label="[[자연순환 루프의 구동수두와 유속이 높이차·온도차에 따라 변하는 모습||How driving head and velocity in a natural circulation loop respond to height and temperature difference]]">
+  <svg viewBox="0 0 790 340" role="img" aria-label="[[자연순환 루프의 구동수두와 유속이 높이차·온도차에 따라 변하는 모습||How driving head and velocity in a natural circulation loop respond to height and temperature difference]]">
     <path id="nc-p" d="M260,300 L260,90 L470,90 L470,300 Z" fill="none" stroke="var(--rule)" stroke-width="11"/>
     <rect x="222" y="238" width="76" height="74" rx="4" fill="var(--hot)"/>
     <text x="260" y="282" text-anchor="middle" font-size="13" fill="#fff" [[font-family="var(--sans)">노심</text>||font-family="var(--sans)">Core</text>]]
