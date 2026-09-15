@@ -1,5 +1,17 @@
 # 변경 이력
 
+## v2.0 — 2026-09-15
+- **한 학기치를 주차별로 쌓는 구조로 갈아엎었다.** 덱 하나를 전제로 짠 `src/` 를 공용(`src/common/`)과
+  주차별(`src/decks/<슬러그>/`)로 갈랐다. 슬러그는 주차 + 영문 하이픈 표기 —
+  `w02-03_smr-design-requirements`. 폴더 이름이 그대로 파일 이름과 URL 이 된다.
+- **`docs/index.html` 은 이제 강의 목차 페이지다.** `deck.conf` 들을 읽어 주차 카드를 만들고,
+  카드마다 슬라이드(한/영)·PDF 링크를 단다. 색·글꼴은 덱에서 그대로 가져온다.
+- **빌드를 `tools/build.py` 로 옮겼다.** 덱이 여럿이면 `cat` 한 줄로는 안 되고, bash 와 PowerShell 에
+  같은 로직을 두 벌 두면 갈라진다. `build.sh` · `build.ps1` 은 이제 껍데기다.
+- `tools/check.js` · `tools/pdf.js` 도 덱을 돌면서 일한다. 덱 이름을 주면 그것만 한다.
+- 덱 소스는 파일마다 `<script>…</script>` 로 닫힌다. 공용 `99_boot.html` 이 제 script 에서 `boot()` 를
+  부른다 — 새 주차를 만들 때 닫는 것을 잊어도 깨지지 않게.
+
 ## v1.6 — 2026-09-15
 - **모노 문맥의 한글이 Pretendard가 아니었다.** `--mono` 스택(`IBM Plex Mono` → `SFMono` →
   `D2Coding` → `Consolas`)에 한글을 가진 글꼴이 하나도 없어, 축 라벨·판독기 키·태그·표지 끝줄의

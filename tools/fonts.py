@@ -24,7 +24,9 @@ MONO = [('Regular', 400), ('Medium', 500), ('SemiBold', 600), ('Bold', 700)]
 
 def charset():
     ch = set()
-    for f in sorted(glob.glob(os.path.join(ROOT, 'src', '*.html'))):
+    for f in sorted(glob.glob(os.path.join(ROOT, 'src', '**', '*.html'), recursive=True)):
+        ch |= set(io.open(f, encoding='utf-8').read())
+    for f in sorted(glob.glob(os.path.join(ROOT, 'src', '**', '*.conf'), recursive=True)):
         ch |= set(io.open(f, encoding='utf-8').read())
     ch |= set('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
     ch |= set(' .,:;·…—–-()[]{}<>/\\|!?\'"“”‘’%°±×÷≈≤≥→←↑↓∙*+=_#&@~^$')

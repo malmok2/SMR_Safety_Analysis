@@ -45,8 +45,7 @@ function tr(s){ return String(s).replace(I18N, (m,ko,en)=> LANG==='en' ? en : ko
 /* 언어에 따라 바뀌는 고정 UI */
 function applyStatic(){
   document.documentElement.lang = LANG;
-  document.title = TX('SMR 설계요건과 공학적안전설비',
-                     'SMR Design Requirements and Engineered Safety Features');
+  document.title = TX(DECK.titleKo || 'THINK Lab', DECK.titleEn || 'THINK Lab');
   const h=document.getElementById('help');
   if(h) h.textContent = TX('← → 이동 · O 목차 · R 다시재생 · F 전체화면',
                           '← → Move · O Index · R Replay · F Fullscreen');
@@ -63,10 +62,11 @@ function applyStatic(){
   if(q('pt-print'))q('pt-print').textContent = TX('Ctrl+P · PDF로 저장','Ctrl+P · Save as PDF');
   if(q('pt-dl'))   q('pt-dl').textContent = TX('미리 만든 PDF 내려받기','Download prepared PDF');
   if(q('pt-back')) q('pt-back').textContent = TX('슬라이드로 돌아가기','Back to the slides');
-  if(q('pt-dl'))   q('pt-dl').href = PDF_NAME[LANG] + '.pdf';
+  if(q('pt-dl'))   q('pt-dl').href = (DECK.slug || '') + (LANG==='en' ? '.en' : '') + '.pdf';
 }
-/* 배포용 PDF 파일 이름 — tools/pdf.js 가 같은 이름으로 굽는다 */
-const PDF_NAME = { ko:'SMR_설계요건과_공학적안전설비', en:'SMR_Design_Requirements_and_Engineered_Safety_Features' };
+/* 이 덱이 무엇인가 — build 가 머리말의 DECK 자리에 window.DECK 을 꽂는다.
+   제목과 배포용 PDF 이름이 덱마다 다르므로 엔진에 박아 두지 않는다. */
+const DECK = window.DECK || {};
 const PT_MSG = '[[슬라이드 <b>46장</b>을 한 장씩 지면에 펼쳤음 · 인쇄용이라 <b>밝은 배경</b>이 기본임 ·'
              + ' 용지는 <b>가로</b>, 배율 <b>기본(100 %)</b> · 색을 살리려면 인쇄 설정에서 <b>배경 그래픽</b>을 켤 것'
              + '||All <b>46 slides</b> laid out one per page · a <b>light background</b> by default, for printing ·'

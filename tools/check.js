@@ -1,23 +1,24 @@
-/* 덱 점검 — 46장을 한/영으로 모두 넘겨보고
- *   · 콘솔 오류
- *   · 영문판에 남은 한글(번역 누락)
- *   · 무대(1280×720) 밖으로 삐져나온 요소
- * 를 보고한다.  node check.js [../docs/index.html]
- * 폰트 요청 실패(ERR_CONNECTION_RESET / ERR_CERT)는 오프라인의 정상 동작이라 걸러낸다.
+/* 덱 점검 — 덱마다 46장을 한/영으로 모두 넘겨보고 아홉 가지를 센다. 전부 0(또는 예)이어야 한다.
+ *   node check.js               모든 덱
+ *   node check.js <슬러그>       그 덱만
+ * 폰트 요청 실패(ERR_CONNECTION_RESET / ERR_CERT / ERR_TUNNEL)는 오프라인의 정상 동작이라 걸러낸다.
  */
 const path = require('path');
+const fs = require('fs');
 const { chromium } = require('playwright-core');
 const { findChromium } = require('./browser');
 
+const ROOT = path.resolve(__dirname, '..');
+const DOCS = path.join(ROOT, 'docs');
 const HANGUL = /[가-힣]/;
+const skip = t => /ERR_CERT|ERR_CONNECTION|ERR_NAME|ERR_TUNNEL|ERR_PROXY|fonts\.g|jsdelivr/i.test(t);
 
-/* 인쇄 모드(46장 동시 렌더 · 3.4초에 정지)에서 SVG 글자끼리 겹치는지, 그림 밖으로 나갔는지 본다.
-   화면 모드로 한 장씩 보려면 46장 × 대기시간이 들지만, 인쇄 모드는 한 번에 끝난다. */
+/* 인쇄 모드(46장 동시 렌더 · 3.4초에 정지)에서 SVG 글자끼리 겹치는지, 그림 밖으로 나갔는지 본다. */
 async function svgScan(page, file, lang) {
-  await page.goto('file://' + file + '?print=1&lang=' + lang);
+  await page.goto('file://' + file + '?print=1&theme=dark&lang=' + lang);
   await page.waitForSelector('html[data-print-ready]', { timeout: 90000 });
   return page.evaluate(() => {
-    const eff = e => {                       // 조상까지 곱한 실효 투명도
+    const eff = e => {
       let o = 1, n = e;
       while (n && n !== document.body) {
         const s = getComputedStyle(n);
@@ -53,8 +54,7 @@ async function svgScan(page, file, lang) {
 }
 
 /* 판면 감사 — 그림이 본문 영역을 얼마나 채우는가, 제목이 몇 줄인가.
-   그림의 viewBox 가로세로비가 실제 배치 칸보다 납작하면 위아래로 죽은 띠가 생긴다.
-   폭은 이미 꽉 차 있으므로, 고치는 방법은 viewBox 높이를 키우고 내용을 다시 앉히는 것뿐이다. */
+   viewBox 가로세로비가 칸보다 납작하면 위아래로 죽은 띠가 생긴다(CLAUDE.md 3절). */
 async function layoutScan(page) {
   return page.evaluate(() => {
     const R = [];
@@ -77,20 +77,17 @@ async function layoutScan(page) {
   });
 }
 
-
-(async () => {
-  const file = path.resolve(process.argv[2] || path.join(__dirname, '..', 'docs', 'index.html'));
-  const b = await chromium.launch(findChromium());
+async function checkDeck(b, slug) {
+  const file = path.join(DOCS, slug + '.html');
+  if (!fs.existsSync(file)) { console.log(slug, '— 먼저 build.sh 를 돌릴 것'); return 1; }
   const p = await b.newPage({ viewport: { width: 1440, height: 810 } });
-
   let at = 0;
   const errs = [];
-  const skip = t => /ERR_CERT|ERR_CONNECTION|ERR_NAME|ERR_TUNNEL|ERR_PROXY|fonts\.g|jsdelivr/i.test(t);
   p.on('console', m => { if (m.type() === 'error' && !skip(m.text())) errs.push([at, m.text()]); });
   p.on('pageerror', e => errs.push([at, 'PAGEERROR: ' + e.message]));
 
   await p.goto('file://' + file);
-  await p.waitForTimeout(1000);
+  await p.waitForTimeout(900);
   const n = await p.evaluate(() => D.length);
 
   const left = [], over = [], junk = [];
@@ -99,7 +96,7 @@ async function layoutScan(page) {
     for (let i = 0; i < n; i++) {
       at = i + 1;
       await p.evaluate(i => { cur = -1; go(i); }, i);
-      await p.waitForTimeout(260);
+      await p.waitForTimeout(240);
       const r = await p.evaluate(() => {
         const s = document.querySelector('.slide');
         const txt = [];
@@ -123,60 +120,70 @@ async function layoutScan(page) {
   const svg = [], thin = [], wrap = [];
   for (const lang of ['ko', 'en']) {
     (await svgScan(p, file, lang)).forEach(x => svg.push([lang, x]));
-    (await layoutScan(p)).forEach(x => {          // svgScan 이 띄워 둔 인쇄 모드를 그대로 쓴다
+    (await layoutScan(p)).forEach(x => {
       if (x.fill !== undefined && x.fill < 0.8) thin.push([lang, x]);
       if (x.lines > 1) wrap.push([lang, x]);
     });
   }
 
-  console.log('slides:', n);
-  console.log('console errors:', errs.length);
-  errs.slice(0, 20).forEach(e => console.log('   slide', e[0], '·', e[1].slice(0, 120)));
-  console.log('영문판에 남은 한글:', left.length);
-  left.slice(0, 400).forEach(e => console.log('   slide', e[0], '·', e[1].slice(0, 90)));
-  console.log('화면에 남은 토큰 찌꺼기:', junk.length);
-  junk.slice(0, 20).forEach(e => console.log('   ' + e[0], 'slide', e[1], '·', e[2].slice(0, 90)));
-  console.log('무대 밖으로 넘친 요소:', over.length);
-  over.slice(0, 30).forEach(e => console.log('   ' + e[0], 'slide', e[1], '·', e[2]));
-  console.log('제목이 두 줄로 흐른 슬라이드:', wrap.length);
-  wrap.slice(0, 20).forEach(([l, x]) => console.log('   ' + l, 'slide', x.n, '·', x.lines + '줄'));
-  console.log('그림이 본문의 80 % 미만인 슬라이드:', thin.length);
-  thin.slice(0, 20).forEach(([l, x]) => console.log('   ' + l, 'slide', String(x.n).padStart(2),
-    '· 채움', x.fill, '· 위아래 빈 띠', x.dead + 'px'));
-  console.log('SVG 글자 충돌·이탈:', svg.length);
-  svg.slice(0, 40).forEach(([l, x]) => console.log('   ' + l, 'slide', String(x.n).padStart(2),
-    x.kind, '[' + x.a.slice(0, 44) + ']', x.b ? '× [' + x.b.slice(0, 44) + ']  ' + x.w + '×' + x.h + 'px' : ''));
-  /* 심어 둔 글꼴 서브셋에 없는 글자가 소스에 들어왔는지.
-     있으면 그 글자만 OS 기본 글꼴로 떨어진다 — tools/fonts.py 를 다시 돌려야 한다. */
-  let miss = '';
-  try {
-    const fs = require('fs'), pathm = require('path');
-    const srcDir = pathm.join(pathm.dirname(file), '..', 'src');
-    const have = new Set(fs.readFileSync(pathm.join(srcDir, 'fonts.charset.txt'), 'utf8'));
-    const used = new Set();
-    for (const f of fs.readdirSync(srcDir).filter(f => f.endsWith('.html')))
-      for (const ch of fs.readFileSync(pathm.join(srcDir, f), 'utf8')) used.add(ch);
-    miss = [...used].filter(c => c.charCodeAt(0) >= 0x20 && !have.has(c)).join('');
-  } catch (e) { miss = ''; }
-  console.log('심어 둔 글꼴에 없는 글자:', miss.length ? miss.length + '자 → ' + miss.slice(0, 40)
-              + '   (python3 tools/fonts.py 를 다시 돌릴 것)' : '0');
-
   /* 영문판 파일이 그냥 열었을 때 영어로 뜨는지 */
   let enFile = 0;
-  const enPath = file.replace(/index\.html$/, 'index_en.html');
-  if (enPath !== file && require('fs').existsSync(enPath)) {
+  const enPath = path.join(DOCS, slug + '.en.html');
+  if (fs.existsSync(enPath)) {
     await p.goto('file://' + enPath);
-    await p.waitForTimeout(800);
-    const got = await p.evaluate(() => [LANG, document.documentElement.lang,
-                                        document.querySelector('.slide h1,.slide h2')?.textContent || '']);
-    const bad = got[0] !== 'en' || HANGUL.test(got[2]);
-    if (bad) enFile = 1;
-    console.log('index_en.html 이 영어로 열림:', bad ? '아니오 · ' + got.join(' / ') : '예');
-  } else {
-    console.log('index_en.html 없음 — build.sh 를 돌릴 것');
-    enFile = 1;
-  }
+    await p.waitForTimeout(700);
+    const got = await p.evaluate(() => [LANG, document.querySelector('.slide h1,.slide h2')?.textContent || '']);
+    if (got[0] !== 'en' || HANGUL.test(got[1])) enFile = 1;
+  } else enFile = 1;
+  await p.close();
 
+  console.log(`\n── ${slug} · ${n}장`);
+  const row = (label, arr, show) => {
+    console.log('   ' + label.padEnd(26), arr.length);
+    if (show) arr.slice(0, 20).forEach(show);
+  };
+  row('콘솔 오류', errs, e => console.log('      slide', e[0], '·', e[1].slice(0, 110)));
+  row('영문판에 남은 한글', left, e => console.log('      slide', e[0], '·', e[1].slice(0, 90)));
+  row('화면에 남은 토큰 찌꺼기', junk, e => console.log('      ' + e[0], 'slide', e[1], '·', e[2].slice(0, 90)));
+  row('무대 밖으로 넘친 요소', over, e => console.log('      ' + e[0], 'slide', e[1], '·', e[2]));
+  row('제목이 두 줄로 흐른 장', wrap, e => console.log('      ' + e[0], 'slide', e[1].n, '·', e[1].lines + '줄'));
+  row('그림이 본문의 80 % 미만', thin, e => console.log('      ' + e[0], 'slide', String(e[1].n).padStart(2),
+      '· 채움', e[1].fill, '· 빈 띠', e[1].dead + 'px'));
+  row('SVG 글자 충돌·이탈', svg, ([l, x]) => console.log('      ' + l, 'slide', String(x.n).padStart(2),
+      x.kind, '[' + x.a.slice(0, 44) + ']', x.b ? '× [' + x.b.slice(0, 44) + ']  ' + x.w + '×' + x.h + 'px' : ''));
+  console.log('   ' + '영문판 파일이 영어로 열림'.padEnd(26), enFile ? '아니오' : '예');
+  return errs.length + left.length + junk.length + over.length + wrap.length + thin.length
+       + svg.length + enFile;
+}
+
+(async () => {
+  const only = process.argv[2];
+  const slugs = fs.readdirSync(path.join(ROOT, 'src', 'decks'))
+    .filter(s => fs.statSync(path.join(ROOT, 'src', 'decks', s)).isDirectory())
+    .filter(s => !only || s === only).sort();
+  if (!slugs.length) { console.error('그런 덱이 없다:', only); process.exit(1); }
+
+  /* 심어 둔 글꼴 서브셋에 없는 글자가 소스에 들어왔는지 (브라우저 없이 파일만 비교) */
+  let miss = '';
+  try {
+    const walk = d => fs.readdirSync(d, { withFileTypes: true }).flatMap(e =>
+      e.isDirectory() ? walk(path.join(d, e.name))
+      : (/\.(html|conf)$/.test(e.name) && e.name !== 'fonts.charset.txt' ? [path.join(d, e.name)] : []));
+    const have = new Set(fs.readFileSync(path.join(ROOT, 'src', 'fonts.charset.txt'), 'utf8'));
+    const used = new Set();
+    for (const f of walk(path.join(ROOT, 'src')))
+      for (const ch of fs.readFileSync(f, 'utf8')) used.add(ch);
+    miss = [...used].filter(c => c.charCodeAt(0) >= 0x20 && !have.has(c)).join('');
+  } catch (e) { miss = ''; }
+
+  const b = await chromium.launch(findChromium());
+  let bad = 0;
+  for (const s of slugs) bad += await checkDeck(b, s);
   await b.close();
-  process.exit(errs.length || left.length || junk.length || over.length || svg.length || wrap.length || enFile || miss.length ? 1 : 0);
+
+  console.log('\n── 공통');
+  console.log('   ' + '심어 둔 글꼴에 없는 글자'.padEnd(26),
+    miss.length ? miss.length + '자 → ' + miss.slice(0, 40) + '   (python3 tools/fonts.py 를 다시 돌릴 것)' : 0);
+  console.log('');
+  process.exit(bad + miss.length ? 1 : 0);
 })();

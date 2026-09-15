@@ -1,8 +1,9 @@
 # SMR_Safety_Analysis — 운영 지침
 
 한양대 원자력공학과 THINK Lab(지도교수 송민섭), 대학원 과목 **NUE4067 「소형모듈원자로 안전해석」**의
-발표용 HTML 슬라이드 저장소다. 교재 `THINK Lab SMR 설계요건과 공학적안전설비 (Rev1.0).docx`(60쪽)를
-브라우저에서 도는 46장 애니메이션 슬라이드로 옮긴 것이며, 여기서 계속 개정한다.
+발표용 HTML 슬라이드 저장소다. **한 학기치 강의 자료를 주차별로 쌓아 간다** — 주차마다 덱 하나,
+`docs/index.html`이 그 목록이다. 첫 덱은 교재 `THINK Lab SMR 설계요건과 공학적안전설비 (Rev1.0).docx`
+(60쪽)를 46장 애니메이션 슬라이드로 옮긴 것이다.
 본문은 **한국어와 영어를 함께** 담고 있고(`L` 키), 배경은 **어두운 판과 밝은 판**을 오갈 수 있으며(`T` 키),
 46장을 그대로 **PDF로 내려받을** 수 있다.
 
@@ -14,47 +15,67 @@
 ## 1. 구조
 
 ```
-src/          슬라이드 소스 12개. 파일명 사전순 = 슬라이드 순서
-  00_head.html              <head> · CSS 토큰 · 컴포넌트 클래스
-  01_engine.html            덱 엔진(슬라이드 등록·내비·애니메이션 프리미티브)
-  10_cover_roadmap.html     표지 · 로드맵 · §01 도입
-  20_economics.html         규모의 경제 · 4대 저감인자
-  30_loop_integral.html     루프형 vs 일체형
-  40_decayheat_natcirc.html §02 붕괴열 · 자연순환 · 열관성
-  50_issues_defence.html    §03 쟁점·인허가 · §04 심층방어
-  60_esf_categories.html    §05 단일고장 · GDC · Category A~D
-  70_shutdown.html          §06 제어봉 · SDM
-  80_rhr.html               §07 잔열제거
-  90_eccs_containment.html  §08 안전주입 · §09 격납
-  99_wrap.html              §10 정리 (끝에 buildOv(); go(0); 호출)
-docs/index.html   빌드 산출물(한국어로 열림). 직접 고치지 말 것 — 항상 src를 고치고 다시 빌드한다
-docs/index_en.html               같은 내용, 영어로 열림. build.sh 가 <!--LANGDEF--> 자리에
-                                 window.SMR_LANG="en" 을 꽂아 함께 굽는다
-docs/SMR_설계요건과_공학적안전설비.pdf                     미리 구운 PDF(46쪽). tools/pdf.js 가 만든다
-docs/SMR_Design_Requirements_and_Engineered_Safety_Features.pdf
-src/fonts.b64.css  덱에 심는 글꼴 서브셋(base64). build.sh 가 /*@FONTS@*/ 자리에 끼운다
-tools/fonts.py     그 서브셋을 다시 만드는 스크립트
-tools/browser.js  크로미움 실행 파일 탐색(CHROME_PATH → PLAYWRIGHT_BROWSERS_PATH → Chrome 채널)
-tools/shot.js     Playwright 스크린샷 검증 도구
-tools/check.js    46장을 한/영으로 전수 점검 — 콘솔 오류 · 번역 누락 · 토큰 찌꺼기 · 레이아웃 넘침
-tools/pdf.js      docs/*.pdf 를 다시 굽는다
-build.sh / build.ps1
+src/
+  common/                모든 덱이 공유한다
+    00_head.html           <head> · CSS 토큰 · 글꼴 자리 · 조작 막대
+    01_engine.html         덱 엔진(슬라이드 등록·내비·애니메이션 프리미티브·언어·배경)
+    99_boot.html           boot() 호출 · 문서 닫기
+  decks/<슬러그>/          주차 하나 = 폴더 하나
+    deck.conf              주차·제목·한 줄 소개. build 와 목차 페이지가 읽는다
+    10_… 20_… 99_wrap.html 슬라이드 소스. 파일명 사전순 = 슬라이드 순서
+  course.conf            과목 정보 — 목차 페이지가 쓴다
+  index.tpl.html         목차 페이지 틀
+  fonts.b64.css          심는 글꼴 서브셋(base64) · tools/fonts.py 가 만든다
+  fonts.charset.txt      그 서브셋에 든 글자 · check.js 가 대조한다
+docs/                    빌드 산출물. 직접 고치지 말 것 — 항상 src 를 고치고 다시 빌드한다
+  index.html               목차 페이지. build 가 deck.conf 들을 읽어 만든다
+  <슬러그>.html              덱 — 한국어로 열림
+  <슬러그>.en.html           덱 — 영어로 열림
+  <슬러그>.pdf · .en.pdf     미리 구운 PDF(한 장 = 한 쪽) · tools/pdf.js 가 굽는다
+tools/
+  build.py   덱을 굽고 목차를 만든다 (build.sh / build.ps1 이 이것을 부른다)
+  fonts.py   글꼴 서브셋을 다시 만든다
+  check.js   덱마다 한/영 전수 점검 — 아홉 가지
+  pdf.js     PDF 를 다시 굽는다
+  shot.js    스크린샷 · browser.js 크로미움 탐색
 ```
 
-**빌드는 단순 연결이다.** `cat src/*.html > docs/index.html`. 그래서:
+**한 덱은 이렇게 만들어진다.**
 
-- 슬라이드를 **추가**하려면 새 `S({...})` 블록을 해당 절의 src 파일 안, 원하는 위치에 넣는다.
-- 절 하나를 **통째로** 넣으려면 새 파일을 만들되 번호 접두사로 순서를 맞춘다(예: `45_something.html`).
-- `docs/index.html`을 고치면 다음 빌드에 덮여 사라진다.
+```
+common/00_head + common/01_engine + decks/<슬러그>/*.html + common/99_boot
+  → /*@FONTS@*/ 자리에 글꼴,  DECK 자리에 window.DECK(제목·슬러그)
+  → docs/<슬러그>.html  ·  docs/<슬러그>.en.html
+```
 
 ```bash
-./build.sh          # 또는 윈도우: .\build.ps1
+./build.sh                    # 전부 (윈도우: .\build.ps1)
+./build.sh w04_system-codes   # 그 덱만
 ```
-빌드가 끝나면 슬라이드 수를 출력한다. **46장이 기준값이다.** 숫자가 예상과 다르면 `S({` 를 빠뜨렸거나 중복한 것이다.
+빌드가 덱마다 슬라이드 수를 출력한다. **첫 덱은 46장이 기준값이다.**
+
+### 주차 하나 더 만들기
+
+1. `src/decks/w04_system-codes/` 폴더를 만든다. 슬러그는 **주차 + 영문 하이픈 표기**다
+   (`w02-03_smr-design-requirements`). 폴더 이름이 그대로 파일 이름과 URL 이 된다.
+2. `deck.conf` 를 쓴다.
+   ```
+   week = 04
+   title_ko = 계통코드 입문
+   title_en = Introduction to System Codes
+   lead_ko = 한 줄 소개
+   lead_en = One-line summary
+   date = 2026-10
+   ```
+3. 슬라이드 소스를 넣는다. `10_` `20_` … 번호 접두사로 순서를 잡고, **파일마다 `<script>` 로 열고
+   `</script>` 로 닫는다.** 첫 파일 맨 앞에서 `SECT()` 로 섹션을 열고 `S({...})` 로 슬라이드를 쌓는다.
+4. `./build.sh` → `python3 tools/fonts.py`(새 글자가 있으면) → `cd tools && node check.js && node pdf.js`
+
+`docs/` 를 직접 고치면 다음 빌드에 덮여 사라진다.
 
 ---
 
-## 2. 엔진 API (`src/01_engine.html`)
+## 2. 엔진 API (`src/common/01_engine.html`)
 
 ```js
 SECT('05 · 공학적안전설비')     // 여기부터 새 섹션. 개요 화면(O)과 레일 표시에 쓰인다
@@ -93,7 +114,7 @@ S({ html:`...`, init(el){ ... } })   // 슬라이드 하나. init은 이 슬라�
 
 ---
 
-## 3. 시각 규약 (`src/00_head.html`)
+## 3. 시각 규약 (`src/common/00_head.html`)
 
 ```
 --ground #070E18   바탕(근흑 네이비)      --cool  #4CC9F0  강조 = 냉각재
@@ -185,7 +206,7 @@ python3 tools/fonts.py            # src/fonts.b64.css 와 src/fonts.charset.txt 
 
 화면 아래 조작 막대의 `한국어 / English` 버튼(또는 `L` 키)으로 그 자리에서 바뀐다. 이것이 기본이다.
 
-그와 별개로 `index.html`은 한국어로, `index_en.html`은 영어로 열린다. 내용은 같고 기본 언어만 다르다 —
+그와 별개로 `<슬러그>.html`은 한국어로, `<슬러그>.en.html`은 영어로 열린다. 내용은 같고 기본 언어만 다르다 —
 받는 사람이 아무것도 누르지 않아도 제 언어로 보게 하려는 것이다. 우선순위는
 
 ```
@@ -247,9 +268,11 @@ NRC·IAEA 표기를 따른다. 기본안전기능 = fundamental safety function,
 - 인쇄 모드는 **라이트 배경이 기본**이다. 어두운 판이 필요하면 `?print=1&theme=dark`.
 
 ```bash
-cd tools && node pdf.js          # ko·en 둘 다 → docs/NUE4067_SMR_safety_{ko,en}.pdf
-node pdf.js ko                   # 한 언어만
+cd tools && node pdf.js                              # 모든 덱, ko·en 둘 다
+node pdf.js w02-03_smr-design-requirements           # 그 덱만
+node pdf.js w02-03_smr-design-requirements ko        # 한 언어만
 ```
+결과는 `docs/<슬러그>.pdf` · `docs/<슬러그>.en.pdf` — 목차 페이지의 링크와 같은 이름이다.
 
 **슬라이드를 고쳤으면 PDF를 다시 굽고 같이 커밋한다.** 안 그러면 공개 링크의 PDF가 낡는다.
 
@@ -272,7 +295,7 @@ node pdf.js ko                   # 한 언어만
 4. **수치는 교재와 일치시킨다.** 붕괴열·자연순환·SDM·격납 압력의 계수는 교재 본문 값이다. 임의로 바꾸지 않는다.
 5. **인허가 현황은 낡는다.** `50_issues_defence.html`의 타임라인·현황은 2026-09 기준이다. 반년마다 확인한다.
 6. **색은 토큰으로만 쓴다.** `#fff`·`#071018` 같은 값을 SVG에 직접 넣으면 라이트 배경에서 깨진다.
-   마땅한 토큰이 없으면 `00_head.html`에 **두 배경 모두**를 정의하고 쓴다.
+   마땅한 토큰이 없으면 `common/00_head.html`에 **두 배경 모두**를 정의하고 쓴다.
 7. **글자를 새로 넣으면 영문도 같이 넣는다.** 한국어만 넣으면 영문판에 한글이 그대로 남는다 —
    `tools/check.js`가 잡지만, 잡히기 전에 넣는 것이 맞다.
 8. **SVG 경로를 `Z`로 닫을 때 대각선이 생기는지 본다.** 유로를 그리는 `<path>`를 닫으면 끝점에서
@@ -287,11 +310,12 @@ node pdf.js ko                   # 한 언어만
 
 ```bash
 cd tools && npm install playwright-core      # 최초 1회
-node check.js                                # 전수 점검 — 이것부터 돌린다
-node shot.js "../docs/index.html" "1,16,23,36"   # 슬라이드 번호 지정, 생략하면 전수
+node check.js                                # 모든 덱 전수 점검 — 이것부터 돌린다
+node check.js w02-03_smr-design-requirements # 한 덱만
+node shot.js "../docs/<슬러그>.html" "1,16,23,36"   # 슬라이드 번호 지정, 생략하면 전수
 ```
 
-`check.js`는 46장을 **한국어와 영어로 각각** 넘기며 네 가지를 센다. 넷 다 0이어야 한다.
+`check.js`는 덱마다 46장을 **한국어와 영어로 각각** 넘기며 아홉 가지를 센다. 전부 0(또는 예)이어야 한다.
 
 ```
 console errors: 0          콘솔 오류(폰트 요청 실패는 걸러냈다)
@@ -302,7 +326,7 @@ console errors: 0          콘솔 오류(폰트 요청 실패는 걸러냈다)
 그림이 본문의 80 % 미만: 0      viewBox 비율이 칸보다 납작하다는 뜻(위 3절)
 SVG 글자 충돌·이탈: 0        <text> 끼리 겹치거나 그림 밖으로 나간 것
 심어 둔 글꼴에 없는 글자: 0    있으면 그 글자만 OS 기본 글꼴로 떨어진다 → tools/fonts.py 재실행
-index_en.html 이 영어로 열림: 예
+영문판 파일이 영어로 열림: 예
 ```
 
 마지막 항목은 인쇄 모드에서 46장을 한 번에 펼쳐 놓고 재므로 한/영 두 번에 12초면 끝난다.
@@ -319,7 +343,7 @@ index_en.html 이 영어로 열림: 예
 
 ## 8. 개정·커밋
 
-- 한 커밋 = 한 가지 변경. `src/`와 `docs/index.html`을 **같이** 커밋한다(빌드 산출물도 추적한다 —
+- 한 커밋 = 한 가지 변경. `src/`와 `docs/`를 **같이** 커밋한다(빌드 산출물도 추적한다 —
   GitHub Pages가 `docs/`를 그대로 서빙하므로, 커밋하지 않으면 공개 링크가 낡는다).
 - 슬라이드 내용이 바뀌었으면 `docs/*.pdf`도 다시 굽고 같은 커밋에 넣는다.
 - 커밋 메시지는 한국어로, 무엇이 왜 바뀌었는지 한 줄. 예: `SDM 요구선 라벨이 막대 뒤로 들어가 우측 여백으로 이동`
