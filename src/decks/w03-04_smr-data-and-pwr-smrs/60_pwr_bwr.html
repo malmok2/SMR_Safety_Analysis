@@ -14,84 +14,17 @@ Then: why SMRs converged on the integral layout.</p>]]`});
 
 /* ---------------------------------------------------------------- PWR vs BWR */
 S({tag:'WHERE THE STEAM IS MADE', ov:'[[증기를 어디서 만드는가 — PWR과 BWR||Where the steam is made - PWR and BWR]]',
-src:'[[<b>출처</b> 본 교재 5.1절 표 5.1 · 운전압력은 대표값(PWR 약 15.5 MPa · BWR 약 7 MPa)||<b>Source</b> This textbook &#167;5.1, Table 5.1 · representative pressures: PWR about 15.5 MPa, BWR about 7 MPa]]',
+src:'[[<b>출처</b> 본 교재 5.1절 그림 5.1 · 5.2 · 표 5.1 · 운전압력은 대표값(PWR 약 15.5 MPa · BWR 약 7 MPa)||<b>Source</b> This textbook &#167;5.1, Figs. 5.1-5.2 and Table 5.1 · representative pressures: PWR about 15.5 MPa, BWR about 7 MPa]]',
 abbr:'[[<b>PWR</b> 가압경수로 · <b>BWR</b> 비등경수로 · <b>랭킨 사이클</b> 물을 끓여 증기로 터빈을 돌리는 열기관 순환 · <b>기수분리기</b> 증기와 물을 갈라 내는 장치||<b>PWR</b> Pressurized Water Reactor · <b>BWR</b> Boiling Water Reactor · <b>Rankine cycle</b> the steam power cycle · <b>steam separator</b> splits steam from water]]',
 html:`<h2 class="t">[[갈라지는 지점은 <em>하나</em>뿐임 — 증기를 어디서 만드는가||They split on <em>one thing</em> - where the steam gets made]]</h2>
 <ul class="b">
-  <li>[[<b>PWR</b>은 1차계통을 높은 압력으로 눌러 <b>노심에서 끓지 않게</b> 함. 열은 증기발생기에서 2차측으로 넘김||A <b>PWR</b> holds the primary at high pressure so <b>the core never boils</b>; heat crosses to the secondary in a steam generator]]</li>
+  <li>[[<b>PWR</b>은 1차계통을 높은 압력으로 눌러 <b>노심에서 끓지 않게</b> 함. 열은 증기발생기에서 2차측으로 넘김 — 핵심은 <b class="cool">분리</b>임||A <b>PWR</b> holds the primary at high pressure so <b>the core never boils</b>; heat crosses to the secondary in a steam generator. The point is <b class="cool">separation</b>]]</li>
   <li>[[<b>BWR</b>은 노심에서 직접 끓여 그 증기를 터빈으로 보냄. 증기발생기가 없고 <b class="hot">터빈실도 방사선 구역</b>이 됨||A <b>BWR</b> boils in the core and sends that steam to the turbine. No steam generator - and <b class="hot">the turbine hall becomes a radiation area</b>]]</li>
 </ul>
 <div class="body"><div class="fig">
-<svg viewBox="0 0 1120 410" role="img" aria-label="[[PWR의 2계통 분리 구성과 BWR의 1계통 직접 구성을 나란히 그린 계통도||A two-loop PWR beside a single-loop BWR]]">
-  <g id="pb-pwr"></g><g id="pb-bwr"></g>
-</svg>
-</div></div>`,
-init(el){
-  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
-    for(const k in at) e.setAttribute(k,at[k]); return e;};
-  const paths=[];
-  function loop(G, ox, title, col, twoLoop){
-    const hd=mk('text',{x:ox,y:22,'font-family':'var(--sans)','font-size':20,fill:col,
-      'font-weight':600}); hd.textContent=title; G.appendChild(hd);
-    /* 노심 */
-    G.appendChild(mk('rect',{x:ox+30,y:200,width:80,height:110,fill:'var(--panel)',
-      stroke:'var(--hot)','stroke-width':1.6}));
-    const c=mk('text',{x:ox+70,y:262,'text-anchor':'middle',class:'ttl',fill:'var(--hot)'});
-    c.textContent=TX('노심','Core'); G.appendChild(c);
-    if(twoLoop){
-      /* 증기발생기 */
-      G.appendChild(mk('rect',{x:ox+210,y:150,width:74,height:160,fill:'var(--panel)',
-        stroke:'var(--cool)','stroke-width':1.6}));
-      const g1=mk('text',{x:ox+247,y:340,'text-anchor':'middle',class:'lbl',fill:'var(--cool)'});
-      g1.textContent=TX('증기발생기','Steam generator'); G.appendChild(g1);
-      /* 1차 고리 — 노심과 증기발생기 사이 */
-      const p1=mk('path',{d:'M'+(ox+110)+',224 H'+(ox+210)+' M'+(ox+210)+',292 H'+(ox+110),
-        fill:'none',stroke:'var(--hot)','stroke-width':2}); G.appendChild(p1);
-      G.appendChild(mk('path',{d:'M'+(ox+110)+',224 H'+(ox+170)+' V292 H'+(ox+110),fill:'none',
-        stroke:'none'}));
-      const l1=mk('text',{x:ox+160,y:212,'text-anchor':'middle',class:'lbl',fill:'var(--hot)'});
-      l1.textContent=TX('1차 · 15.5 MPa','primary 15.5 MPa'); G.appendChild(l1);
-      /* 2차 고리 — 증기발생기에서 터빈으로 */
-      const p2=mk('path',{d:'M'+(ox+284)+',176 H'+(ox+390),fill:'none',stroke:'var(--cool)',
-        'stroke-width':2}); G.appendChild(p2); paths.push(p2);
-      G.appendChild(mk('path',{d:'M'+(ox+390)+',286 H'+(ox+284),fill:'none',stroke:'var(--cool)',
-        'stroke-width':2}));
-      const l2=mk('text',{x:ox+336,y:168,'text-anchor':'middle',class:'lbl',fill:'var(--cool)'});
-      l2.textContent=TX('2차계통 · 깨끗함','secondary · clean'); G.appendChild(l2);
-      turbine(G, ox+390, 'var(--cool)', TX('터빈실 방사선 낮음','turbine hall: low radiation'));
-      paths.push(p1);
-    } else {
-      /* 노심에서 바로 터빈으로 */
-      G.appendChild(mk('rect',{x:ox+30,y:150,width:80,height:46,fill:'var(--panel)',
-        stroke:'var(--rule)'}));
-      const sp=mk('text',{x:ox+70,y:178,'text-anchor':'middle',class:'lbl'});
-      sp.textContent=TX('기수분리기','separator'); G.appendChild(sp);
-      const p=mk('path',{d:'M'+(ox+110)+',172 H'+(ox+390),fill:'none',stroke:'var(--hot)',
-        'stroke-width':2}); G.appendChild(p); paths.push(p);
-      G.appendChild(mk('path',{d:'M'+(ox+390)+',292 H'+(ox+110),fill:'none',stroke:'var(--hot)',
-        'stroke-width':2}));
-      const l=mk('text',{x:ox+250,y:164,'text-anchor':'middle',class:'lbl',fill:'var(--hot)'});
-      l.textContent=TX('방사화된 증기가 그대로 간다 · 약 7 MPa',
-                       'activated steam goes straight through · about 7 MPa'); G.appendChild(l);
-      turbine(G, ox+390, 'var(--hot)', TX('터빈실도 방사선 구역','turbine hall is a radiation area'));
-    }
-  }
-  function turbine(G, x, col, note){
-    G.appendChild(mk('polygon',{points:poly([[x,150],[x+70,134],[x+70,318],[x,302]]),
-      fill:'var(--panel)',stroke:col,'stroke-width':1.6}));
-    const t=mk('text',{x:x+35,y:232,'text-anchor':'middle',class:'ttl',fill:col});
-    t.textContent=TX('터빈','Turbine'); G.appendChild(t);
-    wrapT(note,12).forEach((ln,j)=>{
-      const e=mk('text',{x:x+35,y:348+j*18,'text-anchor':'middle',class:'lbl',fill:col});
-      e.textContent=ln; G.appendChild(e); });
-  }
-  loop(el.querySelector('#pb-pwr'),  30, TX('PWR — 증기발생기에서 만든다','PWR - made in a steam generator'), 'var(--cool)', 1);
-  loop(el.querySelector('#pb-bwr'), 610, TX('BWR — 노심에서 바로 만든다','BWR - made in the core'), 'var(--hot)', 0);
-  el.querySelector('#pb-bwr').appendChild(mk('line',{x1:580,y1:40,x2:580,y2:370,
-    stroke:'var(--rule)','stroke-dasharray':'4 5'}));
-  if(RM) return;
-  paths.forEach(p=>{ const L=p.getTotalLength(); flow(p,{n:6,color:p.getAttribute('stroke'),r:3.4,speed:0.2}); });
-}});
+${PH({src:'f5_01', cap:'[[<b>PWR</b> — 1차계통(노심~증기발생기)과 2차계통(증기발생기~터빈)이 분리되어 있다||<b>PWR</b> - the primary (core to steam generator) and secondary (steam generator to turbine) are separate]]'},
+     {src:'f5_02', cap:'[[<b>BWR</b> — 노심에서 생긴 증기-물 혼합물이 기수분리기와 건조기를 거쳐 바로 터빈으로 간다||<b>BWR</b> - the steam-water mixture from the core passes the separator and dryer straight to the turbine]]'})}
+</div></div>`});
 
 
 /* ---------------------------------------------------------------- 구조적 차이 */

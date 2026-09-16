@@ -17,7 +17,7 @@
     → /*@FONTS@*/ 자리에 글꼴, <!--DECK--> 자리에 덱 정보를 꽂는다
     → docs/<슬러그>.html (한국어로 열림) · docs/<슬러그>.en.html (영어로 열림)
 """
-import glob, io, json, os, re, sys, datetime
+import base64, glob, io, json, os, re, sys, datetime
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC, DOCS = os.path.join(ROOT, 'src'), os.path.join(ROOT, 'docs')
@@ -39,6 +39,26 @@ def read(*p):
 def esc(s):
     return (s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;'))
 
+def media(slug):
+    """decks/<슬러그>/media/*.webp 를 base64 로 심어 window.IMG 에 꽂는다.
+
+    단일 파일 규칙(6절 2번)을 지키려면 그림도 파일 안에 있어야 한다. 교재의 화면 캡처와
+    실물 도면은 SVG 로 다시 그릴 수 없는 것들이라 원본을 그대로 심는다.
+    파일 이름이 곧 키다 — f6_03.webp → IMG.f6_03 (교재 그림 6.3).
+    """
+    d = os.path.join(SRC, 'decks', slug, 'media')
+    if not os.path.isdir(d):
+        return '', 0
+    M, tot = {}, 0
+    for f in sorted(glob.glob(os.path.join(d, '*.webp'))):
+        raw = open(f, 'rb').read(); tot += len(raw)
+        key = os.path.splitext(os.path.basename(f))[0]
+        M[key] = 'data:image/webp;base64,' + base64.b64encode(raw).decode()
+    if not M:
+        return '', 0
+    return '<script>window.IMG=%s</script>' % json.dumps(M), tot
+
+
 def build_deck(slug, fonts):
     d = os.path.join(SRC, 'decks', slug)
     cfg = conf(os.path.join(d, 'deck.conf'))
@@ -52,15 +72,18 @@ def build_deck(slug, fonts):
     deck = {'slug': slug, 'titleKo': cfg['title_ko'], 'titleEn': cfg['title_en']}
     # 첫 번째 하나만 바꾼다 — 소스 주석에 같은 글자가 들어 있어도 망가지지 않게
     html = html.replace('/*@FONTS@*/', fonts, 1)
+    img, imgbytes = media(slug)
     html = html.replace('<!--DECK-->',
-                        '<script>window.DECK=%s</script>' % json.dumps(deck, ensure_ascii=False), 1)
+                        '<script>window.DECK=%s</script>' % json.dumps(deck, ensure_ascii=False)
+                        + img, 1)
 
     ko = os.path.join(DOCS, slug + '.html')
     io.open(ko, 'w', encoding='utf-8').write(html)
     en = os.path.join(DOCS, slug + '.en.html')
     io.open(en, 'w', encoding='utf-8').write(
         html.replace('<!--LANGDEF-->', '<script>window.SMR_LANG="en"</script>', 1))
-    print('  %-42s %2d장  %6.0f KB' % (slug, n, os.path.getsize(ko) / 1024))
+    note = '  (그림 %.0f KB)' % (imgbytes / 1024) if imgbytes else ''
+    print('  %-42s %2d장  %6.0f KB%s' % (slug, n, os.path.getsize(ko) / 1024, note))
     cfg.update(slug=slug, slides=n)
     return cfg
 

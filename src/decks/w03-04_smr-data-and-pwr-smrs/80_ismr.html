@@ -14,104 +14,35 @@ Its specifications come from the Design Status Report lodged with IAEA ARIS.</p>
 
 /* ---------------------------------------------------------------- 모듈 구성 */
 S({tag:'INSIDE THE MODULE', ov:'[[i-SMR 모듈 — 구성 기기와 유로||Inside the i-SMR module - components and flow path]]',
-src:'[[<b>출처</b> 본 교재 7.1 · 7.2절 표 7.1 · IAEA ARIS, i-SMR Design Status Report||<b>Source</b> This textbook &#167;&#167;7.1-7.2, Table 7.1 · IAEA ARIS, i-SMR Design Status Report]]',
+src:'[[<b>출처</b> 본 교재 7.1 · 7.2절 그림 7.1 · 표 7.1 · IAEA ARIS, i-SMR Design Status Report||<b>Source</b> This textbook &#167;&#167;7.1-7.2, Fig. 7.1 and Table 7.1 · IAEA ARIS, i-SMR Design Status Report]]',
 abbr:'[[<b>RCP</b> 원자로냉각재펌프 · <b>PZR</b> 가압기 · <b>EDV</b> 비상감압밸브 · <b>ERV</b> 비상재순환밸브 · <b>CSB</b> 노심지지배럴 · <b>UGS</b> 상부안내구조물 · <b>ECT</b> 비상냉각수조||<b>RCP</b> reactor coolant pump · <b>PZR</b> pressuriser · <b>EDV</b> emergency depressurisation valve · <b>ERV</b> emergency recirculation valve · <b>CSB</b> core support barrel · <b>UGS</b> upper guide structure · <b>ECT</b> emergency cooling tank]]',
 html:`<h2 class="t">[[구조는 같고 <em>구동원만</em> 다름 — 부력 대신 펌프가 돌림||Same structure, <em>different driver</em> - a pump, not buoyancy]]</h2>
 <ul class="b">
-  <li>[[둘 다 <b>가운데로 올라가 바깥으로 내려오는 고리</b>이고, 둘 다 증기발생기가 그 하강 경로에 놓여 있음||Both are <b>a loop that rises in the middle and falls on the outside</b>, and both put the steam generator on the descending leg]]</li>
-  <li>[[다른 것은 <b class="ok">냉각재펌프 4대를 용기에 직접 붙였다</b>는 것. 배관을 없애는 목적은 그대로 달성함||The difference is <b class="ok">four coolant pumps bolted straight onto the vessel</b>. The pipes are still gone]]</li>
+  <li>[[노심 상승 &#8594; 노심지지배럴·상부안내구조물 안쪽 &#8594; 상부에서 방향 전환 &#8594; <b>냉각재펌프</b> &#8594; 증기발생기 셸측을 따라 하강 &#8594; 하부플레넘 &#8594; 다시 노심||Up through the core, inside the core support barrel and upper guide structure, turned at the top, through <b>the coolant pumps</b>, down past the steam generator shell side to the lower plenum, and back into the core]]</li>
+  <li>[[NuScale과 비교하면 <b>구조는 같고 구동원만 다름</b>. 둘 다 가운데로 올라가 바깥으로 내려오는 고리이고, 둘 다 증기발생기가 그 하강 경로에 놓여 있음||Against NuScale the <b>structure is the same and only the driver differs</b>: both rise in the middle and fall on the outside, with the steam generator on the descending leg]]</li>
 </ul>
 <div class="body">
   <div class="fig">
-  <svg viewBox="0 0 790 440" role="img" aria-label="[[i-SMR 모듈 단면 — 가압기·냉각재펌프 4대·하강관 안의 나선형 증기발생기·노심과 EDV·ERV||An i-SMR module section - pressuriser, four coolant pumps, the helical steam generator inside the downcomer, the core, and the EDV and ERV]]">
-    <g id="is-cut"></g>
-  </svg>
+  ${PH({src:'f7_01', cap:'[[i-SMR 모듈의 구성 기기와 유로 — 증기발생기가 <b>하강관 안</b>에 있고 냉각재펌프가 용기 상부에 직결된다||The i-SMR module and its flow path - the steam generator sits <b>inside the downcomer</b> and the pumps bolt to the upper vessel]]'})}
   </div>
   <div class="side">
     <table class="d sm" id="is-tab"></table>
   </div>
 </div>`,
 init(el){
-  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
-    for(const k in at) e.setAttribute(k,at[k]); return e;};
-  const G=el.querySelector('#is-cut'), CX=290;
-  /* 강재 격납용기 */
-  G.appendChild(mk('rect',{x:CX-140,y:26,width:280,height:378,rx:26,fill:'var(--ground)',
-    stroke:'var(--ok)','stroke-width':2}));
-  G.appendChild(mk('text',{x:CX-134,y:398,class:'lbl',fill:'var(--ok)'}))
-   .textContent=TX('강재 격납용기 · 설계압력 5 MPa','steel containment · 5 MPa design');
-  /* 원자로용기 */
-  G.appendChild(mk('rect',{x:CX-96,y:48,width:192,height:326,rx:40,fill:'var(--panel)',
-    stroke:'var(--rule)','stroke-width':1.6}));
-  /* 가압기 */
-  G.appendChild(mk('rect',{x:CX-96,y:48,width:192,height:52,rx:38,fill:'var(--hot)',opacity:0.12}));
-  G.appendChild(mk('path',{d:'M'+(CX-96)+',100 h192',stroke:'var(--rule)','stroke-width':1.2}));
-  /* 냉각재펌프 4대 — 용기 상부에 직결 */
-  [-1,1].forEach(s=>{ [0,1].forEach(j=>{
-    G.appendChild(mk('rect',{x:CX+s*(84+j*0)-(s<0?36:0),y:112+j*30,width:36,height:22,
-      fill:'var(--cool)',opacity:0.55}));
-  });});
-  /* 노심지지배럴 안쪽 상승 유로 */
-  G.appendChild(mk('rect',{x:CX-34,y:118,width:68,height:150,fill:'var(--hot)',opacity:0.16}));
-  G.appendChild(mk('rect',{x:CX-34,y:118,width:68,height:150,fill:'none',stroke:'var(--rule)'}));
-  /* 하강관 안의 나선형 증기발생기 — 8구역 */
-  [-1,1].forEach(s=>{
-    for(let k=0;k<4;k++)
-      G.appendChild(mk('rect',{x:CX+s*80-(s>0?0:24),y:156+k*26,width:24,height:20,
-        fill:'var(--cool)',opacity:0.32}));
-  });
-  /* 노심 */
-  G.appendChild(mk('rect',{x:CX-52,y:280,width:104,height:62,fill:'var(--hot)',opacity:0.30}));
-  G.appendChild(mk('rect',{x:CX-52,y:280,width:104,height:62,fill:'none',stroke:'var(--hot)','stroke-width':1.4}));
-  /* 유로 */
-  const up=mk('path',{d:'M'+CX+',276 V130',fill:'none',stroke:'none'});
-  const dn=mk('path',{d:'M'+(CX+68)+',140 V288',fill:'none',stroke:'none'});
-  G.appendChild(up); G.appendChild(dn);
-  const defs=mk('defs',{}); G.appendChild(defs);
-  [['isup','var(--hot)'],['isdn','var(--cool)']].forEach(m=>{
-    const a=mk('marker',{id:m[0],viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:6,markerHeight:6,orient:'auto'});
-    a.appendChild(mk('path',{d:'M0,0 L10,5 L0,10 z',fill:m[1]})); defs.appendChild(a);
-  });
-  G.appendChild(mk('path',{d:'M'+CX+',274 V132',fill:'none',stroke:'var(--hot)','stroke-width':2.2,
-    'marker-end':'url(#isup)'}));
-  G.appendChild(mk('path',{d:'M'+(CX+70)+',142 V284',fill:'none',stroke:'var(--cool)','stroke-width':2.2,
-    'marker-end':'url(#isdn)'}));
-  const P=[
-    ['①',CX-60,   72,'L',TX('가압기 (PZR)','Pressuriser')],
-    ['②',CX+72,   64,'R',TX('비상감압밸브 (EDV) ×2','Emergency depressurisation valves &#215;2')],
-    ['③',CX,     108,'L',TX('내장형 제어봉구동장치','Internal control rod drives')],
-    ['④',CX+84,  122,'R',TX('원자로냉각재펌프 ×4 — 무밀봉 캔드모터','Coolant pumps &#215;4 - sealless canned motor')],
-    ['⑤',CX+80,  208,'R',TX('나선형 관류 증기발생기 — 하강관 안, 8구역','Helical once-through SG - in the downcomer, 8 zones')],
-    ['⑥',CX,     260,'L',TX('노심지지배럴 (CSB) · 상부안내구조물','Core support barrel and upper guide structure')],
-    ['⑦',CX+96,  318,'R',TX('비상재순환밸브 (ERV) ×2','Emergency recirculation valves &#215;2')],
-    ['⑧',CX,     312,'L',TX('노심 — 17×17 · 69다발','Core - 17&#215;17, 69 assemblies')]
-  ];
-  const marks=[];
-  P.forEach(p=>{
-    const g=mk('g',{opacity:0});
-    g.appendChild(mk('path',{d:'M'+p[1]+','+p[2]+' H'+(p[3]==='L'?152:470),fill:'none',
-      stroke:'var(--rule)','stroke-width':1,'stroke-dasharray':'2 3'}));
-    g.appendChild(mk('circle',{cx:p[1],cy:p[2],r:3.4,fill:'var(--ok)'}));
-    const t=mk('text',{x:p[3]==='L'?146:476,y:p[2]+5,'text-anchor':p[3]==='L'?'end':'start',
-      'font-family':'var(--mono)','font-size':15,fill:'var(--ok)','font-weight':600});
-    t.textContent=p[0]; g.appendChild(t);
-    G.appendChild(g); marks.push(g);
-  });
   const T=el.querySelector('#is-tab');
-  const R=[['①','PZR',TX('1차계통 압력 유지','holds primary pressure')],
-           ['②','EDV ×2',TX('고온·고압수를 격납으로','hot high-pressure water to containment')],
-           ['③','CRDM',TX('코일·모터가 전부 용기 안','coils and motor all inside')],
-           ['④','RCP ×4',TX('무밀봉 캔드모터형','sealless canned motor')],
-           ['⑤',TX('증기발생기','Steam generator'),TX('하강관 안 · 8구역','in the downcomer, 8 zones')],
-           ['⑥','CSB · UGS',TX('상승 유로 형성 · 노심 지지','forms the riser, supports the core')],
-           ['⑦','ERV ×2',TX('응축수를 용기로 회수','returns condensate to the vessel')],
-           ['⑧',TX('노심','Core'),TX('17×17 · 69다발','17&#215;17, 69 assemblies')]];
-  T.innerHTML=tr(R.map(r=>'<tr><td style="width:26px;color:var(--ok)">'+r[0]+'</td>'
-    +'<td>'+r[1]+'</td><td>'+r[2]+'</td></tr>').join(''));
-  if(RM){ marks.forEach(m=>m.setAttribute('opacity',1)); return; }
-  marks.forEach((m,i)=>m.animate([{opacity:0},{opacity:1}],{duration:280,delay:200+90*i,fill:'forwards'}));
-  flow(up,{n:5,color:'var(--hot)',r:3.2,speed:0.2});
-  flow(dn,{n:5,color:'var(--cool)',r:3.2,speed:0.2});
+  const R=[['PZR',TX('용기 최상부 · 압력 유지','top of the vessel; holds pressure')],
+           ['EDV ×2',TX('용기 상부 · 고온·고압수를 격납으로','upper vessel; releases to containment')],
+           ['CRDM',TX('내장형 — 코일·모터가 전부 용기 안','internal; coils and motor all inside')],
+           ['RCP ×4',TX('용기 상부 · 무밀봉 캔드모터형','upper vessel; sealless canned motor')],
+           [TX('증기발생기','Steam generator'),TX('나선형 관류 1대 · 하강관 안 · 8구역','helical once-through, in the downcomer, 8 zones')],
+           ['PCCS',TX('격납 외부 · 격납 증기를 응축','outside containment; condenses its steam')],
+           ['ERV ×2',TX('용기 하부 측면 · 응축수 회수','lower vessel side; returns condensate')],
+           [TX('노심','Core'),TX('17×17 · 69다발','17×17, 69 assemblies')],
+           [TX('격납용기','Containment'),TX('소형 강재 · 설계압력 5 MPa','small steel, 5 MPa design')],
+           ['CSB · UGS',TX('상승 유로 형성 · 노심 지지','forms the riser, supports the core')],
+           ['ECT',TX('격납 바깥 · 최종 열침원','outside containment; ultimate heat sink')]];
+  T.innerHTML=tr(R.map(r=>'<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>').join(''));
 }});
 
 

@@ -71,6 +71,16 @@ async function layoutScan(page) {
         r.fill = +(sv.height / bb.height).toFixed(2);
         r.dead = Math.round((bb.height - sv.height) * k / 2);
       }
+      /* 사진 슬라이드. .ph 가 칸 높이를 통째로 받으므로 빈 띠는 안 생기지만,
+         object-fit:contain 이 그림을 많이 줄여 놓았을 수 있다 — 실제로 그려진 크기를 잰다. */
+      sl.querySelectorAll('.fig .ph img').forEach(im => {
+        const box = im.getBoundingClientRect();
+        if (!im.naturalWidth || !box.width) return;
+        const kk = Math.min(box.width / im.naturalWidth, box.height / im.naturalHeight);
+        const h = im.naturalHeight * kk * k, w = im.naturalWidth * kk * k;
+        /* 1280x720 무대 기준으로 세로 200 px 밑이면 강의실에서 읽히지 않는다 */
+        (r.photos = r.photos || []).push({ w: Math.round(w), h: Math.round(h), small: h < 200 });
+      });
       R.push(r);
     });
     return R;
@@ -117,12 +127,13 @@ async function checkDeck(b, slug) {
     }
   }
 
-  const svg = [], thin = [], wrap = [];
+  const svg = [], thin = [], wrap = [], tiny = [];
   for (const lang of ['ko', 'en']) {
     (await svgScan(p, file, lang)).forEach(x => svg.push([lang, x]));
     (await layoutScan(p)).forEach(x => {
       if (x.fill !== undefined && x.fill < 0.8) thin.push([lang, x]);
       if (x.lines > 1) wrap.push([lang, x]);
+      if (x.photos && x.photos.some(q => q.small)) tiny.push([lang, x]);
     });
   }
 
@@ -149,10 +160,13 @@ async function checkDeck(b, slug) {
   row('제목이 두 줄로 흐른 장', wrap, e => console.log('      ' + e[0], 'slide', e[1].n, '·', e[1].lines + '줄'));
   row('그림이 본문의 80 % 미만', thin, e => console.log('      ' + e[0], 'slide', String(e[1].n).padStart(2),
       '· 채움', e[1].fill, '· 빈 띠', e[1].dead + 'px'));
+  row('사진이 너무 작게 그려진 장', tiny, e => console.log('      ' + e[0], 'slide', String(e[1].n).padStart(2),
+      '· ' + e[1].photos.filter(q => q.small).map(q => q.w + '×' + q.h).join(' · ')));
   row('SVG 글자 충돌·이탈', svg, ([l, x]) => console.log('      ' + l, 'slide', String(x.n).padStart(2),
       x.kind, '[' + x.a.slice(0, 44) + ']', x.b ? '× [' + x.b.slice(0, 44) + ']  ' + x.w + '×' + x.h + 'px' : ''));
   console.log('   ' + '영문판 파일이 영어로 열림'.padEnd(26), enFile ? '아니오' : '예');
   return errs.length + left.length + junk.length + over.length + wrap.length + thin.length
+       + tiny.length
        + svg.length + enFile;
 }
 

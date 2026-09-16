@@ -10,6 +10,7 @@
 const path = require('path');
 const fs = require('fs');
 const { chromium } = require('playwright-core');
+const { spawnSync } = require('child_process');
 const { findChromium } = require('./browser');
 
 const ROOT = path.resolve(__dirname, '..');
@@ -22,6 +23,8 @@ const DOCS = path.join(ROOT, 'docs');
     .filter(s => fs.statSync(path.join(ROOT, 'src', 'decks', s)).isDirectory())
     .filter(s => !only || s === only).sort();
   if (!slugs.length) { console.error('그런 덱이 없다:', only); process.exit(1); }
+
+  const made = [];
 
   const b = await chromium.launch(findChromium());
   for (const slug of slugs) {
@@ -45,8 +48,18 @@ const DOCS = path.join(ROOT, 'docs');
       console.log(`  ${path.basename(file).padEnd(46)} ${n}쪽  ${(fs.statSync(file).size / 1048576).toFixed(1)} MB`
                 + (real.length ? `  ⚠ 오류 ${real.length}건` : ''));
       real.slice(0, 5).forEach(e => console.log('     -', e));
+      made.push(file);
       await p.close();
     }
   }
   await b.close();
+
+  /* 크로미움은 그림을 2배 해상도로 키워 무압축에 가깝게 넣는다. 사진이 있는 덱은 PDF 가
+     스무 배로 불어나므로 곧바로 다시 눌러 준다. 사진이 없으면 아무 일도 일어나지 않는다. */
+  if (made.length) {
+    const r = spawnSync('python3', [path.join(__dirname, 'pdfshrink.py'), ...made],
+                        { encoding: 'utf8' });
+    if (r.status === 0) process.stdout.write(r.stdout);
+    else console.log('  (pdfshrink 를 건너뜀 — pip install pikepdf Pillow 하면 PDF 가 작아진다)');
+  }
 })();

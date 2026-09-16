@@ -23,6 +23,8 @@ src/
   decks/<슬러그>/          주차 하나 = 폴더 하나
     deck.conf              주차·제목·한 줄 소개. build 와 목차 페이지가 읽는다
     10_… 20_… 99_wrap.html 슬라이드 소스. 파일명 사전순 = 슬라이드 순서
+    media/*.webp           교재에서 뽑은 사진·화면 캡처. build 가 base64 로 심는다
+                           파일 이름이 곧 교재의 그림 번호다 — f6_03.webp = 그림 6.3
   course.conf            과목 정보 — 목차 페이지가 쓴다
   index.tpl.html         목차 페이지 틀
   fonts.b64.css          심는 글꼴 서브셋(base64) · tools/fonts.py 가 만든다
@@ -35,8 +37,11 @@ docs/                    빌드 산출물. 직접 고치지 말 것 — 항상 s
 tools/
   build.py   덱을 굽고 목차를 만든다 (build.sh / build.ps1 이 이것을 부른다)
   fonts.py   글꼴 서브셋을 다시 만든다
-  check.js   덱마다 한/영 전수 점검 — 아홉 가지
-  pdf.js     PDF 를 다시 굽는다
+  media.py   교재(docx)의 그림을 덱의 media/ 로 뽑는다 — 흰 여백을 자르고 WebP 로 줄인다
+  check.js   덱마다 한/영 전수 점검 — 열 가지
+  pdf.js     PDF 를 다시 굽는다 (끝에 pdfshrink.py 를 불러 사진을 다시 누른다)
+  pdfshrink.py  구운 PDF 안의 사진을 JPEG 로 다시 눌러 파일을 줄인다
+  figfit.js  그림 칸에 viewBox 높이가 맞는지 재서 권장값을 알려 준다(조언용)
   shot.js    스크린샷 · browser.js 크로미움 탐색
 ```
 
@@ -44,7 +49,7 @@ tools/
 
 ```
 common/00_head + common/01_engine + decks/<슬러그>/*.html + common/99_boot
-  → /*@FONTS@*/ 자리에 글꼴,  DECK 자리에 window.DECK(제목·슬러그)
+  → /*@FONTS@*/ 자리에 글꼴,  DECK 자리에 window.DECK(제목·슬러그) + window.IMG(그림)
   → docs/<슬러그>.html  ·  docs/<슬러그>.en.html
 ```
 
@@ -69,7 +74,12 @@ common/00_head + common/01_engine + decks/<슬러그>/*.html + common/99_boot
    ```
 3. 슬라이드 소스를 넣는다. `10_` `20_` … 번호 접두사로 순서를 잡고, **파일마다 `<script>` 로 열고
    `</script>` 로 닫는다.** 첫 파일 맨 앞에서 `SECT()` 로 섹션을 열고 `S({...})` 로 슬라이드를 쌓는다.
-4. `./build.sh` → `python3 tools/fonts.py`(새 글자가 있으면) → `cd tools && node check.js && node pdf.js`
+4. 교재에 사진·화면 캡처가 있으면 뽑는다.
+   ```bash
+   python3 tools/media.py "<교재.docx>" w04_system-codes   # media/f2_01.webp … 가 생긴다
+   ```
+   **쓰지 않는 그림은 지운다** — media/ 에 있는 것은 전부 덱 파일 안에 들어간다.
+5. `./build.sh` → `python3 tools/fonts.py`(새 글자가 있으면) → `cd tools && node check.js && node pdf.js`
 
 `docs/` 를 직접 고치면 다음 빌드에 덮여 사라진다.
 
@@ -80,7 +90,12 @@ common/00_head + common/01_engine + decks/<슬러그>/*.html + common/99_boot
 ```js
 SECT('05 · 공학적안전설비')     // 여기부터 새 섹션. 개요 화면(O)과 레일 표시에 쓰인다
 S({ html:`...`, init(el){ ... } })   // 슬라이드 하나. init은 이 슬라이드가 켜질 때마다 호출
+S({ html:`...`, src:'출처', abbr:'<b>ECCS</b> 비상노심냉각계통 · …' })
 ```
+
+`abbr` 은 **푸터 맨 윗줄에 붙는 약어 풀이**다. 어려운 약어가 본문에 나오는 장에서 그 자리에 뜻을
+달아 두면 학생이 딴 데를 찾지 않는다. 그 장에 실제로 나오는 약어만 골라 적는다 — 전체 약어표는
+덱 끝에 따로 둔다.
 
 `S()`의 `html`은 **슬라이드 본문만** 쓴다. 좌측 레일(섹션명·번호)과 하단 푸터는 `go()`가 붙인다.
 `init(el)`의 `el`은 그 슬라이드의 DOM 루트다. **`document.querySelector`를 쓰지 말고 `el.querySelector`를 쓴다.**
@@ -97,6 +112,9 @@ S({ html:`...`, init(el){ ... } })   // 슬라이드 하나. init은 이 슬라�
 | `decay(t)` | Way–Wigner 붕괴열 비율. `0.0622(t^-0.2 − (t+10^8)^-0.2)` |
 | `rhoW(T)` | 물 밀도 `1006.0 − 0.2646T − 0.002424T²` (kg/m³, T는 °C) |
 | `clamp` `lerp` `fmt` | 수치 유틸 |
+| `wrapT(s,n,lat)` | SVG 안에서 줄을 나눈다. `<text>`에는 자동 줄바꿈이 없고 한글은 공백이 드물어 단어 기준으로 자르면 칸을 넘는다. `n`은 **한글 몇 자 폭**이다 — 폭 W px 칸에 글자 크기 px 로 넣으려면 `n = W/px`. 모노는 `lat=0.62` |
+| `widT(s,px,lat)` | 글자열의 어림 폭(px). 칸을 나눠 배치할 때 쓴다 |
+| `PH({src,cap,w},…)` | 사진·화면 캡처를 칸에 앉힌다. `src`는 `media/` 의 파일 이름, `w`는 칸을 나눌 때의 무게(기본 1). 캡션에 토큰을 그대로 써도 된다 |
 | `TX(ko,en)` | 현재 언어의 문자열. **init 안에서 JS로 만드는 글자는 전부 이걸 쓴다** |
 | `tr(s)` | 문자열 속 `[[한국어\|\|English]]` 토큰을 현재 언어로 치환. `go()`가 알아서 부른다 |
 | `setLang('en')` | 언어 전환. 현재 슬라이드를 다시 그리고 주소·localStorage에 남긴다 |
@@ -150,6 +168,34 @@ S({ html:`...`, init(el){ ... } })   // 슬라이드 하나. init은 이 슬라�
 `.side`가 있는 슬라이드는 viewBox 폭을 **780~820**으로 잡는다.
 
 높이는 `viewBox폭 × 본문높이 / 칸폭 × 0.92` 정도가 적당하다. `tools/check.js`가 80 % 미만을 잡아 준다.
+
+### 사진 · 화면 캡처 — 다시 그리지 말 것
+
+**그림 자체가 내용인 것은 원본을 쓴다.** ARIS 검색 화면, NuScale 모듈 실물, BWRX-300 도면 같은 것은
+SVG 로 다시 그리면 내용이 사라진다. 처음 이 덱을 만들 때 그것들을 전부 추상 도형으로 바꿔 넣었다가
+다시 걷어냈다. 판단 기준은 하나다 — **내가 그린 것이 원본보다 더 말해 주는가.**
+
+| 원본을 쓴다 | 직접 그린다 |
+|---|---|
+| 화면 캡처(ARIS · NRC · NEA 대시보드) | 개념 도해 — 3계층 · 5단계 · 사슬 |
+| 실물 사진 · 제조사 단면도 · 계통 도면 | 수치가 움직이는 그림(슬라이더 · 버튼) |
+| 남의 집계 그래프(수치를 내가 만들 수 없는 것) | 애니메이션이 순서를 보여 주는 것 |
+
+**수치를 지어내지 않는다.** 원본이 없다고 비율을 임의로 채우면 6절 4번을 어기는 것이다.
+그럴 바에는 그림을 빼고 글로 적는다.
+
+```js
+PH({src:'f6_03', cap:'[[NuScale 모듈의 구성 기기||The NuScale module component by component]]'})
+PH({src:'f6_11', w:1, cap:'…'}, {src:'f6_12', w:2, cap:'…'})   // 비율이 다르면 무게를 준다
+```
+
+- `.ph` 가 칸 높이를 통째로 받고 `img` 가 `object-fit:contain` 으로 그 안에 들어앉는다.
+  **viewBox 높이를 맞출 필요가 없다** — 어떤 비율이든 칸을 넘지 않는다.
+- **한 줄에 셋까지.** 넷을 넣으면 강의실에서 못 읽는다. `tools/check.js` 가 세로 200 px 미만을 잡아 준다.
+- **여러 장을 나란히 놓을 때는 캡션을 한 줄로 줄인다.** 캡션이 길면 그만큼 그림이 눌린다.
+- 배경은 `--sheet`(흰 종이), 테두리는 `--shadow` 를 쓴 `drop-shadow` 다. `drop-shadow` 는 실제로
+  그려진 픽셀을 따라가므로 letterbox 된 빈 자리에 테두리가 생기지 않는다.
+- 교재의 그림 번호가 곧 파일 이름이다(`f6_03` = 그림 6.3). 나중에 원본을 찾아가기 쉽게 하려는 것이다.
 
 ### 글꼴
 
@@ -274,6 +320,15 @@ node pdf.js w02-03_smr-design-requirements ko        # 한 언어만
 ```
 결과는 `docs/<슬러그>.pdf` · `docs/<슬러그>.en.pdf` — 목차 페이지의 링크와 같은 이름이다.
 
+**크로미움은 인쇄할 때 그림을 2배 해상도로 키워 무압축에 가깝게 넣는다.** 사진이 있는 덱은
+PDF 가 스무 배로 불어난다(2 MB 심었는데 25 MB). `pdf.js` 가 끝에 `tools/pdfshrink.py` 를 불러
+사진만 JPEG 로 다시 누른다 — 25 MB → 7 MB. 글자와 도해는 벡터 그대로 남는다.
+`pikepdf` 와 `Pillow` 가 없으면 이 단계를 건너뛰고 큰 파일이 그대로 남는다.
+
+```bash
+pip install pikepdf Pillow fonttools brotli      # 최초 1회
+```
+
 **슬라이드를 고쳤으면 PDF를 다시 굽고 같이 커밋한다.** 안 그러면 공개 링크의 PDF가 낡는다.
 
 ---
@@ -287,11 +342,12 @@ node pdf.js w02-03_smr-design-requirements ko        # 한 언어만
    `rect`의 `width`·`height`, `circle`의 `cx cy r`은 CSS 기하 속성이라 동작한다 —
    **다만 값에 단위를 붙여야 한다.** `[{width:0},{width:160}]`처럼 맨 숫자를 주면 Chrome이
    **조용히 무시한다**(4장 SMR 구역 띠가 v1.0 내내 안 칠해졌다). `[{width:'0px'},{width:'160px'}]`로 쓴다.
-2. **단일 파일을 유지한다.** 외부 이미지·JS·CSS 금지. 그림은 전부 인라인 SVG로 그린다.
-   **글꼴도 파일 안에 있다** — 덱에 쓰인 글자만 남긴 Pretendard·IBM Plex Mono 서브셋(388 KB)을
-   base64로 심었다. 그래서 인터넷이 없어도 글꼴까지 그대로 나온다.
-   CDN 링크는 서브셋에 없는 글자를 위한 보조일 뿐이다.
+2. **단일 파일을 유지한다.** 외부 파일을 링크하지 않는다 — 그림도, 글꼴도, 스크립트도.
+   도해는 인라인 SVG로 그리고, **사진·화면 캡처는 WebP 로 줄여 base64 로 심는다**(`media/`).
+   **글꼴도 파일 안에 있다** — 덱에 쓰인 글자만 남긴 Pretendard·IBM Plex Mono 서브셋을
+   base64로 심었다. CDN 링크는 서브셋에 없는 글자를 위한 보조일 뿐이다.
    **강의실에 인터넷이 없어도 깨지지 않아야 한다**가 기준이다.
+   심는 만큼 파일이 커지므로 **쓰지 않는 그림은 media/ 에서 지운다**.
 3. **타이머는 `raf()`로만 만든다.** `setInterval`이나 맨 `requestAnimationFrame`은 슬라이드를 떠나도 계속 돌아
    누수·중복 애니메이션을 만든다.
 4. **수치는 교재와 일치시킨다.** 붕괴열·자연순환·SDM·격납 압력의 계수는 교재 본문 값이다. 임의로 바꾸지 않는다.
@@ -314,10 +370,11 @@ node pdf.js w02-03_smr-design-requirements ko        # 한 언어만
 cd tools && npm install playwright-core      # 최초 1회
 node check.js                                # 모든 덱 전수 점검 — 이것부터 돌린다
 node check.js w02-03_smr-design-requirements # 한 덱만
+node figfit.js <슬러그>                       # 그림 칸에 viewBox 높이가 맞는지 (조언용)
 node shot.js "../docs/<슬러그>.html" "1,16,23,36"   # 슬라이드 번호 지정, 생략하면 전수
 ```
 
-`check.js`는 덱마다 46장을 **한국어와 영어로 각각** 넘기며 아홉 가지를 센다. 전부 0(또는 예)이어야 한다.
+`check.js`는 덱을 **한국어와 영어로 각각** 전수로 넘기며 열 가지를 센다. 전부 0(또는 예)이어야 한다.
 
 ```
 console errors: 0          콘솔 오류(폰트 요청 실패는 걸러냈다)
@@ -326,6 +383,7 @@ console errors: 0          콘솔 오류(폰트 요청 실패는 걸러냈다)
 무대 밖으로 넘친 요소: 0      1280×720 밖으로 나간 글자 — 영문이 길어질 때 잘 생긴다
 제목이 두 줄로 흐른 슬라이드: 0   한 줄이 기준. 두 줄이 되면 본문이 43 px 밀린다
 그림이 본문의 80 % 미만: 0      viewBox 비율이 칸보다 납작하다는 뜻(위 3절)
+사진이 너무 작게 그려진 장: 0    한 줄에 너무 많이 넣었거나 캡션이 길다 — 세로 200 px 이 하한이다
 SVG 글자 충돌·이탈: 0        <text> 끼리 겹치거나 그림 밖으로 나간 것
 심어 둔 글꼴에 없는 글자: 0    있으면 그 글자만 OS 기본 글꼴로 떨어진다 → tools/fonts.py 재실행
 영문판 파일이 영어로 열림: 예

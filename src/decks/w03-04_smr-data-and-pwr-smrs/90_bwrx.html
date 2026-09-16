@@ -12,81 +12,48 @@ html:`[[<div class="no">09</div><h2>대조군<br>BWRX-300</h2><div class="ln"></
 <b>solved down the BWR line</b>. Same destination, different route.</p>]]`});
 
 
+/* ---------------------------------------------------------------- 건물과 계통 */
+S({tag:'MOSTLY UNDERGROUND', ov:'[[BWRX-300 — 대부분이 지하에 들어간다||BWRX-300 - most of it goes underground]]',
+src:'[[<b>출처</b> 본 교재 9.1절 표 9.1 · 그림 9.1 · 9.2 · 전기출력 300 MWe(송전단) · 열출력 870 MWt||<b>Source</b> This textbook &#167;9.1, Table 9.1 and Figs. 9.1-9.2 · 300 MWe net, 870 MWt]]',
+abbr:'[[<b>ESBWR</b> BWRX-300의 모체 설계 · <b>격리응축기</b> 증기를 관 안에서 응축시켜 되돌리는 열교환기 · <b>복수기</b> 터빈을 나온 증기를 물로 되돌리는 열교환기||<b>ESBWR</b> the parent design · <b>isolation condenser</b> condenses steam inside tubes and returns it · <b>condenser</b> turns turbine exhaust back into water]]',
+html:`<h2 class="t">[[ESBWR을 깎아 만든 설계 — <em>열 번째 세대라는 뜻으로 X</em>||Pared down from the ESBWR - the <em>X marks the tenth generation</em>]]</h2>
+<ul class="b">
+  <li>[[전기출력 <b>300 MWe(송전단)</b> · 열출력 <b>870 MWt</b> · 1차 순환은 <b>자연순환</b> · 안전계통은 완전 피동 · 설계수명 60년||<b>300 MWe net</b>, <b>870 MWt</b> thermal, <b>natural</b> primary circulation, fully passive safety systems, 60-year design life]]</li>
+  <li>[[용도가 넓음 — <b class="cool">부하추종(50~100%) · 수소 생산 · 지역난방 · 공정열</b>. 농축도는 평균 3.81%로 기존 공급망 안임||A wide remit - <b class="cool">load following (50-100%), hydrogen, district heating, process heat</b>. Enrichment averages 3.81%, inside the existing supply chain]]</li>
+</ul>
+<div class="body"><div class="fig">
+${PH({src:'f9_01', cap:'[[원자로건물과 격납 — <b>대부분이 지하</b>에 들어간다||Reactor building and containment - <b>mostly below grade</b>]]'},
+     {src:'f9_02', cap:'[[주요 계통 구성 — 원자로용기 · 격리응축기 · 터빈-복수기 계통||The main systems - reactor vessel, isolation condensers, turbine and condenser]]'})}
+</div></div>`});
+
+
 /* ---------------------------------------------------------------- 굴뚝 */
 S({tag:'THE CHIMNEY', ov:'[[굴뚝으로 순환을 만든다 — 노형이 달라도 물리는 같다||A chimney makes the circulation - different line, same physics]]',
-src:'[[<b>출처</b> 본 교재 9.1 · 9.2절 표 9.1 · 원자로용기 내경 4 m · 높이 27 m · 노심 높이 3.8 m · 벽 두께 약 136 mm||<b>Source</b> This textbook &#167;&#167;9.1-9.2, Table 9.1 · vessel 4 m inside diameter, 27 m tall, 3.8 m core, wall about 136 mm]]',
-abbr:'[[<b>ESBWR</b> BWRX-300의 모체 설계 · <b>굴뚝(chimney)</b> 노심 위에 일부러 만든 긴 통로 · <b>2상 혼합물</b> 물과 기포가 섞인 유체 · <b>기수분리기 · 건조기</b> 증기에서 물기를 걸러 내는 장치||<b>ESBWR</b> the parent design of BWRX-300 · <b>chimney</b> a long passage built above the core on purpose · <b>two-phase mixture</b> water carrying steam voids · <b>separator and dryer</b> remove moisture from the steam]]',
+src:'[[<b>출처</b> 본 교재 9.2절 그림 9.3 · 9.4 · 원자로용기 내경 4 m · 높이 27 m · 노심 높이 3.8 m · 벽 두께 약 136 mm||<b>Source</b> This textbook &#167;9.2, Figs. 9.3-9.4 · vessel 4 m inside diameter, 27 m tall, 3.8 m core, wall about 136 mm]]',
+abbr:'[[<b>굴뚝(chimney)</b> 노심 위에 일부러 만든 긴 통로 · <b>2상 혼합물</b> 물과 기포가 섞인 유체 · <b>시라우드</b> 노심을 감싸 상승·하강 유로를 가르는 원통 · <b>기수분리기 · 건조기</b> 증기에서 물기를 걸러 내는 장치||<b>chimney</b> a long passage built above the core on purpose · <b>two-phase mixture</b> water carrying steam voids · <b>shroud</b> the cylinder separating up-flow from down-flow · <b>separator and dryer</b> remove moisture from the steam]]',
 html:`<h2 class="t">[[펌프를 없앤 대가는 <em>높이로 치름</em> — 6장과 같은 논리임||Drop the pump and you pay <em>in height</em> - as in chapter 6]]</h2>
 <ul class="b">
-  <li>[[기포가 섞인 물은 가볍고 하강관의 물은 무거움. 이 <b>밀도차가 구동수두</b>임 — 기포 구간이 길수록 커짐||Water carrying voids is light; downcomer water is heavy. <b>That density difference is the driving head</b> - the longer the voided run, the larger it gets]]</li>
-  <li>[[그래서 노심 위에 <b class="cool">물만 있는 긴 통로를 일부러</b> 만듦. 이것이 굴뚝임 — 용기가 내경 4 m 에 높이 27 m 로 유난히 긴 이유임||So a <b class="cool">long passage is built above the core on purpose</b> - the chimney. Hence a vessel 4 m across and 27 m tall]]</li>
+  <li>[[기포가 섞인 물은 가볍고 하강관의 물은 무거움. 이 <b>밀도차가 구동수두</b>이고, 기포 구간이 <b>길수록 커짐</b>||Water carrying voids is light; downcomer water is heavy. <b>That density difference is the driving head</b>, and it grows with <b>the length of the voided run</b>]]</li>
+  <li>[[그래서 노심 위에 <b class="cool">긴 통로를 일부러</b> 만듦 — 이것이 굴뚝임. 용기가 내경 4 m 에 높이 27 m 로 유난히 긴 이유임||So a <b class="cool">long passage is built above the core on purpose</b> - the chimney. Hence a vessel 4 m across and 27 m tall]]</li>
 </ul>
 <div class="body">
   <div class="fig">
-  <svg viewBox="0 0 790 412" role="img" aria-label="[[아래에서부터 노심·굴뚝·기수분리기·건조기가 쌓인 BWRX-300 원자로용기 단면||A BWRX-300 vessel section - core, chimney, separator and dryer stacked from the bottom]]">
-    <g id="cm-fig"></g>
-  </svg>
+  ${PH({src:'f9_03', cap:'[[원자로압력용기와 내부구조물 — 아래에서부터 노심 · 굴뚝 · 기수분리기 · 건조기. <b>제어봉은 아래에서</b> 들어간다||Vessel and internals - core, chimney, separator, dryer from the bottom up. <b>The rods enter from below</b>]]'},
+       {src:'f9_04', cap:'[[용기 내 주 유동 경로 — 급수가 하강관에서 분리기 배출수와 섞이고, 노심에서 비등해 굴뚝을 타고 올라간다||The main flow path - feedwater mixes with separator return in the downcomer, boils in the core, climbs the chimney]]'})}
   </div>
   <div class="side">
-    <div class="formula" style="font-size:17px;padding:4px 0">Δp = (ρ<sub>ℓ</sub> − ρ<sub>2ϕ</sub>) g H<sub>ch</sub></div>
+    <div class="formula" style="font-size:16px;padding:4px 0">Δp = (ρ<sub>ℓ</sub> − ρ<sub>2ϕ</sub>) g H<sub>ch</sub></div>
     <table class="d sm">
-      <tr><td>[[노형||Type]]</td><td>[[자연순환 BWR||natural-circulation BWR]]</td></tr>
       <tr><td>[[열출력||Thermal]]</td><td class="n">870 MWt</td></tr>
       <tr><td>[[전기출력||Electrical]]</td><td class="n">[[300 MWe (송전단)||300 MWe (net)]]</td></tr>
       <tr><td>[[용기||Vessel]]</td><td class="n">[[내경 4 m · 높이 27 m||4 m ID · 27 m]]</td></tr>
       <tr><td>[[노심 높이||Core height]]</td><td class="n">3.8 m</td></tr>
+      <tr><td>[[벽 두께||Wall]]</td><td class="n">[[약 136 mm||about 136 mm]]</td></tr>
       <tr><td>[[농축도||Enrichment]]</td><td class="n">[[평균 3.81%||3.81% avg]]</td></tr>
-      <tr><td>[[재장전 주기||Refuelling]]</td><td class="n">[[12~24개월||12-24 months]]</td></tr>
       <tr class="mark"><td>[[제어봉||Control rods]]</td><td>[[아래에서 위로||bottom up]]</td></tr>
     </table>
   </div>
-</div>`,
-init(el){
-  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
-    for(const k in at) e.setAttribute(k,at[k]); return e;};
-  const G=el.querySelector('#cm-fig'), CX=210;
-  G.appendChild(mk('rect',{x:CX-96,y:20,width:192,height:372,rx:36,fill:'var(--panel)',
-    stroke:'var(--rule)','stroke-width':1.8}));
-  const L=[
-    [316,58,'var(--hot)',0.30,TX('노심 — 높이 3.8 m','core - 3.8 m tall')],
-    [176,140,'var(--cool)',0.16,TX('굴뚝 (chimney) — 기포가 올라가는 긴 통로','chimney - the long voided run')],
-    [116,60,'var(--rule)',0.30,TX('기수분리기','steam separator')],
-    [58,58,'var(--rule)',0.20,TX('증기건조기','steam dryer')]
-  ];
-  const parts=[];
-  L.forEach(l=>{
-    const g=mk('g',{opacity:0});
-    g.appendChild(mk('rect',{x:CX-62,y:l[0],width:124,height:l[1],fill:l[2],opacity:l[3]}));
-    g.appendChild(mk('rect',{x:CX-62,y:l[0],width:124,height:l[1],fill:'none',stroke:'var(--rule)'}));
-    g.appendChild(mk('path',{d:'M'+(CX+62)+','+(l[0]+l[1]/2)+' H392',fill:'none',
-      stroke:'var(--rule)','stroke-width':1,'stroke-dasharray':'2 3'}));
-    wrapT(l[4],18).forEach((ln,j)=>{
-      g.appendChild(mk('text',{x:400,y:l[0]+l[1]/2+(wrapT(l[4],18).length>1?-2:5)+j*20,
-        'font-family':'var(--sans)','font-size':16,fill:'var(--ink-2)','font-weight':300}))
-       .textContent=ln; });
-    G.appendChild(g); parts.push(g);
-  });
-  /* 기포 — 노심에서 굴뚝으로 올라간다 */
-  const ch=mk('path',{d:'M'+CX+',312 V180',fill:'none',stroke:'none'}); G.appendChild(ch);
-  const dc=mk('path',{d:'M'+(CX+78)+',100 V330',fill:'none',stroke:'none'}); G.appendChild(dc);
-  /* 굴뚝 높이 표시 */
-  const hm=mk('g',{opacity:0}); G.appendChild(hm);
-  hm.appendChild(mk('path',{d:'M'+(CX-80)+',180 V316 M'+(CX-86)+',180 h12 M'+(CX-86)+',316 h12',
-    fill:'none',stroke:'var(--cool)','stroke-width':1.4}));
-  hm.appendChild(mk('text',{x:CX-94,y:252,'text-anchor':'end','font-family':'var(--mono)',
-    'font-size':16,fill:'var(--cool)','font-weight':600})).textContent='H_ch';
-  const note=mk('text',{x:0,y:404,'font-family':'var(--sans)','font-size':16,fill:'var(--ink-2)',
-    'font-weight':300,opacity:0}); G.appendChild(note);
-  note.textContent=TX('노형 계보가 달라도 물리는 같다 — 펌프를 없애면 높이로 치른다',
-                      'Different reactor line, same physics - drop the pump and you pay in height');
-  if(RM){ parts.concat([hm,note]).forEach(x=>x.setAttribute('opacity',1)); return; }
-  parts.forEach((p,i)=>p.animate([{opacity:0},{opacity:1}],
-    {duration:320,delay:150*i,fill:'forwards'}));
-  hm.animate([{opacity:0},{opacity:1}],{duration:400,delay:760,fill:'forwards'});
-  note.animate([{opacity:0},{opacity:1}],{duration:400,delay:1050,fill:'forwards'});
-  flow(ch,{n:8,color:'var(--bubble)',r:2.8,speed:0.22,fade:1});
-  flow(dc,{n:5,color:'var(--cool)',r:3.2,speed:0.13});
-}});
+</div>`});
 
 
 /* ---------------------------------------------------------------- 세 가지 결정 */
@@ -146,6 +113,22 @@ init(el){
   gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
     {duration:400,delay:220*i,fill:'forwards',easing:'ease-out'}));
 }});
+
+
+/* ---------------------------------------------------------------- RIV · 건식 격납 */
+S({tag:'ISOLATE, NOT PREVENT', ov:'[[격리밸브 하나가 격납 개념 전체를 바꾼다||One isolation valve changes the whole containment concept]]',
+src:'[[<b>출처</b> 본 교재 9.3.1 · 9.3.3절 그림 9.5 · 9.6 · 9.7 · 설계 목표는 호칭경 <b>19 mm(3/4인치)를 넘는</b> 파단에 대해 격리 불가능한 LOCA 를 제거하는 것||<b>Source</b> This textbook &#167;&#167;9.3.1 and 9.3.3, Figs. 9.5-9.7 · the target is no unisolable LOCA for any break above <b>DN 19 mm (3/4 in)</b>]]',
+abbr:'[[<b>RIV</b> 원자로 격리밸브 — 용기에 직접 붙인 이중 밸브 · <b>유량제한기</b> 파단 시 빠져나가는 유량을 제한하는 좁힌 목 · <b>압력억제형 격납</b> 증기를 수조에 밀어 넣어 응축시키는 방식 · <b>건식 격납</b> 그 수조 없이 견디는 방식||<b>RIV</b> reactor isolation valve, doubled and bolted to the vessel · <b>flow restrictor</b> a throat that caps the escaping flow · <b>pressure-suppression containment</b> pushes steam into a pool · <b>dry containment</b> holds without that pool]]',
+html:`<h2 class="t">[[대형 LOCA를 <s>막는</s> 대신 <em>격리 가능하게</em> 만듦||Instead of <s>preventing</s> the large LOCA, it makes every break <em>isolable</em>]]</h2>
+<ul class="b">
+  <li>[[용기를 관통하는 <b>모든 대구경 배관에 격리밸브가 두 개씩</b> 달려 있어 배관이 터지면 즉시 격리함||<b>Every large penetration carries two isolation valves</b>, so a break is shut off at once]]</li>
+  <li>[[건식 격납이 가능해진 이유가 여기 있음 — 격리 불가능한 대형 LOCA가 없으면 <b class="cool">밀려들 증기량이 제한</b>되고, 그러면 압력억제 수조 없이도 격납이 견딤||This is what makes the dry containment possible: with no unisolable large LOCA <b class="cool">the steam that can arrive is bounded</b>, and the containment holds without a suppression pool]]</li>
+</ul>
+<div class="body"><div class="fig">
+${PH({src:'f9_05', cap:'[[<b>격리밸브</b> 설계||The <b>isolation valve</b>]]'},
+     {src:'f9_06', cap:'[[주증기 배관의 <b>격리 구성</b>||<b>Isolation</b> on the steam line]]'},
+     {src:'f9_07', cap:'[[<b>건식 격납용기</b>||The <b>dry containment</b>]]'})}
+</div></div>`});
 
 
 /* ---------------------------------------------------------------- ICS — 수렴 */
@@ -213,6 +196,46 @@ init(el){
   gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
     {duration:380,delay:200*i,fill:'forwards',easing:'ease-out'}));
 }});
+
+
+/* ---------------------------------------------------------------- ICS · PCCS 실물 */
+S({tag:'ICS AND PCCS', ov:'[[격리응축기와 피동격납냉각 — 실제 배치||The isolation condenser and passive containment cooling as built]]',
+src:'[[<b>출처</b> 본 교재 9.4 · 9.5절 그림 9.8 · 9.9 · ICS 는 독립 3계열 · 계열당 약 33 MW||<b>Source</b> This textbook &#167;&#167;9.4-9.5, Figs. 9.8-9.9 · three independent ICS trains, about 33 MW each]]',
+abbr:'[[<b>ICS</b> 격리응축기계통 · <b>PCCS</b> 피동격납냉각계통 · <b>기기 수조</b> 격납의 열을 받아 주는 외부 수조 · <b>주복수기</b> 정상운전에서 증기를 물로 되돌리는 열교환기||<b>ICS</b> Isolation Condenser System · <b>PCCS</b> Passive Containment Cooling System · <b>equipment pool</b> the outside pool that takes the containment heat · <b>main condenser</b> the normal-operation steam-to-water exchanger]]',
+html:`<h2 class="t">[[3계열이 <em>격납 외부 수조</em>에 잠겨 있음||Three trains, submerged in <em>a pool outside the containment</em>]]</h2>
+<ul class="b">
+  <li>[[ICS는 <b>주복수기를 쓸 수 없을 때</b>의 최종 열침원임. 용기에서 나온 증기를 IC 관 내부에서 응축시켜 <b>닫힌 고리</b>로 되돌림||The ICS is the heat sink <b>when the main condenser is unavailable</b>. Steam from the vessel condenses inside the IC tubes and returns in a <b>closed loop</b>]]</li>
+  <li>[[PCCS는 사고 시 또는 능동 격납냉각을 잃었을 때 <b class="ok">자연순환과 응축</b>으로 격납의 열을 기기 수조에 넘김||The PCCS moves containment heat to the equipment pool by <b class="ok">natural circulation and condensation</b> in an accident or on loss of active cooling]]</li>
+</ul>
+<div class="body"><div class="fig">
+${PH({src:'f9_08', cap:'[[격리응축기계통 전체 배치 — <b>3계열</b>이 격납 외부 수조에 잠겨 있다||The isolation condenser system - <b>three trains</b> submerged in a pool outside the containment]]'},
+     {src:'f9_09', cap:'[[피동격납냉각계통 — 자연순환으로 격납의 열을 <b>기기 수조</b>로 옮긴다||Passive containment cooling - natural circulation carries the heat to the <b>equipment pool</b>]]'})}
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- FMCRD */
+S({tag:'FMCRD', ov:'[[미세운동 제어봉구동장치 — BWR의 숙제를 푸는 장치||The fine motion control rod drive - solving the BWR problem]]',
+src:'[[<b>출처</b> 본 교재 9.6절 그림 9.10 · 자성 커플링을 써서 축이 <b>압력경계를 뚫지 않게</b> 함||<b>Source</b> This textbook &#167;9.6, Fig. 9.10 · a magnetic coupling keeps the shaft from <b>crossing the pressure boundary</b>]]',
+abbr:'[[<b>FMCRD</b> 미세운동 제어봉구동장치 · <b>볼 스크루</b> 회전을 직선 운동으로 바꾸는 나사 · <b>자성 커플링</b> 축을 뚫지 않고 자력으로 회전을 넘기는 이음 · <b>수압 축압기</b> 압축 기체로 물을 밀어 제어봉을 급속 삽입하는 장치||<b>FMCRD</b> Fine Motion Control Rod Drive · <b>ball screw</b> turns rotation into linear motion · <b>magnetic coupling</b> passes torque across a wall without a shaft through it · <b>hydraulic accumulator</b> drives rapid rod insertion with stored gas pressure]]',
+html:`<h2 class="t">[[<em>이중 구조</em>임 — 급속 삽입은 수압, 미세 제어는 모터||It is a <em>two-part system</em> - hydraulics for scram, a motor for fine control]]</h2>
+<ul class="b">
+  <li>[[5장에서 짚은 BWR의 숙제 — <b>제어봉을 아래에서 밀어 올려야 한다</b> — 를 푸는 장치임. 모터로 볼 스크루를 돌려 미세 위치를 제어함||It solves the BWR problem from chapter 5 - <b>the rods must be pushed up from below</b>. A motor turns a ball screw for fine positioning]]</li>
+  <li>[[<b class="ok">자성 커플링</b>을 써서 축이 압력경계를 뚫지 않음 — 밀봉부가 없으므로 <b>누설 경로가 하나 줄어듦</b>||A <b class="ok">magnetic coupling</b> keeps the shaft out of the pressure boundary: no seal, so <b>one less leak path</b>]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f9_10', cap:'[[자성 커플링 방식 FMCRD — 볼 스크루를 모터로 돌려 제어봉을 미세하게 움직인다||The magnetically coupled FMCRD - a motor turns the ball screw to position the rod]]'})}
+  </div>
+  <div class="side">
+    <blockquote class="q">[[PWR은 전원을 잃으면 제어봉이 <b>중력으로 떨어지지만</b> BWR은 그렇지 않다.
+      그래서 BWR의 정지계통은 <b>수압 축압기</b>로 급속 삽입을 보장하고,
+      FMCRD는 정상 운전 중의 미세 제어를 맡는 이중 구조가 된다.
+      <span class="cite">GDC 26 의 “두 개의 독립 계통” 요건이 노형마다 다르게 구현되는 예다</span>||In a PWR the rods <b>fall by gravity</b> when power is lost; in a BWR they do not.
+      So the BWR shutdown system guarantees rapid insertion with <b>hydraulic accumulators</b>,
+      while the FMCRD handles fine control in normal operation - two parts, two jobs.
+      <span class="cite">An example of GDC 26&#8217;s “two independent systems” taking a different shape in each line</span>]]</blockquote>
+  </div>
+</div>`});
 
 
 /* ---------------------------------------------------------------- 세 노형 종합 */

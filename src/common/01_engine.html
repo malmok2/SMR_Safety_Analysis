@@ -172,6 +172,23 @@ function wrapT(s, n, lat){
   if(cur.trim()) out.push(cur);
   return out.map(x => x.trim());
 }
+/* ---------- 사진 · 화면 캡처를 칸에 앉힌다 ----------
+   PH({src:'f6_03', cap:'[[한국어||English]]', w:2}, …)  →  .ph 마크업 문자열.
+   w 는 칸을 나눌 때의 무게다(기본 1). 비율이 아주 다른 그림을 나란히 놓을 때 쓴다.
+   src 는 media/ 의 파일 이름이고 build.py 가 window.IMG 에 base64 로 꽂아 둔다.
+   캡션·대체텍스트에 토큰을 그대로 써도 된다 — go() 가 프레임 전체에 tr() 을 부르기 때문이다.
+   그림이 없으면 조용히 건너뛴다(그림을 아직 안 넣은 덱도 빌드는 되어야 한다). */
+function PH(){
+  const IM = window.IMG || {};
+  const a = [].slice.call(arguments).filter(f => IM[f.src]);
+  if(!a.length) return '';
+  return '<div class="ph">' + a.map(f =>
+      '<figure' + (f.w ? ' style="flex:' + f.w + '"' : '') + '>'
+      + '<img src="' + IM[f.src] + '" alt="' + (f.alt || f.cap || '') + '">'
+      + (f.cap ? '<figcaption>' + f.cap + '</figcaption>' : '')
+      + '</figure>').join('') + '</div>';
+}
+
 /* 글자열의 어림 폭(px). 칸을 나눠 배치할 때 쓴다. */
 function widT(s, px, lat){
   lat = lat || 0.55; let w = 0;

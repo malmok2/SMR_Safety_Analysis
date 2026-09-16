@@ -12,112 +12,52 @@ html:`[[<div class="no">06</div><h2>NuScale VOYGR</h2><div class="ln"></div>
 and <b>even the containment</b> in one cylinder. We start inside the vessel and take the safety systems apart one by one.</p>]]`});
 
 
+/* ---------------------------------------------------------------- 모듈의 크기 */
+S({tag:'ONE CYLINDER', ov:'[[모듈 하나에 다 들어간다 — 그리고 그 크기||It all fits in one cylinder - and how big that is]]',
+src:'[[<b>출처</b> 본 교재 6.1절 그림 6.1 · 6.2 · 모듈 높이 <b>76 ft(약 23 m)</b> · 직경 <b>15 ft(약 4.6 m)</b>||<b>Source</b> This textbook &#167;6.1, Figs. 6.1-6.2 · module <b>76 ft (about 23 m)</b> tall and <b>15 ft (about 4.6 m)</b> across]]',
+abbr:'[[<b>NPM</b> NuScale Power Module · <b>격납용기</b> 방사성물질을 가두는 압력경계 · <b>상승관(riser)</b> 가열된 물이 올라가는 통로||<b>NPM</b> NuScale Power Module · <b>containment</b> the pressure boundary that confines radioactivity · <b>riser</b> the passage the heated water climbs]]',
+html:`<h2 class="t">[[<em>격납용기까지</em> 모듈 안에 들어간다는 점이 가장 크게 다름||<em>Even the containment</em> is inside the module]]</h2>
+<ul class="b">
+  <li>[[바깥 원통이 <b>격납용기</b>, 안쪽이 <b>원자로용기</b>. 가운데 긴 관이 상승관이고 그 옆 환상부에 나선형 증기발생기가 감겨 있음||The outer cylinder is the <b>containment</b>, the inner one the <b>reactor vessel</b>. The long central tube is the riser, with the helical steam generator wound in the annulus beside it]]</li>
+  <li>[[사람과 나란히 놓으면 보이는 것 — <b class="cool">수송 가능한 규모</b>임. 공장에서 만들어 옮긴다는 전제가 이 치수에서 나옴||Set beside a person it shows: this is <b class="cool">a transportable size</b>. The whole factory-build premise follows from these dimensions]]</li>
+</ul>
+<div class="body"><div class="fig">
+${PH({src:'f6_01', cap:'[[NPM <b>단면</b>||NPM <b>section</b>]]'},
+     {src:'f6_02', cap:'[[<b>높이 23 m · 직경 4.6 m</b>||<b>23 m tall, 4.6 m across</b>]]'},
+     {src:'f6_13', cap:'[[<b>공장</b>에서 제작 중||In the <b>factory</b>]]'})}
+</div></div>`});
+
+
 /* ---------------------------------------------------------------- 모듈 단면 */
 S({tag:'INSIDE THE MODULE', ov:'[[용기 안에는 무엇이 들어 있는가||What is inside the vessel]]',
-src:'[[<b>출처</b> 본 교재 6.1 · 6.2절 표 6.1 · 모듈 높이 약 23 m(76 ft) · 직경 약 4.6 m(15 ft)||<b>Source</b> This textbook &#167;&#167;6.1-6.2, Table 6.1 · module about 23 m (76 ft) tall, 4.6 m (15 ft) across]]',
-abbr:'[[<b>NPM</b> NuScale Power Module · <b>CNV</b> 격납용기 · <b>RPV</b> 원자로용기 · <b>RVV</b> 원자로 배기밸브 · <b>RRV</b> 원자로 재순환밸브 · <b>CRDM</b> 제어봉구동장치 · <b>DHRS</b> 잔열제거계통||<b>NPM</b> NuScale Power Module · <b>CNV</b> containment vessel · <b>RPV</b> reactor pressure vessel · <b>RVV</b> reactor vent valve · <b>RRV</b> reactor recirculation valve · <b>CRDM</b> control rod drive · <b>DHRS</b> decay heat removal system]]',
-html:`<h2 class="t">[[원자로 · 증기발생기 · 가압기 · <em>격납용기까지</em> 한 원통에||Reactor, steam generator - <em>and the containment</em> - in one cylinder]]</h2>
+src:'[[<b>출처</b> 본 교재 6.2절 그림 6.3 · 표 6.1 · 붉은 화살표가 가열되어 올라가는 흐름, 푸른 화살표가 식어서 내려가는 흐름임||<b>Source</b> This textbook &#167;6.2, Fig. 6.3 and Table 6.1 · red arrows are the heated upward flow, blue the cooled downward flow]]',
+abbr:'[[<b>RVV</b> 원자로 배기밸브 · <b>RRV</b> 원자로 재순환밸브 · <b>CRDM</b> 제어봉구동장치 · <b>CNV</b> 격납용기 · <b>DHRS</b> 잔열제거계통 · <b>CIV</b> 격납격리밸브||<b>RVV</b> reactor vent valve · <b>RRV</b> reactor recirculation valve · <b>CRDM</b> control rod drive · <b>CNV</b> containment vessel · <b>DHRS</b> decay heat removal system · <b>CIV</b> containment isolation valve]]',
+html:`<h2 class="t">[[설계를 읽는다는 것은 <em>어느 기기가 어디에 왜</em> 있는지를 아는 일임||Reading a design means knowing <em>which component sits where, and why</em>]]</h2>
 <ul class="b">
-  <li>[[격납용기까지 모듈 안에 들어간다는 점이 다른 설계와 <b>가장 크게 다름</b>. 두 용기가 모두 <b class="cool">수조에 잠겨</b> 있음||Putting the containment inside the module is <b>the biggest difference</b> from other designs. Both vessels sit <b class="cool">submerged in a pool</b>]]</li>
+  <li>[[원자로용기와 격납용기가 <b>이중으로 겹쳐</b> 있고, 두 용기 모두 <b class="cool">수조에 잠겨</b> 있음 — 이 한 가지가 뒤의 모든 안전 논리를 만듦||The reactor vessel and containment are <b>nested</b>, and both sit <b class="cool">submerged in a pool</b>. That one fact drives every safety argument that follows]]</li>
 </ul>
 <div class="body">
   <div class="fig">
-  <svg viewBox="0 0 790 440" role="img" aria-label="[[NuScale 모듈 단면 — 수조에 잠긴 격납용기와 그 안의 원자로용기, 노심·상승관·증기발생기·가압기와 밸브들||A NuScale module section - the containment in its pool, the reactor vessel inside, with core, riser, steam generator, pressuriser and valves]]">
-    <g id="np-cut"></g>
-  </svg>
+  ${PH({src:'f6_03', cap:'[[NuScale 모듈의 구성 기기 — 두 용기가 겹쳐 있고 둘 다 수조에 잠겨 있다||The NuScale module component by component - two nested vessels, both submerged]]'})}
   </div>
   <div class="side">
     <table class="d sm" id="np-tab"></table>
   </div>
 </div>`,
 init(el){
-  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
-    for(const k in at) e.setAttribute(k,at[k]); return e;};
-  const G=el.querySelector('#np-cut');
-  /* 수조 */
-  G.appendChild(mk('rect',{x:0,y:20,width:790,height:404,fill:'var(--cool)',opacity:0.07}));
-  G.appendChild(mk('text',{x:14,y:414,class:'lbl',fill:'var(--cool)'})).textContent=
-    TX('원자로건물 수조 — 최종 열침원 · 차폐 · 이송 경로','reactor building pool - heat sink, shielding, transport route');
-  const CX=300;
-  /* 격납용기 */
-  G.appendChild(mk('rect',{x:CX-118,y:36,width:236,height:360,rx:100,fill:'var(--ground)',
-    stroke:'var(--ok)','stroke-width':2}));
-  /* 원자로용기 */
-  G.appendChild(mk('rect',{x:CX-86,y:56,width:172,height:320,rx:74,fill:'var(--panel)',
-    stroke:'var(--rule)','stroke-width':1.6}));
-  /* 가압기 증기공간 */
-  G.appendChild(mk('path',{d:'M'+(CX-86)+',120 h172',stroke:'var(--rule)','stroke-width':1.2}));
-  G.appendChild(mk('rect',{x:CX-86,y:56,width:172,height:64,rx:60,fill:'var(--hot)',opacity:0.12}));
-  /* 상승관 */
-  G.appendChild(mk('rect',{x:CX-26,y:132,width:52,height:150,fill:'var(--hot)',opacity:0.18}));
-  G.appendChild(mk('rect',{x:CX-26,y:132,width:52,height:150,fill:'none',stroke:'var(--rule)'}));
-  /* 증기발생기 — 상승관 바깥 환상부 */
-  [-1,1].forEach(s=>{
-    G.appendChild(mk('rect',{x:CX+s*72-(s>0?0:26),y:140,width:26,height:108,
-      fill:'var(--cool)',opacity:0.28}));
-  });
-  /* 노심 */
-  G.appendChild(mk('rect',{x:CX-44,y:290,width:88,height:60,fill:'var(--hot)',opacity:0.30}));
-  G.appendChild(mk('rect',{x:CX-44,y:290,width:88,height:60,fill:'none',stroke:'var(--hot)','stroke-width':1.4}));
-  /* 순환 경로 — 닫지 않는다. 닫으면 노심 위로 대각선이 생긴다. */
-  const up=mk('path',{d:'M'+CX+',288 V150',fill:'none',stroke:'none'});
-  const dn=mk('path',{d:'M'+(CX+56)+',140 V300',fill:'none',stroke:'none'});
-  G.appendChild(up); G.appendChild(dn);
-
-  /* 지시선과 번호 */
-  const P=[
-    ['①',CX,      70, 'L', TX('제어봉구동장치 (CRDM)','Control rod drive (CRDM)')],
-    ['②',CX+60,  104, 'R', TX('원자로 배기밸브 (RVV) ×2','Reactor vent valves (RVV) &#215;2')],
-    ['③',CX-58,   92, 'L', TX('가압기','Pressuriser')],
-    ['④',CX+78,  194, 'R', TX('나선형 증기발생기 ×2','Helical steam generators &#215;2')],
-    ['⑤',CX,     206, 'L', TX('상승관 — 높이차의 근원','Riser - the source of the head')],
-    ['⑥',CX+80,  300, 'R', TX('원자로 재순환밸브 (RRV) ×2','Recirculation valves (RRV) &#215;2')],
-    ['⑦',CX,     320, 'L', TX('노심 — 37다발 · 유효높이 약 2 m','Core - 37 assemblies, about 2 m active')],
-    ['⑧',CX+118, 248, 'R', TX('격납용기 (CNV) — 운전 중 진공','Containment (CNV) - vacuum in operation')]
-  ];
-  const marks=[];
-  P.forEach(p=>{
-    const g=mk('g',{opacity:0});
-    const lx = p[3]==='L' ? 132 : 470, ly = p[2];
-    g.appendChild(mk('path',{d:'M'+p[1]+','+p[2]+' H'+(p[3]==='L'?152:450),
-      fill:'none',stroke:'var(--rule)','stroke-width':1,'stroke-dasharray':'2 3'}));
-    g.appendChild(mk('circle',{cx:p[1],cy:p[2],r:3.4,fill:'var(--cool)'}));
-    const t=mk('text',{x:p[3]==='L'?146:456,y:ly+5,'text-anchor':p[3]==='L'?'end':'start',
-      'font-family':'var(--mono)','font-size':15,fill:'var(--cool)','font-weight':600});
-    t.textContent=p[0]; g.appendChild(t);
-    G.appendChild(g); marks.push(g);
-  });
-  /* 흐름 화살표 */
-  const hot=mk('path',{d:'M'+CX+',282 V152',fill:'none',stroke:'var(--hot)','stroke-width':2.2,
-    'marker-end':'url(#npup)'});
-  const cold=mk('path',{d:'M'+(CX+62)+',150 V292',fill:'none',stroke:'var(--cool)','stroke-width':2.2,
-    'marker-end':'url(#npdn)'});
-  const defs=mk('defs',{}); G.appendChild(defs);
-  [['npup','var(--hot)'],['npdn','var(--cool)']].forEach(m=>{
-    const mk2=mk('marker',{id:m[0],viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:6,markerHeight:6,
-      orient:'auto'}); mk2.appendChild(mk('path',{d:'M0,0 L10,5 L0,10 z',fill:m[1]}));
-    defs.appendChild(mk2);
-  });
-  G.appendChild(hot); G.appendChild(cold);
-
-  /* 오른쪽 표 */
   const T=el.querySelector('#np-tab');
-  const R=[['①',TX('CRDM','CRDM'),TX('전원 상실 시 중력 낙하','gravity drop on loss of power')],
-           ['②',TX('RVV ×2','RVV &#215;2'),TX('증기를 격납으로 방출','vents steam to containment')],
-           ['③',TX('가압기','Pressuriser'),TX('1차계통 압력 유지','holds primary pressure')],
-           ['④',TX('증기발생기 ×2','Steam generators &#215;2'),TX('두 대가 독립','two independent units')],
-           ['⑤',TX('상승관','Riser'),TX('가열된 물이 올라가는 통로','the heated water rises here')],
-           ['⑥',TX('RRV ×2','RRV &#215;2'),TX('고인 물을 용기로 회수','returns collected water')],
-           ['⑦',TX('노심','Core'),TX('연료 37다발','37 fuel assemblies')],
-           ['⑧',TX('격납용기','Containment'),TX('압력경계 + 응축면','pressure boundary and condenser')]];
-  T.innerHTML = tr(R.map(r=>'<tr><td style="width:26px;color:var(--cool)">'+r[0]+'</td>'
-    +'<td>'+r[1]+'</td><td>'+r[2]+'</td></tr>').join(''));
-
-  if(RM){ marks.forEach(m=>m.setAttribute('opacity',1)); return; }
-  marks.forEach((m,i)=>m.animate([{opacity:0},{opacity:1}],
-    {duration:280,delay:200+90*i,fill:'forwards'}));
-  flow(up,{n:5,color:'var(--hot)',r:3.2,speed:0.13});
-  flow(dn,{n:5,color:'var(--cool)',r:3.2,speed:0.13,});
+  const R=[['CRDM',TX('상부 헤드 · 전원 상실 시 중력 낙하','upper head; gravity drop on loss of power')],
+           [TX('가압기','Pressuriser'),TX('용기 최상부 증기공간','steam space at the very top')],
+           ['RVV ×2',TX('가압기 영역 · 증기를 격납으로','pressuriser region; vents steam to containment')],
+           [TX('증기발생기 ×2','Steam generators ×2'),TX('상승관 바깥 환상부 · 두 대가 독립','in the annulus; two independent units')],
+           [TX('상승관','Riser'),TX('노심 위 중앙 · 높이차의 근원','centre, above the core; source of the head')],
+           [TX('하강관','Downcomer'),TX('용기 벽과 상승관 사이','between vessel wall and riser')],
+           ['RRV ×2',TX('하강관 높이의 용기 측면','vessel side, at downcomer level')],
+           [TX('노심','Core'),TX('연료 37다발 · 유효높이 약 2 m','37 assemblies, about 2 m active')],
+           ['CNV',TX('압력경계 + 사고 시 응축면','pressure boundary and condensing surface')],
+           [TX('수조','Pool'),TX('최종 열침원 · 차폐 · 이송 경로','heat sink, shielding, transport route')],
+           ['CIV',TX('전부 피동 fail-closed','all passive, fail-closed')]];
+  T.innerHTML = tr(R.map(r=>'<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>').join(''));
 }});
 
 
@@ -599,6 +539,73 @@ init(el){
     {duration:400,delay:700+250*i,fill:'forwards'}));
   note.animate([{opacity:0},{opacity:1}],{duration:400,delay:1250,fill:'forwards'});
 }});
+
+
+/* ---------------------------------------------------------------- 원자로건물과 부지 */
+S({tag:'BUILDING AND SITE', ov:'[[원자로건물과 부지 — 수조가 세 가지 일을 한다||Building and site - the pool does three jobs]]',
+src:'[[<b>출처</b> 본 교재 6.7절 그림 6.8 · 6.9 · 6.10||<b>Source</b> This textbook &#167;6.7, Figs. 6.8-6.10]]',
+abbr:'[[<b>최종 열침원</b> 열이 마지막에 버려지는 곳 · <b>차폐</b> 방사선을 막는 것 · <b>사용후연료 수조</b> 꺼낸 연료를 식히며 보관하는 물탱크||<b>ultimate heat sink</b> where the heat finally goes · <b>shielding</b> what stops the radiation · <b>spent fuel pool</b> the tank where discharged fuel cools and is stored]]',
+html:`<h2 class="t">[[수조가 <em>열침원이자 차폐이며 동시에 이송 경로</em>임||The pool is <em>heat sink, shielding and transport route at once</em>]]</h2>
+<ul class="b">
+  <li>[[모듈들이 <b>공용 수조에 나란히 잠겨</b> 있고 위로 이송 크레인이 지남. 모듈 하나를 정비하려면 <b>수조 안에서 들어 올려 옮김</b>||The modules sit <b>side by side in a shared pool</b> with a transfer crane above. Servicing one means <b>lifting and moving it inside the pool</b>]]</li>
+  <li>[[원자로건물·터빈건물·제어건물·냉각탑이 모두 <b class="cool">대형 원전보다 작은 면적</b>에 들어감 — 계통 수가 줄어든 결과임||Reactor, turbine and control buildings and the cooling towers all fit on <b class="cool">a smaller footprint than a large plant</b> - a consequence of having fewer systems]]</li>
+</ul>
+<div class="body"><div class="fig">
+${PH({src:'f6_08', cap:'[[원자로건물 <b>단면</b>||Building <b>section</b>]]'},
+     {src:'f6_09', cap:'[[원자로건물 <b>평면</b>||Building <b>plan</b>]]'},
+     {src:'f6_10', cap:'[[<b>부지 배치</b>||<b>Site layout</b>]]'})}
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 나선형 증기발생기 */
+S({tag:'HELICAL COIL SG', ov:'[[나선형 증기발생기 — 부피가 절대적 제약이다||The helical steam generator - volume is the binding constraint]]',
+src:'[[<b>출처</b> 본 교재 6.8절 그림 6.11 · 6.12 · 1차측이 관 바깥(셸측), 2차측이 관 안을 지나는 <b>관류식</b>임||<b>Source</b> This textbook &#167;6.8, Figs. 6.11-6.12 · primary on the shell side, secondary inside the tubes - a <b>once-through</b> design]]',
+abbr:'[[<b>관류식</b> 한 번 지나가며 물이 증기로 바뀌는 방식 · <b>셸측</b> 관 다발 바깥 공간 · <b>다공성 매질 근사</b> 관 하나하나 대신 덩어리로 푸는 모델||<b>once-through</b> water becomes steam in a single pass · <b>shell side</b> outside the tube bundle · <b>porous-medium approximation</b> modelling the bundle as a block]]',
+html:`<h2 class="t">[[U자관보다 <em>부피 대비 전열면적</em>이 커서 나선형을 씀||Helical wins on <em>heat transfer area per unit volume</em>, so that is what goes in]]</h2>
+<ul class="b">
+  <li>[[일체형에서는 증기발생기를 <b>용기 안에 넣어야</b> 하므로 부피가 절대적 제약임. 여기서 나선형이 유리함||In an integral design the steam generator <b>must fit inside the vessel</b>, so volume is the binding constraint - and that is where helical wins]]</li>
+  <li>[[관 안은 관류식으로 끓고, 관 바깥은 <b>경사 교차류</b>임. 이 둘이 겹치는 곳의 열전달 예측이 <b class="hot">일체형 SMR 해석의 난제</b>임||Once-through boiling inside the tubes, <b>inclined cross-flow</b> outside. Where they meet is <b class="hot">the hard problem of integral SMR analysis</b>]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f6_11', w:1, cap:'[[나선형 <b>코일</b>||The helical <b>coil</b>]]'},
+       {src:'f6_12', w:2, cap:'[[증기발생기 <b>실물</b> — 두 개의 독립 관다발||The <b>real thing</b> - two independent bundles]]'})}
+  </div>
+  <div class="side">
+    <blockquote class="q">[[나선형 증기발생기의 열수력 해석은 <b>THINK Lab 이 i-SMR 과제에서 다루고 있는 주제</b>다.
+      관 다발 바깥을 지나는 유동은 관군을 비스듬히 가로지르는 <b>경사 교차류</b>이고,
+      관다발이 커지면 관 하나하나를 모델링할 수 없어 <b>다공성 매질 근사</b>를 쓴다.
+      <span class="cite">ATHOS 계열 코드가 그 목적으로 쓰인다</span>||The thermal-hydraulics of helical steam generators is <b>a THINK Lab topic on the i-SMR project</b>.
+      The flow outside the bundle is an <b>inclined cross-flow</b>, and once the bundle is large
+      you cannot model tube by tube - hence the <b>porous-medium approximation</b>.
+      <span class="cite">ATHOS-class codes are used for this</span>]]</blockquote>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 공장 제작과 EPZ */
+S({tag:'FACTORY AND EPZ', ov:'[[공장 제작과 비상계획구역 축소||Factory build, and shrinking the emergency planning zone]]',
+src:'[[<b>출처</b> 본 교재 6.9절 그림 6.14 · 6.9.1절 · EPZ 축소 주장의 근거로 <b>선원항과 방출 해석</b>을 제출함||<b>Source</b> This textbook &#167;6.9 (Fig. 6.14) and &#167;6.9.1 · the EPZ case rests on <b>source term and release analyses</b>]]',
+abbr:'[[<b>EPZ</b> 비상계획구역 — 사고 시 대피·옥내대피 계획을 세워 두는 구역 · <b>선원항</b> 사고 시 방출될 수 있는 방사성물질의 양과 종류 · <b>INL</b> 미국 아이다호국립연구소||<b>EPZ</b> Emergency Planning Zone, where evacuation and sheltering plans must exist · <b>source term</b> how much of what could be released · <b>INL</b> Idaho National Laboratory]]',
+html:`<h2 class="t">[[EPZ가 줄면 <em>부지 선택의 폭</em>이 크게 넓어짐||A smaller EPZ <em>widens the choice of sites</em> a great deal]]</h2>
+<ul class="b">
+  <li>[[노심이 작고 심층방어가 두터우므로 EPZ를 <b>부지 경계까지 줄일 수 있다</b>는 것이 주장이고, 그 근거로 선원항과 방출 해석을 제출함||The claim is that a small core and deep defence let the EPZ shrink <b>to the site boundary</b>, supported by source-term and release analyses]]</li>
+  <li>[[줄면 <b class="cool">산업단지 인근 배치가 가능</b>해짐 — 공정열·수소 생산 같은 용도가 여기서 열림||If it shrinks, <b class="cool">siting next to an industrial park becomes possible</b> - which is what opens up process heat and hydrogen]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f6_14', cap:'[[미국 아이다호국립연구소(INL) 부지의 선진원자로 실증·배치 일정 — 여러 노형이 같은 부지에서 단계적으로 배치된다||The advanced-reactor demonstration schedule at Idaho National Laboratory - several designs phased onto one site]]'})}
+  </div>
+  <div class="side">
+    <div class="readout hi"><span class="k">[[대형 원전의 EPZ||EPZ of a large plant]]</span>
+      <span class="v">[[약 16 <small>km</small>||about 16 <small>km</small>]]</span></div>
+    <div class="readout good"><span class="k">[[NuScale 이 주장하는 EPZ||EPZ NuScale argues for]]</span>
+      <span class="v" style="font-size:20px">[[부지 경계||the site boundary]]</span></div>
+    <blockquote class="q" style="font-size:15px;padding:11px 15px">[[현장 건설이 <b>제작 · 수송 · 설치</b>로 바뀐다.
+      공기가 짧아지고 품질이 공장 관리로 넘어가는 대신, <b>운반 한계가 설계 제약</b>이 된다.||Site construction becomes <b>fabricate, ship, install</b>.
+      The schedule shortens and quality moves into the factory - but <b>transport limits become a design constraint</b>.]]</blockquote>
+  </div>
+</div>`});
 
 
 /* ---------------------------------------------------------------- 인허가 */
