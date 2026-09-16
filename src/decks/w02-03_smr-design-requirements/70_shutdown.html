@@ -9,7 +9,7 @@ Why control rods and boron injection are <b>both</b> needed, and what calculatio
 
 S({tag:'SCRAM', ov:'[[제어봉 낙하 — S-곡선과 stuck rod||Rod drop - the S-curve and the stuck rod]]',
 src:'[[<b>계산</b> 코사인 중성자속 분포를 가정한 표준 S-곡선 <span class="mono">ρ(x)/ρ_total = x − sin(2πx)/2π</span> · stuck rod 영향 18 % 손실로 예시. 실제 값은 노심 설계·연소도에 따라 다르다||<b>Calculation</b> the standard S-curve for an assumed cosine flux shape, <span class="mono">ρ(x)/ρ_total = x − sin(2πx)/2π</span> · the stuck rod is shown as an 18 % loss. Real values depend on core design and burn-up]]',
-html:`<h2 class="t">[[삽입 초기와 말기는 <s>효율이 낮다</s> — 그래서 낙하 시간이 요건이 된다||Inefficient at <s>both ends of the stroke</s> - hence a drop-time limit]]</h2>
+html:`<h2 class="t">[[제어봉 낙하 — <em>S-곡선</em>과 stuck rod||Rod drop - the <em>S-curve</em> and the stuck rod]]</h2>
 <ul class="b">
   <li>[[중성자속이 높은 <b>노심 중앙부</b>를 지날 때 반응도가 급격히 들어감 — 곡선이 S자인 이유||Reactivity goes in fastest while the rod crosses the <b>high-flux centre</b> of the core - that is why the curve is S-shaped]]</li>
   <li>[[<b class="hot">GDC 26</b> — 최대 반응도가 봉 1개가 <b>삽입되지 않는다</b>는 가정에서도 요구 성능을 만족해야 함||<b class="hot">GDC 26</b> - the requirement must still be met assuming the single most reactive rod <b>fails to insert</b>]]</li>
@@ -82,9 +82,9 @@ init(el){
   });
 }});
 
-S({tag:'SHUTDOWN MARGIN', ov:'[[정지여유도 계산기||Shutdown margin calculator]]',
+S({tag:'SHUTDOWN MARGIN', ov:'[[정지여유도(SDM)의 계산||Calculating the shutdown margin]]',
 src:'[[<b>식</b> SDM = ρ<sub>rod,total</sub> − ρ<sub>stuck</sub> − ρ<sub>defect</sub> − ρ<sub>uncertainty</sub> · 요구 최소치는 설계별 기술지침서에서 정해지며 흔히 Δρ 기준 1 % 이상||<b>Equation</b> SDM = ρ<sub>rod,total</sub> − ρ<sub>stuck</sub> − ρ<sub>defect</sub> − ρ<sub>uncertainty</sub> · the minimum is set in each plant&#8217;s technical specifications, commonly at least 1 % Δρ]]',
-html:`<h2 class="t">[[정지여유도 — <em>확보한 것에서 깎이는 것</em>을 뺀 나머지||Shutdown margin - <em>what you have</em> minus <em>what gets taken away</em>]]</h2>
+html:`<h2 class="t">[[<em>정지여유도(SDM)</em>의 계산||Calculating the <em>shutdown margin</em>]]</h2>
 <ul class="b">
   <li>[[냉각이 진행되면 감속재 밀도가 커져 반응도가 <b class="hot">양의 방향으로 되돌아온다</b>. 그 몫까지 미리 덮어야 함||As the plant cools the moderator gets denser and reactivity <b class="hot">comes back positive</b>. That much has to be covered in advance]]</li>
   <li>[[슬라이더를 움직여 각 항이 여유도를 어떻게 깎는지 확인 — 교재 연습문제 6.2의 조건이 기본값||Move the sliders to see how each term eats into the margin - the defaults are the conditions of Exercise 6.2 in the text]]</li>
@@ -140,7 +140,7 @@ init(el){
 
 S({tag:'FEEDBACK', ov:'[[고유안전성 — 반응도 계수와 무붕산 설계||Inherent safety - reactivity coefficients and boron-free design]]',
 src:'[[<b>대표 크기</b>이며 실제 값은 연소도·붕소 농도·노심 설계에 따라 크게 다르다. 정밀 값은 노심 설계 코드로 계산 · i-SMR 무붕산 운전: IAEA SMR Booklet 2022||<b>Representative magnitudes</b>; actual values vary widely with burn-up, boron concentration and core design, and are computed with core design codes · i-SMR boron-free operation: IAEA SMR Booklet 2022]]',
-html:`<h2 class="t">[[신호보다 <em>먼저</em> 작동하는 것 — 노심 자체의 물리||What acts <em>before</em> any signal - the physics of the core itself]]</h2>
+html:`<h2 class="t">[[<em>고유안전성</em> — 반응도 계수와 무붕산 설계||<em>Inherent safety</em> - reactivity coefficients and boron-free design]]</h2>
 <ul class="b">
   <li>[[<b>도플러 계수</b> <code>−2~−4 pcm/K</code> — 연료 온도가 곧바로 반응, <b class="hot">즉각적</b>. 급격한 반응도 삽입의 1차 저지선||<b>Doppler coefficient</b> <code>−2 to −4 pcm/K</code> - the fuel temperature responds at once, <b class="hot">immediate</b>. The first line against a rapid reactivity insertion]]</li>
   <li>[[<b>감속재온도계수</b> <code>−10~−60 pcm/K</code> — 열이 냉각재로 전달된 뒤 작동, <b class="cool">지연</b>||<b>Moderator temperature coefficient</b> <code>−10 to −60 pcm/K</code> - acts only after the heat reaches the coolant, <b class="cool">delayed</b>]]</li>

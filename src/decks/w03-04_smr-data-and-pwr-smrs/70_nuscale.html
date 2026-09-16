@@ -13,10 +13,10 @@ and <b>even the containment</b> in one cylinder. We start inside the vessel and 
 
 
 /* ---------------------------------------------------------------- 모듈의 크기 */
-S({tag:'ONE CYLINDER', ov:'[[모듈 하나에 다 들어간다 — 그리고 그 크기||It all fits in one cylinder - and how big that is]]',
+S({tag:'NPM · DIMENSIONS', ov:'[[NuScale 모듈(NPM)의 구성과 치수||The NuScale Power Module - layout and dimensions]]',
 src:'[[<b>출처</b> 본 교재 6.1절 그림 6.1 · 6.2 · 모듈 높이 <b>76 ft(약 23 m)</b> · 직경 <b>15 ft(약 4.6 m)</b>||<b>Source</b> This textbook &#167;6.1, Figs. 6.1-6.2 · module <b>76 ft (about 23 m)</b> tall and <b>15 ft (about 4.6 m)</b> across]]',
 abbr:'[[<b>NPM</b> NuScale Power Module · <b>격납용기</b> 방사성물질을 가두는 압력경계 · <b>상승관(riser)</b> 가열된 물이 올라가는 통로||<b>NPM</b> NuScale Power Module · <b>containment</b> the pressure boundary that confines radioactivity · <b>riser</b> the passage the heated water climbs]]',
-html:`<h2 class="t">[[<em>격납용기까지</em> 모듈 안에 들어간다는 점이 가장 크게 다름||<em>Even the containment</em> is inside the module]]</h2>
+html:`<h2 class="t">[[NuScale 모듈(<em>NPM</em>)의 구성과 치수||The NuScale Power Module - <em>layout and dimensions</em>]]</h2>
 <ul class="b">
   <li>[[바깥 원통이 <b>격납용기</b>, 안쪽이 <b>원자로용기</b>. 가운데 긴 관이 상승관이고 그 옆 환상부에 나선형 증기발생기가 감겨 있음||The outer cylinder is the <b>containment</b>, the inner one the <b>reactor vessel</b>. The long central tube is the riser, with the helical steam generator wound in the annulus beside it]]</li>
   <li>[[사람과 나란히 놓으면 보이는 것 — <b class="cool">수송 가능한 규모</b>임. 공장에서 만들어 옮긴다는 전제가 이 치수에서 나옴||Set beside a person it shows: this is <b class="cool">a transportable size</b>. The whole factory-build premise follows from these dimensions]]</li>
@@ -29,10 +29,10 @@ ${PH({src:'f6_01', cap:'[[NPM <b>단면</b>||NPM <b>section</b>]]'},
 
 
 /* ---------------------------------------------------------------- 모듈 단면 */
-S({tag:'INSIDE THE MODULE', ov:'[[용기 안에는 무엇이 들어 있는가||What is inside the vessel]]',
+S({tag:'INSIDE THE MODULE', ov:'[[모듈 내부 구성 기기||Components inside the module]]',
 src:'[[<b>출처</b> 본 교재 6.2절 그림 6.3 · 표 6.1 · 붉은 화살표가 가열되어 올라가는 흐름, 푸른 화살표가 식어서 내려가는 흐름임||<b>Source</b> This textbook &#167;6.2, Fig. 6.3 and Table 6.1 · red arrows are the heated upward flow, blue the cooled downward flow]]',
 abbr:'[[<b>RVV</b> 원자로 배기밸브 · <b>RRV</b> 원자로 재순환밸브 · <b>CRDM</b> 제어봉구동장치 · <b>CNV</b> 격납용기 · <b>DHRS</b> 잔열제거계통 · <b>CIV</b> 격납격리밸브||<b>RVV</b> reactor vent valve · <b>RRV</b> reactor recirculation valve · <b>CRDM</b> control rod drive · <b>CNV</b> containment vessel · <b>DHRS</b> decay heat removal system · <b>CIV</b> containment isolation valve]]',
-html:`<h2 class="t">[[설계를 읽는다는 것은 <em>어느 기기가 어디에 왜</em> 있는지를 아는 일임||Reading a design means knowing <em>which component sits where, and why</em>]]</h2>
+html:`<h2 class="t">[[모듈 <em>내부 구성 기기</em>||<em>Components inside</em> the module]]</h2>
 <ul class="b">
   <li>[[원자로용기와 격납용기가 <b>이중으로 겹쳐</b> 있고, 두 용기 모두 <b class="cool">수조에 잠겨</b> 있음 — 이 한 가지가 뒤의 모든 안전 논리를 만듦||The reactor vessel and containment are <b>nested</b>, and both sit <b class="cool">submerged in a pool</b>. That one fact drives every safety argument that follows]]</li>
 </ul>
@@ -62,10 +62,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 왜 용기가 길어야 하는가 */
-S({tag:'WHY SO TALL', ov:'[[왜 용기가 길어야 하는가 — ṁ ∝ √H||Why the vessel must be tall - ṁ ∝ √H]]',
+S({tag:'FLOW vs HEIGHT', ov:'[[자연순환 유량과 용기 높이||Natural-circulation flow and vessel height]]',
 src:'[[<b>출처</b> 본 교재 6.3절 · 구동수두 <code>Δp = (ρ<sub>c</sub> − ρ<sub>h</sub>) g H</code>가 유로 압력손실 <code>K ṁ² / 2ρA²</code>과 같아지는 곳에서 유량이 정해짐||<b>Source</b> This textbook &#167;6.3 · flow settles where the driving head <code>&#916;p = (&#961;<sub>c</sub> &#8722; &#961;<sub>h</sub>) g H</code> equals the loop loss <code>K &#7745;&#178; / 2&#961;A&#178;</code>]]',
 abbr:'[[<b>H</b> 열원(노심) 중심과 열침원(증기발생기) 중심 사이의 높이차 · <b>K</b> 유로 전체의 압력손실 계수 · <b>ρ<sub>c</sub> · ρ<sub>h</sub></b> 찬 쪽과 더운 쪽의 밀도||<b>H</b> height between the centre of the core and the centre of the steam generator · <b>K</b> total loop loss coefficient · <b>&#961;<sub>c</sub>, &#961;<sub>h</sub></b> cold-side and hot-side density]]',
-html:`<h2 class="t">[[유량을 2배로 늘리려면 높이를 <em>4배</em>로 벌려야 함||To double the flow you must <em>quadruple</em> the height]]</h2>
+html:`<h2 class="t">[[자연순환 유량과 <em>용기 높이</em>||Natural-circulation flow and <em>vessel height</em>]]</h2>
 <ul class="b">
   <li>[[펌프를 없애면 순환은 부력이 만듦. 유량이 <b class="cool">높이차의 제곱근에 비례</b>함 — 이것이 가늘고 긴 형상의 이유임||Drop the pump and buoyancy drives the loop. Flow goes as <b class="cool">the square root of the height</b> - hence the long, slim shape]]</li>
   <li>[[압력손실 계수 <b>K</b>를 줄이는 일도 높이를 벌리는 일만큼 중요함 — <b class="ok">CFD가 실제로 쓰이는 지점</b>임||Cutting the loss coefficient <b>K</b> matters as much as adding height - <b class="ok">this is where CFD actually earns its keep</b>]]</li>
@@ -140,10 +140,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 세 가지 유로 */
-S({tag:'THREE FLOW MODES', ov:'[[하나의 용기 안에서 유로가 세 번 바뀐다||Three flow paths in one vessel]]',
+S({tag:'THREE FLOW MODES', ov:'[[운전 모드별 유로 — 정상 · DHRS · ECCS||Flow path by mode - normal, DHRS, ECCS]]',
 src:'[[<b>출처</b> 본 교재 6.4절 그림 6.4 · 6.5 · (A) 정상운전 자연순환 (B) 잔열제거계통 (C) 비상노심냉각계통||<b>Source</b> This textbook &#167;6.4, Figs. 6.4-6.5 · (A) normal natural circulation, (B) DHRS, (C) ECCS]]',
 abbr:'[[<b>DHRS</b> 잔열제거계통 — 2차측에서 도는 닫힌 고리 · <b>ECCS</b> 비상노심냉각계통 · <b>RVV</b> 원자로 배기밸브 · <b>RRV</b> 원자로 재순환밸브||<b>DHRS</b> Decay Heat Removal System, a closed loop on the secondary side · <b>ECCS</b> Emergency Core Cooling System · <b>RVV</b> reactor vent valve · <b>RRV</b> reactor recirculation valve]]',
-html:`<h2 class="t">[[안전 논리는 <em>유로가 세 번 바뀐다</em>는 것으로 요약됨||The safety logic in one line - <em>the flow path changes three times</em>]]</h2>
+html:`<h2 class="t">[[운전 모드별 유로 — <em>정상 · DHRS · ECCS</em>||Flow path by mode - <em>normal, DHRS, ECCS</em>]]</h2>
 <ul class="b">
   <li>[[정상 &#8594; 과도 &#8594; 사고로 가면서 <b>같은 용기 안에서 경로만 바뀜</b>. 밖에서 물을 넣는 단계가 없음||Normal &#8594; transient &#8594; accident: <b>only the path changes, inside the same vessel</b>. At no point is water pumped in from outside]]</li>
 </ul>
@@ -222,10 +222,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 진공 격납 */
-S({tag:'A VACUUM CONTAINMENT', ov:'[[격납용기가 진공이라는 것||The containment is held at vacuum]]',
+S({tag:'VACUUM CONTAINMENT', ov:'[[진공 격납용기 — 이유와 설계압력||The vacuum containment - why, and its design pressure]]',
 src:'[[<b>출처</b> 본 교재 6.2.1절 · 정상운전 중 격납 내부 압력 <b>1 psia 미만(약 6.9 kPa)</b> · 격납 설계압력 8.3 MPa(1 200 psi)||<b>Source</b> This textbook &#167;6.2.1 · containment held <b>below 1 psia (about 6.9 kPa)</b> in operation; design pressure 8.3 MPa (1 200 psi)]]',
 abbr:'[[<b>비응축성 기체</b> 증기와 함께 있으면서 응축하지 않는 기체(공기 등) · <b>응축 열전달</b> 증기가 찬 면에서 물로 바뀌며 열을 넘기는 현상||<b>non-condensable gas</b> a gas such as air that stays gaseous while steam condenses · <b>condensation heat transfer</b> steam turning to water on a cold surface and giving up its heat]]',
-html:`<h2 class="t">[[크기와 설계압력과 ECCS 방식이 <em>한 묶음</em>임||Size, design pressure and the ECCS approach are <em>one package</em>]]</h2>
+html:`<h2 class="t">[[<em>진공 격납용기</em> — 이유와 설계압력||The <em>vacuum containment</em> - why, and its design pressure]]</h2>
 <ul class="b">
   <li>[[대형 PWR 격납은 <b>0.4~0.5 MPa</b>. NuScale은 <b class="hot">8.3 MPa</b> — 1차계통 증기를 <b>감압 없이 직접</b> 방출하기 때문임||A large PWR containment holds <b>0.4-0.5 MPa</b>. NuScale&#8217;s holds <b class="hot">8.3 MPa</b>, because primary steam is vented into it <b>without depressurising first</b>]]</li>
   <li>[[격납이 <b>작기 때문에</b> 두껍게 만들 수 있고, 두껍게 만들 수 있기 때문에 <b>직접 방출이 가능</b>함||It can be thick <b>because it is small</b>, and direct venting is possible <b>because it can be thick</b>]]</li>
@@ -296,10 +296,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- DHRS */
-S({tag:'DHRS', ov:'[[DHRS — 2계열 · 각 100% 용량||DHRS - two trains, each at full duty]]',
+S({tag:'DHRS', ov:'[[DHRS — 2계열 × 100 % 구성||DHRS - two trains, each rated 100%]]',
 src:'[[<b>출처</b> 본 교재 6.5.1절 표 6.2 · 각 계열이 붕괴열 전량(100%)을 제거할 수 있음||<b>Source</b> This textbook &#167;6.5.1, Table 6.2 · each train alone can remove the full decay heat]]',
 abbr:'[[<b>DHRS</b> 잔열제거계통 · <b>단일고장기준</b> 어느 기기 하나가 고장 나도 안전기능이 유지되어야 한다는 요건 · <b>2계열 × 100%</b> 한 계열만으로 전량을 감당하는 구성||<b>DHRS</b> Decay Heat Removal System · <b>single failure criterion</b> the function must survive any one component failing · <b>2 &#215; 100%</b> either train alone carries the full duty]]',
-html:`<h2 class="t">[[단일고장기준을 <em>계열 구성</em>으로 만족시킨 것임||The single failure criterion satisfied by <em>how the trains are arranged</em>]]</h2>
+html:`<h2 class="t">[[<em>DHRS</em> — 2계열 × 100 % 구성||<em>DHRS</em> - two trains, each rated 100%]]</h2>
 <ul class="b">
   <li>[[증기발생기 하나에 한 계열씩 붙고, <b>각 계열이 붕괴열 전량을 제거</b>할 수 있음 — 한 계열이 통째로 고장 나도 기능이 유지됨||One train per steam generator, and <b>each train alone removes the full decay heat</b> - lose a whole train and the function stands]]</li>
   <li>[[밸브가 열리고 나면 <b class="ok">열역학이 알아서 돌림</b>. 전기도, 운전원 조작도 필요 없음||Once the valves open, <b class="ok">thermodynamics runs it</b>. No electricity, no operator action]]</li>
@@ -371,10 +371,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- ECCS */
-S({tag:'ECCS', ov:'[[ECCS — 밖에서 넣지 않고 가둬 놓고 돌린다||ECCS - nothing is pumped in; what was lost is returned]]',
+S({tag:'ECCS', ov:'[[ECCS — RVV 방출과 RRV 회수||ECCS - venting through RVVs, returning through RRVs]]',
 src:'[[<b>출처</b> 본 교재 6.5.2 · 6.5.3절 · 밸브마다 주밸브 + 오작동방지블록(IAB) + 솔레노이드 파일럿 2개(작동·복귀)||<b>Source</b> This textbook &#167;&#167;6.5.2-6.5.3 · each valve has a main valve, an inadvertent actuation block and two solenoid pilots (actuate and reset)]]',
 abbr:'[[<b>IAB</b> 오작동방지블록 — 안전계통이 잘못 열리는 것을 막는 장치 · <b>GDC 26</b> 서로 독립인 두 반응도 제어계통을 요구하는 미국 일반설계기준 조문 · <b>붕소 펠릿</b> 물이 닿으면 녹아 붕소를 내놓는 고형물||<b>IAB</b> Inadvertent Actuation Block · <b>GDC 26</b> the US criterion requiring two independent reactivity control systems · <b>boron pellet</b> a solid that dissolves on contact with water and releases boron]]',
-html:`<h2 class="t">[[잃은 물이 <em>격납 안에 그대로</em> 있으므로 되돌리기만 하면 됨||The lost water is <em>still inside the containment</em> - it only has to be returned]]</h2>
+html:`<h2 class="t">[[<em>ECCS</em> — RVV 방출과 RRV 회수||<em>ECCS</em> - venting through RVVs, returning through RRVs]]</h2>
 <ul class="b">
   <li>[[대형 PWR의 ECCS는 밖에서 물을 퍼 넣는 계통이라 <b>펌프 · 전원 · 수원</b>이 필요함. 여기엔 <b class="ok">셋 다 필요 없음</b>||A large PWR&#8217;s ECCS pumps water in, so it needs <b>pumps, power and a water source</b>. Here <b class="ok">none of the three is needed</b>]]</li>
   <li>[[ECCS가 작동하면 격납 상부의 <b class="amb">붕소 펠릿이 녹아</b> 붕소가 같이 들어감 — 물이 닿으면 녹으므로 신호도 전원도 필요 없음||When the ECCS acts, <b class="amb">boron pellets in the upper containment dissolve</b> and boron goes in with the water - it melts on contact, needing no signal and no power]]</li>
@@ -459,10 +459,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 최종 열침원 */
-S({tag:'ULTIMATE HEAT SINK', ov:'[[수조가 30일, 그 뒤는 공기||The pool for 30 days, then air]]',
+S({tag:'ULTIMATE HEAT SINK', ov:'[[최종 열침원 — 수조 · 비등 · 공랭||The ultimate heat sink - pool, boiling, air]]',
 src:'[[<b>출처</b> 본 교재 6.5.5절 표 6.3 · 6.6절 · 수조 약 280만 갤런(6모듈) · ELAP 해석에서 99일까지 노심 위 수위 유지||<b>Source</b> This textbook &#167;&#167;6.5.5 (Table 6.3) and 6.6 · about 2.8 million gallons for six modules; the ELAP analysis keeps water above the core to 99 days]]',
 abbr:'[[<b>ELAP</b> 장기 교류전원상실 — 설계기준을 넘는 시나리오 · <b>붕괴열</b> 정지 후에도 핵분열 생성물이 계속 내는 열 · <b>최종 열침원</b> 열이 마지막에 버려지는 곳||<b>ELAP</b> Extended Loss of AC Power, a beyond-design-basis scenario · <b>decay heat</b> heat from fission products after shutdown · <b>ultimate heat sink</b> where the heat finally goes]]',
-html:`<h2 class="t">[[&#8220;무기한&#8221;은 <s>처음부터</s>가 아니라 <em>붕괴열이 줄어든 뒤</em>의 이야기임||&#8220;Indefinitely&#8221; is not <s>from the start</s> - it is <em>after the decay heat has fallen</em>]]</h2>
+html:`<h2 class="t">[[<em>최종 열침원</em> — 수조 · 비등 · 공랭||The <em>ultimate heat sink</em> - pool, boiling, air]]</h2>
 <ul class="b">
   <li>[[정지 직후의 붕괴열은 공랭으로 감당되지 않음. <b>물 &#8594; 비등 &#8594; 공랭</b>의 순서와 시점이 설계의 본체임||Air cooling cannot carry the decay heat right after shutdown. <b>Water &#8594; boiling &#8594; air</b>, in that order and at those times, is the design]]</li>
   <li>[[MW당 보유 수량이 기존 PWR의 <b class="cool">약 4배</b>임. 분모가 4배면 <b>온도 상승률이 1/4</b> — 대처시간은 이 식 하나로 정해짐||Water inventory per MW is about <b class="cool">four times</b> a conventional PWR&#8217;s. Four times the denominator means <b>a quarter of the temperature rise rate</b> - that one relation sets the coping time]]</li>
@@ -542,10 +542,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 원자로건물과 부지 */
-S({tag:'BUILDING AND SITE', ov:'[[원자로건물과 부지 — 수조가 세 가지 일을 한다||Building and site - the pool does three jobs]]',
+S({tag:'BUILDING AND SITE', ov:'[[원자로건물과 부지 배치||The reactor building and site layout]]',
 src:'[[<b>출처</b> 본 교재 6.7절 그림 6.8 · 6.9 · 6.10||<b>Source</b> This textbook &#167;6.7, Figs. 6.8-6.10]]',
 abbr:'[[<b>최종 열침원</b> 열이 마지막에 버려지는 곳 · <b>차폐</b> 방사선을 막는 것 · <b>사용후연료 수조</b> 꺼낸 연료를 식히며 보관하는 물탱크||<b>ultimate heat sink</b> where the heat finally goes · <b>shielding</b> what stops the radiation · <b>spent fuel pool</b> the tank where discharged fuel cools and is stored]]',
-html:`<h2 class="t">[[수조가 <em>열침원이자 차폐이며 동시에 이송 경로</em>임||The pool is <em>heat sink, shielding and transport route at once</em>]]</h2>
+html:`<h2 class="t">[[<em>원자로건물</em>과 부지 배치||The <em>reactor building</em> and site layout]]</h2>
 <ul class="b">
   <li>[[모듈들이 <b>공용 수조에 나란히 잠겨</b> 있고 위로 이송 크레인이 지남. 모듈 하나를 정비하려면 <b>수조 안에서 들어 올려 옮김</b>||The modules sit <b>side by side in a shared pool</b> with a transfer crane above. Servicing one means <b>lifting and moving it inside the pool</b>]]</li>
   <li>[[원자로건물·터빈건물·제어건물·냉각탑이 모두 <b class="cool">대형 원전보다 작은 면적</b>에 들어감 — 계통 수가 줄어든 결과임||Reactor, turbine and control buildings and the cooling towers all fit on <b class="cool">a smaller footprint than a large plant</b> - a consequence of having fewer systems]]</li>
@@ -558,10 +558,10 @@ ${PH({src:'f6_08', cap:'[[원자로건물 <b>단면</b>||Building <b>section</b>
 
 
 /* ---------------------------------------------------------------- 나선형 증기발생기 */
-S({tag:'HELICAL COIL SG', ov:'[[나선형 증기발생기 — 부피가 절대적 제약이다||The helical steam generator - volume is the binding constraint]]',
+S({tag:'HELICAL COIL SG', ov:'[[나선형 관류 증기발생기||The helical once-through steam generator]]',
 src:'[[<b>출처</b> 본 교재 6.8절 그림 6.11 · 6.12 · 1차측이 관 바깥(셸측), 2차측이 관 안을 지나는 <b>관류식</b>임||<b>Source</b> This textbook &#167;6.8, Figs. 6.11-6.12 · primary on the shell side, secondary inside the tubes - a <b>once-through</b> design]]',
 abbr:'[[<b>관류식</b> 한 번 지나가며 물이 증기로 바뀌는 방식 · <b>셸측</b> 관 다발 바깥 공간 · <b>다공성 매질 근사</b> 관 하나하나 대신 덩어리로 푸는 모델||<b>once-through</b> water becomes steam in a single pass · <b>shell side</b> outside the tube bundle · <b>porous-medium approximation</b> modelling the bundle as a block]]',
-html:`<h2 class="t">[[U자관보다 <em>부피 대비 전열면적</em>이 커서 나선형을 씀||Helical wins on <em>heat transfer area per unit volume</em>, so that is what goes in]]</h2>
+html:`<h2 class="t">[[<em>나선형 관류 증기발생기</em>||The <em>helical once-through steam generator</em>]]</h2>
 <ul class="b">
   <li>[[일체형에서는 증기발생기를 <b>용기 안에 넣어야</b> 하므로 부피가 절대적 제약임. 여기서 나선형이 유리함||In an integral design the steam generator <b>must fit inside the vessel</b>, so volume is the binding constraint - and that is where helical wins]]</li>
   <li>[[관 안은 관류식으로 끓고, 관 바깥은 <b>경사 교차류</b>임. 이 둘이 겹치는 곳의 열전달 예측이 <b class="hot">일체형 SMR 해석의 난제</b>임||Once-through boiling inside the tubes, <b>inclined cross-flow</b> outside. Where they meet is <b class="hot">the hard problem of integral SMR analysis</b>]]</li>
@@ -584,10 +584,10 @@ html:`<h2 class="t">[[U자관보다 <em>부피 대비 전열면적</em>이 커�
 
 
 /* ---------------------------------------------------------------- 공장 제작과 EPZ */
-S({tag:'FACTORY AND EPZ', ov:'[[공장 제작과 비상계획구역 축소||Factory build, and shrinking the emergency planning zone]]',
+S({tag:'FACTORY AND EPZ', ov:'[[공장 제작과 비상계획구역(EPZ)||Factory fabrication and the emergency planning zone]]',
 src:'[[<b>출처</b> 본 교재 6.9절 그림 6.14 · 6.9.1절 · EPZ 축소 주장의 근거로 <b>선원항과 방출 해석</b>을 제출함||<b>Source</b> This textbook &#167;6.9 (Fig. 6.14) and &#167;6.9.1 · the EPZ case rests on <b>source term and release analyses</b>]]',
 abbr:'[[<b>EPZ</b> 비상계획구역 — 사고 시 대피·옥내대피 계획을 세워 두는 구역 · <b>선원항</b> 사고 시 방출될 수 있는 방사성물질의 양과 종류 · <b>INL</b> 미국 아이다호국립연구소||<b>EPZ</b> Emergency Planning Zone, where evacuation and sheltering plans must exist · <b>source term</b> how much of what could be released · <b>INL</b> Idaho National Laboratory]]',
-html:`<h2 class="t">[[EPZ가 줄면 <em>부지 선택의 폭</em>이 크게 넓어짐||A smaller EPZ <em>widens the choice of sites</em> a great deal]]</h2>
+html:`<h2 class="t">[[공장 제작과 <em>비상계획구역(EPZ)</em>||Factory fabrication and the <em>emergency planning zone</em>]]</h2>
 <ul class="b">
   <li>[[노심이 작고 심층방어가 두터우므로 EPZ를 <b>부지 경계까지 줄일 수 있다</b>는 것이 주장이고, 그 근거로 선원항과 방출 해석을 제출함||The claim is that a small core and deep defence let the EPZ shrink <b>to the site boundary</b>, supported by source-term and release analyses]]</li>
   <li>[[줄면 <b class="cool">산업단지 인근 배치가 가능</b>해짐 — 공정열·수소 생산 같은 용도가 여기서 열림||If it shrinks, <b class="cool">siting next to an industrial park becomes possible</b> - which is what opens up process heat and hydrogen]]</li>
@@ -609,10 +609,10 @@ html:`<h2 class="t">[[EPZ가 줄면 <em>부지 선택의 폭</em>이 크게 넓�
 
 
 /* ---------------------------------------------------------------- 인허가 */
-S({tag:'LICENSING', ov:'[[NuScale 인허가·사업 경과 (2026-09)||NuScale licensing and project record, as of Sept 2026]]',
+S({tag:'LICENSING', ov:'[[NuScale 인허가·사업 경과 (2026년 9월)||NuScale licensing and project record, September 2026]]',
 src:'[[<b>출처</b> 본 교재 6.10절 표 6.5 · <b>2026년 9월 기준</b> — 이 표는 반년이면 낡음||<b>Source</b> This textbook &#167;6.10, Table 6.5 · <b>as of September 2026</b> - this table ages within six months]]',
 abbr:'[[<b>DCA</b> 설계인증신청 · <b>SDA</b> 표준설계승인 · <b>FID</b> 최종투자결정 — 착공이 아님 · <b>EPZ</b> 비상계획구역||<b>DCA</b> Design Certification Application · <b>SDA</b> Standard Design Approval · <b>FID</b> Final Investment Decision - not construction start · <b>EPZ</b> Emergency Planning Zone]]',
-html:`<h2 class="t">[[<em>FID는 착공이 아님</em> — 결정의 종류를 구분해 적을 것||<em>An FID is not a construction start</em> - record what kind of decision it was]]</h2>
+html:`<h2 class="t">[[NuScale <em>인허가·사업 경과</em> (2026년 9월)||NuScale <em>licensing and project record</em>, September 2026]]</h2>
 <ul class="b">
   <li>[[조건부 FID는 실제로 흔하고 조건의 내용은 대개 <b>비공개</b>임. 섞어 놓으면 <b class="hot">진척도를 과대평가</b>하게 됨||Conditional FIDs are common and the conditions are usually <b>not published</b>. Blur them together and you <b class="hot">overstate the progress</b>]]</li>
   <li>[[인허가 표를 만들 때는 <b>사전협의 · 설계승인 · 건설허가 · FID · 착공</b>을 반드시 구분해 적음||In a licensing table always separate <b>pre-application, design approval, construction permit, FID and first concrete</b>]]</li>

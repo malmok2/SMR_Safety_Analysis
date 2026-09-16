@@ -1,7 +1,7 @@
 <script>
-S({tag:'LAYOUT · [[루프형||Loop type]]', ov:'[[루프형 대형 경수로 — 대구경 배관이 곧 LBLOCA||Loop-type large LWR - the large pipe is the LBLOCA]]',
+S({tag:'LAYOUT · [[루프형||Loop type]]', ov:'[[루프형 배치 — 대구경 배관과 대형 LOCA||The loop layout - large pipes and the large LOCA]]',
 src:'[[<b>개념도</b> 자체 작성. 배관 수·기기 배치를 축약한 모식도이며 축척은 임의. <b>GDC 4</b>는 파단확률이 극히 낮으면 동적효과를 배제할 수 있게 한다(LBB 근거)||<b>Schematic</b> drawn for this course. Pipe count and equipment layout are simplified and the scale is arbitrary. <b>GDC 4</b> allows dynamic effects to be excluded where break probability is extremely low (the basis for LBB)]]',
-html:`<h2 class="t">[[루프형 — 대구경 배관 하나가 <s>최악의 설계기준사고</s>를 정의한다||Loop type - a single large pipe defines <s>the worst design basis accident</s>]]</h2>
+html:`<h2 class="t">[[루프형 배치 — 대구경 배관과 <em>대형 LOCA</em>||The loop layout - large pipes and the <em>large LOCA</em>]]</h2>
 <ul class="b">
   <li>[[원자로용기와 증기발생기를 잇는 <b class="hot">대구경 고온관·저온관</b>이 존재 → 그 순간 파단이 <b>대형 LOCA</b>||A <b class="hot">large-bore hot leg and cold leg</b> join the vessel to the steam generator &#8594; break one and you have a <b>large LOCA</b>]]</li>
   <li>[[냉각재는 <b>펌프</b>가 돌린다. 펌프가 멈추면 유량이 곧바로 사라짐||The coolant is driven by <b>pumps</b>. Stop the pumps and the flow is gone at once]]</li>
@@ -74,9 +74,9 @@ init(el){
   });
 }});
 
-S({tag:'LAYOUT · [[일체형||Integral type]]', ov:'[[일체형 SMR — 파단할 배관이 없다||Integral SMR - no pipe left to break]]',
+S({tag:'LAYOUT · [[일체형||Integral type]]', ov:'[[일체형 배치 — 배관 제거가 없애는 것||The integral layout - what removing the pipes eliminates]]',
 src:'[[<b>개념도</b> 자체 작성. <b>Safety-by-design</b> — 사고를 완화하는 대신 배치로 배제. Westinghouse, <i>IRIS Plant Overview</i>, NRC ADAMS ML033600086 (2003)||<b>Schematic</b> drawn for this course. <b>Safety by design</b> - the accident is excluded by layout, not mitigated. Westinghouse, <i>IRIS Plant Overview</i>, NRC ADAMS ML033600086 (2003)]]',
-html:`<h2 class="t">[[일체형 — 사고를 완화하는 대신 <em>설계에서 배제</em>한다||Integral type - the accident is <em>designed out</em> rather than mitigated]]</h2>
+html:`<h2 class="t">[[<em>일체형</em> 배치 — 배관 제거가 없애는 것||The <em>integral</em> layout - what removing the pipes eliminates]]</h2>
 <ul class="b">
   <li>[[노심 · 증기발생기 · 가압기를 <b>하나의 용기</b>에 담음 → 대구경 배관이 존재하지 않음||Core, steam generator and pressuriser all sit in <b>one vessel</b> &#8594; no large-bore pipe exists]]</li>
   <li>[[펌프 없이 <b class="ok">밀도차</b>로 순환. 구동수두는 대형 PWR 펌프의 <code>약 1/50</code> (2장에서 계산)||Circulation without pumps, driven by <b class="ok">density difference</b>. The driving head is <code>about 1/50</code> of a large PWR pump (calculated in Ch. 2)]]</li>
@@ -131,9 +131,9 @@ init(el){
   raf(t=>{ hp.setAttribute('opacity',0.45+0.55*Math.abs(Math.sin(t*1.8))); });
 }});
 
-S({tag:'SUMMARY', ov:'[[SMR의 특징을 물리적 근거로 다시 쓰기||Rewriting SMR claims as physical arguments]]',
+S({tag:'SUMMARY', ov:'[[SMR의 특징을 물리적 근거로 다시 쓰기||Restating the SMR claims as physical arguments]]',
 src:'[[<b>왼쪽 열</b> 2025-2학기 강의자료 「Design Specification and Requirement for SMR」의 항목. <b>오른쪽 두 열</b>은 본 교재에서 근거를 붙인 것||<b>Left column</b> items from the 2025 fall lecture notes <i>Design Specification and Requirement for SMR</i>. <b>The two right columns</b> are the supporting arguments added in this text]]',
-html:`<h2 class="t">[[홍보 문장을 <em>근거</em>로 바꿔 읽기||Reading the sales pitch as an <em>argument</em>]]</h2>
+html:`<h2 class="t">[[SMR의 특징을 <em>물리적 근거</em>로 다시 쓰기||Restating the SMR claims as <em>physical arguments</em>]]</h2>
 <div class="body col">
 <table class="d">
 <tr><th style="width:26%">[[흔히 말하는 특징||Common claim]]</th><th style="width:37%">[[실제 근거||What actually supports it]]</th><th>[[유의할 점||What to watch]]</th></tr>

@@ -13,10 +13,10 @@ Then: why SMRs converged on the integral layout.</p>]]`});
 
 
 /* ---------------------------------------------------------------- PWR vs BWR */
-S({tag:'WHERE THE STEAM IS MADE', ov:'[[증기를 어디서 만드는가 — PWR과 BWR||Where the steam is made - PWR and BWR]]',
+S({tag:'PWR vs BWR', ov:'[[PWR과 BWR — 증기 생성 위치의 차이||PWR and BWR - where the steam is made]]',
 src:'[[<b>출처</b> 본 교재 5.1절 그림 5.1 · 5.2 · 표 5.1 · 운전압력은 대표값(PWR 약 15.5 MPa · BWR 약 7 MPa)||<b>Source</b> This textbook &#167;5.1, Figs. 5.1-5.2 and Table 5.1 · representative pressures: PWR about 15.5 MPa, BWR about 7 MPa]]',
 abbr:'[[<b>PWR</b> 가압경수로 · <b>BWR</b> 비등경수로 · <b>랭킨 사이클</b> 물을 끓여 증기로 터빈을 돌리는 열기관 순환 · <b>기수분리기</b> 증기와 물을 갈라 내는 장치||<b>PWR</b> Pressurized Water Reactor · <b>BWR</b> Boiling Water Reactor · <b>Rankine cycle</b> the steam power cycle · <b>steam separator</b> splits steam from water]]',
-html:`<h2 class="t">[[갈라지는 지점은 <em>하나</em>뿐임 — 증기를 어디서 만드는가||They split on <em>one thing</em> - where the steam gets made]]</h2>
+html:`<h2 class="t">[[PWR과 BWR — <em>증기 생성 위치</em>의 차이||PWR and BWR - <em>where the steam is made</em>]]</h2>
 <ul class="b">
   <li>[[<b>PWR</b>은 1차계통을 높은 압력으로 눌러 <b>노심에서 끓지 않게</b> 함. 열은 증기발생기에서 2차측으로 넘김 — 핵심은 <b class="cool">분리</b>임||A <b>PWR</b> holds the primary at high pressure so <b>the core never boils</b>; heat crosses to the secondary in a steam generator. The point is <b class="cool">separation</b>]]</li>
   <li>[[<b>BWR</b>은 노심에서 직접 끓여 그 증기를 터빈으로 보냄. 증기발생기가 없고 <b class="hot">터빈실도 방사선 구역</b>이 됨||A <b>BWR</b> boils in the core and sends that steam to the turbine. No steam generator - and <b class="hot">the turbine hall becomes a radiation area</b>]]</li>
@@ -28,10 +28,10 @@ ${PH({src:'f5_01', cap:'[[<b>PWR</b> — 1차계통(노심~증기발생기)과 2
 
 
 /* ---------------------------------------------------------------- 구조적 차이 */
-S({tag:'CONTROL ROD DIRECTION', ov:'[[제어봉 삽입 방향 — 전원을 잃으면 어떻게 되는가||Control rod direction - what happens when power is lost]]',
+S({tag:'CONTROL ROD DIRECTION', ov:'[[제어봉 삽입 방향과 전원상실 시 거동||Rod insertion direction and behaviour on loss of power]]',
 src:'[[<b>출처</b> 본 교재 5.1.2절 표 5.1 · 9장 BWRX-300의 FMCRD를 볼 때 이 차이를 기억할 것||<b>Source</b> This textbook &#167;5.1.2, Table 5.1 · remember this when the BWRX-300 FMCRD comes up in ch. 9]]',
 abbr:'[[<b>제어봉</b> 중성자를 흡수해 반응도를 낮추는 봉 · <b>축압기</b> 압축 기체로 힘을 저장해 두는 용기 · <b>FMCRD</b> 미세운동 제어봉구동장치(BWRX-300)||<b>control rod</b> absorbs neutrons to cut reactivity · <b>accumulator</b> a vessel storing force in compressed gas · <b>FMCRD</b> Fine Motion Control Rod Drive (BWRX-300)]]',
-html:`<h2 class="t">[[PWR은 전원을 잃으면 제어봉이 <em>떨어진다</em>. BWR은 <s>그렇지 않다</s>||Lose power and a PWR&#8217;s rods <em>fall</em>. A BWR&#8217;s <s>do not</s>]]</h2>
+html:`<h2 class="t">[[<em>제어봉 삽입 방향</em>과 전원상실 시 거동||<em>Rod insertion direction</em> and behaviour on loss of power]]</h2>
 <ul class="b">
   <li>[[BWR은 노심 위쪽이 기수분리기·건조기로 채워지므로 제어봉을 <b>아래에서 밀어 넣어야</b> 함 — 구조가 강제한 선택임||A BWR&#8217;s core is capped by separators and dryers, so rods must be <b>driven in from below</b> - the structure forces it]]</li>
   <li>[[그래서 BWR은 별도의 <b class="amb">수압·전동 구동장치와 축압기</b>가 필요함. 안전해석에서 자주 되돌아오는 항목임||So a BWR needs <b class="amb">hydraulic and electric drives with accumulators</b>. It comes back often in safety analysis]]</li>
@@ -110,10 +110,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 일체형 = 사고 제거 */
-S({tag:'REMOVE THE ACCIDENT', ov:'[[일체형 — 안전계통을 개선하는 게 아니라 사고를 제거한다||Integral - not a better safety system but a removed accident]]',
+S({tag:'INTEGRAL LAYOUT', ov:'[[일체형 배치 — 대형 LOCA 시나리오의 제거||The integral layout - removing the large-LOCA scenario]]',
 src:'[[<b>출처</b> 본 교재 5.2절 · 대형 LOCA 는 1차계통 대구경 배관의 완전 파단 시나리오임||<b>Source</b> This textbook &#167;5.2 · a large LOCA is the double-ended rupture of a large primary pipe]]',
 abbr:'[[<b>LOCA</b> 냉각재상실사고 · <b>A<sub>break</sub></b> 파단면적 · <b>ṁ<sub>loss</sub></b> 유출 유량 · <b>축압기</b> 압축 기체로 물을 밀어 넣는 피동 주입 탱크||<b>LOCA</b> Loss-of-Coolant Accident · <b>A<sub>break</sub></b> break area · <b>&#7745;<sub>loss</sub></b> escaping flow · <b>accumulator</b> a passive tank that pushes water in with compressed gas]]',
-html:`<h2 class="t">[[안전계통을 <s>더 잘 만드는</s> 게 아니라, 막아야 할 <em>사고를 없앰</em>||Not <s>a better safety system</s> - the accident itself is <em>removed</em>]]</h2>
+html:`<h2 class="t">[[일체형 배치 — <em>대형 LOCA</em> 시나리오의 제거||The integral layout - removing the <em>large-LOCA</em> scenario]]</h2>
 <ul class="b">
   <li>[[대형 PWR의 안전주입 · 축압기 · 재순환계통은 전부 <b>대구경 배관 파단이라는 한 시나리오</b>에 대비해 존재함||Safety injection, accumulators and recirculation in a large PWR all exist for <b>one scenario</b> - a large pipe break]]</li>
   <li>[[배관이 없으면 그 시나리오 자체가 사라짐. <b class="cool">파단면적이 0이면 유출 유량도 0</b>임||No pipe, no scenario. <b class="cool">Zero break area means zero escaping flow</b>]]</li>
@@ -182,9 +182,9 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 득실 */
-S({tag:'THE PRICE', ov:'[[일체형이 얻는 것과 잃는 것||What the integral layout gains and loses]]',
+S({tag:'TRADE-OFFS', ov:'[[일체형 배치의 득실||What the integral layout gains and gives up]]',
 src:'[[<b>출처</b> 본 교재 5.2절 표 5.2 · 일체형 SMR 의 안전해석은 대형 LOCA 가 아니라 <b>소구경 파단과 감압 과도</b>가 주된 시나리오가 됨||<b>Source</b> This textbook &#167;5.2, Table 5.2 · for an integral SMR the leading scenarios are <b>small breaks and depressurisation transients</b>, not a large LOCA]]',
-html:`<h2 class="t">[[대가가 안 보이면 <em>아직 다 읽지 않은 것</em>임||If you cannot see the price, <em>you have not finished reading</em>]]</h2>
+html:`<h2 class="t">[[일체형 배치의 <em>득실</em>||What the integral layout <em>gains and gives up</em>]]</h2>
 <ul class="b">
   <li>[[일체형에서도 LOCA가 완전히 사라지지는 않음. 용기에는 여전히 <b>관통부 · 노즐 · 감압밸브</b>가 붙어 있음||A LOCA does not vanish entirely. The vessel still carries <b>penetrations, nozzles and relief valves</b>]]</li>
 </ul>
@@ -230,9 +230,9 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 세 갈래 */
-S({tag:'THREE ANSWERS', ov:'[[세 갈래 — 펌프를 없앤다 · 남긴다 · 끓인다||Three answers - drop the pump, keep it, or boil]]',
+S({tag:'THREE DESIGNS', ov:'[[순환 방식에 따른 세 갈래 설계||Three designs, by how the coolant circulates]]',
 src:'[[<b>출처</b> 본 교재 5.3절 · 6~9장에서 하나씩 봄||<b>Source</b> This textbook &#167;5.3 · each is taken up in turn in chapters 6-9]]',
-html:`<h2 class="t">[[&#8220;배관을 없애는 것&#8221;과 &#8220;펌프를 없애는 것&#8221;은 <em>별개의 선택</em>임||Removing the pipes and removing the pump are <em>separate choices</em>]]</h2>
+html:`<h2 class="t">[[순환 방식에 따른 <em>세 갈래 설계</em>||<em>Three designs</em>, by how the coolant circulates]]</h2>
 <ul class="b">
   <li>[[일체형을 택한 뒤에도 갈림길이 하나 더 있음 — <b>냉각재를 무엇으로 돌리는가</b>||Even after going integral one fork remains - <b>what drives the coolant round</b>]]</li>
   <li>[[세 설계는 <b class="cool">같은 질문에 서로 다르게 답함</b>. 우열이 아니라 무엇을 최적화했는가의 차이임||The three <b class="cool">answer one question differently</b>. Not better or worse - a difference in what was optimised]]</li>

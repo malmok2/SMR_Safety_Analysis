@@ -7,9 +7,9 @@ html:`[[<div class="no">07</div><h2>잔열제거계통</h2><div class="ln"></div
 <p>Safety function &#9313;: where the heat goes after shutdown.
 First pin down how much heat, for how long and to where, in numbers; then compare three ways of doing it.</p>]]`});
 
-S({tag:'HEAT SINK', ov:'[[수조 시뮬레이션 — 72시간은 어디서 나온 숫자인가||Pool simulation - where the 72 hours comes from]]',
+S({tag:'HEAT SINK', ov:'[[무조작 72시간에 필요한 수조 용량||Water inventory for 72 unattended hours]]',
 src:'[[<b>계산</b> Way–Wigner 붕괴열 적분(250 MWt, t₀ = 10⁸ s) · c_p = 4.18 kJ/(kg·K), h_fg = 2,257 kJ/kg, 초기 수온 30 °C. <b>열이 전부 수조로 들어간다고 본 상한 추정</b> — 실제로는 열교환기 성능 한계·성층화·외부 열손실이 작용한다||<b>Calculation</b> Way-Wigner decay heat integrated (250 MWt, t₀ = 10⁸ s) · c_p = 4.18 kJ/(kg·K), h_fg = 2,257 kJ/kg, initial water temperature 30 °C. <b>A bounding estimate that sends all the heat into the pool</b> - in reality heat exchanger capacity, stratification and heat loss all intervene]]',
-html:`<h2 class="t">[[“72시간 무조작”은 마법이 아니라 <em>물통 크기를 정하는 계산</em>이다||&#8220;72 hours&#8221; is not magic - it is <em>what sizes the tank</em>]]</h2>
+html:`<h2 class="t">[[무조작 <em>72시간</em>에 필요한 수조 용량||Water inventory for <em>72 unattended hours</em>]]</h2>
 <ul class="b">
   <li>[[정지 후 72시간 누적 붕괴 에너지는 <code>약 315 GJ</code> — 현열만으로 받으려면 물 <b class="cool">약 1,000 t</b>||The decay energy accumulated in 72 hours is <code>about 315 GJ</code> - taking it on sensible heat alone needs <b class="cool">about 1,000 t</b> of water]]</li>
   <li>[[잠열이 현열의 <b>약 8배</b>. 끓기 시작한 뒤에도 한참을 더 버틴다 — 대신 증기 배출과 보충수가 새 설계 문제||Latent heat is <b>about eight times</b> the sensible heat, so it holds out far longer once boiling starts - at the price of a new design problem: venting the steam and making up the water]]</li>
@@ -92,9 +92,9 @@ init(el){
   raf(t=>{ H=(t*34)%420; draw(Math.min(H,400)); });
 }});
 
-S({tag:'RHR · [[구현||Implementations]]', ov:'[[잔열제거의 세 가지 구현||Three ways to remove residual heat]]',
+S({tag:'RHR · [[구현||Implementations]]', ov:'[[잔열제거의 세 가지 구현||Three implementations of residual heat removal]]',
 src:'[[<b>개념도</b> 자체 작성. 계통 구성을 원리 수준으로 축약 · <b>사례</b> IRIS EHRS · SMART PRHRS · NuScale DHRS / AP1000 PRHR HX · BWRX-300 ICS / NuScale ECCS||<b>Schematic</b> drawn for this course, reduced to the level of principle · <b>Examples</b> IRIS EHRS · SMART PRHRS · NuScale DHRS / AP1000 PRHR HX · BWRX-300 ICS / NuScale ECCS]]',
-html:`<h2 class="t">[[열을 어디로 옮기는가 — <em>세 갈래</em>의 답||Where do you move the heat - <em>three</em> answers]]</h2>
+html:`<h2 class="t">[[<em>잔열제거</em>의 세 가지 구현||Three implementations of <em>residual heat removal</em>]]</h2>
 <ul class="b">
   <li>[[(a)만 <b class="ok">1차 압력경계를 열지 않는다</b>. 대신 증기발생기 자체가 고장난 경우에는 못 쓴다||Only (a) <b class="ok">keeps the primary pressure boundary closed</b>. In exchange, it is useless if the steam generator itself has failed]]</li>
 </ul>
@@ -152,9 +152,9 @@ init(el){
   flow(el.querySelector('#rc2'),{n:8,speed:0.14,r:3.8,color:'var(--hot)'});
 }});
 
-S({tag:'GRACE PERIOD', ov:'[[대처시간 비교 — 무엇을 기준으로 센 값인가||Grace period compared - counted against what]]',
+S({tag:'GRACE PERIOD', ov:'[[설계별 대처시간 — 무엇을 센 값인가||Coping time by design - what each number counts]]',
 src:'[[<b>출처</b> K.H. Bae et al., <i>Nucl. Eng. Des.</i> <b>379</b> (2021) 111247 (SMART100) · IAEA SMR Booklet 2022 (i-SMR·BWRX-300·CAREM·NuScale) · NRC ADAMS ML15230A043 (AP1000). <b>모두 설계자 제시값</b>||<b>Source</b> K.H. Bae et al., <i>Nucl. Eng. Des.</i> <b>379</b> (2021) 111247 (SMART100) · IAEA SMR Booklet 2022 (i-SMR, BWRX-300, CAREM, NuScale) · NRC ADAMS ML15230A043 (AP1000). <b>All are vendor-stated values</b>]]',
-html:`<h2 class="t">[[“72시간”이 설계마다 <s>다른 것을 뜻한다</s>||&#8220;72 hours&#8221; <s>means different things</s> in different designs]]</h2>
+html:`<h2 class="t">[[설계별 <em>대처시간</em> — 무엇을 센 값인가||<em>Coping time</em> by design - what each number counts]]</h2>
 <ul class="b">
   <li>[[① 운전원 조작 없이 유지하는 시간 · ② 외부 급수 없이 버티는 시간 · ③ 교류전원 없이 버티는 시간||&#9312; time held without operator action · &#9313; time held without external water · &#9314; time held without AC power]]</li>
   <li>[[세 정의가 주는 숫자는 서로 크게 다르다 — 비교할 때 <b class="hot">반드시 정의를 확인</b>||The three definitions give very different numbers - when comparing, <b class="hot">always check which one is meant</b>]]</li>

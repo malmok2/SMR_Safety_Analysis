@@ -13,10 +13,10 @@ search all three every time. Know which question each one answers and you open o
 
 
 /* ---------------------------------------------------------------- 역할 분담 */
-S({tag:'DIVISION OF LABOUR', ov:'[[세 자료원은 서로 다른 질문에 답한다||Each source answers a different question]]',
+S({tag:'THREE SOURCES', ov:'[[세 자료원의 역할 분담||What each of the three sources answers]]',
 src:'[[<b>출처</b> 본 교재 2.1절 표 2.1||<b>Source</b> This textbook &#167;2.1, Table 2.1]]',
 abbr:'[[<b>ARIS</b> IAEA 노형 정보 시스템 · <b>NRC</b> 미국 원자력규제위원회 · <b>NEA</b> OECD 원자력기구 · <b>PRIS</b> IAEA 운전원전 정보 시스템||<b>ARIS</b> Advanced Reactors Information System · <b>NRC</b> US Nuclear Regulatory Commission · <b>NEA</b> OECD Nuclear Energy Agency · <b>PRIS</b> Power Reactor Information System]]',
-html:`<h2 class="t">[[&#8220;어느 데이터베이스를 여는가&#8221;는 <em>질문이 정함</em>||<em>The question</em> decides which database you open]]</h2>
+html:`<h2 class="t">[[세 자료원의 <em>역할 분담</em>||What each of the <em>three sources</em> answers]]</h2>
 <ul class="b">
   <li>[[셋을 한 덩어리로 보면 매번 세 곳을 뒤지게 됨. <b>질문 → 자료원</b>이 정해져 있음||Treat them as one and you search all three every time. <b>Question &#8594; source</b> is a fixed mapping]]</li>
   <li>[[각 자료원이 <b class="hot">못 하는 것</b>을 아는 것이 더 중요함 — 거기서 자료를 찾으면 시간만 날림||Knowing what each <b class="hot">cannot</b> do matters more - looking there wastes the afternoon]]</li>
@@ -65,10 +65,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- ARIS */
-S({tag:'ARIS', ov:'[[ARIS — 설계 사양의 1차 자료||ARIS - the primary source for specifications]]',
+S({tag:'ARIS', ov:'[[ARIS — 설계기술서(DSR)||ARIS - the Design Status Report]]',
 src:'[[<b>출처</b> 본 교재 2.2절 그림 2.1 · IAEA ARIS 소개 화면 — https://aris.iaea.org · 접근일 2026-09||<b>Source</b> This textbook &#167;2.2, Fig. 2.1 · the IAEA ARIS landing page at https://aris.iaea.org · accessed September 2026]]',
 abbr:'[[<b>DSR</b> 설계기술서 — 설계자가 직접 작성해 IAEA 에 제출한 문서 · <b>HTGR</b> 고온가스로 · <b>SFR</b> 소듐냉각고속로 · <b>MSR</b> 용융염로||<b>DSR</b> Design Status Report - written and filed by the designer itself · <b>HTGR</b> High-Temperature Gas-cooled Reactor · <b>SFR</b> Sodium-cooled Fast Reactor · <b>MSR</b> Molten Salt Reactor]]',
-html:`<h2 class="t">[[ARIS를 <em>1차 자료</em>로 만드는 것은 설계기술서 하나임||One thing makes ARIS <em>primary</em> - the Design Status Report]]</h2>
+html:`<h2 class="t">[[ARIS — 설계기술서(<em>DSR</em>)||ARIS - the <em>Design Status Report</em>]]</h2>
 <ul class="b">
   <li>[[<b>설계자가 직접 작성해 제출한</b> 설계기술서(DSR)를 PDF로 받을 수 있음 — 숫자에 <b>책임 주체</b>가 있음||You can download the Design Status Report <b>written and submitted by the designer</b> - someone is accountable for the numbers]]</li>
   <li>[[IAEA 양식을 따르므로 <b>압력·온도·유량·연료</b>가 빠짐없이 들어감. 국내 노형도 영문 사양은 <b class="cool">브로슈어보다 ARIS가 나음</b>||It follows the IAEA template, so <b>pressure, temperature, flow and fuel</b> are all there. Even for Korean designs, <b class="cool">ARIS beats the vendor brochure</b>]]</li>
@@ -90,9 +90,9 @@ html:`<h2 class="t">[[ARIS를 <em>1차 자료</em>로 만드는 것은 설계기
 
 
 /* ---------------------------------------------------------------- ARIS 국가별 */
-S({tag:'ARIS BY COUNTRY', ov:'[[국가 필터를 바꾸면 보이는 것||What the country filter shows]]',
+S({tag:'ARIS BY COUNTRY', ov:'[[ARIS 검색 결과 — 국가별 설계 상태||ARIS search results - design status by country]]',
 src:'[[<b>출처</b> 본 교재 2.2절 그림 2.2 · 2.3 · 2.4 — ARIS 검색 결과(한국 · 러시아 · 미국) · 접근일 2026-09||<b>Source</b> This textbook &#167;2.2, Figs. 2.2-2.4 - ARIS search results for Korea, Russia and the United States · accessed September 2026]]',
-html:`<h2 class="t">[[미국은 <em>개념이 많고</em>, 러시아는 <em>실물이 있음</em>||The United States has <em>many concepts</em>; Russia has <em>hardware</em>]]</h2>
+html:`<h2 class="t">[[ARIS 검색 결과 — 국가별 <em>설계 상태</em>||ARIS search results - <em>design status</em> by country]]</h2>
 <ul class="b">
   <li>[[설계명 · 설계기관 · 냉각재 · 감속재 · <b>설계 상태</b> · 국가 · 용도가 한 줄에 정리됨. 읽을 것은 <b class="cool">설계 상태 칸</b>임||Each row carries design, organisation, coolant, moderator, <b>design status</b>, country and purpose. The column to read is <b class="cool">design status</b>]]</li>
   <li>[[2026년 현재 <b>실제로 전기를 만들고 있는 SMR</b>은 러시아와 중국에 있음. 한국은 설계 단계에 몰려 있음||As of 2026 the SMRs <b>actually making electricity</b> are in Russia and China. Korea&#8217;s entries sit in the design phase]]</li>
@@ -104,10 +104,10 @@ ${PH({src:'f2_03', cap:'[[<b>러시아</b> — 설계 상태 칸에 <b>Operating
 
 
 /* ---------------------------------------------------------------- 예 · 부유식 */
-S({tag:'A FLOATING PLANT', ov:'[[예 · Akademik Lomonosov — 배 위의 원자로||Example - Akademik Lomonosov, a reactor on a barge]]',
+S({tag:'FLOATING PLANT', ov:'[[부유식 원전 — KLT-40S와 Akademik Lomonosov||Floating plants - the KLT-40S and Akademik Lomonosov]]',
 src:'[[<b>출처</b> 본 교재 2.2.1절 그림 2.5 · 2.6 · KLT-40S 2기 · 기당 약 35 MWe(두 기 70 MWe) · 2020년 5월 상업운전||<b>Source</b> This textbook &#167;2.2.1, Figs. 2.5-2.6 · two KLT-40S units, about 35 MWe each (70 MWe together), commercial operation May 2020]]',
 abbr:'[[<b>KLT-40S</b> 쇄빙선 원자로에서 온 러시아 소형 PWR · <b>구동수두</b> 자연순환을 만드는 압력차 · <b>동요(motion)</b> 배가 흔들리며 생기는 자세 변화||<b>KLT-40S</b> a small Russian PWR descended from icebreaker reactors · <b>driving head</b> the pressure difference that sustains natural circulation · <b>motion</b> the attitude changes of a vessel at sea]]',
-html:`<h2 class="t">[[배 위에서는 <em>동요가 구동수두에 직접</em> 영향을 줌||At sea, <em>motion acts directly on the driving head</em>]]</h2>
+html:`<h2 class="t">[[부유식 원전 — <em>KLT-40S</em>와 Akademik Lomonosov||Floating plants - the <em>KLT-40S</em> and Akademik Lomonosov]]</h2>
 <ul class="b">
   <li>[[원자로를 배에 싣는다는 발상은 <b>쇄빙선 원자로 운용 경험</b>에서 나옴. 발전과 동시에 담수화에도 쓸 수 있게 설계됨||Putting a reactor on a ship came out of <b>icebreaker experience</b>. It was designed to desalinate as well as generate]]</li>
   <li>[[육상 설계를 그대로 옮길 수 없음 — <b class="hot">KLT-40S가 강제순환을 택한 이유</b>가 여기 있음. THINK Lab 해상 부유식 과제와 직결됨||A land design cannot simply be moved offshore - <b class="hot">this is why the KLT-40S uses forced circulation</b>. It bears directly on THINK Lab&#8217;s floating-plant work]]</li>
@@ -119,10 +119,10 @@ ${PH({src:'f2_05', cap:'[[KLT-40S 1차계통 배치 — 원자로 · 증기발�
 
 
 /* ---------------------------------------------------------------- NRC · ADAMS */
-S({tag:'US NRC · ADAMS', ov:'[[ADAMS — 문서에서 문서로 타고 간다||ADAMS - follow document to document]]',
+S({tag:'US NRC · ADAMS', ov:'[[US NRC — ADAMS 문서를 찾는 법||US NRC - finding documents in ADAMS]]',
 src:'[[<b>출처</b> 본 교재 2.3절 그림 2.7 · <b>접근번호로 직접 열기</b> https://www.nrc.gov/docs/MLxxxx/MLxxxxxxxxx.pdf||<b>Source</b> This textbook &#167;2.3, Fig. 2.7 · <b>open by accession number</b> https://www.nrc.gov/docs/MLxxxx/MLxxxxxxxxx.pdf]]',
 abbr:'[[<b>ADAMS</b> NRC 문서 공개 시스템 · <b>RAI</b> 규제기관이 보내는 추가정보요구 · <b>FSER</b> 최종 안전성평가보고서 · <b>ML번호</b> ADAMS 문서 접근번호||<b>ADAMS</b> Agencywide Documents Access and Management System · <b>RAI</b> Request for Additional Information · <b>FSER</b> Final Safety Evaluation Report · <b>ML number</b> ADAMS accession number]]',
-html:`<h2 class="t">[[ADAMS는 <s>검색으로</s> 쓰는 게 아니라 <em>참고문헌으로</em> 씀||ADAMS is not worked by <s>search</s> but by <em>reference list</em>]]</h2>
+html:`<h2 class="t">[[US NRC — <em>ADAMS</em> 문서를 찾는 법||US NRC - finding documents in <em>ADAMS</em>]]</h2>
 <ul class="b">
   <li>[[NRC가 주고받은 문서를 거의 전부 공개함 — 신청서 · 질의(RAI) · 답변 · 최종보고서(FSER). <b>공개 자료 중 가장 깊음</b>||Nearly every document the NRC exchanged is public - applications, RAIs, responses, the FSER. <b>The deepest public material there is</b>]]</li>
   <li>[[키워드를 넣으면 수백 건이 쏟아지고 원하는 문서는 없음. 요령은 <b class="cool">FSER 한 편의 참고문헌 목록</b>에서 접근번호를 훑는 것임||Keywords return hundreds of hits and not the one you want. The trick is <b class="cool">the reference list of one FSER</b>, which carries every accession number that matters]]</li>
@@ -189,10 +189,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- NEA 대시보드 전환 */
-S({tag:'NEA DASHBOARD', ov:'[[인쇄판에서 디지털 대시보드로||From printed report to digital dashboard]]',
+S({tag:'NEA DASHBOARD', ov:'[[NEA SMR 대시보드 — 인쇄판에서 디지털로||The NEA SMR dashboard - print edition to digital]]',
 src:'[[<b>출처</b> 본 교재 2.4절 · OECD/NEA SMR 디지털 대시보드(2025-07 개설, 연중 갱신) · 제3판 데이터 기준일 2025-02-14||<b>Source</b> This textbook &#167;2.4 · OECD/NEA SMR digital dashboard (opened July 2025, updated through the year) · Third Edition data cut-off 14 Feb 2025]]',
 abbr:'[[<b>NEA</b> OECD 원자력기구 · <b>대시보드</b> 설계별 사업 성숙도를 여섯 차원으로 평가해 보여 주는 화면||<b>NEA</b> OECD Nuclear Energy Agency · <b>dashboard</b> a screen scoring each design’s deployment maturity on six dimensions]]',
-html:`<h2 class="t">[[2025년 7월부터 <em>디지털 대시보드가 주(主)</em>임 — PDF가 아님||Since July 2025 <em>the digital dashboard is the main source</em>, not the PDF]]</h2>
+html:`<h2 class="t">[[NEA SMR 대시보드 — <em>인쇄판에서 디지털로</em>||The NEA SMR dashboard - <em>print edition to digital</em>]]</h2>
 <ul class="b">
   <li>[[인쇄판은 <b>데이터 기준일에 고정</b>되고, 디지털은 연중 여러 차례 갱신 창구를 엶 (최근 갱신에 개발사 14곳 참여)||The printed edition is <b>frozen at its cut-off date</b>; the digital one opens submission windows through the year (14 vendors in the latest round)]]</li>
   <li>[[<b class="hot">대시보드에 없다 &#8800; 그런 설계가 없다</b> — 개발사가 요청하면 빠짐. 추적 129건 중 수록은 79건임||<b class="hot">Absent from the dashboard &#8800; no such design</b> - a vendor can ask to be left out. 79 of 129 tracked designs are listed]]</li>
@@ -251,10 +251,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 여섯 차원 */
-S({tag:'SIX DIMENSIONS', ov:'[[여섯 차원 — 가장 낮은 축이 속도를 정한다||Six dimensions - the lowest axis sets the pace]]',
+S({tag:'SIX DIMENSIONS', ov:'[[대시보드의 여섯 가지 평가 차원||The dashboard&#8217;s six assessment dimensions]]',
 src:'[[<b>출처</b> 본 교재 2.4.2 · 2.4.3절 표 2.2 · 평가하는 것은 기술 성숙도가 아니라 <b>사업 성숙도</b>임||<b>Source</b> This textbook &#167;&#167;2.4.2-2.4.3, Table 2.2 · what is scored is <b>deployment</b> maturity, not technical maturity]]',
 abbr:'[[<b>HALEU</b> 농축도 5~20% 구간의 저농축 우라늄 · <b>MOU</b> 구속력 없는 양해각서 · <b>수용성</b> 지역사회·이해관계자와의 합의||<b>HALEU</b> High-Assay Low-Enriched Uranium, 5-20% enrichment · <b>MOU</b> non-binding memorandum of understanding · <b>engagement</b> agreements with the community and stakeholders]]',
-html:`<h2 class="t">[[카드를 읽을 때는 평균이 아니라 <em>가장 낮은 축</em>을 봄||Read the card by its <em>lowest axis</em>, never its average]]</h2>
+html:`<h2 class="t">[[대시보드의 <em>여섯 가지 평가 차원</em>||The dashboard&#8217;s <em>six assessment dimensions</em>]]</h2>
 <ul class="b">
   <li>[[여섯 축이 고르게 3점인 설계와, 다섯 축이 5점이고 한 축이 0점인 설계 중 <b>먼저 지어지는 쪽은 전자</b>임||Between a design scoring a flat 3 on all six and one scoring 5 on five axes and 0 on one, <b>the flat one gets built first</b>]]</li>
   <li>[[설계는 끝났는데 연료를 못 구하거나, 인허가는 났는데 자금이 없는 사례가 <b class="hot">실제로 대부분</b>임||A finished design with no fuel, or a licensed design with no money, is <b class="hot">the common case</b>]]</li>
@@ -318,9 +318,9 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 설계 카드 */
-S({tag:'READING A CARD', ov:'[[설계 카드 읽는 법||How to read a design card]]',
+S({tag:'DESIGN CARD', ov:'[[설계 카드의 구성과 읽는 법||What a design card shows, and how to read it]]',
 src:'[[<b>출처</b> 본 교재 2.4.3절 그림 2.9 · 2.10 — 인쇄판의 설계 카드. 디지털 대시보드도 같은 구조를 보여 줌||<b>Source</b> This textbook &#167;2.4.3, Figs. 2.9-2.10 - cards from the printed edition; the digital dashboard uses the same structure]]',
-html:`<h2 class="t">[[같은 형식이라 두 설계의 <em>강·약 차원이 바로 비교</em>됨||One format, so the <em>strong and weak axes compare at a glance</em>]]</h2>
+html:`<h2 class="t">[[<em>설계 카드</em>의 구성과 읽는 법||What a <em>design card</em> shows, and how to read it]]</h2>
 <ul class="b">
   <li>[[설계 하나당 카드 하나. 육각형의 각 축이 <b>여섯 차원</b>이고, 옆의 게이지가 세부 점수이며, 아래에 열출력·출구온도·스펙트럼·연료 형태가 붙음||One card per design. The hexagon&#8217;s axes are <b>the six dimensions</b>, the gauges beside it are the sub-scores, and below sit thermal power, outlet temperature, spectrum and fuel form]]</li>
 </ul>
@@ -331,9 +331,9 @@ ${PH({src:'f2_09', cap:'[[설계 카드 — <b>NuScale VOYGR</b>||Design card - 
 
 
 /* ---------------------------------------------------------------- 인쇄판 집계 */
-S({tag:'THE 2024 PICTURE', ov:'[[인쇄판이 남긴 전체 그림 (2024)||The picture the printed edition left (2024)]]',
+S({tag:'2024 TALLY', ov:'[[인쇄판 제2판의 전체 집계 (2024년)||The 2024 tally from the printed second edition]]',
 src:'[[<b>출처</b> 본 교재 2.4.4절 그림 2.12 · 2.13 · 2.15 — <b>제2판(2024년) 집계</b>. 수치는 이미 낡았고 현재 값은 디지털 대시보드에서 다시 뽑아야 함||<b>Source</b> This textbook &#167;2.4.4, Figs. 2.12, 2.13, 2.15 - <b>the 2024 second edition</b>. These numbers are already stale; current values must be pulled from the digital dashboard]]',
-html:`<h2 class="t">[[<s>수치는 낡았지만</s> <em>구조는 두 해 사이에 크게 안 바뀜</em>||<s>The numbers are stale</s> but <em>the shape has not moved much in two years</em>]]</h2>
+html:`<h2 class="t">[[인쇄판 제2판의 <em>전체 집계</em> (2024년)||The <em>2024 tally</em> from the printed second edition]]</h2>
 <ul class="b">
   <li>[[<b class="hot">그대로 인용하면 안 됨</b> — 2024년 제2판 집계임. 그럼에도 싣는 이유는 집계가 보여 주는 <b>구조</b> 때문임||<b class="hot">Do not cite these directly</b> - they are the 2024 tally. They are shown because of the <b>structure</b> they reveal]]</li>
   <li>[[러시아·중국이 <b>최초호기 배치를 이끌고</b>, 북미·유럽이 부지 확보에서 빠르게 따라붙는 구도임||Russia and China <b>lead on first-of-a-kind deployment</b>, with North America and Europe catching up fast on siting]]</li>
@@ -346,10 +346,10 @@ ${PH({src:'f2_12', cap:'[[국가별 <b>부지 확보 진척</b>||<b>Siting progr
 
 
 /* ---------------------------------------------------------------- HALEU 병목 */
-S({tag:'FUEL BOTTLENECK', ov:'[[HALEU — 배치 순서를 정하는 병목||HALEU - the bottleneck that sets the order of deployment]]',
+S({tag:'FUEL · HALEU', ov:'[[연료 — 농축도 요건과 HALEU 병목||Fuel - enrichment requirements and the HALEU bottleneck]]',
 src:'[[<b>출처</b> 본 교재 2.4.5절 그림 2.17 · 2.18 · 농축도 값은 각 설계의 공개 사양||<b>Source</b> This textbook &#167;2.4.5, Figs. 2.17-2.18 · enrichment values from each design’s published specification]]',
 abbr:'[[<b>HALEU</b> 고분석 저농축 우라늄 — 농축도 5~20% 구간 · <b>천연 우라늄</b> U-235 가 0.711% · <b>고농축</b> 20% 초과||<b>HALEU</b> High-Assay Low-Enriched Uranium, 5-20% enrichment · <b>natural uranium</b> 0.711% U-235 · <b>highly enriched</b> above 20%]]',
-html:`<h2 class="t">[[먼저 지어지는 이유는 기술 우열이 아니라 <em>공급망 준비도</em>임||The order is set by <em>supply-chain readiness</em>, not merit]]</h2>
+html:`<h2 class="t">[[연료 — 농축도 요건과 <em>HALEU 병목</em>||Fuel - enrichment requirements and the <em>HALEU bottleneck</em>]]</h2>
 <ul class="b">
   <li>[[가스냉각 · 고속 · 용융염 계열은 대개 <b>HALEU</b>를 요구함. 기술적으로 검증된 연료지만 2023년까지 OECD 국가에 <b class="hot">상업 공급이 없었음</b>||Gas-cooled, fast and molten-salt designs mostly need <b>HALEU</b>. It is a proven fuel, but until 2023 there was <b class="hot">no commercial supply</b> in OECD countries]]</li>
   <li>[[경수로형 SMR 셋은 모두 <b class="ok">5% 미만</b> — 기존 연료 공급망을 그대로 씀. 이것이 먼저 배치되는 가장 현실적인 이유임||All three light-water SMRs sit <b class="ok">below 5%</b> and use the existing fuel supply chain. That is the practical reason they go first]]</li>
@@ -440,10 +440,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 연료와 경제성 */
-S({tag:'ECONOMICS', ov:'[[경제성 — 작아져서 잃은 것을 무엇으로 되찾는가||Economics - what wins back what shrinking cost]]',
+S({tag:'ECONOMICS', ov:'[[SMR 경제성 — 규모의 비경제와 네 가지 동인||SMR economics - the four offsetting drivers]]',
 src:'[[<b>출처</b> 본 교재 2.4.6절 그림 2.19 · 2.20 · 규모의 경제 <code>C₂/C₁ = (P₂/P₁)ⁿ</code>, 지수 n 은 1보다 작음||<b>Source</b> This textbook &#167;2.4.6, Figs. 2.19-2.20 · economy of scale <code>C&#8322;/C&#8321; = (P&#8322;/P&#8321;)&#8319;</code> with the exponent below 1]]',
 abbr:'[[<b>규모의 비경제</b> 출력을 줄이면 kW당 단가가 오르는 것 · <b>모듈화</b> 공장에서 만들어 옮기는 제작 방식 · <b>조화(harmonisation)</b> 나라마다 다른 인허가 요건을 맞추는 일||<b>diseconomy of scale</b> smaller output raising the cost per kW · <b>modularisation</b> building in a factory and shipping · <b>harmonisation</b> aligning licensing requirements across countries]]',
-html:`<h2 class="t">[[작아져서 잃은 것을 <em>네 가지 동인</em>으로 되찾아야 함||What was lost by shrinking must be won back by <em>four drivers</em>]]</h2>
+html:`<h2 class="t">[[SMR 경제성 — 규모의 비경제와 <em>네 가지 동인</em>||SMR economics - the <em>four offsetting drivers</em>]]</h2>
 <ul class="b">
   <li>[[지수 <b>n 이 1보다 작아</b> 출력을 줄이면 kW당 단가가 오름 — 이것이 <b>규모의 비경제</b>임||Because <b>n is below 1</b>, cutting output raises the cost per kW - the <b>diseconomy of scale</b>]]</li>
   <li>[[그 손해를 <b class="cool">모듈화·공장제작 · 설계 단순화 · 표준화 · 조화</b>로 되찾겠다는 것이 SMR 경제성 주장의 전부임||Winning it back through <b class="cool">modularisation, simplification, standardisation and harmonisation</b> is the whole SMR economic case]]</li>
@@ -455,9 +455,9 @@ ${PH({src:'f2_19', cap:'[[규모의 비경제를 상쇄하는 <b>네 가지 동�
 
 
 /* ---------------------------------------------------------------- 다섯 개의 숫자 */
-S({tag:'FIVE NUMBERS', ov:'[[같은 대시보드에서 나온 다섯 개의 숫자||Five numbers from the same dashboard]]',
+S({tag:'FIVE NUMBERS', ov:'[[같은 대시보드에서 나온 다섯 개의 숫자||Five different counts from the same dashboard]]',
 src:'[[<b>출처</b> 본 교재 2.4.7절 표 2.3 · 다섯 다 맞음. 세는 대상과 시점이 다를 뿐임||<b>Source</b> This textbook &#167;2.4.7, Table 2.3 · all five are correct; they count different things at different times]]',
-html:`<h2 class="t">[[&#8220;NEA에 따르면 SMR 설계는 <s>OO개</s>&#8221;는 <em>거의 틀린 문장</em>임||&#8220;According to NEA there are <s>N</s> SMR designs&#8221; is <em>almost always wrong</em>]]</h2>
+html:`<h2 class="t">[[같은 대시보드에서 나온 <em>다섯 개의 숫자</em>||<em>Five different counts</em> from the same dashboard]]</h2>
 <ul class="b">
   <li>[[한 절 안에만 숫자가 다섯 개 나옴 — <b>98 · 56 · 74 · 129 · 79</b>. 모순처럼 보이지만 다섯 다 맞음||One section alone carries five numbers - <b>98, 56, 74, 129, 79</b>. They look contradictory; all five are right]]</li>
   <li>[[1.1절의 <b class="cool">&#8220;무엇을 세는지가 다르다&#8221;</b>가 여기서 그대로 재현됨. 어느 숫자를 쓰든 <b>무엇을 센 것인지와 시점</b>을 같이 적음||&#167;1.1&#8217;s <b class="cool">&#8220;they count different things&#8221;</b> repeats here. Whichever you use, write down <b>what it counted and when</b>]]</li>

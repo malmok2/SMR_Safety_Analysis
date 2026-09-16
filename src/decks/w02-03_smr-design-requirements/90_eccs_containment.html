@@ -7,9 +7,9 @@ html:`[[<div class="no">08</div><h2>안전주입계통</h2><div class="ln"></div
 <p>The second half of safety function &#9313;: how to put back the coolant that was lost,
 and the five quantitative acceptance criteria the regulator imposes.</p>]]`});
 
-S({tag:'10 CFR 50.46', ov:'[[ECCS 허용기준 — 다섯 개의 합격선||ECCS acceptance criteria - five pass marks]]',
+S({tag:'10 CFR 50.46', ov:'[[10 CFR 50.46 — ECCS 허용기준 다섯 개||10 CFR 50.46 - the five ECCS acceptance criteria]]',
 src:'[[<b>출처</b> 10 CFR 50.46 (최종 개정 2007-08-28, 72 FR 49494) eCFR 원문. <b>유의</b> 성능기반 대체기준 50.46c는 2024-04 위원회 반려로 <b>2026년 현재 미제정</b>이며, 50.46a는 ECCS가 아니라 <b>원자로냉각재계통 배기계통</b> 조문이다||<b>Source</b> 10 CFR 50.46 (last amended 2007-08-28, 72 FR 49494), eCFR text. <b>Note</b> the performance-based alternative 50.46c was remanded by the Commission in April 2024 and is <b>still not issued as of 2026</b>; 50.46a is not about ECCS at all but about the <b>reactor coolant system venting</b>]]',
-html:`<h2 class="t">[[인허가 안전해석의 <em>합격선</em> — 정확히 외울 값||The <em>pass mark</em> for a licensing safety analysis - learn these exactly]]</h2>
+html:`<h2 class="t">[[<em>10 CFR 50.46</em> — ECCS 허용기준 다섯 개||<em>10 CFR 50.46</em> - the five ECCS acceptance criteria]]</h2>
 <div class="body">
   <div class="fig" style="justify-content:flex-start">
   <table class="d">
@@ -37,9 +37,9 @@ html:`<h2 class="t">[[인허가 안전해석의 <em>합격선</em> — 정확히
   </div>
 </div>`});
 
-S({tag:'PRESSURE TIERS', ov:'[[압력 계층 — 주입계통의 순차 인계||Pressure tiers - injection systems handing over]]',
+S({tag:'PRESSURE TIERS', ov:'[[압력 계층 — 주입계통의 순차 인계||The pressure hierarchy - injection systems handing over]]',
 src:'[[<b>개념도</b> 자체 작성. 압력 이력은 소형 파단의 전형적 형태 예시이며 특정 설계의 해석 결과가 아니다. 축압기 충전압 4.9 MPa(약 700 psig)는 AP1000 기준값 (NRC ADAMS ML15230A043)||<b>Schematic</b> drawn for this course. The pressure history is a typical small-break shape, not any design&#8217;s analysis. Accumulator charge 4.9 MPa (about 700 psig) is the AP1000 value (NRC ADAMS ML15230A043)]]',
-html:`<h2 class="t">[[압력이 떨어지며 <em>차례로 인계</em>한다 — 하나로는 안 된다||As the pressure falls they <em>hand over in turn</em> - no single system can do it]]</h2>
+html:`<h2 class="t">[[<em>압력 계층</em> — 주입계통의 순차 인계||The <em>pressure hierarchy</em> - injection systems handing over]]</h2>
 <ul class="b">
   <li>[[사고 초기에는 압력이 높아 저압 펌프가 못 밀고, 나중에는 고압 계통의 유량이 부족함||Early on the pressure is too high for a low-pressure pump to push against; later the high-pressure system cannot deliver enough flow]]</li>
   <li>[[그래서 <b class="cool">압력 구간마다 다른 주입 수단</b>을 준비한다 — 이것이 ECCS의 기본 골격||So <b class="cool">each pressure band gets its own means of injection</b> - that is the skeleton of an ECCS]]</li>
@@ -96,9 +96,9 @@ init(el){
   at(1); raf(t=>{ const u=(t%8)/8; at(Math.pow(10,u*4)); });
 }});
 
-S({tag:'NuScale ECCS', ov:'[[폐루프 — 물을 밖에서 넣지 않는다||A closed loop - no water added from outside]]',
+S({tag:'NuScale ECCS', ov:'[[피동 ECCS — 감압 · 응축 · 중력 회수||Passive ECCS - depressurise, condense, return by gravity]]',
 src:'[[<b>개념도</b> 자체 작성. NuScale NPM의 ECCS는 RVV 3개 + RRV 2개로 구성되며 펌프·축압기가 없다 (IAEA SMR Booklet 2022). 8장·9장의 경계가 사라지는 지점||<b>Schematic</b> drawn for this course. The NuScale NPM ECCS is three RVVs and two RRVs, with no pump and no accumulator (IAEA SMR Booklet 2022). This is where the line between Chapters 8 and 9 disappears]]',
-html:`<h2 class="t">[[잃은 물을 밖에서 넣는 대신 <em>가둬 두고 순환</em>시킨다||Instead of adding water, it <em>keeps it in and circulates</em>]]</h2>
+html:`<h2 class="t">[[피동 ECCS — 감압 · 응축 · <em>중력 회수</em>||Passive ECCS - depressurise, condense, <em>return by gravity</em>]]</h2>
 <ul class="b">
   <li>[[① <b>RVV</b>를 열어 증기를 격납으로 방출 → ② 침수된 격납 벽면에서 <b class="cool">응축</b>, 열은 수조로 → ③ <b>RRV</b>로 응축수를 용기로 복귀||&#9312; open the <b>RVVs</b> and vent steam into containment &#8594; &#9313; it <b class="cool">condenses</b> on the submerged containment wall and the heat goes to the pool &#8594; &#9314; the <b>RRVs</b> return the condensate to the vessel]]</li>
   <li>[[수원이 계 밖에 없어도 순환이 유지되므로 <b class="ok">50.46(b)(5) 장기 냉각</b>이 성립한다||Circulation holds with no water source outside the system, which is how <b class="ok">50.46(b)(5) long-term cooling</b> is met]]</li>
@@ -161,9 +161,9 @@ html:`[[<div class="no">09</div><h2>격납계통</h2><div class="ln"></div>
 <p>Safety function &#9314;, the last of the four barriers.
 Only one property is demanded of it - <b>do not leak</b>. And to hold that property, the heat has to go somewhere.</p>]]`});
 
-S({tag:'ISOLATION', ov:'[[격리밸브 — 구멍 관리가 전부||Isolation valves - it is all about the holes]]',
+S({tag:'ISOLATION', ov:'[[격납 관통부와 격리밸브||Containment penetrations and isolation valves]]',
 src:'[[<b>출처</b> 10 CFR 50 Appendix A, GDC 16·50~57. <b>GDC 52</b>는 설계압에서 종합누설률시험(ILRT)을 수행할 수 있도록 요구한다 — “새지 않는다”를 주장이 아니라 <b>측정</b>으로 증명해야 한다||<b>Source</b> 10 CFR 50 Appendix A, GDC 16 and 50-57. <b>GDC 52</b> requires that an integrated leak rate test be possible at design pressure - &#8220;it does not leak&#8221; has to be proved by <b>measurement</b>, not assertion]]',
-html:`<h2 class="t">[[격납에는 <s>필연적으로 구멍</s>이 뚫린다 — 사고 시 닫히는가||A containment <s>necessarily has holes</s> in it - do they close when it matters]]</h2>
+html:`<h2 class="t">[[격납 <em>관통부</em>와 격리밸브||Containment <em>penetrations</em> and isolation valves]]</h2>
 <ul class="b">
   <li>[[배관 · 전기 관통부 · 인원 출입구. 이 구멍이 닫히지 않으면 아무리 두꺼운 벽도 소용없음||Pipes, electrical penetrations, personnel airlocks. If these do not close, no thickness of wall helps]]</li>
   <li>[[단순 <b class="hot">체크밸브</b>는 격납 외부 자동 격리밸브로 인정되지 않음 — 막아야 할 방향으로는 닫히지 않으니까||A plain <b class="hot">check valve</b> does not count as an automatic outboard isolation valve - it does not close in the direction you need to block]]</li>
@@ -192,9 +192,9 @@ html:`<h2 class="t">[[격납에는 <s>필연적으로 구멍</s>이 뚫린다 �
   </div>
 </div>`});
 
-S({tag:'CONTAINMENT PRESSURE', ov:'[[격납 압력 — 계산이 포화압에 막힌다||Containment pressure - the calculation hits saturation]]',
+S({tag:'CONTAINMENT PRESSURE', ov:'[[격납 압력 계산 — 증기 응축의 효과||Containment pressure - the effect of steam condensation]]',
 src:'[[<b>예제 조건</b> 자유체적 3,000 m³ · 초기 공기 1기압 20 °C · 평형 온도 150 °C · R_v = 461.5 J/(kg·K) · 150 °C 포화압 0.476 MPa. 이상기체 근사만으로는 답이 틀린다는 것을 보이기 위한 예제||<b>Worked example</b> free volume 3,000 m³ · initial air at 1 atm and 20 °C · equilibrium temperature 150 °C · R_v = 461.5 J/(kg·K) · saturation pressure at 150 °C is 0.476 MPa. The point of the example is that the ideal gas approximation alone gives the wrong answer]]',
-html:`<h2 class="t">[[이상기체로 계산하면 <s>틀린다</s> — 초과분은 <em>응축</em>한다||Treat it as an ideal gas and you get it <s>wrong</s> - the excess <em>condenses</em>]]</h2>
+html:`<h2 class="t">[[격납 압력 계산 — <em>증기 응축</em>의 효과||Containment pressure - the effect of <em>steam condensation</em>]]</h2>
 <ul class="b">
   <li>[[계산된 증기 분압이 그 온도의 <b>포화압</b>을 넘으면 물리적으로 불가능 → 증기 일부가 액체가 됨||A computed steam partial pressure above the <b>saturation pressure</b> at that temperature is physically impossible &#8594; part of the steam turns liquid]]</li>
   <li>[[결국 <b class="cool">격납 압력은 증기 질량이 아니라 평형 온도가 결정</b>한다. 그래서 격납 해석의 핵심은 열 균형||In the end <b class="cool">containment pressure is set by the equilibrium temperature, not by the mass of steam</b>. Which is why containment analysis is really a heat balance]]</li>
@@ -251,9 +251,9 @@ init(el){
   raf(t=>{ if(t>2.2) return; sl.value=(lerp(4,20,clamp(t/2,0,1))).toFixed(1); upd(); });
 }});
 
-S({tag:'CONTAINMENT TYPES', ov:'[[격납 3형식 — 에너지를 어디에 흡수시키는가||Three containment types - where the energy goes]]',
+S({tag:'CONTAINMENT TYPES', ov:'[[격납 3형식 — 에너지를 어디에 흡수시키는가||Three containment types - where the energy is absorbed]]',
 src:'[[<b>출처</b> IAEA SMR Booklet 2022 (CAREM 설계압 0.5 MPa, 콘크리트 1.2 m · NuScale CNV 외경 4.5 m × 높이 23.1 m) · NRC ADAMS ML15230A043 (AP1000 PCCWST 72시간 배수)||<b>Source</b> IAEA SMR Booklet 2022 (CAREM design pressure 0.5 MPa, 1.2 m concrete · NuScale CNV 4.5 m outer diameter by 23.1 m high) · NRC ADAMS ML15230A043 (AP1000 PCCWST draining over 72 hours)]]',
-html:`<h2 class="t">[[흡수 방식은 <em>세 가지뿐</em>이다 — 대기 · 물 · 벽||There are only <em>three</em> places to put it - the atmosphere, water, or the wall]]</h2>
+html:`<h2 class="t">[[격납 <em>3형식</em> — 에너지를 어디에 흡수시키는가||<em>Three containment types</em> - where the energy is absorbed]]</h2>
 <div class="body col">
 <table class="d">
 [[<tr><th style="width:22%">형식</th><th style="width:30%">에너지를 어디에 흡수시키는가</th><th style="width:22%">능동/피동</th><th>대표 설계</th></tr>||<tr><th style="width:22%">Type</th><th style="width:30%">Where the energy is absorbed</th><th style="width:22%">Active / passive</th><th>Representative design</th></tr>]]

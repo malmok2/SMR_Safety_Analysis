@@ -5,9 +5,9 @@ html:`[[<div class="no">10</div><h2>요건에서 계통까지</h2><div class="ln
 <p>아홉 개의 장을 하나의 추적표로 묶는다. 이 표를 거꾸로 읽으면 설계 검토 체크리스트가 된다.</p>||<div class="no">10</div><h2>From requirement to system</h2><div class="ln"></div>
 <p>Nine chapters pulled into a single traceability table. Read that table backwards and it becomes a design review checklist.</p>]]`});
 
-S({tag:'TRACEABILITY', ov:'[[요건 → 기능 → 계통 추적||Requirement &#8594; function &#8594; system]]',
+S({tag:'TRACEABILITY', ov:'[[요건 &#8594; 기능 &#8594; 계통 추적||Tracing requirement &#8594; function &#8594; system]]',
 src:'[[<b>출처</b> 10 CFR 50 Appendix A의 GDC, IAEA SSR-2/1 (Rev.1)의 기본안전기능, 그리고 6~9장에서 다룬 계통을 대응시킨 것||<b>Source</b> the GDC of 10 CFR 50 Appendix A, the fundamental safety functions of IAEA SSR-2/1 (Rev.1), and the systems covered in Chapters 6 to 9, mapped onto each other]]',
-html:`<h2 class="t">[[설계는 요건에서 시작해 계통으로 끝난다 — <s>거꾸로 읽으면 근거를 잃는다</s>||Requirement &#8594; function &#8594; system - <s>never the other way</s>]]</h2>
+html:`<h2 class="t">[[<em>요건 &#8594; 기능 &#8594; 계통</em> 추적||Tracing <em>requirement &#8594; function &#8594; system</em>]]</h2>
 <div class="body"><div class="fig">
 <svg viewBox="0 0 1120 462" role="img" aria-label="[[규제 요건에서 기본안전기능을 거쳐 공학적안전설비로 이어지는 추적 관계||Traceability from regulatory requirement through fundamental safety function to engineered safety feature]]">
   <defs><marker id="tr-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
@@ -52,9 +52,9 @@ init(el){
   rows.forEach((r,i)=>r.animate([{opacity:0},{opacity:1}],{duration:420,delay:180*i,fill:'forwards'}));
 }});
 
-S({tag:'COMPARISON', ov:'[[노형별 ESF 구성 비교||ESF line-up, design by design]]',
+S({tag:'COMPARISON', ov:'[[노형별 공학적안전설비 구성 비교||Engineered safety features compared across designs]]',
 src:'[[<b>출처</b> IAEA SMR Booklet 2022 (NuScale·i-SMR·BWRX-300·CAREM) · K.H. Bae et al., <i>Nucl. Eng. Des.</i> <b>379</b> (2021) 111247 (SMART100) · NRC ML15230A043 (AP1000) · Westinghouse ML033600086 (IRIS). <b>모두 설계자 제시 자료 기준</b>||<b>Source</b> IAEA SMR Booklet 2022 (NuScale, i-SMR, BWRX-300, CAREM) · K.H. Bae et al., <i>Nucl. Eng. Des.</i> <b>379</b> (2021) 111247 (SMART100) · NRC ML15230A043 (AP1000) · Westinghouse ML033600086 (IRIS). <b>All from vendor-supplied material</b>]]',
-html:`<h2 class="t">[[같은 일을 하는데 <em>이름이 다르다</em> — 나란히 놓고 보기||The same job under <em>different names</em> - set side by side]]</h2>
+html:`<h2 class="t">[[노형별 <em>공학적안전설비</em> 구성 비교||<em>Engineered safety features</em> compared across designs]]</h2>
 <div class="body col">
 <table class="d sm">
 [[<tr><th style="width:14%">설계</th><th style="width:16%">정지계통</th><th style="width:24%">잔열제거</th><th style="width:23%">안전주입</th><th>격납</th></tr>||<tr><th style="width:14%">Design</th><th style="width:16%">Shutdown</th><th style="width:24%">Residual heat removal</th><th style="width:23%">Safety injection</th><th>Containment</th></tr>]]
@@ -68,9 +68,9 @@ html:`<h2 class="t">[[같은 일을 하는데 <em>이름이 다르다</em> — �
 </table>
 </div>`});
 
-S({tag:'CHECKLIST', ov:'[[마무리 — 네 줄 체크리스트||Closing - a four-line checklist]]',
+S({tag:'CHECKLIST', ov:'[[설계 자료를 읽을 때의 네 줄 체크리스트||A four-line checklist for reading a design]]',
 src:'[[다음 단계: 5~8주차 계통코드. 이 네 질문에 답할 수 있으면 노드화의 요구사항이 이미 정해진 것이다||Next: system codes in weeks 5-8. Answer these four questions and the nodalisation requirements are already settled]]',
-html:`<h2 class="t">[[설계 자료를 받았을 때 <em>이 네 줄</em>을 채울 수 있는가||Handed a design, can you fill in <em>these four lines</em>]]</h2>
+html:`<h2 class="t">[[설계 자료를 읽을 때의 <em>네 줄 체크리스트</em>||A <em>four-line checklist</em> for reading a design]]</h2>
 <div class="body col">
   <div style="display:flex;flex-direction:column;gap:12px;margin-top:6px">
     <div class="readout" style="border-left:3px solid var(--hot)">

@@ -1,7 +1,7 @@
 <script>
-S({tag:'SINGLE FAILURE', ov:'[[단일고장기준 — 원문과 세 가지 함정||Single failure criterion - the text and three traps]]',
+S({tag:'SINGLE FAILURE', ov:'[[단일고장기준 — 원문과 세 가지 함정||The single failure criterion - the text and three traps]]',
 src:'[[<b>출처</b> 10 CFR Part 50, Appendix A, “Definitions and Explanations” (eCFR 원문 확인) · IAEA SSR-2/1 (Rev.1) Requirement 25||<b>Source</b> 10 CFR Part 50, Appendix A, &#8220;Definitions and Explanations&#8221; (verified against eCFR) · IAEA SSR-2/1 (Rev.1) Requirement 25]]',
-html:`<h2 class="t">[[하나는 고장 났다고 <em>치고</em> 설계한다 — 단, 세 가지를 정확히||Design as if one thing <em>has already failed</em> - but get three points right]]</h2>
+html:`<h2 class="t">[[<em>단일고장기준</em> — 원문과 세 가지 함정||The <em>single failure criterion</em> - the text and three traps]]</h2>
 <div class="body">
   <div class="fig" style="justify-content:flex-start;padding-top:4px">
     <blockquote class="q" style="font-size:15.5px;line-height:1.55">
@@ -31,9 +31,9 @@ html:`<h2 class="t">[[하나는 고장 났다고 <em>치고</em> 설계한다 �
   </div>
 </div>`});
 
-S({tag:'PLANT STATES', ov:'[[플랜트 상태 — 빈도가 낮을수록 허용 결과가 느슨해진다||Plant states - rarer events, looser limits]]',
+S({tag:'PLANT STATES', ov:'[[플랜트 상태 분류 — 빈도와 허용 결과||Plant condition categories - frequency and allowable consequence]]',
 src:'[[<b>출처</b> IAEA SSR-2/1 (Rev.1) Requirement 19(설계기준사고)·Requirement 20(설계확장조건). 빈도 구간은 관례적 크기이며 규제·설계마다 경계가 다르다||<b>Source</b> IAEA SSR-2/1 (Rev.1) Requirement 19 (design basis accidents) and Requirement 20 (design extension conditions). The frequency bands are conventional magnitudes; the boundaries differ between regulators and designs]]',
-html:`<h2 class="t">[[무엇에 대비하는가 — <em>빈도</em>가 <em>허용 결과</em>를 정한다||What you design against - <em>frequency</em> sets the <em>allowable outcome</em>]]</h2>
+html:`<h2 class="t">[[플랜트 상태 분류 — <em>빈도</em>와 허용 결과||Plant condition categories - <em>frequency</em> and allowable consequence]]</h2>
 <ul class="b">
   <li>[[매년 일어날 수 있는 이탈에서 연료가 손상되면 안 되지만, 백만 년에 한 번은 <b>격납만 지키면</b> 된다||A transient that can happen every year must not damage fuel; for a once-in-a-million-year event it is enough to <b>keep containment intact</b>]]</li>
   <li>[[심층방어 단계 구분(앞 슬라이드)이 이 <b class="cool">빈도–결과 축</b>과 정확히 대응한다||The levels of defence in depth from the previous slide map exactly onto this <b class="cool">frequency-consequence axis</b>]]</li>
@@ -73,9 +73,9 @@ init(el){
   items.forEach((it,i)=>it.animate([{opacity:0},{opacity:1}],{duration:420,delay:220*i,fill:'forwards'}));
 }});
 
-S({tag:'GDC MAP', ov:'[[GDC 지도 — 요건이 계통을 부른다||A map of the GDC - requirements calling for systems]]',
+S({tag:'GDC MAP', ov:'[[GDC 지도 — 어느 조문이 어느 계통을 부르는가||A map of the GDC - which rule calls for which system]]',
 src:'[[<b>출처</b> 10 CFR Part 50, Appendix A(eCFR·Cornell LII 확인). 국내 대응은 「원자로시설 등의 기술기준에 관한 규칙」 제20·23·24·29·30조||<b>Source</b> 10 CFR Part 50, Appendix A (verified against eCFR and Cornell LII). The Korean counterpart is the Rules on Technical Standards for Nuclear Reactor Facilities, Articles 20, 23, 24, 29 and 30]]',
-html:`<h2 class="t">[[막히면 <em>GDC 원문</em>을 찾아 읽는 것이 가장 빠르다||When stuck, reading the <em>GDC text itself</em> is the fastest way out]]</h2>
+html:`<h2 class="t">[[<em>GDC</em> 지도 — 어느 조문이 어느 계통을 부르는가||A map of the <em>GDC</em> - which rule calls for which system]]</h2>
 <div class="body col">
 <table class="d sm">
 [[<tr><th style="width:12%">분류</th><th style="width:9%">GDC</th><th style="width:34%">제목</th><th>요구의 핵심</th></tr>||<tr><th style="width:12%">Group</th><th style="width:9%">GDC</th><th style="width:34%">Title</th><th>What it demands</th></tr>]]
@@ -104,9 +104,9 @@ html:`[[<div class="no">05</div><h2>공학적안전설비</h2><div class="ln"></
 <p>What an ESF is, how active and passive are told apart, and the five properties a design has to have.
 This is the shared vocabulary for reading the systems in Chapters 6 to 9.</p>]]`});
 
-S({tag:'PASSIVE CATEGORIES', ov:'[[피동 Category A~D — 어디까지가 피동인가||Passive Categories A-D - how passive is passive]]',
+S({tag:'PASSIVE CATEGORIES', ov:'[[피동계통의 네 등급 (Category A~D)||Four categories of passive system (A to D)]]',
 src:'[[<b>출처</b> IAEA-TECDOC-626, <i>Safety Related Terms for Advanced Nuclear Plants</i> (1991)||<b>Source</b> IAEA-TECDOC-626, <i>Safety Related Terms for Advanced Nuclear Plants</i> (1991)]]',
-html:`<h2 class="t">[[“피동”은 <em>이분법이 아니다</em> — 네 등급으로 갈린다||&#8220;Passive&#8221; is <em>not a yes-or-no</em> - it splits into four grades]]</h2>
+html:`<h2 class="t">[[피동계통의 <em>네 등급</em> (Category A~D)||<em>Four categories</em> of passive system (A to D)]]</h2>
 <ul class="b">
   <li>[[범주가 오른쪽으로 갈수록 <b class="hot">고장 가능성이 있는 요소</b>가 하나씩 늘어난다||Moving right through the categories adds <b class="hot">one more thing that can fail</b> at each step]]</li>
   <li>[[실제 SMR의 “피동 안전계통”은 대부분 <b>Category C 또는 D</b> — 피동이라고 고장 나지 않는 게 아니다||Most real SMR &#8220;passive safety systems&#8221; are <b>Category C or D</b> - passive does not mean it cannot fail]]</li>
@@ -149,9 +149,9 @@ init(el){
   cols.forEach((c,i)=>c.animate([{opacity:0},{opacity:1}],{duration:400,delay:200*i,fill:'forwards'}));
 }});
 
-S({tag:'ESF DESIGN', ov:'[[ESF가 갖춰야 할 다섯 가지 성질||Five properties an ESF must have]]',
+S({tag:'ESF DESIGN', ov:'[[공학적안전설비가 갖춰야 할 다섯 가지 성질||Five properties an engineered safety feature must have]]',
 src:'[[<b>왼쪽 두 열</b> 2025-2학기 강의자료 「Safety Requirements for SMR」의 “Design Characteristics of ESF” 항목. <b>오른쪽 열</b>은 10 CFR 50 Appendix A 및 IAEA SSR-2/1 (Rev.1)에서 대응시킨 것||<b>The two left columns</b> follow the &#8220;Design Characteristics of ESF&#8221; items in the 2025 fall lecture notes <i>Safety Requirements for SMR</i>. <b>The right column</b> maps them onto 10 CFR 50 Appendix A and IAEA SSR-2/1 (Rev.1)]]',
-html:`<h2 class="t">[[다섯 가지 성질은 <em>각각 조문</em>을 갖고 있다||Each of the five properties has <em>a rule behind it</em>]]</h2>
+html:`<h2 class="t">[[공학적안전설비가 갖춰야 할 <em>다섯 가지 성질</em>||<em>Five properties</em> an engineered safety feature must have]]</h2>
 <ul class="b">
   <li>[[조문과 함께 외우면 실무에서 훨씬 쓸모 있음 — “왜 이렇게 만들었나”가 곧 “어느 조문 때문인가”||Learn them together with the rule and they become useful in practice - &#8220;why is it built this way&#8221; is &#8220;which rule demands it&#8221;]]</li>
 </ul>

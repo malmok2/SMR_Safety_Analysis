@@ -7,9 +7,9 @@ html:`[[<div class="no">02</div><h2>작아지면 무엇이 달라지는가</h2><
 <p>Two pieces of physics carry the whole SMR safety argument: the <b>absolute amount</b> of decay heat,
 and the <b>driving head</b> of natural circulation. These two numbers set every system design that follows.</p>]]`});
 
-S({tag:'DECAY HEAT', ov:'[[붕괴열 — 비율은 같고 절대량이 준다||Decay heat - same fraction, smaller absolute load]]',
+S({tag:'DECAY HEAT', ov:'[[붕괴열 — 비율과 절대량||Decay heat - fraction and absolute power]]',
 src:'[[<b>계산</b> Way–Wigner 근사 <span class="mono">P_d/P₀ = 0.0622 [ t<sup>−0.2</sup> − (t+t₀)<sup>−0.2</sup> ]</span>, t₀ = 10⁸ s. 인허가 해석에는 ANSI/ANS-5.1을 쓴다 · 정격 열출력 출처 IAEA SMR Booklet 2022 · KHNP||<b>Calculation</b> Way-Wigner approximation <span class="mono">P_d/P₀ = 0.0622 [ t<sup>−0.2</sup> − (t+t₀)<sup>−0.2</sup> ]</span>, t₀ = 10⁸ s. Licensing analyses use ANSI/ANS-5.1 · rated thermal power from IAEA SMR Booklet 2022 · KHNP]]',
-html:`<h2 class="t">[[비율은 같다. <em>절대량</em>이 다르다 — 슬라이더로 시간을 흘려보자||Same fraction, different <em>absolute load</em> - run the slider]]</h2>
+html:`<h2 class="t">[[<em>붕괴열</em> — 비율과 절대량||<em>Decay heat</em> - fraction and absolute power]]</h2>
 <ul class="b">
   <li>[[붕괴열 <b>비율</b>은 노심 크기와 거의 무관. 정지 1시간 뒤 어느 노형이든 정격의 약 <code>1 %</code>||The decay heat <b>fraction</b> barely depends on core size. One hour after shutdown any reactor sits near <code>1 %</code> of rating]]</li>
   <li>[[달라지는 건 <b class="hot">절대량</b> — 3,983 MWt의 1 %는 40 MW, 250 MWt의 1 %는 2.6 MW. <b>15배</b> 차이||What differs is the <b class="hot">absolute load</b> - 1 % of 3,983 MWt is 40 MW, 1 % of 250 MWt is 2.6 MW. A factor of <b>15</b>]]</li>
@@ -87,9 +87,9 @@ init(el){
   raf(t=>{ if(t<1.1||t>4.6) return; const u=(t-1.1)/3.5; sl.value=Math.round(u*600); upd(+sl.value); });
 }});
 
-S({tag:'NATURAL CIRCULATION', ov:'[[자연순환 — 구동수두 인터랙티브||Natural circulation - driving head, interactive]]',
+S({tag:'NATURAL CIRCULATION', ov:'[[자연순환 구동수두의 크기||The size of the natural-circulation driving head]]',
 src:'[[<b>계산</b> Δp = (ρ_c − ρ_h) g H, u = √[2Δp / ρ(fL/D + ΣK)] · 압축수 밀도 근사(10~16 MPa) · 유로 K = 25, 단면적 2 m², 저온측 250 °C 기준. 펌프 양정 600 kPa는 대형 PWR의 개념적 대표값||<b>Calculation</b> Δp = (ρ_c − ρ_h) g H, u = √[2Δp / ρ(fL/D + ΣK)] · compressed-water density fit (10-16 MPa) · loop K = 25, flow area 2 m², cold side at 250 °C. The 600 kPa pump head is a representative figure for a large PWR]]',
-html:`<h2 class="t">[[펌프가 없으면 <em>밀도차</em>가 밀어야 한다 — 그 힘은 얼마인가||With no pump, <em>density difference</em> has to push - so how hard does it push]]</h2>
+html:`<h2 class="t">[[자연순환 <em>구동수두</em>의 크기||The size of the natural-circulation <em>driving head</em>]]</h2>
 <ul class="b">
   <li>[[열중심 높이차 <code>H</code>와 온도차 <code>ΔT</code>가 만드는 부력이 유일한 구동력||The only driving force is buoyancy from the thermal-centre height <code>H</code> and the temperature difference <code>ΔT</code>]]</li>
   <li>[[구동수두가 작으니 <b>유량도 작다</b> → 같은 출력을 빼려면 노심 출입구 <b class="hot">온도차가 커진다</b>||A small driving head means <b>small flow</b> &#8594; to remove the same power the <b class="hot">core temperature rise must grow</b>]]</li>
@@ -158,9 +158,9 @@ init(el){
     sh.value=(lerp(3,10,u)).toFixed(1); stt.value=Math.round(lerp(30,67,u)); upd(); });
 }});
 
-S({tag:'THERMAL INERTIA', ov:'[[열관성 — 5배 느리게 데워진다||Thermal inertia - heats up five times slower]]',
+S({tag:'THERMAL INERTIA', ov:'[[열관성과 대처시간||Thermal inertia and coping time]]',
 src:'[[<b>계산</b> dT/dt = P_d /(M c_p), c_p = 5.3 kJ/(kg·K), 정지 1시간 후 붕괴열(SMR 2.6 MW / 대형로 41.8 MW) 기준. 냉각이 <b>완전히 끊긴</b> 가장 보수적인 상한이며 실제로는 용기 열손실과 잔열제거계통이 함께 작동한다||<b>Calculation</b> dT/dt = P_d /(M c_p), c_p = 5.3 kJ/(kg·K), using decay heat one hour after shutdown (2.6 MW for the SMR, 41.8 MW for the large unit). This is the most conservative bound, with cooling <b>completely lost</b>; in reality vessel heat loss and the residual heat removal system also act]]',
-html:`<h2 class="t">[[대처시간이 길다는 말의 <em>물리적 내용</em>||What &#8220;more time to act&#8221; <em>physically means</em>]]</h2>
+html:`<h2 class="t">[[열관성과 <em>대처시간</em>||Thermal inertia and <em>coping time</em>]]</h2>
 <ul class="b">
   <li>[[붕괴열이 적고 물이 많으면 온도가 <b>천천히</b> 오른다 — 그 느림이 운전원과 피동계통이 쓰는 시간||Less decay heat and more water means the temperature climbs <b>slowly</b> - and that slowness is the time operators and passive systems get to use]]</li>
   <li>[[SMR <code>17.7 K/h</code> vs 대형 경수로 <code>94.6 K/h</code> — <b class="ok">약 5배</b>||SMR <code>17.7 K/h</code> against large LWR <code>94.6 K/h</code> - <b class="ok">about five times</b>]]</li>

@@ -13,10 +13,10 @@ Its specifications come from the Design Status Report lodged with IAEA ARIS.</p>
 
 
 /* ---------------------------------------------------------------- 모듈 구성 */
-S({tag:'INSIDE THE MODULE', ov:'[[i-SMR 모듈 — 구성 기기와 유로||Inside the i-SMR module - components and flow path]]',
+S({tag:'INSIDE THE MODULE', ov:'[[i-SMR 모듈의 구성과 유로||The i-SMR module - layout and flow path]]',
 src:'[[<b>출처</b> 본 교재 7.1 · 7.2절 그림 7.1 · 표 7.1 · IAEA ARIS, i-SMR Design Status Report||<b>Source</b> This textbook &#167;&#167;7.1-7.2, Fig. 7.1 and Table 7.1 · IAEA ARIS, i-SMR Design Status Report]]',
 abbr:'[[<b>RCP</b> 원자로냉각재펌프 · <b>PZR</b> 가압기 · <b>EDV</b> 비상감압밸브 · <b>ERV</b> 비상재순환밸브 · <b>CSB</b> 노심지지배럴 · <b>UGS</b> 상부안내구조물 · <b>ECT</b> 비상냉각수조||<b>RCP</b> reactor coolant pump · <b>PZR</b> pressuriser · <b>EDV</b> emergency depressurisation valve · <b>ERV</b> emergency recirculation valve · <b>CSB</b> core support barrel · <b>UGS</b> upper guide structure · <b>ECT</b> emergency cooling tank]]',
-html:`<h2 class="t">[[구조는 같고 <em>구동원만</em> 다름 — 부력 대신 펌프가 돌림||Same structure, <em>different driver</em> - a pump, not buoyancy]]</h2>
+html:`<h2 class="t">[[i-SMR 모듈의 <em>구성과 유로</em>||The i-SMR module - <em>layout and flow path</em>]]</h2>
 <ul class="b">
   <li>[[노심 상승 &#8594; 노심지지배럴·상부안내구조물 안쪽 &#8594; 상부에서 방향 전환 &#8594; <b>냉각재펌프</b> &#8594; 증기발생기 셸측을 따라 하강 &#8594; 하부플레넘 &#8594; 다시 노심||Up through the core, inside the core support barrel and upper guide structure, turned at the top, through <b>the coolant pumps</b>, down past the steam generator shell side to the lower plenum, and back into the core]]</li>
   <li>[[NuScale과 비교하면 <b>구조는 같고 구동원만 다름</b>. 둘 다 가운데로 올라가 바깥으로 내려오는 고리이고, 둘 다 증기발생기가 그 하강 경로에 놓여 있음||Against NuScale the <b>structure is the same and only the driver differs</b>: both rise in the middle and fall on the outside, with the steam generator on the descending leg]]</li>
@@ -47,10 +47,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 관통부를 줄인다 */
-S({tag:'FEWER PENETRATIONS', ov:'[[일체형의 본질은 관통부를 줄이는 것||The point of going integral is fewer penetrations]]',
+S({tag:'PENETRATIONS', ov:'[[관통부를 줄이는 세 가지 설계 선택||Three choices that cut the penetrations]]',
 src:'[[<b>출처</b> 본 교재 7.2.2절 · 설계 자료를 읽을 때 <b>용기에 뚫린 구멍의 목록</b>을 세어 보면 그 설계의 성격이 드러남||<b>Source</b> This textbook &#167;7.2.2 · count <b>the holes in the pressure boundary</b> and the character of a design shows itself]]',
 abbr:'[[<b>축봉 파손(seal LOCA)</b> 펌프 축 밀봉부가 깨져 냉각재가 새는 사고 경로 · <b>캔드모터</b> 축이 밖으로 나오지 않는 밀폐형 펌프 · <b>관통부</b> 압력경계를 뚫고 지나는 구멍||<b>seal LOCA</b> coolant escaping through a failed pump shaft seal · <b>canned motor</b> a pump whose shaft never leaves the pressure boundary · <b>penetration</b> a hole through the pressure boundary]]',
-html:`<h2 class="t">[[일체형의 본질은 &#8220;배관을 없앤다&#8221;보다 <em>&#8220;구멍을 줄인다&#8221;</em>에 가까움||Integral is about <em>removing holes</em>, not pipes]]</h2>
+html:`<h2 class="t">[[<em>관통부를 줄이는</em> 세 가지 설계 선택||Three choices that <em>cut the penetrations</em>]]</h2>
 <ul class="b">
   <li>[[세 가지 선택이 전부 <b>같은 방침</b>으로 묶임 — 압력경계를 뚫는 구멍을 줄인다||All three choices fold into <b>one policy</b> - fewer holes through the pressure boundary]]</li>
 </ul>
@@ -105,10 +105,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 사양 */
-S({tag:'SPECIFICATIONS', ov:'[[i-SMR 주요 사양 — 설계값과 목표값을 구분||i-SMR specifications - design values and target values kept apart]]',
+S({tag:'SPECIFICATIONS', ov:'[[i-SMR 주요 사양 — 설계값과 목표값||i-SMR specifications - design values and targets]]',
 src:'[[<b>출처</b> 본 교재 7.3절 표 7.2 · IAEA ARIS, i-SMR Design Status Report · 접근일 2026-09-16||<b>Source</b> This textbook &#167;7.3, Table 7.2 · IAEA ARIS, i-SMR Design Status Report · accessed 2026-09-16]]',
 abbr:'[[<b>MW(th)</b> 열출력 · <b>MWe</b> 전기출력 · <b>abs</b> 절대압 · <b>무붕산</b> 붕산을 반응도 제어에 쓰지 않는 운전 · <b>안전정지지진</b> 그 값까지 안전기능을 지켜야 하는 지진 세기||<b>MW(th)</b> thermal power · <b>MWe</b> electrical power · <b>abs</b> absolute pressure · <b>soluble-boron-free</b> no boric acid used for reactivity control · <b>SSE</b> safe shutdown earthquake]]',
-html:`<h2 class="t">[[<em>목표값</em>과 <em>설계값</em>은 반드시 구분해 적어야 함||<em>Target values</em> and <em>design values</em> must be written apart]]</h2>
+html:`<h2 class="t">[[i-SMR 주요 사양 — <em>설계값과 목표값</em>||i-SMR specifications - <em>design values and targets</em>]]</h2>
 <ul class="b">
   <li>[[노심손상빈도는 <b>확률론적 안전성평가로 확인해야 하는 값</b>이지 사양서에 적어 확정되는 값이 아님. 홍보 자료에서 이 구분이 자주 사라짐||Core damage frequency is <b>a value that probabilistic assessment must establish</b>, not one a spec sheet settles. Promotional material often loses the distinction]]</li>
 </ul>
@@ -182,10 +182,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 펌프를 남기면 */
-S({tag:'WHY KEEP THE PUMP', ov:'[[펌프를 남기면 무엇이 달라지는가 — ΔT = 35 K||What keeping the pump changes - ΔT = 35 K]]',
+S({tag:'FORCED CIRCULATION', ov:'[[강제순환의 효과 — ΔT = 35 K와 검증 부담||What forced circulation buys - &#916;T = 35 K]]',
 src:'[[<b>출처</b> 본 교재 7.4절 · <code>Q = ṁ c<sub>p</sub> ΔT = 2 658 × 5.5 × (321−286) ≈ 512 MW</code> — 정격 540 MWt와 5% 안쪽||<b>Source</b> This textbook &#167;7.4 · <code>Q = &#7745; c<sub>p</sub> &#916;T = 2 658 &#215; 5.5 &#215; (321&#8722;286) &#8776; 512 MW</code>, within 5% of the rated 540 MWt]]',
 abbr:'[[<b>상관식</b> 실험으로 얻은 열전달·마찰 계산식 · <b>적용 범위</b> 그 상관식이 검증된 조건의 범위 · <b>검증시험</b> 상관식과 계통 성능을 실험으로 확인하는 일||<b>correlation</b> a heat-transfer or friction formula fitted to experiment · <b>range of applicability</b> the conditions over which it was validated · <b>validation testing</b> confirming correlations and system performance by experiment]]',
-html:`<h2 class="t">[[펌프를 남긴 진짜 이유는 <em>검증 부담을 줄이려는 것</em>임||The pump stays <em>to cut the validation burden</em>]]</h2>
+html:`<h2 class="t">[[강제순환의 효과 — <em>ΔT = 35 K</em>와 검증 부담||What forced circulation buys - <em>&#916;T = 35 K</em>]]</h2>
 <ul class="b">
   <li>[[강제순환에서는 유량이 <b>입력값</b>임. 그래서 노심 온도상승을 대형 PWR과 <b class="cool">비슷하게(약 35 K) 유지</b>할 수 있음||With forced circulation the flow is <b>an input</b>. So the core temperature rise can be <b class="cool">held near a large PWR&#8217;s, about 35 K</b>]]</li>
   <li>[[열수력 조건이 기존 PWR과 비슷하면 <b class="ok">검증된 상관식·계통 코드·실험 데이터베이스를 그대로</b> 쓸 수 있음 — 설계 선택이 곧 검증 부담의 선택임||Similar conditions mean <b class="ok">validated correlations, system codes and test databases carry over</b>. Choosing a design is choosing a validation burden]]</li>
@@ -246,10 +246,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 안전계통 셋 */
-S({tag:'PAFS · PECCS · PCCS', ov:'[[i-SMR 공학적안전설비 — 셋 다 피동||i-SMR engineered safety features - all three passive]]',
+S({tag:'PAFS · PECCS · PCCS', ov:'[[피동 안전계통 — PAFS · PECCS · PCCS||The passive safety systems - PAFS, PECCS, PCCS]]',
 src:'[[<b>출처</b> 본 교재 7.5절 표 7.3 · PAFS 성능 요건 36시간 냉각 + 36시간 유지 · PCCS 24시간 내 최고압의 절반||<b>Source</b> This textbook &#167;7.5, Table 7.3 · PAFS: 36 h to cool plus 36 h to hold · PCCS: half the peak pressure within 24 h]]',
 abbr:'[[<b>PAFS</b> 피동보조급수계통 · <b>PECCS</b> 피동비상노심냉각계통 · <b>PCCS</b> 피동격납냉각계통 · <b>RSS</b> 원자로안전계통 · <b>ECT</b> 비상냉각수조||<b>PAFS</b> Passive Auxiliary Feedwater System · <b>PECCS</b> Passive Emergency Core Cooling System · <b>PCCS</b> Passive Containment Cooling System · <b>RSS</b> Reactor Safety System · <b>ECT</b> emergency cooling tank]]',
-html:`<h2 class="t">[[&#8220;72시간&#8221;이 아니라 <em>36시간 냉각 + 36시간 유지</em>임||It is not &#8220;72 hours&#8221; but <em>36 hours cooling plus 36 hours holding</em>]]</h2>
+html:`<h2 class="t">[[피동 안전계통 — <em>PAFS · PECCS · PCCS</em>||The passive safety systems - <em>PAFS, PECCS, PCCS</em>]]</h2>
 <ul class="b">
   <li>[[앞 36시간은 <b>냉각</b>(온도를 내린다), 뒤 36시간은 <b>유지</b>(내린 상태를 지킨다) — 서로 다른 요건임||The first 36 h is <b>cooling</b> (bring the temperature down); the next 36 h is <b>holding</b> (keep it there). Different requirements]]</li>
   <li>[[전자는 <b class="cool">열제거 용량</b>의 문제이고 후자는 <b class="cool">수조 재고</b>의 문제임. 설계 검증도 둘로 나뉨||The first is a question of <b class="cool">heat removal capacity</b>, the second of <b class="cool">pool inventory</b>. The validation splits the same way]]</li>
@@ -319,10 +319,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- PECCS 5단계 */
-S({tag:'PECCS SEQUENCE', ov:'[[PECCS — EDV로 내보내고 ERV로 되돌린다||PECCS - out through the EDVs, back through the ERVs]]',
+S({tag:'PECCS SEQUENCE', ov:'[[PECCS 작동 순서 — EDV 개방에서 ERV 재순환까지||The PECCS sequence - EDV opening to ERV recirculation]]',
 src:'[[<b>출처</b> 본 교재 7.5.2절 · 작동 신호는 <b>용기–격납 차압</b>이 설정치에 도달하는 것 — 전자 신호가 아님||<b>Source</b> This textbook &#167;7.5.2 · the actuation signal is <b>the vessel-to-containment differential pressure</b> reaching its setpoint, not an electronic trip]]',
 abbr:'[[<b>EDV</b> 비상감압밸브 · <b>ERV</b> 비상재순환밸브 · <b>플래싱</b> 고압 포화수가 감압되며 순간적으로 증기로 바뀌는 현상 · <b>임계유동</b> 더 감압해도 유량이 늘지 않는 한계 상태||<b>EDV</b> emergency depressurisation valve · <b>ERV</b> emergency recirculation valve · <b>flashing</b> saturated water turning to steam the instant pressure drops · <b>critical flow</b> the choked state where further depressurisation adds no flow]]',
-html:`<h2 class="t">[[NuScale ECCS와 <em>논리가 같음</em> — 다른 것은 <s>응축을 누가 맡는가</s>임||Same logic as NuScale&#8217;s ECCS - <s>who condenses</s> differs]]</h2>
+html:`<h2 class="t">[[<em>PECCS</em> 작동 순서 — EDV 개방에서 ERV 재순환까지||The <em>PECCS</em> sequence - EDV opening to ERV recirculation]]</h2>
 <ul class="b">
   <li>[[둘 다 <b>감압 &#8594; 격납에서 응축 &#8594; 중력으로 회수</b>. 밖에서 물을 넣지 않음||Both are <b>depressurise &#8594; condense in the containment &#8594; return by gravity</b>. Nothing is pumped in]]</li>
   <li>[[NuScale은 <b class="cool">격납 내벽 자체</b>가 응축면이고(수조에 잠겨 있으므로), i-SMR은 <b class="ok">PCCS 열교환기</b>가 그 역할을 함||In NuScale <b class="cool">the containment wall itself</b> condenses, because it is submerged; in i-SMR <b class="ok">the PCCS heat exchanger</b> does it]]</li>
@@ -381,10 +381,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 무붕산 */
-S({tag:'NO SOLUBLE BORON', ov:'[[무붕산 운전 — 이득 넷과 대가 하나||Soluble-boron-free - four gains and one price]]',
+S({tag:'SOLUBLE-BORON-FREE', ov:'[[무붕산 운전 — 이득과 대가||Soluble-boron-free operation - gains and price]]',
 src:'[[<b>출처</b> 본 교재 7.6절 · 가연성흡수체는 Gd₂O₃ 를 UO₂ 에 섞은 봉 형태 · 정지여유도 <code>SDM = ρ<sub>rod</sub> − ρ<sub>stuck</sub> − ρ<sub>defect</sub> − ρ<sub>unc</sub></code>||<b>Source</b> This textbook &#167;7.6 · the burnable absorber is Gd&#8322;O&#8323; mixed into UO&#8322; rods · shutdown margin <code>SDM = &#961;<sub>rod</sub> &#8722; &#961;<sub>stuck</sub> &#8722; &#961;<sub>defect</sub> &#8722; &#961;<sub>unc</sub></code>]]',
 abbr:'[[<b>CVCS</b> 화학체적제어계통 · <b>가연성흡수체</b> 타면서 중성자 흡수 능력이 줄어드는 물질 · <b>감속재 온도계수</b> 감속재 온도가 오를 때 반응도가 변하는 정도 · <b>SDM</b> 정지여유도 · <b>GDC 26</b> 두 개의 독립 반응도 제어계통을 요구하는 조문||<b>CVCS</b> Chemical and Volume Control System · <b>burnable absorber</b> an absorber that depletes as it burns · <b>moderator temperature coefficient</b> how reactivity moves when the moderator heats up · <b>SDM</b> shutdown margin · <b>GDC 26</b> the criterion requiring two independent reactivity control systems]]',
-html:`<h2 class="t">[[붕산을 없애면 <em>GDC 26의 두 번째 계통</em>을 따로 답해야 함||No boron means <em>GDC 26&#8217;s second system</em> needs another answer]]</h2>
+html:`<h2 class="t">[[<em>무붕산 운전</em> — 이득과 대가||<em>Soluble-boron-free</em> operation - gains and price]]</h2>
 <ul class="b">
   <li>[[대형 PWR은 부족분을 <b>붕산 주입</b>이라는 두 번째 독립 수단으로 메움. NuScale의 붕소 펠릿도 같은 자리를 채움||A large PWR fills the gap with <b>boron injection</b> as its second independent means. NuScale&#8217;s boron pellets sit in the same slot]]</li>
   <li>[[i-SMR은 그 자리를 <b class="amb">제어봉 가치와 가연성흡수체 설계</b>로 채워야 함 — 인허가 심사에서 주목받는 항목임||i-SMR must fill it with <b class="amb">rod worth and burnable absorber design</b> - a focus of the licensing review]]</li>
@@ -459,10 +459,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 인허가 */
-S({tag:'LICENSING', ov:'[[i-SMR 인허가 현황 (2026-09)||i-SMR licensing status, as of Sept 2026]]',
+S({tag:'LICENSING', ov:'[[i-SMR 인허가 현황 (2026년 9월)||i-SMR licensing status, September 2026]]',
 src:'[[<b>출처</b> 본 교재 7.7절 표 7.4 · <b>2026년 9월 기준</b> · 원안위·KINS 보도자료와 심사계획 보고가 1차 근거||<b>Source</b> This textbook &#167;7.7, Table 7.4 · <b>as of September 2026</b> · NSSC and KINS releases and the review plan report are the primary basis]]',
 abbr:'[[<b>표준설계인가</b> 설계 자체를 먼저 심사해 인가받는 제도 · <b>KINS</b> 한국원자력안전기술원 · <b>서류적합성 검토</b> 신청 서류가 심사에 들어갈 요건을 갖췄는지 보는 단계 · <b>스케일링</b> 축소 실험 결과를 실기 규모로 외삽하는 방법론||<b>standard design approval</b> licensing the design itself ahead of a site · <b>KINS</b> Korea Institute of Nuclear Safety · <b>acceptance review</b> checking that an application is complete enough to review · <b>scaling</b> the methodology for extrapolating scaled-test results to full size]]',
-html:`<h2 class="t">[[설계를 <s>종이로만</s> 인가받을 수 없음 — <em>실험으로 보여야</em> 함||A design cannot be licensed <s>on paper alone</s> - <em>the tests must show it</em>]]</h2>
+html:`<h2 class="t">[[i-SMR <em>인허가 현황</em> (2026년 9월)||i-SMR <em>licensing status</em>, September 2026]]</h2>
 <ul class="b">
   <li>[[KINS는 <b>모듈형 설계와 피동안전계통</b>을 중점 검토 대상으로 제시함 — 기존 대형 경수로 심사 경험으로 다루기 어려운 부분임||KINS named <b>the modular layout and the passive safety systems</b> as focus areas - the parts that large-PWR review experience does not cover]]</li>
   <li>[[<b class="amb">2028-06 주요 검증시험 결과 제출</b>이 눈여겨볼 항목임. 연구실 관점에서는 이 구간이 <b>가장 일거리가 많은 시점</b>임||Watch <b class="amb">the June 2028 milestone for validation test results</b>. From a laboratory&#8217;s point of view this is <b>where the work is</b>]]</li>

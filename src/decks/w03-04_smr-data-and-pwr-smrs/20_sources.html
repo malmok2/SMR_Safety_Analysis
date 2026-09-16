@@ -13,9 +13,9 @@ will use. Once you know why the same quantity gets written differently, conflict
 
 
 /* ---------------------------------------------------------------- 네 가지 이유 */
-S({tag:'WHY THEY DIFFER', ov:'[[같은 값이 왜 다르게 적히는가 — 네 가지||Why the same value is written differently - four reasons]]',
+S({tag:'CAUSES', ov:'[[값이 자료마다 다른 네 가지 원인||Four reasons the same value is written differently]]',
 src:'[[<b>출처</b> 본 교재 1.1절 · 네 원인 모두 SMR 자료에서 흔하게 나타남||<b>Source</b> This textbook &#167;1.1 · all four are common in SMR literature]]',
-html:`<h2 class="t">[[숫자가 엇갈리는 이유는 <em>넷</em>이고, 넷 다 흔함||There are <em>four</em> reasons numbers disagree, and all four are common]]</h2>
+html:`<h2 class="t">[[값이 자료마다 다른 <em>네 가지 원인</em>||<em>Four reasons</em> the same value is written differently]]</h2>
 <ul class="b">
   <li>[[네 경우 모두 <b>어느 쪽도 거짓이 아님</b> — 무엇을 언제 세었는지가 다를 뿐임||In all four cases <b>neither side is false</b> - they count different things at different times]]</li>
   <li>[[그래서 자료를 볼 때 묻는 첫 질문이 &#8220;맞나 틀리나&#8221;가 아니라 <b class="cool">&#8220;무엇을 센 값인가&#8221;</b>임||So the first question is not &#8220;is it right?&#8221; but <b class="cool">&#8220;what did it count?&#8221;</b>]]</li>
@@ -66,10 +66,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 출처의 3계층 */
-S({tag:'THREE TIERS', ov:'[[출처의 3계층 — 1차·2차·3차||Three tiers of sources - primary, secondary, tertiary]]',
+S({tag:'THREE TIERS', ov:'[[출처의 3계층 — 1차 · 2차 · 3차 자료||Three tiers of sources - primary, secondary, tertiary]]',
 src:'[[<b>출처</b> 본 교재 1.2절 그림 1.1 · 3차 자료에서 본 숫자는 인용 전에 반드시 한 층 아래로 내려가 확인할 것||<b>Source</b> This textbook &#167;1.2, Fig. 1.1 · a number seen in a tertiary source must be traced down one tier before it is cited]]',
 abbr:'[[<b>ARIS</b> IAEA 노형 정보 시스템 · <b>DSR</b> ARIS 설계기술서 · <b>PRIS</b> IAEA 운전원전 정보 시스템 · <b>KINS</b> 한국원자력안전기술원||<b>ARIS</b> Advanced Reactors Information System · <b>DSR</b> Design Status Report · <b>PRIS</b> Power Reactor Information System · <b>KINS</b> Korea Institute of Nuclear Safety]]',
-html:`<h2 class="t">[[자료를 볼 때 먼저 묻는 것 — <em>이건 몇 차 자료인가</em>||The first question about any source - <em>which tier is this?</em>]]</h2>
+html:`<h2 class="t">[[<em>출처의 3계층</em> — 1차 · 2차 · 3차 자료||<em>Three tiers of sources</em> - primary, secondary, tertiary]]</h2>
 <ul class="b">
   <li>[[위로 갈수록 <b>빠르고</b>, 아래로 갈수록 <b>검증되어</b> 있음. 탐색은 위에서, 인용은 아래에서 함||The higher you go the <b>faster</b> it is; the lower, the more <b>verified</b>. Explore at the top, cite from the bottom]]</li>
   <li>[[AI가 생성한 요약은 전부 <b class="hot">3차 자료</b>임 — 방향을 잡는 데는 좋고 숫자를 가져오는 데는 쓰면 안 됨||Anything an AI summarises is <b class="hot">tertiary</b> - fine for orientation, never for numbers]]</li>
@@ -135,10 +135,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 속도 ↔ 검증도 */
-S({tag:'SPEED vs RIGOUR', ov:'[[속도와 검증도는 반대로 간다||Speed and rigour pull in opposite directions]]',
+S({tag:'SPEED vs VERIFICATION', ov:'[[자료원의 갱신 속도와 검증 단계||Update speed against verification depth]]',
 src:'[[<b>출처</b> 본 교재 1.3절 그림 1.2 · 두 축을 동시에 만족하는 자료원은 존재하지 않음||<b>Source</b> This textbook &#167;1.3, Fig. 1.2 · no source satisfies both axes at once]]',
 abbr:'[[<b>ADAMS</b> NRC 문서 공개 시스템 · <b>FSER</b> 최종 안전성평가보고서 · <b>NEA</b> OECD 원자력기구||<b>ADAMS</b> Agencywide Documents Access and Management System · <b>FSER</b> Final Safety Evaluation Report · <b>NEA</b> Nuclear Energy Agency]]',
-html:`<h2 class="t">[[빠른 것은 <s>틀리기 쉽고</s>, 맞는 것은 <em>느림</em>||What is fast is <s>easy to get wrong</s>; what is right is <em>slow</em>]]</h2>
+html:`<h2 class="t">[[자료원의 <em>갱신 속도</em>와 검증 단계||<em>Update speed</em> against verification depth]]</h2>
 <ul class="b">
   <li>[[AI 기반 수집이 매력적인 이유와 위험한 이유가 같음 — <b class="hot">가장 빠르고 가장 덜 검증된 자리</b>에 앉아 있음||AI collection is attractive and dangerous for the same reason - it sits in <b class="hot">the fastest, least verified corner</b>]]</li>
   <li>[[그래서 작업 방식은 단순함. <b>탐색은 빠른 쪽에서, 인용은 느린 쪽에서</b>||So the working rule is simple: <b>explore on the fast side, cite from the slow side</b>]]</li>
@@ -188,9 +188,9 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 다섯 줄 기록 */
-S({tag:'FIVE LINES', ov:'[[수치 하나를 확정하는 다섯 줄||Five lines that pin one number down]]',
+S({tag:'RECORD FORMAT', ov:'[[수치 기록의 최소 형식 — 다섯 항목||The minimum record for a value - five fields]]',
 src:'[[<b>출처</b> 본 교재 1.4절 표 1.1 · 이 다섯이 채워지면 인용해도 됨||<b>Source</b> This textbook &#167;1.4, Table 1.1 · once these five are filled in, the value may be cited]]',
-html:`<h2 class="t">[[값 하나에 <em>다섯 줄</em>을 붙임 — 이게 채워지면 인용해도 됨||Attach <em>five lines</em> to every value - once they are filled in, cite it]]</h2>
+html:`<h2 class="t">[[수치 기록의 최소 형식 — <em>다섯 항목</em>||The minimum record for a value - <em>five fields</em>]]</h2>
 <ul class="b">
   <li>[[값·단위·출처·접근일·비고를 <b>한 줄에 같이</b> 적어 두면, 반년 뒤 &#8220;이거 어디서 났지&#8221;로 날리는 시간이 사라짐||Write value, unit, source, access date and note <b>on one line</b> and you never lose a day to &#8220;where did this come from?&#8221;]]</li>
   <li>[[<b class="amb">접근일</b>이 특히 중요함 — 인허가 현황처럼 빨리 낡는 값은 접근일이 값 자체만큼 중요함||The <b class="amb">access date</b> matters most - for fast-ageing values like licensing status it is as important as the value]]</li>

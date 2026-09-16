@@ -13,10 +13,10 @@ Both chains are internally consistent; they optimised different things.</p>]]`})
 
 
 /* ---------------------------------------------------------------- 순환을 무엇이 만드는가 */
-S({tag:'WHAT DRIVES THE LOOP', ov:'[[순환을 무엇이 만드는가 — 자연 vs 강제||What drives the loop - natural versus forced]]',
+S({tag:'CIRCULATION', ov:'[[자연순환과 강제순환 — 유량을 무엇이 정하는가||Natural versus forced circulation - what sets the flow]]',
 src:'[[<b>출처</b> 본 교재 8.1절 · 자연순환 <code>Δp = (ρ<sub>c</sub> − ρ<sub>h</sub>) g H</code> · 강제순환은 펌프 4대가 2 658 kg/s 를 만듦||<b>Source</b> This textbook &#167;8.1 · natural: <code>&#916;p = (&#961;<sub>c</sub> &#8722; &#961;<sub>h</sub>) g H</code>; forced: four pumps deliver 2 658 kg/s]]',
 abbr:'[[<b>피동</b> 전원·조작 없이 물리만으로 동작하는 것 · <b>능동</b> 전원이나 조작이 필요한 것 · <b>안전등급 기기</b> 안전기능을 맡아 별도 품질요건을 받는 기기||<b>passive</b> works on physics alone, with no power or operator action · <b>active</b> needs power or action · <b>safety-class equipment</b> carries a safety function and its own quality requirements]]',
-html:`<h2 class="t">[[<em>강제순환이라고 해서 피동안전이 아닌 것은 아님</em>||<em>Forced circulation does not mean the safety is not passive</em>]]</h2>
+html:`<h2 class="t">[[자연순환과 강제순환 — <em>유량을 무엇이 정하는가</em>||Natural versus forced circulation - <em>what sets the flow</em>]]</h2>
 <ul class="b">
   <li>[[정상운전에 펌프를 쓰는 것과, 사고 시 피동으로 냉각되는 것은 <b>별개의 얘기</b>임||Using a pump in normal operation and cooling passively in an accident are <b>two different statements</b>]]</li>
   <li>[[i-SMR의 안전계통 <b class="ok">PAFS · PECCS · PCCS는 전부 피동</b>임. 펌프가 멈춰도 안전 기능은 유지된다는 것이 설계 전제임||i-SMR&#8217;s <b class="ok">PAFS, PECCS and PCCS are all passive</b>. The premise is that the safety function holds when the pumps stop]]</li>
@@ -80,10 +80,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 사양 비교 */
-S({tag:'SPEC BY SPEC', ov:'[[사양 비교 — “미확인”이 남아 있는 것이 정상||Spec by spec - a blank is the correct answer]]',
+S({tag:'SPECIFICATIONS', ov:'[[NuScale US460과 i-SMR 사양 비교||NuScale US460 and i-SMR, spec by spec]]',
 src:'[[<b>출처</b> 본 교재 8.2절 표 8.1 · NuScale은 <b>US460</b> 기준 · US600 시절의 264 / 310 °C 를 이 칸에 적으면 틀림||<b>Source</b> This textbook &#167;8.2, Table 8.1 · NuScale values are <b>US460</b> · writing the US600-era 264/310 &#176;C into these cells would be wrong]]',
 abbr:'[[<b>총발전(gross)</b> 발전기 단자 출력 · <b>기준 발전소</b> 설계사가 표준으로 제시하는 모듈 수 구성 · <b>관류식</b> 한 번 지나가며 물이 증기로 바뀌는 증기발생기||<b>gross</b> output at the generator terminals · <b>reference plant</b> the vendor’s standard module count · <b>once-through</b> a steam generator where water becomes steam in a single pass]]',
-html:`<h2 class="t">[[빈칸은 <em>정보</em>이고, 잘못 채운 칸은 <s>오류</s>임||A blank is <em>information</em>; a wrongly filled cell is <s>an error</s>]]</h2>
+html:`<h2 class="t">[[NuScale US460과 i-SMR <em>사양 비교</em>||NuScale US460 and i-SMR, <em>spec by spec</em>]]</h2>
 <ul class="b">
   <li>[[3장에서 프롬프트에 &#8220;모르면 비워 두라&#8221;를 넣은 이유가 여기서 드러남. <b class="hot">표가 완성되어 보이려고</b> 세대가 다른 값을 채우면 표 전체의 신뢰도가 무너짐||This is why the prompt in chapter 3 said &#8220;leave it blank.&#8221; Filling a cell with a different generation&#8217;s value <b class="hot">to make the table look finished</b> destroys its credibility]]</li>
 </ul>
@@ -143,10 +143,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 안전기능 대응 */
-S({tag:'FUNCTION BY FUNCTION', ov:'[[안전기능별 대응 관계 — 이름만 다르고 순서는 같다||Function by function - the names differ, the order does not]]',
+S({tag:'SAFETY FUNCTIONS', ov:'[[안전기능별 대응 관계||Safety function by safety function]]',
 src:'[[<b>출처</b> 본 교재 8.3절 표 8.2 · 두 설계 모두 <b>트립 이후 구간은 전원이 필요 없음</b>||<b>Source</b> This textbook &#167;8.3, Table 8.2 · in both designs <b>nothing after the trip needs power</b>]]',
 abbr:'[[<b>MPS</b> 모듈보호계통(NuScale) · <b>RSS</b> 원자로안전계통(i-SMR) · <b>fail-closed</b> 신호가 없으면 스스로 닫히는 설계 · <b>ECT</b> 비상냉각수조||<b>MPS</b> Module Protection System (NuScale) · <b>RSS</b> Reactor Safety System (i-SMR) · <b>fail-closed</b> shuts by itself when the signal is lost · <b>ECT</b> emergency cooling tank]]',
-html:`<h2 class="t">[[기능 구조가 <em>놀랄 만큼 닮아</em> 있음 — 진짜 다른 것은 셋뿐||The functions are <em>strikingly alike</em> - only three things really differ]]</h2>
+html:`<h2 class="t">[[<em>안전기능별</em> 대응 관계||<em>Safety function by safety function</em>]]</h2>
 <ul class="b">
   <li>[[둘 다 <b>증기를 만들어 수조 쪽에서 응축시키고 중력으로 되돌림</b>. 밸브 구성도 <b>방출 2 + 회수 2</b>로 같음||Both <b>make steam, condense it towards a pool and return it by gravity</b>. Even the valve count matches: <b>two out, two back</b>]]</li>
 </ul>
@@ -202,10 +202,10 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 대처시간 */
-S({tag:'WHAT ENDS THE CLOCK', ov:'[[무조작 대처시간 — 무엇이 끝을 정하는가||Unattended coping - what ends the clock]]',
+S({tag:'COPING TIME', ov:'[[무조작 대처시간과 그 한계를 정하는 것||Unattended coping time, and what limits it]]',
 src:'[[<b>출처</b> 본 교재 8.3.1절 그림 8.4 · 72시간 무조작은 두 설계 모두 만족함. 그 위로 얼마를 더 보이느냐가 설계사의 선택임||<b>Source</b> This textbook &#167;8.3.1, Fig. 8.4 · both designs meet 72 unattended hours; how much further to demonstrate is the vendor&#8217;s choice]]',
 abbr:'[[<b>무조작 대처시간</b> 운전원이 아무것도 하지 않아도 안전이 유지되는 시간 · <b>설계기준</b> 그 범위까지는 반드시 대비하도록 정한 사고 범위 · <b>ELAP</b> 장기 교류전원상실||<b>unattended coping time</b> how long safety holds with no operator action · <b>design basis</b> the set of events a plant must be designed against · <b>ELAP</b> extended loss of AC power]]',
-html:`<h2 class="t">[[&#8220;무조작 72시간&#8221;을 볼 때는 <em>무엇이 끝을 정하는가</em>를 물어야 함||When you see &#8220;72 unattended hours,&#8221; ask <em>what ends the clock</em>]]</h2>
+html:`<h2 class="t">[[<em>무조작 대처시간</em>과 그 한계를 정하는 것||<em>Unattended coping time</em>, and what limits it]]</h2>
 <ul class="b">
   <li>[[수조 물이 마르는 시점인가, 배터리가 떨어지는 시점인가, 격납 압력이 한계에 닿는 시점인가 — <b>답이 설계마다 다름</b>||Is it the pool drying out, the batteries running down, or the containment reaching its limit? <b>The answer differs by design</b>]]</li>
   <li>[[그 답이 <b class="cool">여유를 늘리는 방법</b>도 정함. 수조가 끝을 정한다면 수조를 키우면 되고, <b class="hot">격납 압력이 정한다면 수조를 키워도 소용없음</b>||The answer also fixes <b class="cool">how to buy more margin</b>. If the pool ends it, enlarge the pool. <b class="hot">If containment pressure ends it, a bigger pool changes nothing</b>]]</li>
@@ -271,9 +271,9 @@ init(el){
 
 
 /* ---------------------------------------------------------------- 설계 선택의 사슬 */
-S({tag:'THE CHAIN', ok:1, ov:'[[설계 선택의 사슬 — 하나를 바꾸면 셋이 따라 움직인다||The chain - change one and three follow]]',
+S({tag:'DESIGN CHAIN', ok:1, ov:'[[설계 선택의 연쇄 — 두 사슬||The chain of design consequences - two paths]]',
 src:'[[<b>출처</b> 본 교재 8.5절 · 어느 쪽이 옳은가는 질문이 잘못된 것임 — 두 사슬은 각각 내부적으로 일관됨||<b>Source</b> This textbook &#167;8.5 · asking which is right is the wrong question; each chain is internally consistent]]',
-html:`<h2 class="t">[[설계 문서를 읽을 때 찾아야 하는 것이 <em>이 연쇄</em>임||<em>This chain</em> is what you look for when you read a design document]]</h2>
+html:`<h2 class="t">[[설계 선택의 <em>연쇄</em> — 두 사슬||The <em>chain</em> of design consequences - two paths]]</h2>
 <ul class="b">
   <li>[[&#8220;이 설계자는 <b class="cool">무엇을 최적화했는가</b>&#8221; — 이 질문에 답하지 못하면 설계를 읽은 것이 아님||&#8220;<b class="cool">What did this designer optimise?</b>&#8221; If you cannot answer that, you have not read the design]]</li>
   <li>[[답을 찾으면 나머지 선택들이 <b>왜 그렇게 되어 있는지 연쇄적으로 풀림</b>||Find the answer and the rest of the choices <b>unlock one after another</b>]]</li>

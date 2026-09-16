@@ -705,9 +705,9 @@ init(el){
   ln.animate([{width:'0px'},{width:'120px'}],{duration:600,delay:500,fill:'forwards'});
 }});
 
-S({tag:'ROADMAP', ov:'[[이 발표의 구조 — 기능이 계통을 부른다||How this deck is built - functions call for systems]]',
+S({tag:'ROADMAP', ov:'[[세 가지 기본안전기능과 그것을 담당하는 계통||The three fundamental safety functions and the systems for them]]',
 src:'IAEA SSR-2/1 (Rev.1) Requirement 4 · 10 CFR 50 Appendix A',
-html:`<h2 class="t">[[원자로가 반드시 해야 하는 <em>세 가지</em> — 그것이 계통을 부른다||The <em>three things</em> a reactor must do - and they call for the systems]]</h2>
+html:`<h2 class="t">[[세 가지 <em>기본안전기능</em>과 그것을 담당하는 계통||The three <em>fundamental safety functions</em> and the systems for them]]</h2>
 <ul class="b">
   <li>[[계통 이름부터 외우면 왜 거기 있는지 알 수 없음. <b>요건 → 기능 → 계통</b> 순서로 읽음||Memorising system names first tells you nothing about why they exist. Read it as <b>requirement &#8594; function &#8594; system</b>]]</li>
   <li>[[앞 기능이 실패하면 뒤 기능의 부담이 커지는 <b>사슬</b>임 — 순서에 의미가 있음||It is a <b>chain</b>: when an upstream function fails the burden on the next one grows - the order carries meaning]]</li>
@@ -780,9 +780,9 @@ html:`[[<div class="no">01</div><h2>SMR이란 무엇인가</h2><div class="ln"><
 <p>Two words in the name, and the price paid for the choice to build it small.
 Miss this chapter and you miss the motive behind every design choice that follows.</p>]]`});
 
-S({tag:'DEFINITION', ov:'[[Small + Modular — 300 MWe 경계||Small + Modular - the 300 MWe line]]',
+S({tag:'DEFINITION', ov:'[[SMR의 정의 — 300 MWe 경계와 모듈화||Defining an SMR - the 300 MWe line and modularity]]',
 src:'[[<b>출처</b> IAEA, <i>Advances in SMR Technology Developments</i>, 2022 Edition · 300 MWe는 법적 정의가 아니라 분류를 위한 관례적 상한||<b>Source</b> IAEA, <i>Advances in SMR Technology Developments</i>, 2022 Edition · 300 MWe is not a legal definition but a conventional upper bound used for classification]]',
-html:`<h2 class="t">[[Small은 <em>결과가 아니라 선택</em>이다||Small is <em>a choice, not an outcome</em>]]</h2>
+html:`<h2 class="t">[[SMR의 정의 — <em>300 MWe</em> 경계와 모듈화||Defining an SMR - the <em>300 MWe</em> line and modularity]]</h2>
 <ul class="b">
   <li>[[<b>Small</b> — 전기출력 <code>300 MWe</code> 이하. 열출력이 아니라 <b>전기출력</b> 기준임에 주의||<b>Small</b> - <code>300 MWe</code> or less. Note the yardstick is <b>electrical</b> output, not thermal]]</li>
   <li>[[<b>Modular</b> — ① 공장에서 만들어 옮기는 <b>제작 단위</b>, ② 여러 대를 이어 붙이는 <b>출력 단위</b>||<b>Modular</b> - &#9312; a <b>fabrication unit</b> built in a factory and shipped, &#9313; a <b>power unit</b> added one at a time]]</li>
@@ -848,9 +848,9 @@ function ecAxes(){
 }
 function ecCurve(){ let d=''; for(let P=150;P<=1500;P+=10){ d+=(d?'L':'M')+EC.sx(P).toFixed(1)+','+EC.sy(EC.C(P)).toFixed(1); } return d; }
 
-S({tag:'ECONOMY', ov:'[[규모의 경제 — 작게 만드는 대가||Economies of scale - the price of going small]]',
+S({tag:'ECONOMY', ov:'[[규모의 경제 — 출력과 kW당 건설단가||Economy of scale - output versus cost per kW]]',
 src:'[[<b>출처</b> L.M. Boldon, P. Sabharwall, INL/EXT-14-32616 (2014) §6.1 — NEA 평균 <i>n</i> = 0.51 채택. <b>유의</b> 상관식 검증 구간은 300~1300 MWe이므로 그 아래에서는 불확실성이 커진다||<b>Source</b> L.M. Boldon, P. Sabharwall, INL/EXT-14-32616 (2014) &#167;6.1 - NEA average <i>n</i> = 0.51 adopted. <b>Caution</b> the correlation is validated over 300-1300 MWe, so uncertainty grows below that range]]',
-html:`<h2 class="t">[[출력을 줄이면 <s>kW당 비용이 오른다</s> — 얼마나 오르는지가 전부||Smaller output, <s>higher cost per kW</s> - by how much is everything]]</h2>
+html:`<h2 class="t">[[<em>규모의 경제</em> — 출력과 kW당 건설단가||<em>Economy of scale</em> - output versus cost per kW]]</h2>
 <ul class="b">
   <li>[[용기·배관·구조물 비용은 <b>표면적</b>에 비례하고 출력은 <b>체적</b>에 비례 → 규모지수 <code>n ≈ 0.4~0.7</code>||Vessel, piping and structure cost follows <b>surface area</b> while power follows <b>volume</b> &#8594; scaling exponent <code>n &#8776; 0.4-0.7</code>]]</li>
   <li>[[총 자본비가 아니라 <b class="cool">kW당 비용</b>을 봐야 함. 두 값은 반대 방향으로 움직임||Watch <b class="cool">cost per kW</b>, not total capital cost. The two move in opposite directions]]</li>
@@ -906,9 +906,9 @@ init(el){
     const e=1-Math.pow(1-u,3); const P=lerp(1400,180,e); sl.value=Math.round(P); upd(P); });
 }});
 
-S({tag:'ECONOMY', ov:'[[2.7배를 되돌리는 네 가지 인자||Four factors that claw back the 2.7x]]',
+S({tag:'ECONOMY', ov:'[[규모의 비경제를 상쇄하는 네 가지 인자||Four factors that offset the diseconomy of scale]]',
 src:'[[<b>출처</b> Boldon &amp; Sabharwall, INL/EXT-14-32616 (2014) §5.5·§6.1, Eq.3~6·Eq.12 — 원 보고서는 NEA/OECD(2011), Carelli et al.(2010), Wilton(2012)을 인용. <b>모두 반복 건설을 전제</b>한다||<b>Source</b> Boldon &amp; Sabharwall, INL/EXT-14-32616 (2014) &#167;5.5·&#167;6.1, citing NEA/OECD (2011), Carelli et al. (2010), Wilton (2012). <b>All assume repeated construction</b>]]',
-html:`<h2 class="t">[[2.7배를 되돌리는 <em>네 가지 인자</em> — 버튼을 눌러 하나씩 적용||<em>Four factors</em> that claw back the 2.7x - apply them one by one]]</h2>
+html:`<h2 class="t">[[규모의 비경제를 상쇄하는 <em>네 가지 인자</em>||<em>Four factors</em> that offset the diseconomy of scale]]</h2>
 <ul class="b">
   <li>[[네 인자 모두 <b>반복</b>을 전제로 함. 지금 세계 어디에도 SMR 반복 건설 사례가 없음 — 전부 <b class="hot">FOAK</b>||Every one of them assumes <b>repetition</b>. Nowhere in the world is an SMR being built repeatedly yet - all of them are <b class="hot">FOAK</b>]]</li>
 </ul>
@@ -975,9 +975,9 @@ init(el){
 }});
 </script>
 <script>
-S({tag:'LAYOUT · [[루프형||Loop type]]', ov:'[[루프형 대형 경수로 — 대구경 배관이 곧 LBLOCA||Loop-type large LWR - the large pipe is the LBLOCA]]',
+S({tag:'LAYOUT · [[루프형||Loop type]]', ov:'[[루프형 배치 — 대구경 배관과 대형 LOCA||The loop layout - large pipes and the large LOCA]]',
 src:'[[<b>개념도</b> 자체 작성. 배관 수·기기 배치를 축약한 모식도이며 축척은 임의. <b>GDC 4</b>는 파단확률이 극히 낮으면 동적효과를 배제할 수 있게 한다(LBB 근거)||<b>Schematic</b> drawn for this course. Pipe count and equipment layout are simplified and the scale is arbitrary. <b>GDC 4</b> allows dynamic effects to be excluded where break probability is extremely low (the basis for LBB)]]',
-html:`<h2 class="t">[[루프형 — 대구경 배관 하나가 <s>최악의 설계기준사고</s>를 정의한다||Loop type - a single large pipe defines <s>the worst design basis accident</s>]]</h2>
+html:`<h2 class="t">[[루프형 배치 — 대구경 배관과 <em>대형 LOCA</em>||The loop layout - large pipes and the <em>large LOCA</em>]]</h2>
 <ul class="b">
   <li>[[원자로용기와 증기발생기를 잇는 <b class="hot">대구경 고온관·저온관</b>이 존재 → 그 순간 파단이 <b>대형 LOCA</b>||A <b class="hot">large-bore hot leg and cold leg</b> join the vessel to the steam generator &#8594; break one and you have a <b>large LOCA</b>]]</li>
   <li>[[냉각재는 <b>펌프</b>가 돌린다. 펌프가 멈추면 유량이 곧바로 사라짐||The coolant is driven by <b>pumps</b>. Stop the pumps and the flow is gone at once]]</li>
@@ -1050,9 +1050,9 @@ init(el){
   });
 }});
 
-S({tag:'LAYOUT · [[일체형||Integral type]]', ov:'[[일체형 SMR — 파단할 배관이 없다||Integral SMR - no pipe left to break]]',
+S({tag:'LAYOUT · [[일체형||Integral type]]', ov:'[[일체형 배치 — 배관 제거가 없애는 것||The integral layout - what removing the pipes eliminates]]',
 src:'[[<b>개념도</b> 자체 작성. <b>Safety-by-design</b> — 사고를 완화하는 대신 배치로 배제. Westinghouse, <i>IRIS Plant Overview</i>, NRC ADAMS ML033600086 (2003)||<b>Schematic</b> drawn for this course. <b>Safety by design</b> - the accident is excluded by layout, not mitigated. Westinghouse, <i>IRIS Plant Overview</i>, NRC ADAMS ML033600086 (2003)]]',
-html:`<h2 class="t">[[일체형 — 사고를 완화하는 대신 <em>설계에서 배제</em>한다||Integral type - the accident is <em>designed out</em> rather than mitigated]]</h2>
+html:`<h2 class="t">[[<em>일체형</em> 배치 — 배관 제거가 없애는 것||The <em>integral</em> layout - what removing the pipes eliminates]]</h2>
 <ul class="b">
   <li>[[노심 · 증기발생기 · 가압기를 <b>하나의 용기</b>에 담음 → 대구경 배관이 존재하지 않음||Core, steam generator and pressuriser all sit in <b>one vessel</b> &#8594; no large-bore pipe exists]]</li>
   <li>[[펌프 없이 <b class="ok">밀도차</b>로 순환. 구동수두는 대형 PWR 펌프의 <code>약 1/50</code> (2장에서 계산)||Circulation without pumps, driven by <b class="ok">density difference</b>. The driving head is <code>about 1/50</code> of a large PWR pump (calculated in Ch. 2)]]</li>
@@ -1107,9 +1107,9 @@ init(el){
   raf(t=>{ hp.setAttribute('opacity',0.45+0.55*Math.abs(Math.sin(t*1.8))); });
 }});
 
-S({tag:'SUMMARY', ov:'[[SMR의 특징을 물리적 근거로 다시 쓰기||Rewriting SMR claims as physical arguments]]',
+S({tag:'SUMMARY', ov:'[[SMR의 특징을 물리적 근거로 다시 쓰기||Restating the SMR claims as physical arguments]]',
 src:'[[<b>왼쪽 열</b> 2025-2학기 강의자료 「Design Specification and Requirement for SMR」의 항목. <b>오른쪽 두 열</b>은 본 교재에서 근거를 붙인 것||<b>Left column</b> items from the 2025 fall lecture notes <i>Design Specification and Requirement for SMR</i>. <b>The two right columns</b> are the supporting arguments added in this text]]',
-html:`<h2 class="t">[[홍보 문장을 <em>근거</em>로 바꿔 읽기||Reading the sales pitch as an <em>argument</em>]]</h2>
+html:`<h2 class="t">[[SMR의 특징을 <em>물리적 근거</em>로 다시 쓰기||Restating the SMR claims as <em>physical arguments</em>]]</h2>
 <div class="body col">
 <table class="d">
 <tr><th style="width:26%">[[흔히 말하는 특징||Common claim]]</th><th style="width:37%">[[실제 근거||What actually supports it]]</th><th>[[유의할 점||What to watch]]</th></tr>
@@ -1130,9 +1130,9 @@ html:`[[<div class="no">02</div><h2>작아지면 무엇이 달라지는가</h2><
 <p>Two pieces of physics carry the whole SMR safety argument: the <b>absolute amount</b> of decay heat,
 and the <b>driving head</b> of natural circulation. These two numbers set every system design that follows.</p>]]`});
 
-S({tag:'DECAY HEAT', ov:'[[붕괴열 — 비율은 같고 절대량이 준다||Decay heat - same fraction, smaller absolute load]]',
+S({tag:'DECAY HEAT', ov:'[[붕괴열 — 비율과 절대량||Decay heat - fraction and absolute power]]',
 src:'[[<b>계산</b> Way–Wigner 근사 <span class="mono">P_d/P₀ = 0.0622 [ t<sup>−0.2</sup> − (t+t₀)<sup>−0.2</sup> ]</span>, t₀ = 10⁸ s. 인허가 해석에는 ANSI/ANS-5.1을 쓴다 · 정격 열출력 출처 IAEA SMR Booklet 2022 · KHNP||<b>Calculation</b> Way-Wigner approximation <span class="mono">P_d/P₀ = 0.0622 [ t<sup>−0.2</sup> − (t+t₀)<sup>−0.2</sup> ]</span>, t₀ = 10⁸ s. Licensing analyses use ANSI/ANS-5.1 · rated thermal power from IAEA SMR Booklet 2022 · KHNP]]',
-html:`<h2 class="t">[[비율은 같다. <em>절대량</em>이 다르다 — 슬라이더로 시간을 흘려보자||Same fraction, different <em>absolute load</em> - run the slider]]</h2>
+html:`<h2 class="t">[[<em>붕괴열</em> — 비율과 절대량||<em>Decay heat</em> - fraction and absolute power]]</h2>
 <ul class="b">
   <li>[[붕괴열 <b>비율</b>은 노심 크기와 거의 무관. 정지 1시간 뒤 어느 노형이든 정격의 약 <code>1 %</code>||The decay heat <b>fraction</b> barely depends on core size. One hour after shutdown any reactor sits near <code>1 %</code> of rating]]</li>
   <li>[[달라지는 건 <b class="hot">절대량</b> — 3,983 MWt의 1 %는 40 MW, 250 MWt의 1 %는 2.6 MW. <b>15배</b> 차이||What differs is the <b class="hot">absolute load</b> - 1 % of 3,983 MWt is 40 MW, 1 % of 250 MWt is 2.6 MW. A factor of <b>15</b>]]</li>
@@ -1210,9 +1210,9 @@ init(el){
   raf(t=>{ if(t<1.1||t>4.6) return; const u=(t-1.1)/3.5; sl.value=Math.round(u*600); upd(+sl.value); });
 }});
 
-S({tag:'NATURAL CIRCULATION', ov:'[[자연순환 — 구동수두 인터랙티브||Natural circulation - driving head, interactive]]',
+S({tag:'NATURAL CIRCULATION', ov:'[[자연순환 구동수두의 크기||The size of the natural-circulation driving head]]',
 src:'[[<b>계산</b> Δp = (ρ_c − ρ_h) g H, u = √[2Δp / ρ(fL/D + ΣK)] · 압축수 밀도 근사(10~16 MPa) · 유로 K = 25, 단면적 2 m², 저온측 250 °C 기준. 펌프 양정 600 kPa는 대형 PWR의 개념적 대표값||<b>Calculation</b> Δp = (ρ_c − ρ_h) g H, u = √[2Δp / ρ(fL/D + ΣK)] · compressed-water density fit (10-16 MPa) · loop K = 25, flow area 2 m², cold side at 250 °C. The 600 kPa pump head is a representative figure for a large PWR]]',
-html:`<h2 class="t">[[펌프가 없으면 <em>밀도차</em>가 밀어야 한다 — 그 힘은 얼마인가||With no pump, <em>density difference</em> has to push - so how hard does it push]]</h2>
+html:`<h2 class="t">[[자연순환 <em>구동수두</em>의 크기||The size of the natural-circulation <em>driving head</em>]]</h2>
 <ul class="b">
   <li>[[열중심 높이차 <code>H</code>와 온도차 <code>ΔT</code>가 만드는 부력이 유일한 구동력||The only driving force is buoyancy from the thermal-centre height <code>H</code> and the temperature difference <code>ΔT</code>]]</li>
   <li>[[구동수두가 작으니 <b>유량도 작다</b> → 같은 출력을 빼려면 노심 출입구 <b class="hot">온도차가 커진다</b>||A small driving head means <b>small flow</b> &#8594; to remove the same power the <b class="hot">core temperature rise must grow</b>]]</li>
@@ -1281,9 +1281,9 @@ init(el){
     sh.value=(lerp(3,10,u)).toFixed(1); stt.value=Math.round(lerp(30,67,u)); upd(); });
 }});
 
-S({tag:'THERMAL INERTIA', ov:'[[열관성 — 5배 느리게 데워진다||Thermal inertia - heats up five times slower]]',
+S({tag:'THERMAL INERTIA', ov:'[[열관성과 대처시간||Thermal inertia and coping time]]',
 src:'[[<b>계산</b> dT/dt = P_d /(M c_p), c_p = 5.3 kJ/(kg·K), 정지 1시간 후 붕괴열(SMR 2.6 MW / 대형로 41.8 MW) 기준. 냉각이 <b>완전히 끊긴</b> 가장 보수적인 상한이며 실제로는 용기 열손실과 잔열제거계통이 함께 작동한다||<b>Calculation</b> dT/dt = P_d /(M c_p), c_p = 5.3 kJ/(kg·K), using decay heat one hour after shutdown (2.6 MW for the SMR, 41.8 MW for the large unit). This is the most conservative bound, with cooling <b>completely lost</b>; in reality vessel heat loss and the residual heat removal system also act]]',
-html:`<h2 class="t">[[대처시간이 길다는 말의 <em>물리적 내용</em>||What &#8220;more time to act&#8221; <em>physically means</em>]]</h2>
+html:`<h2 class="t">[[열관성과 <em>대처시간</em>||Thermal inertia and <em>coping time</em>]]</h2>
 <ul class="b">
   <li>[[붕괴열이 적고 물이 많으면 온도가 <b>천천히</b> 오른다 — 그 느림이 운전원과 피동계통이 쓰는 시간||Less decay heat and more water means the temperature climbs <b>slowly</b> - and that slowness is the time operators and passive systems get to use]]</li>
   <li>[[SMR <code>17.7 K/h</code> vs 대형 경수로 <code>94.6 K/h</code> — <b class="ok">약 5배</b>||SMR <code>17.7 K/h</code> against large LWR <code>94.6 K/h</code> - <b class="ok">about five times</b>]]</li>
@@ -1347,9 +1347,9 @@ html:`[[<div class="no">03</div><h2>SMR의 쟁점</h2><div class="ln"></div>
 <p>Economics, regulation, safety, feasibility - what has been settled and what has not.
 Every status in this chapter is <b>as of September 2026</b>; state it without that date and it will be wrong in six months.</p>]]`});
 
-S({tag:'ECONOMY · FOAK', ov:'[[FOAK의 벽 — 실적치와 목표치||The FOAK wall - actuals against targets]]',
+S({tag:'ECONOMY · FOAK', ov:'[[FOAK 비용 — 실적치와 목표치||FOAK cost - actual against target]]',
 src:'[[<b>출처</b> WNISR, “Ontario’s Darlington SMR project to cost nearly $21 billion” (2025) · World Nuclear News, “Final investment decision taken for Romania’s SMRs” (2026) · IEA, <i>The Path to a New Era for Nuclear Energy</i> (2025). <b>유의</b> 사업비 포함 범위(송전·부지·금융비용)와 통화가 서로 달라 단순 비교는 주의||<b>Source</b> WNISR, &#8220;Ontario&#8217;s Darlington SMR project to cost nearly $21 billion&#8221; (2025) · World Nuclear News, &#8220;Final investment decision taken for Romania&#8217;s SMRs&#8221; (2026) · IEA, <i>The Path to a New Era for Nuclear Energy</i> (2025). <b>Caution</b> the projects differ in scope (transmission, site, financing) and in currency, so the figures are not directly comparable]]',
-html:`<h2 class="t">[[저감 인자는 전부 <em>반복</em>을 전제한다 — 그런데 아직 <s>FOAK뿐</s>이다||Every factor assumes <em>repetition</em> - so far there is <s>only FOAK</s>]]</h2>
+html:`<h2 class="t">[[<em>FOAK</em> 비용 — 실적치와 목표치||<em>FOAK</em> cost - actual against target]]</h2>
 <ul class="b">
   <li>[[Darlington BWRX-300 4기 <code>C$20.9억</code> · 약 1,200 MWe → kW당 <b class="hot">약 C$17,400</b>||Darlington, four BWRX-300 units, <code>C$20.9 bn</code> · about 1,200 MWe &#8594; <b class="hot">about C$17,400 per kW</b>]]</li>
   <li>[[Doicești NuScale 6모듈 <code>USD 60~70억</code> · 462 MWe → kW당 <b class="hot">약 13,000~15,200 USD</b>||Doicești, six NuScale modules, <code>USD 6-7 bn</code> · 462 MWe &#8594; <b class="hot">about USD 13,000-15,200 per kW</b>]]</li>
@@ -1388,9 +1388,9 @@ init(el){
   set(0); raf(t=>{ const u=clamp(t/1.3,0,1); set(1-Math.pow(1-u,3)); });
 }});
 
-S({tag:'REGULATION', ov:'[[규제 — 아직 만들어지는 중||Regulation - still being written]]',
+S({tag:'REGULATION', ov:'[[규제 체계와 SMR의 불일치||Where the existing rules do not fit SMRs]]',
 src:'[[<b>출처</b> IAEA, “Five Reports of the SMR Regulators’ Forum Published” · IAEA, “SMR Platform and NHSI” · 원자력안전위원회 「SMR 규제체계 구축 로드맵(안)」(2026-02-12) · 에너지데일리 (2026-08-28)||<b>Source</b> IAEA, &#8220;Five Reports of the SMR Regulators&#8217; Forum Published&#8221; · IAEA, &#8220;SMR Platform and NHSI&#8221; · Nuclear Safety and Security Commission (Korea), <i>Draft roadmap for an SMR regulatory framework</i> (2026-02-12) · Energy Daily (2026-08-28)]]',
-html:`<h2 class="t">[[기존 규제는 <em>대형 경수로</em>를 전제로 만들어졌다||The existing rules were written around <em>large light water reactors</em>]]</h2>
+html:`<h2 class="t">[[규제 체계와 SMR의 <em>불일치</em>||Where the existing rules <em>do not fit</em> SMRs]]</h2>
 <ul class="b">
   <li>[[격납 크기 · 비상계획구역(EPZ) 반경 · 운전원 정원 · 다수호기 취급 — 전부 대형로 기준||Containment size, emergency planning zone radius, operator staffing, treatment of multiple units - all sized for large plants]]</li>
   <li>[[국내 i-SMR 심사에서 <b class="amb">모듈 설계와 피동안전계통의 안전성</b>이 중점 검토 대상으로 명시됨||In the Korean i-SMR review, <b class="amb">the module design and the safety of the passive safety systems</b> are named as focal points]]</li>
@@ -1415,9 +1415,9 @@ html:`<h2 class="t">[[기존 규제는 <em>대형 경수로</em>를 전제로 �
   </div>
 </div>`});
 
-S({tag:'STATUS · 2026.09', ov:'[[인허가·건설 타임라인||Licensing and construction timeline]]',
+S({tag:'STATUS · 2026.09', ov:'[[주요 SMR의 인허가·건설 경과 (2026년 9월)||SMR licensing and construction record, September 2026]]',
 src:'[[<b>출처</b> NRC 보도자료(2025) · World Nuclear News(2024·2026) · CNSC·OPG 공개자료 · IAEA SMR Booklet 2022 · EconoJournal(2026). <b>목표 시점은 사업자 발표값</b>이므로 변동 가능성이 크다||<b>Source</b> NRC press releases (2025) · World Nuclear News (2024, 2026) · CNSC and OPG public material · IAEA SMR Booklet 2022 · EconoJournal (2026). <b>Target dates are the vendors&#8217; own</b> and are liable to move]]',
-html:`<h2 class="t">[[지금 어디까지 왔는가 — <em>붉은 선이 현재</em>||Where things actually stand - <em>the red line is now</em>]]</h2>
+html:`<h2 class="t">[[주요 SMR의 <em>인허가·건설 경과</em> (2026년 9월)||SMR <em>licensing and construction record</em>, September 2026]]</h2>
 <ul class="b">
   <li>[[전력 생산에 가장 가까운 것은 <b class="ok">BWRX-300</b> — 2025년 4월 G7 최초 건설허가, 2026년 4월 운영허가 신청·토건 착수||Closest to generating power is <b class="ok">BWRX-300</b> - the first G7 construction licence in April 2025, operating licence applied for and civil works started in April 2026]]</li>
   <li>[[CAREM-25는 기술이 아니라 <b class="hot">자금·조직의 연속성</b> 때문에 멈췄다||CAREM-25 stalled not on technology but on <b class="hot">continuity of funding and organisation</b>]]</li>
@@ -1480,9 +1480,9 @@ html:`[[<div class="no">04</div><h2>안전요건의 뼈대</h2><div class="ln"><
 <p>Before looking at individual systems, set up the frame that says why those systems exist at all.
 Fundamental safety functions, defence in depth, the single failure criterion - these three come back in every chapter that follows.</p>]]`});
 
-S({tag:'DEFENCE IN DEPTH', ov:'[[심층방어 5단계 — 사고가 어디서 멈추는가||Five levels of defence in depth - where the accident stops]]',
+S({tag:'DEFENCE IN DEPTH', ov:'[[심층방어 5단계와 공학적안전설비의 자리||The five levels of defence in depth, and where the ESF sits]]',
 src:'[[<b>출처</b> IAEA, <i>Safety of Nuclear Power Plants: Design</i>, SSR-2/1 (Rev.1) Requirement 7 — “The levels of defence in depth shall be <b>independent as far as is practicable</b>.”||<b>Source</b> IAEA, <i>Safety of Nuclear Power Plants: Design</i>, SSR-2/1 (Rev.1) Requirement 7 - &#8220;The levels of defence in depth shall be <b>independent as far as is practicable</b>.&#8221;]]',
-html:`<h2 class="t">[[사고는 <em>겹</em>을 하나씩 뚫는다 — 어디서 멈추게 할 것인가||An accident pierces the <em>layers</em> one at a time - where do you make it stop]]</h2>
+html:`<h2 class="t">[[<em>심층방어</em> 5단계와 공학적안전설비의 자리||The five levels of <em>defence in depth</em>, and where the ESF sits]]</h2>
 <ul class="b">
   <li>[[공학적안전설비(ESF)가 지키는 곳은 <b class="cool">Level 3</b>. 이 교재가 다루는 범위다||Engineered safety features hold <b class="cool">Level 3</b>. That is the scope of this text]]</li>
   <li>[[단계를 나눠도 <b class="hot">같은 원인으로 함께 죽으면 겹이 아니다</b> — 후쿠시마가 그랬다||Splitting into levels means nothing if <b class="hot">one cause kills them together</b> - which is what happened at Fukushima]]</li>
@@ -1564,9 +1564,9 @@ init(el){
 }});
 </script>
 <script>
-S({tag:'SINGLE FAILURE', ov:'[[단일고장기준 — 원문과 세 가지 함정||Single failure criterion - the text and three traps]]',
+S({tag:'SINGLE FAILURE', ov:'[[단일고장기준 — 원문과 세 가지 함정||The single failure criterion - the text and three traps]]',
 src:'[[<b>출처</b> 10 CFR Part 50, Appendix A, “Definitions and Explanations” (eCFR 원문 확인) · IAEA SSR-2/1 (Rev.1) Requirement 25||<b>Source</b> 10 CFR Part 50, Appendix A, &#8220;Definitions and Explanations&#8221; (verified against eCFR) · IAEA SSR-2/1 (Rev.1) Requirement 25]]',
-html:`<h2 class="t">[[하나는 고장 났다고 <em>치고</em> 설계한다 — 단, 세 가지를 정확히||Design as if one thing <em>has already failed</em> - but get three points right]]</h2>
+html:`<h2 class="t">[[<em>단일고장기준</em> — 원문과 세 가지 함정||The <em>single failure criterion</em> - the text and three traps]]</h2>
 <div class="body">
   <div class="fig" style="justify-content:flex-start;padding-top:4px">
     <blockquote class="q" style="font-size:15.5px;line-height:1.55">
@@ -1596,9 +1596,9 @@ html:`<h2 class="t">[[하나는 고장 났다고 <em>치고</em> 설계한다 �
   </div>
 </div>`});
 
-S({tag:'PLANT STATES', ov:'[[플랜트 상태 — 빈도가 낮을수록 허용 결과가 느슨해진다||Plant states - rarer events, looser limits]]',
+S({tag:'PLANT STATES', ov:'[[플랜트 상태 분류 — 빈도와 허용 결과||Plant condition categories - frequency and allowable consequence]]',
 src:'[[<b>출처</b> IAEA SSR-2/1 (Rev.1) Requirement 19(설계기준사고)·Requirement 20(설계확장조건). 빈도 구간은 관례적 크기이며 규제·설계마다 경계가 다르다||<b>Source</b> IAEA SSR-2/1 (Rev.1) Requirement 19 (design basis accidents) and Requirement 20 (design extension conditions). The frequency bands are conventional magnitudes; the boundaries differ between regulators and designs]]',
-html:`<h2 class="t">[[무엇에 대비하는가 — <em>빈도</em>가 <em>허용 결과</em>를 정한다||What you design against - <em>frequency</em> sets the <em>allowable outcome</em>]]</h2>
+html:`<h2 class="t">[[플랜트 상태 분류 — <em>빈도</em>와 허용 결과||Plant condition categories - <em>frequency</em> and allowable consequence]]</h2>
 <ul class="b">
   <li>[[매년 일어날 수 있는 이탈에서 연료가 손상되면 안 되지만, 백만 년에 한 번은 <b>격납만 지키면</b> 된다||A transient that can happen every year must not damage fuel; for a once-in-a-million-year event it is enough to <b>keep containment intact</b>]]</li>
   <li>[[심층방어 단계 구분(앞 슬라이드)이 이 <b class="cool">빈도–결과 축</b>과 정확히 대응한다||The levels of defence in depth from the previous slide map exactly onto this <b class="cool">frequency-consequence axis</b>]]</li>
@@ -1638,9 +1638,9 @@ init(el){
   items.forEach((it,i)=>it.animate([{opacity:0},{opacity:1}],{duration:420,delay:220*i,fill:'forwards'}));
 }});
 
-S({tag:'GDC MAP', ov:'[[GDC 지도 — 요건이 계통을 부른다||A map of the GDC - requirements calling for systems]]',
+S({tag:'GDC MAP', ov:'[[GDC 지도 — 어느 조문이 어느 계통을 부르는가||A map of the GDC - which rule calls for which system]]',
 src:'[[<b>출처</b> 10 CFR Part 50, Appendix A(eCFR·Cornell LII 확인). 국내 대응은 「원자로시설 등의 기술기준에 관한 규칙」 제20·23·24·29·30조||<b>Source</b> 10 CFR Part 50, Appendix A (verified against eCFR and Cornell LII). The Korean counterpart is the Rules on Technical Standards for Nuclear Reactor Facilities, Articles 20, 23, 24, 29 and 30]]',
-html:`<h2 class="t">[[막히면 <em>GDC 원문</em>을 찾아 읽는 것이 가장 빠르다||When stuck, reading the <em>GDC text itself</em> is the fastest way out]]</h2>
+html:`<h2 class="t">[[<em>GDC</em> 지도 — 어느 조문이 어느 계통을 부르는가||A map of the <em>GDC</em> - which rule calls for which system]]</h2>
 <div class="body col">
 <table class="d sm">
 [[<tr><th style="width:12%">분류</th><th style="width:9%">GDC</th><th style="width:34%">제목</th><th>요구의 핵심</th></tr>||<tr><th style="width:12%">Group</th><th style="width:9%">GDC</th><th style="width:34%">Title</th><th>What it demands</th></tr>]]
@@ -1669,9 +1669,9 @@ html:`[[<div class="no">05</div><h2>공학적안전설비</h2><div class="ln"></
 <p>What an ESF is, how active and passive are told apart, and the five properties a design has to have.
 This is the shared vocabulary for reading the systems in Chapters 6 to 9.</p>]]`});
 
-S({tag:'PASSIVE CATEGORIES', ov:'[[피동 Category A~D — 어디까지가 피동인가||Passive Categories A-D - how passive is passive]]',
+S({tag:'PASSIVE CATEGORIES', ov:'[[피동계통의 네 등급 (Category A~D)||Four categories of passive system (A to D)]]',
 src:'[[<b>출처</b> IAEA-TECDOC-626, <i>Safety Related Terms for Advanced Nuclear Plants</i> (1991)||<b>Source</b> IAEA-TECDOC-626, <i>Safety Related Terms for Advanced Nuclear Plants</i> (1991)]]',
-html:`<h2 class="t">[[“피동”은 <em>이분법이 아니다</em> — 네 등급으로 갈린다||&#8220;Passive&#8221; is <em>not a yes-or-no</em> - it splits into four grades]]</h2>
+html:`<h2 class="t">[[피동계통의 <em>네 등급</em> (Category A~D)||<em>Four categories</em> of passive system (A to D)]]</h2>
 <ul class="b">
   <li>[[범주가 오른쪽으로 갈수록 <b class="hot">고장 가능성이 있는 요소</b>가 하나씩 늘어난다||Moving right through the categories adds <b class="hot">one more thing that can fail</b> at each step]]</li>
   <li>[[실제 SMR의 “피동 안전계통”은 대부분 <b>Category C 또는 D</b> — 피동이라고 고장 나지 않는 게 아니다||Most real SMR &#8220;passive safety systems&#8221; are <b>Category C or D</b> - passive does not mean it cannot fail]]</li>
@@ -1714,9 +1714,9 @@ init(el){
   cols.forEach((c,i)=>c.animate([{opacity:0},{opacity:1}],{duration:400,delay:200*i,fill:'forwards'}));
 }});
 
-S({tag:'ESF DESIGN', ov:'[[ESF가 갖춰야 할 다섯 가지 성질||Five properties an ESF must have]]',
+S({tag:'ESF DESIGN', ov:'[[공학적안전설비가 갖춰야 할 다섯 가지 성질||Five properties an engineered safety feature must have]]',
 src:'[[<b>왼쪽 두 열</b> 2025-2학기 강의자료 「Safety Requirements for SMR」의 “Design Characteristics of ESF” 항목. <b>오른쪽 열</b>은 10 CFR 50 Appendix A 및 IAEA SSR-2/1 (Rev.1)에서 대응시킨 것||<b>The two left columns</b> follow the &#8220;Design Characteristics of ESF&#8221; items in the 2025 fall lecture notes <i>Safety Requirements for SMR</i>. <b>The right column</b> maps them onto 10 CFR 50 Appendix A and IAEA SSR-2/1 (Rev.1)]]',
-html:`<h2 class="t">[[다섯 가지 성질은 <em>각각 조문</em>을 갖고 있다||Each of the five properties has <em>a rule behind it</em>]]</h2>
+html:`<h2 class="t">[[공학적안전설비가 갖춰야 할 <em>다섯 가지 성질</em>||<em>Five properties</em> an engineered safety feature must have]]</h2>
 <ul class="b">
   <li>[[조문과 함께 외우면 실무에서 훨씬 쓸모 있음 — “왜 이렇게 만들었나”가 곧 “어느 조문 때문인가”||Learn them together with the rule and they become useful in practice - &#8220;why is it built this way&#8221; is &#8220;which rule demands it&#8221;]]</li>
 </ul>
@@ -1756,7 +1756,7 @@ Why control rods and boron injection are <b>both</b> needed, and what calculatio
 
 S({tag:'SCRAM', ov:'[[제어봉 낙하 — S-곡선과 stuck rod||Rod drop - the S-curve and the stuck rod]]',
 src:'[[<b>계산</b> 코사인 중성자속 분포를 가정한 표준 S-곡선 <span class="mono">ρ(x)/ρ_total = x − sin(2πx)/2π</span> · stuck rod 영향 18 % 손실로 예시. 실제 값은 노심 설계·연소도에 따라 다르다||<b>Calculation</b> the standard S-curve for an assumed cosine flux shape, <span class="mono">ρ(x)/ρ_total = x − sin(2πx)/2π</span> · the stuck rod is shown as an 18 % loss. Real values depend on core design and burn-up]]',
-html:`<h2 class="t">[[삽입 초기와 말기는 <s>효율이 낮다</s> — 그래서 낙하 시간이 요건이 된다||Inefficient at <s>both ends of the stroke</s> - hence a drop-time limit]]</h2>
+html:`<h2 class="t">[[제어봉 낙하 — <em>S-곡선</em>과 stuck rod||Rod drop - the <em>S-curve</em> and the stuck rod]]</h2>
 <ul class="b">
   <li>[[중성자속이 높은 <b>노심 중앙부</b>를 지날 때 반응도가 급격히 들어감 — 곡선이 S자인 이유||Reactivity goes in fastest while the rod crosses the <b>high-flux centre</b> of the core - that is why the curve is S-shaped]]</li>
   <li>[[<b class="hot">GDC 26</b> — 최대 반응도가 봉 1개가 <b>삽입되지 않는다</b>는 가정에서도 요구 성능을 만족해야 함||<b class="hot">GDC 26</b> - the requirement must still be met assuming the single most reactive rod <b>fails to insert</b>]]</li>
@@ -1829,9 +1829,9 @@ init(el){
   });
 }});
 
-S({tag:'SHUTDOWN MARGIN', ov:'[[정지여유도 계산기||Shutdown margin calculator]]',
+S({tag:'SHUTDOWN MARGIN', ov:'[[정지여유도(SDM)의 계산||Calculating the shutdown margin]]',
 src:'[[<b>식</b> SDM = ρ<sub>rod,total</sub> − ρ<sub>stuck</sub> − ρ<sub>defect</sub> − ρ<sub>uncertainty</sub> · 요구 최소치는 설계별 기술지침서에서 정해지며 흔히 Δρ 기준 1 % 이상||<b>Equation</b> SDM = ρ<sub>rod,total</sub> − ρ<sub>stuck</sub> − ρ<sub>defect</sub> − ρ<sub>uncertainty</sub> · the minimum is set in each plant&#8217;s technical specifications, commonly at least 1 % Δρ]]',
-html:`<h2 class="t">[[정지여유도 — <em>확보한 것에서 깎이는 것</em>을 뺀 나머지||Shutdown margin - <em>what you have</em> minus <em>what gets taken away</em>]]</h2>
+html:`<h2 class="t">[[<em>정지여유도(SDM)</em>의 계산||Calculating the <em>shutdown margin</em>]]</h2>
 <ul class="b">
   <li>[[냉각이 진행되면 감속재 밀도가 커져 반응도가 <b class="hot">양의 방향으로 되돌아온다</b>. 그 몫까지 미리 덮어야 함||As the plant cools the moderator gets denser and reactivity <b class="hot">comes back positive</b>. That much has to be covered in advance]]</li>
   <li>[[슬라이더를 움직여 각 항이 여유도를 어떻게 깎는지 확인 — 교재 연습문제 6.2의 조건이 기본값||Move the sliders to see how each term eats into the margin - the defaults are the conditions of Exercise 6.2 in the text]]</li>
@@ -1887,7 +1887,7 @@ init(el){
 
 S({tag:'FEEDBACK', ov:'[[고유안전성 — 반응도 계수와 무붕산 설계||Inherent safety - reactivity coefficients and boron-free design]]',
 src:'[[<b>대표 크기</b>이며 실제 값은 연소도·붕소 농도·노심 설계에 따라 크게 다르다. 정밀 값은 노심 설계 코드로 계산 · i-SMR 무붕산 운전: IAEA SMR Booklet 2022||<b>Representative magnitudes</b>; actual values vary widely with burn-up, boron concentration and core design, and are computed with core design codes · i-SMR boron-free operation: IAEA SMR Booklet 2022]]',
-html:`<h2 class="t">[[신호보다 <em>먼저</em> 작동하는 것 — 노심 자체의 물리||What acts <em>before</em> any signal - the physics of the core itself]]</h2>
+html:`<h2 class="t">[[<em>고유안전성</em> — 반응도 계수와 무붕산 설계||<em>Inherent safety</em> - reactivity coefficients and boron-free design]]</h2>
 <ul class="b">
   <li>[[<b>도플러 계수</b> <code>−2~−4 pcm/K</code> — 연료 온도가 곧바로 반응, <b class="hot">즉각적</b>. 급격한 반응도 삽입의 1차 저지선||<b>Doppler coefficient</b> <code>−2 to −4 pcm/K</code> - the fuel temperature responds at once, <b class="hot">immediate</b>. The first line against a rapid reactivity insertion]]</li>
   <li>[[<b>감속재온도계수</b> <code>−10~−60 pcm/K</code> — 열이 냉각재로 전달된 뒤 작동, <b class="cool">지연</b>||<b>Moderator temperature coefficient</b> <code>−10 to −60 pcm/K</code> - acts only after the heat reaches the coolant, <b class="cool">delayed</b>]]</li>
@@ -1945,9 +1945,9 @@ html:`[[<div class="no">07</div><h2>잔열제거계통</h2><div class="ln"></div
 <p>Safety function &#9313;: where the heat goes after shutdown.
 First pin down how much heat, for how long and to where, in numbers; then compare three ways of doing it.</p>]]`});
 
-S({tag:'HEAT SINK', ov:'[[수조 시뮬레이션 — 72시간은 어디서 나온 숫자인가||Pool simulation - where the 72 hours comes from]]',
+S({tag:'HEAT SINK', ov:'[[무조작 72시간에 필요한 수조 용량||Water inventory for 72 unattended hours]]',
 src:'[[<b>계산</b> Way–Wigner 붕괴열 적분(250 MWt, t₀ = 10⁸ s) · c_p = 4.18 kJ/(kg·K), h_fg = 2,257 kJ/kg, 초기 수온 30 °C. <b>열이 전부 수조로 들어간다고 본 상한 추정</b> — 실제로는 열교환기 성능 한계·성층화·외부 열손실이 작용한다||<b>Calculation</b> Way-Wigner decay heat integrated (250 MWt, t₀ = 10⁸ s) · c_p = 4.18 kJ/(kg·K), h_fg = 2,257 kJ/kg, initial water temperature 30 °C. <b>A bounding estimate that sends all the heat into the pool</b> - in reality heat exchanger capacity, stratification and heat loss all intervene]]',
-html:`<h2 class="t">[[“72시간 무조작”은 마법이 아니라 <em>물통 크기를 정하는 계산</em>이다||&#8220;72 hours&#8221; is not magic - it is <em>what sizes the tank</em>]]</h2>
+html:`<h2 class="t">[[무조작 <em>72시간</em>에 필요한 수조 용량||Water inventory for <em>72 unattended hours</em>]]</h2>
 <ul class="b">
   <li>[[정지 후 72시간 누적 붕괴 에너지는 <code>약 315 GJ</code> — 현열만으로 받으려면 물 <b class="cool">약 1,000 t</b>||The decay energy accumulated in 72 hours is <code>about 315 GJ</code> - taking it on sensible heat alone needs <b class="cool">about 1,000 t</b> of water]]</li>
   <li>[[잠열이 현열의 <b>약 8배</b>. 끓기 시작한 뒤에도 한참을 더 버틴다 — 대신 증기 배출과 보충수가 새 설계 문제||Latent heat is <b>about eight times</b> the sensible heat, so it holds out far longer once boiling starts - at the price of a new design problem: venting the steam and making up the water]]</li>
@@ -2030,9 +2030,9 @@ init(el){
   raf(t=>{ H=(t*34)%420; draw(Math.min(H,400)); });
 }});
 
-S({tag:'RHR · [[구현||Implementations]]', ov:'[[잔열제거의 세 가지 구현||Three ways to remove residual heat]]',
+S({tag:'RHR · [[구현||Implementations]]', ov:'[[잔열제거의 세 가지 구현||Three implementations of residual heat removal]]',
 src:'[[<b>개념도</b> 자체 작성. 계통 구성을 원리 수준으로 축약 · <b>사례</b> IRIS EHRS · SMART PRHRS · NuScale DHRS / AP1000 PRHR HX · BWRX-300 ICS / NuScale ECCS||<b>Schematic</b> drawn for this course, reduced to the level of principle · <b>Examples</b> IRIS EHRS · SMART PRHRS · NuScale DHRS / AP1000 PRHR HX · BWRX-300 ICS / NuScale ECCS]]',
-html:`<h2 class="t">[[열을 어디로 옮기는가 — <em>세 갈래</em>의 답||Where do you move the heat - <em>three</em> answers]]</h2>
+html:`<h2 class="t">[[<em>잔열제거</em>의 세 가지 구현||Three implementations of <em>residual heat removal</em>]]</h2>
 <ul class="b">
   <li>[[(a)만 <b class="ok">1차 압력경계를 열지 않는다</b>. 대신 증기발생기 자체가 고장난 경우에는 못 쓴다||Only (a) <b class="ok">keeps the primary pressure boundary closed</b>. In exchange, it is useless if the steam generator itself has failed]]</li>
 </ul>
@@ -2090,9 +2090,9 @@ init(el){
   flow(el.querySelector('#rc2'),{n:8,speed:0.14,r:3.8,color:'var(--hot)'});
 }});
 
-S({tag:'GRACE PERIOD', ov:'[[대처시간 비교 — 무엇을 기준으로 센 값인가||Grace period compared - counted against what]]',
+S({tag:'GRACE PERIOD', ov:'[[설계별 대처시간 — 무엇을 센 값인가||Coping time by design - what each number counts]]',
 src:'[[<b>출처</b> K.H. Bae et al., <i>Nucl. Eng. Des.</i> <b>379</b> (2021) 111247 (SMART100) · IAEA SMR Booklet 2022 (i-SMR·BWRX-300·CAREM·NuScale) · NRC ADAMS ML15230A043 (AP1000). <b>모두 설계자 제시값</b>||<b>Source</b> K.H. Bae et al., <i>Nucl. Eng. Des.</i> <b>379</b> (2021) 111247 (SMART100) · IAEA SMR Booklet 2022 (i-SMR, BWRX-300, CAREM, NuScale) · NRC ADAMS ML15230A043 (AP1000). <b>All are vendor-stated values</b>]]',
-html:`<h2 class="t">[[“72시간”이 설계마다 <s>다른 것을 뜻한다</s>||&#8220;72 hours&#8221; <s>means different things</s> in different designs]]</h2>
+html:`<h2 class="t">[[설계별 <em>대처시간</em> — 무엇을 센 값인가||<em>Coping time</em> by design - what each number counts]]</h2>
 <ul class="b">
   <li>[[① 운전원 조작 없이 유지하는 시간 · ② 외부 급수 없이 버티는 시간 · ③ 교류전원 없이 버티는 시간||&#9312; time held without operator action · &#9313; time held without external water · &#9314; time held without AC power]]</li>
   <li>[[세 정의가 주는 숫자는 서로 크게 다르다 — 비교할 때 <b class="hot">반드시 정의를 확인</b>||The three definitions give very different numbers - when comparing, <b class="hot">always check which one is meant</b>]]</li>
@@ -2118,9 +2118,9 @@ html:`[[<div class="no">08</div><h2>안전주입계통</h2><div class="ln"></div
 <p>The second half of safety function &#9313;: how to put back the coolant that was lost,
 and the five quantitative acceptance criteria the regulator imposes.</p>]]`});
 
-S({tag:'10 CFR 50.46', ov:'[[ECCS 허용기준 — 다섯 개의 합격선||ECCS acceptance criteria - five pass marks]]',
+S({tag:'10 CFR 50.46', ov:'[[10 CFR 50.46 — ECCS 허용기준 다섯 개||10 CFR 50.46 - the five ECCS acceptance criteria]]',
 src:'[[<b>출처</b> 10 CFR 50.46 (최종 개정 2007-08-28, 72 FR 49494) eCFR 원문. <b>유의</b> 성능기반 대체기준 50.46c는 2024-04 위원회 반려로 <b>2026년 현재 미제정</b>이며, 50.46a는 ECCS가 아니라 <b>원자로냉각재계통 배기계통</b> 조문이다||<b>Source</b> 10 CFR 50.46 (last amended 2007-08-28, 72 FR 49494), eCFR text. <b>Note</b> the performance-based alternative 50.46c was remanded by the Commission in April 2024 and is <b>still not issued as of 2026</b>; 50.46a is not about ECCS at all but about the <b>reactor coolant system venting</b>]]',
-html:`<h2 class="t">[[인허가 안전해석의 <em>합격선</em> — 정확히 외울 값||The <em>pass mark</em> for a licensing safety analysis - learn these exactly]]</h2>
+html:`<h2 class="t">[[<em>10 CFR 50.46</em> — ECCS 허용기준 다섯 개||<em>10 CFR 50.46</em> - the five ECCS acceptance criteria]]</h2>
 <div class="body">
   <div class="fig" style="justify-content:flex-start">
   <table class="d">
@@ -2148,9 +2148,9 @@ html:`<h2 class="t">[[인허가 안전해석의 <em>합격선</em> — 정확히
   </div>
 </div>`});
 
-S({tag:'PRESSURE TIERS', ov:'[[압력 계층 — 주입계통의 순차 인계||Pressure tiers - injection systems handing over]]',
+S({tag:'PRESSURE TIERS', ov:'[[압력 계층 — 주입계통의 순차 인계||The pressure hierarchy - injection systems handing over]]',
 src:'[[<b>개념도</b> 자체 작성. 압력 이력은 소형 파단의 전형적 형태 예시이며 특정 설계의 해석 결과가 아니다. 축압기 충전압 4.9 MPa(약 700 psig)는 AP1000 기준값 (NRC ADAMS ML15230A043)||<b>Schematic</b> drawn for this course. The pressure history is a typical small-break shape, not any design&#8217;s analysis. Accumulator charge 4.9 MPa (about 700 psig) is the AP1000 value (NRC ADAMS ML15230A043)]]',
-html:`<h2 class="t">[[압력이 떨어지며 <em>차례로 인계</em>한다 — 하나로는 안 된다||As the pressure falls they <em>hand over in turn</em> - no single system can do it]]</h2>
+html:`<h2 class="t">[[<em>압력 계층</em> — 주입계통의 순차 인계||The <em>pressure hierarchy</em> - injection systems handing over]]</h2>
 <ul class="b">
   <li>[[사고 초기에는 압력이 높아 저압 펌프가 못 밀고, 나중에는 고압 계통의 유량이 부족함||Early on the pressure is too high for a low-pressure pump to push against; later the high-pressure system cannot deliver enough flow]]</li>
   <li>[[그래서 <b class="cool">압력 구간마다 다른 주입 수단</b>을 준비한다 — 이것이 ECCS의 기본 골격||So <b class="cool">each pressure band gets its own means of injection</b> - that is the skeleton of an ECCS]]</li>
@@ -2207,9 +2207,9 @@ init(el){
   at(1); raf(t=>{ const u=(t%8)/8; at(Math.pow(10,u*4)); });
 }});
 
-S({tag:'NuScale ECCS', ov:'[[폐루프 — 물을 밖에서 넣지 않는다||A closed loop - no water added from outside]]',
+S({tag:'NuScale ECCS', ov:'[[피동 ECCS — 감압 · 응축 · 중력 회수||Passive ECCS - depressurise, condense, return by gravity]]',
 src:'[[<b>개념도</b> 자체 작성. NuScale NPM의 ECCS는 RVV 3개 + RRV 2개로 구성되며 펌프·축압기가 없다 (IAEA SMR Booklet 2022). 8장·9장의 경계가 사라지는 지점||<b>Schematic</b> drawn for this course. The NuScale NPM ECCS is three RVVs and two RRVs, with no pump and no accumulator (IAEA SMR Booklet 2022). This is where the line between Chapters 8 and 9 disappears]]',
-html:`<h2 class="t">[[잃은 물을 밖에서 넣는 대신 <em>가둬 두고 순환</em>시킨다||Instead of adding water, it <em>keeps it in and circulates</em>]]</h2>
+html:`<h2 class="t">[[피동 ECCS — 감압 · 응축 · <em>중력 회수</em>||Passive ECCS - depressurise, condense, <em>return by gravity</em>]]</h2>
 <ul class="b">
   <li>[[① <b>RVV</b>를 열어 증기를 격납으로 방출 → ② 침수된 격납 벽면에서 <b class="cool">응축</b>, 열은 수조로 → ③ <b>RRV</b>로 응축수를 용기로 복귀||&#9312; open the <b>RVVs</b> and vent steam into containment &#8594; &#9313; it <b class="cool">condenses</b> on the submerged containment wall and the heat goes to the pool &#8594; &#9314; the <b>RRVs</b> return the condensate to the vessel]]</li>
   <li>[[수원이 계 밖에 없어도 순환이 유지되므로 <b class="ok">50.46(b)(5) 장기 냉각</b>이 성립한다||Circulation holds with no water source outside the system, which is how <b class="ok">50.46(b)(5) long-term cooling</b> is met]]</li>
@@ -2272,9 +2272,9 @@ html:`[[<div class="no">09</div><h2>격납계통</h2><div class="ln"></div>
 <p>Safety function &#9314;, the last of the four barriers.
 Only one property is demanded of it - <b>do not leak</b>. And to hold that property, the heat has to go somewhere.</p>]]`});
 
-S({tag:'ISOLATION', ov:'[[격리밸브 — 구멍 관리가 전부||Isolation valves - it is all about the holes]]',
+S({tag:'ISOLATION', ov:'[[격납 관통부와 격리밸브||Containment penetrations and isolation valves]]',
 src:'[[<b>출처</b> 10 CFR 50 Appendix A, GDC 16·50~57. <b>GDC 52</b>는 설계압에서 종합누설률시험(ILRT)을 수행할 수 있도록 요구한다 — “새지 않는다”를 주장이 아니라 <b>측정</b>으로 증명해야 한다||<b>Source</b> 10 CFR 50 Appendix A, GDC 16 and 50-57. <b>GDC 52</b> requires that an integrated leak rate test be possible at design pressure - &#8220;it does not leak&#8221; has to be proved by <b>measurement</b>, not assertion]]',
-html:`<h2 class="t">[[격납에는 <s>필연적으로 구멍</s>이 뚫린다 — 사고 시 닫히는가||A containment <s>necessarily has holes</s> in it - do they close when it matters]]</h2>
+html:`<h2 class="t">[[격납 <em>관통부</em>와 격리밸브||Containment <em>penetrations</em> and isolation valves]]</h2>
 <ul class="b">
   <li>[[배관 · 전기 관통부 · 인원 출입구. 이 구멍이 닫히지 않으면 아무리 두꺼운 벽도 소용없음||Pipes, electrical penetrations, personnel airlocks. If these do not close, no thickness of wall helps]]</li>
   <li>[[단순 <b class="hot">체크밸브</b>는 격납 외부 자동 격리밸브로 인정되지 않음 — 막아야 할 방향으로는 닫히지 않으니까||A plain <b class="hot">check valve</b> does not count as an automatic outboard isolation valve - it does not close in the direction you need to block]]</li>
@@ -2303,9 +2303,9 @@ html:`<h2 class="t">[[격납에는 <s>필연적으로 구멍</s>이 뚫린다 �
   </div>
 </div>`});
 
-S({tag:'CONTAINMENT PRESSURE', ov:'[[격납 압력 — 계산이 포화압에 막힌다||Containment pressure - the calculation hits saturation]]',
+S({tag:'CONTAINMENT PRESSURE', ov:'[[격납 압력 계산 — 증기 응축의 효과||Containment pressure - the effect of steam condensation]]',
 src:'[[<b>예제 조건</b> 자유체적 3,000 m³ · 초기 공기 1기압 20 °C · 평형 온도 150 °C · R_v = 461.5 J/(kg·K) · 150 °C 포화압 0.476 MPa. 이상기체 근사만으로는 답이 틀린다는 것을 보이기 위한 예제||<b>Worked example</b> free volume 3,000 m³ · initial air at 1 atm and 20 °C · equilibrium temperature 150 °C · R_v = 461.5 J/(kg·K) · saturation pressure at 150 °C is 0.476 MPa. The point of the example is that the ideal gas approximation alone gives the wrong answer]]',
-html:`<h2 class="t">[[이상기체로 계산하면 <s>틀린다</s> — 초과분은 <em>응축</em>한다||Treat it as an ideal gas and you get it <s>wrong</s> - the excess <em>condenses</em>]]</h2>
+html:`<h2 class="t">[[격납 압력 계산 — <em>증기 응축</em>의 효과||Containment pressure - the effect of <em>steam condensation</em>]]</h2>
 <ul class="b">
   <li>[[계산된 증기 분압이 그 온도의 <b>포화압</b>을 넘으면 물리적으로 불가능 → 증기 일부가 액체가 됨||A computed steam partial pressure above the <b>saturation pressure</b> at that temperature is physically impossible &#8594; part of the steam turns liquid]]</li>
   <li>[[결국 <b class="cool">격납 압력은 증기 질량이 아니라 평형 온도가 결정</b>한다. 그래서 격납 해석의 핵심은 열 균형||In the end <b class="cool">containment pressure is set by the equilibrium temperature, not by the mass of steam</b>. Which is why containment analysis is really a heat balance]]</li>
@@ -2362,9 +2362,9 @@ init(el){
   raf(t=>{ if(t>2.2) return; sl.value=(lerp(4,20,clamp(t/2,0,1))).toFixed(1); upd(); });
 }});
 
-S({tag:'CONTAINMENT TYPES', ov:'[[격납 3형식 — 에너지를 어디에 흡수시키는가||Three containment types - where the energy goes]]',
+S({tag:'CONTAINMENT TYPES', ov:'[[격납 3형식 — 에너지를 어디에 흡수시키는가||Three containment types - where the energy is absorbed]]',
 src:'[[<b>출처</b> IAEA SMR Booklet 2022 (CAREM 설계압 0.5 MPa, 콘크리트 1.2 m · NuScale CNV 외경 4.5 m × 높이 23.1 m) · NRC ADAMS ML15230A043 (AP1000 PCCWST 72시간 배수)||<b>Source</b> IAEA SMR Booklet 2022 (CAREM design pressure 0.5 MPa, 1.2 m concrete · NuScale CNV 4.5 m outer diameter by 23.1 m high) · NRC ADAMS ML15230A043 (AP1000 PCCWST draining over 72 hours)]]',
-html:`<h2 class="t">[[흡수 방식은 <em>세 가지뿐</em>이다 — 대기 · 물 · 벽||There are only <em>three</em> places to put it - the atmosphere, water, or the wall]]</h2>
+html:`<h2 class="t">[[격납 <em>3형식</em> — 에너지를 어디에 흡수시키는가||<em>Three containment types</em> - where the energy is absorbed]]</h2>
 <div class="body col">
 <table class="d">
 [[<tr><th style="width:22%">형식</th><th style="width:30%">에너지를 어디에 흡수시키는가</th><th style="width:22%">능동/피동</th><th>대표 설계</th></tr>||<tr><th style="width:22%">Type</th><th style="width:30%">Where the energy is absorbed</th><th style="width:22%">Active / passive</th><th>Representative design</th></tr>]]
@@ -2391,9 +2391,9 @@ html:`[[<div class="no">10</div><h2>요건에서 계통까지</h2><div class="ln
 <p>아홉 개의 장을 하나의 추적표로 묶는다. 이 표를 거꾸로 읽으면 설계 검토 체크리스트가 된다.</p>||<div class="no">10</div><h2>From requirement to system</h2><div class="ln"></div>
 <p>Nine chapters pulled into a single traceability table. Read that table backwards and it becomes a design review checklist.</p>]]`});
 
-S({tag:'TRACEABILITY', ov:'[[요건 → 기능 → 계통 추적||Requirement &#8594; function &#8594; system]]',
+S({tag:'TRACEABILITY', ov:'[[요건 &#8594; 기능 &#8594; 계통 추적||Tracing requirement &#8594; function &#8594; system]]',
 src:'[[<b>출처</b> 10 CFR 50 Appendix A의 GDC, IAEA SSR-2/1 (Rev.1)의 기본안전기능, 그리고 6~9장에서 다룬 계통을 대응시킨 것||<b>Source</b> the GDC of 10 CFR 50 Appendix A, the fundamental safety functions of IAEA SSR-2/1 (Rev.1), and the systems covered in Chapters 6 to 9, mapped onto each other]]',
-html:`<h2 class="t">[[설계는 요건에서 시작해 계통으로 끝난다 — <s>거꾸로 읽으면 근거를 잃는다</s>||Requirement &#8594; function &#8594; system - <s>never the other way</s>]]</h2>
+html:`<h2 class="t">[[<em>요건 &#8594; 기능 &#8594; 계통</em> 추적||Tracing <em>requirement &#8594; function &#8594; system</em>]]</h2>
 <div class="body"><div class="fig">
 <svg viewBox="0 0 1120 462" role="img" aria-label="[[규제 요건에서 기본안전기능을 거쳐 공학적안전설비로 이어지는 추적 관계||Traceability from regulatory requirement through fundamental safety function to engineered safety feature]]">
   <defs><marker id="tr-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
@@ -2438,9 +2438,9 @@ init(el){
   rows.forEach((r,i)=>r.animate([{opacity:0},{opacity:1}],{duration:420,delay:180*i,fill:'forwards'}));
 }});
 
-S({tag:'COMPARISON', ov:'[[노형별 ESF 구성 비교||ESF line-up, design by design]]',
+S({tag:'COMPARISON', ov:'[[노형별 공학적안전설비 구성 비교||Engineered safety features compared across designs]]',
 src:'[[<b>출처</b> IAEA SMR Booklet 2022 (NuScale·i-SMR·BWRX-300·CAREM) · K.H. Bae et al., <i>Nucl. Eng. Des.</i> <b>379</b> (2021) 111247 (SMART100) · NRC ML15230A043 (AP1000) · Westinghouse ML033600086 (IRIS). <b>모두 설계자 제시 자료 기준</b>||<b>Source</b> IAEA SMR Booklet 2022 (NuScale, i-SMR, BWRX-300, CAREM) · K.H. Bae et al., <i>Nucl. Eng. Des.</i> <b>379</b> (2021) 111247 (SMART100) · NRC ML15230A043 (AP1000) · Westinghouse ML033600086 (IRIS). <b>All from vendor-supplied material</b>]]',
-html:`<h2 class="t">[[같은 일을 하는데 <em>이름이 다르다</em> — 나란히 놓고 보기||The same job under <em>different names</em> - set side by side]]</h2>
+html:`<h2 class="t">[[노형별 <em>공학적안전설비</em> 구성 비교||<em>Engineered safety features</em> compared across designs]]</h2>
 <div class="body col">
 <table class="d sm">
 [[<tr><th style="width:14%">설계</th><th style="width:16%">정지계통</th><th style="width:24%">잔열제거</th><th style="width:23%">안전주입</th><th>격납</th></tr>||<tr><th style="width:14%">Design</th><th style="width:16%">Shutdown</th><th style="width:24%">Residual heat removal</th><th style="width:23%">Safety injection</th><th>Containment</th></tr>]]
@@ -2454,9 +2454,9 @@ html:`<h2 class="t">[[같은 일을 하는데 <em>이름이 다르다</em> — �
 </table>
 </div>`});
 
-S({tag:'CHECKLIST', ov:'[[마무리 — 네 줄 체크리스트||Closing - a four-line checklist]]',
+S({tag:'CHECKLIST', ov:'[[설계 자료를 읽을 때의 네 줄 체크리스트||A four-line checklist for reading a design]]',
 src:'[[다음 단계: 5~8주차 계통코드. 이 네 질문에 답할 수 있으면 노드화의 요구사항이 이미 정해진 것이다||Next: system codes in weeks 5-8. Answer these four questions and the nodalisation requirements are already settled]]',
-html:`<h2 class="t">[[설계 자료를 받았을 때 <em>이 네 줄</em>을 채울 수 있는가||Handed a design, can you fill in <em>these four lines</em>]]</h2>
+html:`<h2 class="t">[[설계 자료를 읽을 때의 <em>네 줄 체크리스트</em>||A <em>four-line checklist</em> for reading a design]]</h2>
 <div class="body col">
   <div style="display:flex;flex-direction:column;gap:12px;margin-top:6px">
     <div class="readout" style="border-left:3px solid var(--hot)">
