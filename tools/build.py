@@ -87,6 +87,16 @@ def build_deck(slug, fonts):
     cfg.update(slug=slug, slides=n)
     return cfg
 
+def nojekyll():
+    """GitHub Pages 가 docs/ 를 Jekyll 로 처리하지 않게 한다.
+
+    이 파일이 없으면 Pages 가 빌드 단계를 한 번 더 거치고, 밑줄로 시작하는 이름이나
+    Liquid 문법처럼 보이는 글자에 걸려 파일이 통째로 빠질 수 있다. 우리는 이미 구운
+    HTML 을 그대로 서빙하기만 하면 된다.
+    """
+    open(os.path.join(DOCS, '.nojekyll'), 'a').close()
+
+
 def build_index(decks, fonts):
     tpl = read(SRC, 'index.tpl.html')
     course = conf(os.path.join(SRC, 'course.conf'))
@@ -135,6 +145,7 @@ def main():
     if only and not built:
         sys.exit('그런 덱이 없다: ' + only)
     if not only:
+        nojekyll()
         build_index(built, fonts)
     print('  검증:  cd tools && node check.js        PDF 굽기:  cd tools && node pdf.js')
 
