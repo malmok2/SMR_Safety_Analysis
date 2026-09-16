@@ -1,0 +1,178 @@
+<script>
+/* ================================================================
+   부록 — 약어 · 자료원 · 닫는 장
+   ================================================================ */
+SECT('[[부록 · 약어와 자료원||Appendix · abbreviations and sources]]');
+
+/* ---------------------------------------------------------------- 약어 1/2 */
+S({tag:'ABBREVIATIONS 1/2', ov:'[[약어 (1/2) — 자료원과 규제||Abbreviations (1 of 2) - sources and regulation]]',
+src:'[[<b>출처</b> 본 교재 부록 A · 각 장 하단의 약어 줄과 같은 내용임||<b>Source</b> This textbook, Appendix A · the same entries as the abbreviation line under each slide]]',
+html:`<h2 class="t">[[약어 <em>1/2</em> — 자료원 · 규제 · 사업||Abbreviations <em>1 of 2</em> - sources, regulation, projects]]</h2>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 470" role="img" aria-label="[[자료원과 규제·사업 관련 약어의 원어와 뜻을 정리한 표||Abbreviations for sources, regulation and projects, with their expansions and meanings]]">
+  <g id="ab1"></g>
+</svg>
+</div></div>`,
+init(el){ abbrTable(el,'#ab1',[
+  ['ADAMS','Agencywide Documents Access and Management System',TX('NRC 문서 공개 시스템','the NRC document system')],
+  ['ARIS','Advanced Reactors Information System',TX('IAEA 노형 정보 시스템','the IAEA reactor information system')],
+  ['DSR','Design Status Report',TX('ARIS 설계기술서 — 설계자가 직접 제출','the ARIS design report, filed by the designer')],
+  ['PRIS','Power Reactor Information System',TX('IAEA 운전원전 정보 시스템','the IAEA operating-reactor database')],
+  ['NEA','Nuclear Energy Agency',TX('OECD 원자력기구','the OECD nuclear agency')],
+  ['KINS','Korea Institute of Nuclear Safety',TX('한국원자력안전기술원','Korea’s nuclear safety institute')],
+  ['RAI','Request for Additional Information',TX('규제기관이 보내는 추가정보요구','the regulator’s request for more information')],
+  ['FSER','Final Safety Evaluation Report',TX('최종 안전성평가보고서','the regulator’s final safety evaluation')],
+  ['DCA','Design Certification Application',TX('설계인증신청 (미국)','design certification application, US')],
+  ['SDA','Standard Design Approval',TX('표준설계승인 (미국) · 표준설계인가 (한국)','standard design approval, US and Korea')],
+  ['FID','Final Investment Decision',TX('최종투자결정 — 착공이 아니다','final investment decision - not a construction start')],
+  ['EPZ','Emergency Planning Zone',TX('비상계획구역','emergency planning zone')],
+  ['GDC','General Design Criteria',TX('일반설계기준 (10 CFR 50 Appendix A)','the US general design criteria')],
+  ['MCP','Model Context Protocol',TX('언어모델이 외부 도구·데이터를 부르는 표준 규약','the standard for a model to call external tools and data')],
+  ['HALEU','High-Assay Low-Enriched Uranium',TX('농축도 5~20% 구간의 우라늄','uranium enriched between 5 and 20%')]
+]);}});
+
+/* ---------------------------------------------------------------- 약어 2/2 */
+S({tag:'ABBREVIATIONS 2/2', ov:'[[약어 (2/2) — 계통과 기기||Abbreviations (2 of 2) - systems and components]]',
+src:'[[<b>출처</b> 본 교재 부록 A · 계통 이름은 설계마다 다르고 하는 일은 대체로 같음 — 8장 표 8.2 참조||<b>Source</b> This textbook, Appendix A · system names differ by design though the function is largely the same - see Table 8.2 in ch. 8]]',
+html:`<h2 class="t">[[약어 <em>2/2</em> — 계통 · 기기||Abbreviations <em>2 of 2</em> - systems and components]]</h2>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 470" role="img" aria-label="[[안전계통과 기기 약어의 원어와 뜻, 그리고 어느 설계의 것인지 정리한 표||Abbreviations for safety systems and components, with expansions, meanings and which design they belong to]]">
+  <g id="ab2"></g>
+</svg>
+</div></div>`,
+init(el){ abbrTable(el,'#ab2',[
+  ['NPM','NuScale Power Module',TX('NuScale 모듈 — 격납까지 한 원통에','the NuScale module - containment included')],
+  ['DHRS','Decay Heat Removal System',TX('잔열제거계통 (NuScale) — 2계열 × 100%','decay heat removal, NuScale - 2 trains × 100%')],
+  ['ECCS','Emergency Core Cooling System',TX('비상노심냉각계통','emergency core cooling')],
+  ['RVV · RRV','Reactor Vent Valve · Reactor Recirculation Valve',TX('원자로 배기밸브 · 재순환밸브 (NuScale)','vent and recirculation valves, NuScale')],
+  ['IAB','Inadvertent Actuation Block',TX('오작동방지블록 — ECCS 밸브가 잘못 열리는 것을 막음','blocks an ECCS valve from opening by mistake')],
+  ['PAFS','Passive Auxiliary Feedwater System',TX('피동보조급수계통 (i-SMR) — 36 h 냉각 + 36 h 유지','passive auxiliary feedwater, i-SMR - 36 h + 36 h')],
+  ['PECCS','Passive Emergency Core Cooling System',TX('피동비상노심냉각계통 (i-SMR)','passive emergency core cooling, i-SMR')],
+  ['PCCS','Passive Containment Cooling System',TX('피동격납냉각계통','passive containment cooling')],
+  ['EDV · ERV','Emergency Depressurisation · Recirculation Valve',TX('비상감압밸브 · 비상재순환밸브 (i-SMR)','depressurisation and recirculation valves, i-SMR')],
+  ['RCP · CRDM','Reactor Coolant Pump · Control Rod Drive Mechanism',TX('원자로냉각재펌프 · 제어봉구동장치','coolant pump and control rod drive')],
+  ['CVCS','Chemical and Volume Control System',TX('화학체적제어계통 — 무붕산이면 대폭 단순해짐','chemical and volume control - much simpler without boron')],
+  ['ICS','Isolation Condenser System',TX('격리응축기계통 (BWRX-300) — 3계열 × 33 MW','isolation condenser, BWRX-300 - 3 × 33 MW')],
+  ['RIV · SRV','Reactor Isolation Valve · Safety Relief Valve',TX('원자로 격리밸브 · 안전방출밸브','reactor isolation valve and safety relief valve')],
+  ['FMCRD','Fine Motion Control Rod Drive',TX('미세운동 제어봉구동장치 (BWRX-300)','fine motion control rod drive, BWRX-300')],
+  ['ESBWR · PCV','Economic Simplified BWR · Primary Containment Vessel',TX('BWRX-300의 모체 설계 · 1차격납용기','the parent design of BWRX-300, and the primary containment')]
+]);}});
+
+/* 약어 표 하나를 그린다 — 두 장이 같은 모양을 쓴다 */
+function abbrTable(el, sel, R){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector(sel), gs=[];
+  [[TX('약어','Abbreviation'),0],[TX('원어','Expansion'),200],[TX('뜻','What it means'),640]]
+    .forEach(h=>{ const t=mk('text',{x:h[1],y:14,class:'lbl'}); t.textContent=h[0]; G.appendChild(t); });
+  G.appendChild(mk('line',{x1:0,y1:24,x2:1100,y2:24,stroke:'var(--cool)'}));
+  R.forEach((r,i)=>{
+    const y=48+i*29, g=mk('g',{opacity:0});
+    const k=mk('text',{x:0,y:y,'font-family':'var(--mono)','font-size':15.5,fill:'var(--cool)',
+      'font-weight':600}); k.textContent=r[0]; g.appendChild(k);
+    const e=mk('text',{x:200,y:y,'font-family':'var(--sans)','font-size':15.5,fill:'var(--ink)',
+      'font-weight':300}); e.textContent=r[1]; g.appendChild(e);
+    const m=mk('text',{x:640,y:y,'font-family':'var(--sans)','font-size':15.5,fill:'var(--ink-2)',
+      'font-weight':300}); m.textContent=r[2]; g.appendChild(m);
+    g.appendChild(mk('line',{x1:0,y1:y+9,x2:1100,y2:y+9,stroke:'var(--rule)','stroke-opacity':0.55}));
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:220,delay:45*i,fill:'forwards'}));
+}
+
+
+/* ---------------------------------------------------------------- 자료원 */
+S({tag:'WHERE TO LOOK', ov:'[[자료원 목록 — 어디를 먼저 여는가||Source list - which one to open first]]',
+src:'[[<b>출처</b> 본 교재 부록 B · 이 교재의 인허가·사업 현황은 모두 <b>2026년 9월 기준</b>임. 반년이면 낡음||<b>Source</b> This textbook, Appendix B · all licensing and project status here is <b>as of September 2026</b> and ages within six months]]',
+html:`<h2 class="t">[[탐색은 <em>빠른 쪽</em>에서, 인용은 <em>느린 쪽</em>에서||Explore on <em>the fast side</em>, cite from <em>the slow side</em>]]</h2>
+<ul class="b">
+  <li>[[디지털 대시보드처럼 상시 갱신되는 화면에서 가져온 수치에는 <b class="amb">반드시 접근일</b>을 적음||For anything taken from a continuously updated screen, <b class="amb">always record the access date</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 420" role="img" aria-label="[[데이터베이스와 인용 문서 목록을 두 칸으로 나눠 정리한 그림||Databases and cited documents, in two columns]]">
+  <g id="wl-list"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#wl-list'), gs=[];
+  /* 왼쪽 — 상시 열어 두는 데이터베이스. 오른쪽 — 이 교재가 실제로 인용한 문서. */
+  const A=[TX('데이터베이스 — 여기서 찾는다','Databases - where you look'),'var(--cool)',[
+    ['IAEA ARIS','aris.iaea.org',TX('설계기술서 · SMR 부클릿','design reports, SMR booklet')],
+    ['US NRC SMR','nrc.gov/reactors/new-reactors/smr.html',TX('미국 인허가 활동','US licensing activity')],
+    ['NRC ADAMS','nrc.gov/reading-rm/adams',TX('인허가 문서 원본 · API 있음','original documents; API exists')],
+    ['OECD/NEA','oecd-nea.org — SMR digital dashboard',TX('사업 성숙도 · 129 중 79 수록','maturity - 79 of 129 tracked')],
+    [TX('원자력안전위원회','NSSC Korea'),'nssc.go.kr',TX('국내 일정의 1차 근거','primary basis for Korean dates')]]];
+  const B=[TX('이 교재가 인용한 문서','Documents this book cites'),'var(--ok)',[
+    ['OECD/NEA',TX('SMR Dashboard 2판(2024) · 3판(2025-07)','SMR Dashboard 2nd (2024), 3rd (2025-07)'),'2 · 10'],
+    ['IAEA ARIS','i-SMR Design Status Report','7 · 8'],
+    ['IAEA ARIS','BWRX-300 Design Status Report (2020)','9'],
+    ['NuScale','NuScale Power Module Technical Specifications','6 · 8'],
+    ['US NRC',TX('ML25136A329 · 보도자료 25-033 (2025)','ML25136A329 · press release 25-033 (2025)'),'6'],
+    ['GE Hitachi','BWRX-300 General Description','9'],
+    ['Onweller et al.','Cited but Not Verified, arXiv:2605.06635 (2026)','4']]];
+  /* 왼쪽 */
+  const ga=mk('g',{opacity:0});
+  ga.appendChild(mk('rect',{width:548,height:416,fill:'var(--panel)',stroke:'var(--rule)'}));
+  ga.appendChild(mk('rect',{width:548,height:3,fill:A[1]}));
+  ga.appendChild(mk('text',{x:22,y:38,'font-family':'var(--sans)','font-size':19,fill:A[1],
+    'font-weight':600})).textContent=A[0];
+  A[2].forEach((r,i)=>{
+    const y=80+i*66;
+    ga.appendChild(mk('text',{x:22,y:y,'font-family':'var(--mono)','font-size':15,fill:'var(--ink)',
+      'font-weight':600})).textContent=r[0];
+    ga.appendChild(mk('text',{x:22,y:y+20,'font-family':'var(--mono)','font-size':13.5,
+      fill:'var(--ink-3)'})).textContent=r[1];
+    ga.appendChild(mk('text',{x:22,y:y+40,'font-family':'var(--sans)','font-size':15,
+      fill:'var(--ink-2)','font-weight':300})).textContent=wrapT(r[2],32)[0];
+  });
+  G.appendChild(ga); gs.push(ga);
+  /* 오른쪽 — 한 문서에 두 줄. 오른쪽 끝에 그 문서를 쓴 장을 적는다. */
+  const gb=mk('g',{transform:'translate(570,0)',opacity:0});
+  gb.appendChild(mk('rect',{width:548,height:416,fill:'var(--panel)',stroke:'var(--rule)'}));
+  gb.appendChild(mk('rect',{width:548,height:3,fill:B[1]}));
+  gb.appendChild(mk('text',{x:22,y:38,'font-family':'var(--sans)','font-size':19,fill:B[1],
+    'font-weight':600})).textContent=B[0];
+  gb.appendChild(mk('text',{x:526,y:38,'text-anchor':'end',class:'lbl'}))
+    .textContent=TX('쓰인 장','used in');
+  B[2].forEach((r,i)=>{
+    const y=78+i*47;
+    gb.appendChild(mk('text',{x:22,y:y,'font-family':'var(--mono)','font-size':14.5,
+      fill:'var(--ink)','font-weight':600})).textContent=r[0];
+    gb.appendChild(mk('text',{x:22,y:y+20,'font-family':'var(--sans)','font-size':14.5,
+      fill:'var(--ink-2)','font-weight':300})).textContent=wrapT(r[1],44,0.5)[0];
+    gb.appendChild(mk('text',{x:526,y:y+10,'text-anchor':'end','font-family':'var(--mono)',
+      'font-size':14,fill:B[1]})).textContent=r[2];
+    if(i<B[2].length-1)
+      gb.appendChild(mk('line',{x1:22,y1:y+30,x2:526,y2:y+30,stroke:'var(--rule)','stroke-opacity':0.5}));
+  });
+  G.appendChild(gb); gs.push(gb);
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:400,delay:250*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 닫는 장 */
+S({bare:true, cls:'cover', ov:'[[닫는 장||Closing]]',
+html:`<div class="kick">[[NUE4067 · 3~4주차||NUE4067 · Weeks 3-4]]</div>
+<h1>[[&#8220;그 숫자 <span>어디서 나온</span> 거야?&#8221;||&#8220;Where did <span>that number</span> come from?&#8221;]]</h1>
+<div class="ln"></div>
+<div class="meta">
+  [[이 질문에 <b>한 줄로</b> 답할 수 있으면 그 표는 발표 자리에서 버팀.<br>
+  값 · 단위 · 출처 · 접근일 · 비고 — 다섯 줄이면 됨.<br><br>
+  다음 주차는 <b>계통 코드</b>로 넘어감. 이 교재 표 8.1 · 9.2의 값들이 그때 <b>입력자료</b>가 됨.||Answer it <b>in one line</b> and the table will hold up in the room.<br>
+  Value, unit, source, access date, note - five lines is all it takes.<br><br>
+  Next comes <b>the system codes</b>. The values in Tables 8.1 and 9.2 become <b>the inputs</b>.]]
+</div>
+<div class="hint">[[<kbd>O</kbd> 목차 &nbsp; <kbd>L</kbd> 한/영 &nbsp; <kbd>T</kbd> 배경 &nbsp; <kbd>P</kbd> 인쇄·PDF &nbsp; &nbsp; THINK Lab · 한양대학교 원자력공학과||<kbd>O</kbd> Index &nbsp; <kbd>L</kbd> KO/EN &nbsp; <kbd>T</kbd> Theme &nbsp; <kbd>P</kbd> Print·PDF &nbsp; &nbsp; THINK Lab · Hanyang University]]</div>`,
+init(el){
+  if(RM) return;
+  const h1=el.querySelector('h1'), ln=el.querySelector('.ln');
+  h1.style.opacity=0; ln.style.width='0px';
+  h1.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],
+    {duration:700,easing:'cubic-bezier(.2,.7,.3,1)',fill:'forwards'});
+  ln.animate([{width:'0px'},{width:'120px'}],{duration:600,delay:500,fill:'forwards'});
+}});
+</script>

@@ -1,0 +1,270 @@
+<script>
+/* ================================================================
+   SECTION 10 — 정리  (교재 10장)
+   ================================================================ */
+SECT('10 · [[정리||Wrap-up]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;10 정리 — 같은 문제, 세 가지 답||&#167;10 Wrap-up - one problem, three answers]]',
+html:`[[<div class="no">10</div><h2>정리</h2><div class="ln"></div>
+<p>1부와 2부를 하나로 묶는다. <b>자료를 찾는 법과 설계를 읽는 법은 사실 같은 일</b>이다.
+어느 쪽이든 묻는 것은 하나다 — 이 값은 어디서 왔고, 무엇과 맞아야 하는가.</p>||<div class="no">10</div><h2>Wrap-up</h2><div class="ln"></div>
+<p>Part I and Part II close together. <b>Finding data and reading a design are the same job</b>.
+Either way the question is one - where did this value come from, and what must it agree with?</p>]]`});
+
+
+/* ---------------------------------------------------------------- 현재 위치 */
+S({tag:'WHERE THEY STAND', ov:'[[인허가 경로 — 2026년 9월의 현재 위치||Licensing path - where each stands in September 2026]]',
+src:'[[<b>출처</b> 본 교재 10.1절 그림 10.1 · <b>2026년 9월 기준</b> — 이 그림은 반년이면 낡음. 개정 시 우선 갱신할 것||<b>Source</b> This textbook &#167;10.1, Fig. 10.1 · <b>as of September 2026</b> - this figure ages within six months and is the first thing to revise]]',
+abbr:'[[<b>사전협의</b> 신청 전에 규제기관과 쟁점을 미리 맞추는 단계 · <b>설계승인</b> 설계 자체를 심사해 받는 승인 · <b>건설허가</b> 특정 부지에 짓도록 받는 허가 · <b>FID</b> 최종투자결정||<b>pre-application</b> aligning issues with the regulator before filing · <b>design approval</b> approval of the design itself · <b>construction permit</b> permission to build at a named site · <b>FID</b> final investment decision]]',
+html:`<h2 class="t">[[기술적 완성도와 배치 진척도는 <em>같은 축이 아님</em>||Technical maturity and deployment progress are <em>not the same axis</em>]]</h2>
+<ul class="b">
+  <li>[[세 노형의 위치가 다르다는 사실 자체가 <b>정보</b>임. NEA 대시보드가 여섯 차원으로 평가하는 이유가 이것임||That the three stand in different places is <b>itself information</b>. It is why the NEA dashboard scores six dimensions]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 440" role="img" aria-label="[[사전협의부터 건설까지의 단계 위에 NuScale·i-SMR·BWRX-300이 현재 어디에 있는지 표시한 그림||A stage line from pre-application to construction, showing where NuScale, i-SMR and BWRX-300 stand]]">
+  <g id="ws-path"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#ws-path');
+  const ST=[TX('사전협의','pre-application'),TX('심사 중','under review'),TX('설계승인','design approval'),
+            TX('최종투자결정','FID'),TX('건설허가','construction permit'),TX('건설 중','under construction')];
+  const X0=130, X1=1030, dx=(X1-X0)/(ST.length-1);
+  ST.forEach((s,i)=>{
+    const x=X0+i*dx;
+    G.appendChild(mk('line',{x1:x,y1:44,x2:x,y2:272,stroke:'var(--rule)','stroke-dasharray':'3 5'}));
+    const t=mk('text',{x:x,y:32,'text-anchor':'middle',class:'lbl'}); t.textContent=s; G.appendChild(t);
+  });
+  const D=[
+    ['NuScale','var(--cool)',3, TX('설계승인(2025-05, US460)을 끝내고 첫 사업의 최종투자결정까지 갔다. 다만 조건부다.',
+        'Design approval done (US460, May 2025), and a conditional FID on the first project.')],
+    ['i-SMR','var(--ok)',1, TX('2026-02 표준설계인가를 신청해 심사 초기다. 서류 보완 13건, 검증시험 결과 제출은 2028-06 목표다.',
+        'Applied February 2026, early in review. 13 items to complete; test results due June 2028.')],
+    ['BWRX-300','var(--amber)',5, TX('캐나다에서 건설허가를 받아 실제 공사 단계에 있다. 세 노형 중 가장 앞서 있다.',
+        'Holds a construction licence in Canada and is physically building - furthest along.')]
+  ];
+  const gs=[], bars=[];
+  D.forEach((d,i)=>{
+    const y=76+i*66;
+    const n=mk('text',{x:0,y:y+24,'font-family':'var(--mono)','font-size':17,fill:d[1],
+      'font-weight':600}); n.textContent=d[0]; G.appendChild(n);
+    const r=mk('rect',{x:X0-26,y:y,width:'0',height:34,fill:d[1],opacity:0.30});
+    G.appendChild(r); bars.push([r, d[2]*dx+26]);
+    const c=mk('circle',{cx:X0+d[2]*dx,cy:y+17,r:9,fill:d[1],opacity:0});
+    G.appendChild(c); gs.push(c);
+  });
+  /* 현재 선 */
+  G.appendChild(mk('text',{x:0,y:296,class:'lbl',fill:'var(--hot)'}))
+   .textContent=TX('붉은 점이 2026년 9월의 위치','the marks are where each stood in September 2026');
+  /* 아래 — 설명 */
+  D.forEach((d,i)=>{
+    const g=mk('g',{transform:'translate('+(i*374)+',312)',opacity:0});
+    g.appendChild(mk('rect',{width:352,height:126,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:352,height:3,fill:d[1]}));
+    const n=mk('text',{x:22,y:34,'font-family':'var(--mono)','font-size':15,fill:d[1],
+      'font-weight':600}); n.textContent=d[0]; g.appendChild(n);
+    wrapT(d[3],20).slice(0,3).forEach((ln,j)=>{
+      const t=mk('text',{x:22,y:60+j*22,'font-family':'var(--sans)','font-size':15.5,
+        fill:'var(--ink-2)','font-weight':300}); t.textContent=ln; g.appendChild(t); });
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ bars.forEach(b=>b[0].setAttribute('width',b[1]));
+          gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  bars.forEach((b,i)=>b[0].animate([{width:'0px'},{width:b[1]+'px'}],
+    {duration:700,delay:150*i,fill:'forwards',easing:'cubic-bezier(.2,.7,.3,1)'}));
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:340,delay:700+130*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 같은 문제, 세 가지 답 */
+S({tag:'ONE PROBLEM, THREE ANSWERS', ov:'[[같은 문제를 어떻게 다르게 풀었나||How they solved the same problem differently]]',
+src:'[[<b>출처</b> 본 교재 10.2절 표 10.1 · 읽어야 할 것은 답의 목록이 아니라 <b>답들 사이의 연결</b>임||<b>Source</b> This textbook &#167;10.2, Table 10.1 · what matters is not the list of answers but <b>the links between them</b>]]',
+html:`<h2 class="t">[[설계 하나를 바꾸면 <em>세 개가 따라 움직임</em>||Change one choice and <em>three others move with it</em>]]</h2>
+<ul class="b">
+  <li>[[배관을 없애면 &#8594; 용기가 커지고 &#8594; 증기발생기를 안에 넣어야 하고 &#8594; 나선형을 쓰게 되고 &#8594; <b>출력이 용기 크기에 묶임</b>||Remove the pipes &#8594; the vessel grows &#8594; the SG must go inside &#8594; it becomes helical &#8594; <b>output is tied to vessel size</b>]]</li>
+  <li>[[붕산을 없애면 &#8594; CVCS가 단순해지고 &#8594; 정지여유도 부담이 커지고 &#8594; <b class="amb">GDC 26의 두 번째 계통을 따로 설명해야 함</b>||Remove the boron &#8594; the CVCS simplifies &#8594; shutdown margin gets harder &#8594; <b class="amb">GDC 26&#8217;s second system needs its own answer</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 410" role="img" aria-label="[[네 가지 문제에 세 설계가 내놓은 답을 정리한 표||A table of the four shared problems and the answer each of the three designs gave]]">
+  <g id="op-tab"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#op-tab');
+  const Q=[
+    [TX('대형 LOCA 를 어떻게 할 것인가','What about the large LOCA?'),
+     TX('배관을 없앤다','remove the pipes'),TX('배관을 없앤다','remove the pipes'),
+     TX('배관을 남기고 격리한다','keep them, isolate them')],
+    [TX('냉각재를 무엇이 미는가','What pushes the coolant?'),
+     TX('높이차 (자연순환)','height difference'),TX('펌프 4대','four pumps'),
+     TX('기포 부력 (자연순환)','void buoyancy')],
+    [TX('잔열을 어디에 버리는가','Where does the decay heat go?'),
+     TX('수조 → 공기','pool → air'),TX('냉각수조','cooling tank'),TX('IC 수조','IC pool')],
+    [TX('정지 후 반응도를 어떻게 잡는가','How is reactivity held after trip?'),
+     TX('제어봉 + 붕산','rods + boric acid'),TX('제어봉 + 가연성흡수체','rods + burnable absorbers'),
+     TX('제어봉 + 붕산','rods + boric acid')]
+  ];
+  const X=[0,392,632,872], COL=['var(--ink-3)','var(--cool)','var(--ok)','var(--amber)'];
+  [[TX('네 가지 문제','The four problems'),0],['NuScale',392],['i-SMR',632],['BWRX-300',872]]
+    .forEach((h,i)=>{
+      const t=mk('text',{x:h[1],y:16,class:'lbl',fill:COL[i]}); t.textContent=h[0]; G.appendChild(t);
+    });
+  G.appendChild(mk('line',{x1:0,y1:26,x2:1100,y2:26,stroke:'var(--rule)'}));
+  const gs=[];
+  Q.forEach((q,i)=>{
+    const y=44+i*62, g=mk('g',{opacity:0});
+    wrapT(q[0],24).forEach((ln,j)=>{
+      const k=mk('text',{x:0,y:y+(wrapT(q[0],24).length>1?18:28)+j*22,'font-family':'var(--sans)',
+        'font-size':17,fill:'var(--ink)','font-weight':400}); k.textContent=ln; g.appendChild(k); });
+    [1,2,3].forEach(c=>{
+      wrapT(q[c],14).forEach((ln,j)=>{
+        const v=mk('text',{x:X[c],y:y+(wrapT(q[c],14).length>1?18:28)+j*20,'font-family':'var(--sans)',
+          'font-size':16,fill:COL[c],'font-weight':400}); v.textContent=ln; g.appendChild(v); });
+    });
+    g.appendChild(mk('line',{x1:0,y1:y+44,x2:1100,y2:y+44,stroke:'var(--rule)','stroke-opacity':0.6}));
+    G.appendChild(g); gs.push(g);
+  });
+  /* 아래 — 세 개의 연쇄 */
+  const CH=[['var(--cool)',TX('배관을 없애면','Remove the pipes'),
+             [TX('용기가 커진다','the vessel grows'),TX('증기발생기를 안에','the SG goes inside'),
+              TX('나선형을 쓴다','it becomes helical'),TX('출력이 용기에 묶인다','output is tied to the vessel')]],
+            ['var(--ok)',TX('펌프를 없애면','Remove the pump'),
+             [TX('유량이 물리로 정해진다','flow is set by physics'),TX('용기가 길어진다','the vessel lengthens'),
+              TX('모듈당 출력을 낮춘다','output per module drops'),TX('모듈 수를 늘린다','module count rises')]],
+            ['var(--amber)',TX('붕산을 없애면','Remove the boron'),
+             [TX('CVCS 가 단순해진다','the CVCS simplifies'),TX('정지여유도 부담이 커진다','shutdown margin gets harder'),
+              TX('GDC 26 을 따로 설명','GDC 26 needs its own answer'),'']]];
+  CH.forEach((c,i)=>{
+    const g=mk('g',{transform:'translate(0,'+(302+i*36)+')',opacity:0});
+    const h=mk('text',{x:0,y:20,'font-family':'var(--sans)','font-size':16.5,fill:c[0],
+      'font-weight':600}); h.textContent=c[1]; g.appendChild(h);
+    let x=200;
+    c[2].forEach((t,j)=>{
+      if(!t) return;
+      const e=mk('text',{x:x,y:20,'font-family':'var(--sans)','font-size':16,fill:'var(--ink-2)',
+        'font-weight':300}); e.textContent=t; g.appendChild(e);
+      const w=widT(t,16,0.55)+26;
+      if(j<c[2].length-1 && c[2][j+1]){
+        const a=mk('text',{x:x+w-16,y:20,'font-family':'var(--mono)','font-size':14,fill:c[0]});
+        a.textContent='→'; g.appendChild(a);
+      }
+      x += w + 14;
+    });
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:300,delay:110*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 네 가지 질문 */
+S({tag:'FOUR QUESTIONS', ov:'[[설계 자료를 받았을 때 던지는 네 가지 질문||Four questions to ask of any design document]]',
+src:'[[<b>출처</b> 본 교재 10.4절 · 이 교재 전체를 네 줄로 압축한 것임||<b>Source</b> This textbook &#167;10.4 · the whole book compressed into four lines]]',
+html:`<h2 class="t">[[이 교재 전체를 <em>네 줄</em>로 압축하면||The whole book in <em>four lines</em>]]</h2>
+<ul class="b">
+  <li>[[<b>대가가 안 보이면 아직 다 읽지 않은 것</b>임. 모든 설계 선택에는 대가가 있고, 그것이 보일 때 설계를 읽은 것임||<b>If you cannot see the price, you have not finished reading.</b> Every design choice has one, and seeing it means you have read the design]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 440" role="img" aria-label="[[출처의 등급·최적화한 것·선택의 대가·값들의 정합성 네 가지 질문||Four questions - the tier of the source, what was optimised, the price of the choice, and whether the values agree]]">
+  <g id="fq-list"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const Q=[
+    ['var(--amber)',TX('이 숫자는 어느 자료에서 왔고, 그 자료는 몇 차인가',
+                       'Which source is this number from, and which tier is that source?'),
+     TX('1차 자료가 아니면 인용하지 않는다. 1~2장','Do not cite below the primary tier. Chapters 1-2')],
+    ['var(--cool)',TX('이 설계자는 무엇을 최적화했는가',
+                      'What did this designer optimise?'),
+     TX('그 답이 나머지 선택을 전부 설명한다. 8장','That answer explains every other choice. Chapter 8')],
+    ['var(--hot)',TX('이 선택의 대가는 무엇인가',
+                     'What is the price of this choice?'),
+     TX('대가가 안 보이면 아직 다 읽지 않은 것이다. 5~9장','If you cannot see it, you are not done reading. Chapters 5-9')],
+    ['var(--ok)',TX('이 값들은 서로 정합적인가',
+                    'Do these values agree with one another?'),
+     TX('열평형 한 줄이면 대부분 걸러진다. 4장','One energy balance filters most of it. Chapter 4')]
+  ];
+  const G=el.querySelector('#fq-list'), gs=[];
+  Q.forEach((q,i)=>{
+    const y=i*106, g=mk('g',{opacity:0});
+    g.appendChild(mk('rect',{x:0,y:y,width:1100,height:92,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{x:0,y:y,width:4,height:92,fill:q[0]}));
+    const n=mk('text',{x:30,y:y+56,'font-family':'var(--mono)','font-size':36,fill:q[0],
+      'font-weight':600}); n.textContent=String(i+1); g.appendChild(n);
+    const t=mk('text',{x:84,y:y+42,'font-family':'var(--sans)','font-size':23,fill:'var(--ink)',
+      'font-weight':500}); t.textContent=q[1]; g.appendChild(t);
+    const s=mk('text',{x:84,y:y+72,'font-family':'var(--sans)','font-size':16.5,fill:q[0],
+      'font-weight':300}); s.textContent=q[2]; g.appendChild(s);
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0,transform:'translateY(10px)'},
+    {opacity:1,transform:'none'}],
+    {duration:400,delay:200*i,fill:'forwards',easing:'cubic-bezier(.2,.7,.3,1)'}));
+}});
+
+
+/* ---------------------------------------------------------------- 다음으로 */
+S({tag:'WHAT COMES NEXT', ov:'[[다음으로 — 비경수로형과 계통 해석||What comes next - non-water reactors, and system analysis]]',
+src:'[[<b>출처</b> 본 교재 10.5절 · 표 8.1 · 9.2의 값들이 계통 코드 입력자료가 됨||<b>Source</b> This textbook &#167;10.5 · the values in Tables 8.1 and 9.2 become system-code inputs]]',
+abbr:'[[<b>계통 코드</b> 원자로 계통 전체의 과도 거동을 푸는 해석 프로그램 · <b>노드</b> 계통을 나눈 계산 단위 · <b>HTGR · SFR · MSR</b> 고온가스로 · 소듐냉각고속로 · 용융염로||<b>system code</b> a program solving the transient behaviour of a whole reactor system · <b>node</b> one computational cell of that system · <b>HTGR, SFR, MSR</b> high-temperature gas, sodium fast and molten salt reactors]]',
+html:`<h2 class="t">[[지금 손으로 하는 검산이 <em>나중에 코드로 하는 검증</em>의 축소판임||Today&#8217;s hand check is <em>tomorrow&#8217;s code validation</em>, in miniature]]</h2>
+<ul class="b">
+  <li>[[노드가 수백 개로 늘어나도 <b>&#8220;에너지가 맞는가&#8221;를 보는 일은 변하지 않음</b>. 규모만 다름||Grow to hundreds of nodes and <b>&#8220;does the energy close?&#8221; is still the question</b>. Only the scale changes]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 410" role="img" aria-label="[[비경수로형과 계통 해석 두 방향, 그리고 이 교재의 표가 입력자료로 이어지는 흐름||Two directions ahead - non-water-cooled designs and system analysis - and how this book's tables become inputs]]">
+  <g id="wn-two"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#wn-two'), gs=[];
+  const D=[
+    ['var(--amber)',TX('비경수로형','Non-water-cooled designs'),
+     TX('HTGR · SFR · MSR — 냉각재가 바뀌면 열수력 문제 자체가 달라진다. 2.4.5절의 HALEU 병목도 주로 이쪽 얘기다.',
+        'HTGR, SFR, MSR - change the coolant and the thermal-hydraulic problem itself changes. The HALEU bottleneck of §2.4.5 is mostly about these.'),
+     [TX('물성이 다르다 — 밀도 · 비열 · 열전도','Different properties - density, specific heat, conductivity'),
+      TX('상변화가 없거나 전혀 다른 방식이다','No phase change, or an entirely different one'),
+      TX('검증된 상관식이 훨씬 적다','Far fewer validated correlations')]],
+    ['var(--cool)',TX('계통 해석','System analysis'),
+     TX('지금까지는 설계를 “읽었다”. 다음은 계통 코드로 직접 계산하는 단계다. 이 교재 표 8.1 · 9.2 의 값들이 그때 입력자료가 된다.',
+        'So far the designs have been read. Next comes computing them in a system code - and the values in Tables 8.1 and 9.2 become the inputs.'),
+     [TX('물성 · 기하 · 경계조건을 어디서 가져왔는가','Where did the properties, geometry and boundary conditions come from?'),
+      TX('추적 가능성은 규제 요건이다','Traceability is a regulatory requirement'),
+      TX('노드별 유량과 엔탈피 상승이 전체 출력과 맞는가','Do the nodal flows and enthalpy rises add up to the total power?')]]
+  ];
+  D.forEach((d,i)=>{
+    const g=mk('g',{transform:'translate('+(i*562)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:540,height:400,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:540,height:3,fill:d[0]}));
+    const n=mk('text',{x:22,y:44,'font-family':'var(--sans)','font-size':22,fill:d[0],
+      'font-weight':600}); n.textContent=d[1]; g.appendChild(n);
+    let y=82;
+    wrapT(d[2],32).forEach((ln,j)=>{
+      const t=mk('text',{x:22,y:y+j*24,'font-family':'var(--sans)','font-size':17,
+        fill:'var(--ink)','font-weight':300}); t.textContent=ln; g.appendChild(t); });
+    y += wrapT(d[2],32).length*24 + 28;
+    g.appendChild(mk('line',{x1:22,y1:y-18,x2:518,y2:y-18,stroke:'var(--rule)'}));
+    d[3].forEach(t=>{
+      const L=wrapT(t,30);
+      g.appendChild(mk('circle',{cx:30,cy:y-5,r:3.2,fill:d[0]}));
+      L.forEach((ln,j)=>{
+        const e=mk('text',{x:46,y:y+j*22,'font-family':'var(--sans)','font-size':16,
+          fill:'var(--ink-2)','font-weight':300}); e.textContent=ln; g.appendChild(e); });
+      y += L.length*22 + 16;
+    });
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:420,delay:240*i,fill:'forwards',easing:'ease-out'}));
+}});
+</script>

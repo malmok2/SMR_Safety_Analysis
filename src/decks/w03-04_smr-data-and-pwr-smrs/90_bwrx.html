@@ -1,0 +1,274 @@
+<script>
+/* ================================================================
+   SECTION 09 — 대조군 BWRX-300  (교재 9장)
+   ================================================================ */
+SECT('09 · [[대조군 BWRX-300||Control case BWRX-300]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;09 BWRX-300 — 끓여서 순환시키는 길||&#167;09 BWRX-300 - boil to circulate]]',
+html:`[[<div class="no">09</div><h2>대조군<br>BWRX-300</h2><div class="ln"></div>
+<p>PWR형 두 설계와 비교하기 위한 대조군이다. 같은 문제 — 배관 파단 · 잔열 제거 · 격납 — 를
+<b>BWR 계보에서 어떻게 푸는지</b> 본다. 목적지가 같고 경로가 다르다.</p>||<div class="no">09</div><h2>Control case<br>BWRX-300</h2><div class="ln"></div>
+<p>A control case against the two PWR designs. Same problems - pipe break, decay heat, containment -
+<b>solved down the BWR line</b>. Same destination, different route.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 굴뚝 */
+S({tag:'THE CHIMNEY', ov:'[[굴뚝으로 순환을 만든다 — 노형이 달라도 물리는 같다||A chimney makes the circulation - different line, same physics]]',
+src:'[[<b>출처</b> 본 교재 9.1 · 9.2절 표 9.1 · 원자로용기 내경 4 m · 높이 27 m · 노심 높이 3.8 m · 벽 두께 약 136 mm||<b>Source</b> This textbook &#167;&#167;9.1-9.2, Table 9.1 · vessel 4 m inside diameter, 27 m tall, 3.8 m core, wall about 136 mm]]',
+abbr:'[[<b>ESBWR</b> BWRX-300의 모체 설계 · <b>굴뚝(chimney)</b> 노심 위에 일부러 만든 긴 통로 · <b>2상 혼합물</b> 물과 기포가 섞인 유체 · <b>기수분리기 · 건조기</b> 증기에서 물기를 걸러 내는 장치||<b>ESBWR</b> the parent design of BWRX-300 · <b>chimney</b> a long passage built above the core on purpose · <b>two-phase mixture</b> water carrying steam voids · <b>separator and dryer</b> remove moisture from the steam]]',
+html:`<h2 class="t">[[펌프를 없앤 대가는 <em>높이로 치름</em> — 6장과 같은 논리임||Drop the pump and you pay <em>in height</em> - as in chapter 6]]</h2>
+<ul class="b">
+  <li>[[기포가 섞인 물은 가볍고 하강관의 물은 무거움. 이 <b>밀도차가 구동수두</b>임 — 기포 구간이 길수록 커짐||Water carrying voids is light; downcomer water is heavy. <b>That density difference is the driving head</b> - the longer the voided run, the larger it gets]]</li>
+  <li>[[그래서 노심 위에 <b class="cool">물만 있는 긴 통로를 일부러</b> 만듦. 이것이 굴뚝임 — 용기가 내경 4 m 에 높이 27 m 로 유난히 긴 이유임||So a <b class="cool">long passage is built above the core on purpose</b> - the chimney. Hence a vessel 4 m across and 27 m tall]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 790 412" role="img" aria-label="[[아래에서부터 노심·굴뚝·기수분리기·건조기가 쌓인 BWRX-300 원자로용기 단면||A BWRX-300 vessel section - core, chimney, separator and dryer stacked from the bottom]]">
+    <g id="cm-fig"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="formula" style="font-size:17px;padding:4px 0">Δp = (ρ<sub>ℓ</sub> − ρ<sub>2ϕ</sub>) g H<sub>ch</sub></div>
+    <table class="d sm">
+      <tr><td>[[노형||Type]]</td><td>[[자연순환 BWR||natural-circulation BWR]]</td></tr>
+      <tr><td>[[열출력||Thermal]]</td><td class="n">870 MWt</td></tr>
+      <tr><td>[[전기출력||Electrical]]</td><td class="n">[[300 MWe (송전단)||300 MWe (net)]]</td></tr>
+      <tr><td>[[용기||Vessel]]</td><td class="n">[[내경 4 m · 높이 27 m||4 m ID · 27 m]]</td></tr>
+      <tr><td>[[노심 높이||Core height]]</td><td class="n">3.8 m</td></tr>
+      <tr><td>[[농축도||Enrichment]]</td><td class="n">[[평균 3.81%||3.81% avg]]</td></tr>
+      <tr><td>[[재장전 주기||Refuelling]]</td><td class="n">[[12~24개월||12-24 months]]</td></tr>
+      <tr class="mark"><td>[[제어봉||Control rods]]</td><td>[[아래에서 위로||bottom up]]</td></tr>
+    </table>
+  </div>
+</div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#cm-fig'), CX=210;
+  G.appendChild(mk('rect',{x:CX-96,y:20,width:192,height:372,rx:36,fill:'var(--panel)',
+    stroke:'var(--rule)','stroke-width':1.8}));
+  const L=[
+    [316,58,'var(--hot)',0.30,TX('노심 — 높이 3.8 m','core - 3.8 m tall')],
+    [176,140,'var(--cool)',0.16,TX('굴뚝 (chimney) — 기포가 올라가는 긴 통로','chimney - the long voided run')],
+    [116,60,'var(--rule)',0.30,TX('기수분리기','steam separator')],
+    [58,58,'var(--rule)',0.20,TX('증기건조기','steam dryer')]
+  ];
+  const parts=[];
+  L.forEach(l=>{
+    const g=mk('g',{opacity:0});
+    g.appendChild(mk('rect',{x:CX-62,y:l[0],width:124,height:l[1],fill:l[2],opacity:l[3]}));
+    g.appendChild(mk('rect',{x:CX-62,y:l[0],width:124,height:l[1],fill:'none',stroke:'var(--rule)'}));
+    g.appendChild(mk('path',{d:'M'+(CX+62)+','+(l[0]+l[1]/2)+' H392',fill:'none',
+      stroke:'var(--rule)','stroke-width':1,'stroke-dasharray':'2 3'}));
+    wrapT(l[4],18).forEach((ln,j)=>{
+      g.appendChild(mk('text',{x:400,y:l[0]+l[1]/2+(wrapT(l[4],18).length>1?-2:5)+j*20,
+        'font-family':'var(--sans)','font-size':16,fill:'var(--ink-2)','font-weight':300}))
+       .textContent=ln; });
+    G.appendChild(g); parts.push(g);
+  });
+  /* 기포 — 노심에서 굴뚝으로 올라간다 */
+  const ch=mk('path',{d:'M'+CX+',312 V180',fill:'none',stroke:'none'}); G.appendChild(ch);
+  const dc=mk('path',{d:'M'+(CX+78)+',100 V330',fill:'none',stroke:'none'}); G.appendChild(dc);
+  /* 굴뚝 높이 표시 */
+  const hm=mk('g',{opacity:0}); G.appendChild(hm);
+  hm.appendChild(mk('path',{d:'M'+(CX-80)+',180 V316 M'+(CX-86)+',180 h12 M'+(CX-86)+',316 h12',
+    fill:'none',stroke:'var(--cool)','stroke-width':1.4}));
+  hm.appendChild(mk('text',{x:CX-94,y:252,'text-anchor':'end','font-family':'var(--mono)',
+    'font-size':16,fill:'var(--cool)','font-weight':600})).textContent='H_ch';
+  const note=mk('text',{x:0,y:404,'font-family':'var(--sans)','font-size':16,fill:'var(--ink-2)',
+    'font-weight':300,opacity:0}); G.appendChild(note);
+  note.textContent=TX('노형 계보가 달라도 물리는 같다 — 펌프를 없애면 높이로 치른다',
+                      'Different reactor line, same physics - drop the pump and you pay in height');
+  if(RM){ parts.concat([hm,note]).forEach(x=>x.setAttribute('opacity',1)); return; }
+  parts.forEach((p,i)=>p.animate([{opacity:0},{opacity:1}],
+    {duration:320,delay:150*i,fill:'forwards'}));
+  hm.animate([{opacity:0},{opacity:1}],{duration:400,delay:760,fill:'forwards'});
+  note.animate([{opacity:0},{opacity:1}],{duration:400,delay:1050,fill:'forwards'});
+  flow(ch,{n:8,color:'var(--bubble)',r:2.8,speed:0.22,fade:1});
+  flow(dc,{n:5,color:'var(--cool)',r:3.2,speed:0.13});
+}});
+
+
+/* ---------------------------------------------------------------- 세 가지 결정 */
+S({tag:'THREE DECISIONS', ov:'[[세 가지 결정 — RIV · SRV 제거 · 건식 격납||Three decisions - RIV, no SRV, dry containment]]',
+src:'[[<b>출처</b> 본 교재 9.3절 · RIV 설계 목표는 호칭경 19 mm(3/4인치)를 넘는 배관 파단에 대해 <b>격리 불가능한 LOCA 제거</b>||<b>Source</b> This textbook &#167;9.3 · the RIV target is to <b>eliminate the unisolable LOCA</b> for any break above DN 19 mm (3/4 in)]]',
+abbr:'[[<b>RIV</b> 원자로 격리밸브 · <b>SRV</b> 안전방출밸브 — 과압을 밖으로 흘려 보내는 밸브 · <b>PSA</b> 확률론적 안전성평가 · <b>압력억제형 격납</b> 증기를 수조에 밀어 넣어 응축시키는 방식||<b>RIV</b> reactor isolation valve · <b>SRV</b> safety relief valve, which bleeds off overpressure · <b>PSA</b> probabilistic safety assessment · <b>pressure-suppression containment</b> pushes steam into a pool to condense it]]',
+html:`<h2 class="t">[[배관을 <s>없애는</s> 대신 <em>문제가 되기 전에 끊음</em>||Instead of <s>removing</s> the pipes, it <em>cuts them before they matter</em>]]</h2>
+<ul class="b">
+  <li>[[일체형 SMR이 배관을 없애 문제를 지웠다면, BWRX-300은 <b>배관을 남기되 격리 가능하게</b> 만듦 — 목적지가 같고 경로가 다름||Where an integral SMR erased the problem by removing the pipes, BWRX-300 <b>keeps them but makes every break isolable</b> - same destination, different route]]</li>
+  <li>[[&#8220;안전을 위해 단 기기가 사고의 원인이 되는&#8221; 구조는 드물지 않음. <b class="cool">설계 단순화가 안전성 향상과 같은 방향</b>일 수 있음||&#8220;The device added for safety becomes the cause&#8221; is not a rare structure. <b class="cool">Simplifying can point the same way as improving safety</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 410" role="img" aria-label="[[원자로 격리밸브·안전방출밸브 제거·건식 격납 세 결정과 그 인과 관계||Three decisions - isolation valves, removing the relief valves, a dry containment - and how they follow from one another]]">
+  <g id="td-cards"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const C=[
+    ['var(--cool)','RIV',TX('원자로 격리밸브','Reactor isolation valves'),
+     TX('용기에 직접 붙인 이중 격리밸브. 용기를 관통하는 모든 대구경 배관에 두 개씩 달려 있어, 배관이 터지면 즉시 격리한다.',
+        'Double isolation valves bolted straight to the vessel. Every large penetration carries two, so a break is isolated at once.'),
+     TX('목표 — 19 mm 를 넘는 파단에 대해 격리 불가능한 LOCA 를 제거','Target - no unisolable LOCA for any break above 19 mm')],
+    ['var(--hot)','SRV',TX('안전방출밸브를 없앴다','The relief valves were removed'),
+     TX('역사적으로 BWR 의 LOCA 원인 중 가장 흔한 것이 안전방출밸브였다. 압력을 지키려고 단 밸브가 냉각재 상실의 주된 경로였다.',
+        'Historically the most common cause of a BWR LOCA was the safety relief valve. The device fitted to hold pressure was the main path for losing coolant.'),
+     TX('대신 — 용량이 큰 격리응축기계통과 용기 내 큰 증기 공간이 과압 보호를 맡는다','Instead - a large isolation condenser system and a big steam volume handle overpressure')],
+    ['var(--ok)',TX('건식','Dry'),TX('건식 격납','A dry containment'),
+     TX('원자로용기와 관련 계통을 감싸는 금속 탱크로, 내부가 건식이다. 기존 BWR 의 압력억제형 격납과 다르다.',
+        'A metal tank around the vessel and its systems, dry inside - unlike the pressure-suppression containment of earlier BWRs.'),
+     TX('가능해진 이유 — RIV 덕분이다. 격리 불가능한 대형 LOCA 가 없으면 밀려들 증기량이 제한된다','Why it works - thanks to the RIVs. With no unisolable large LOCA, the steam that can arrive is bounded')]
+  ];
+  const G=el.querySelector('#td-cards'), gs=[];
+  C.forEach((c,i)=>{
+    const g=mk('g',{transform:'translate('+(i*374)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:352,height:400,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:352,height:3,fill:c[0]}));
+    const n=mk('text',{x:22,y:40,'font-family':'var(--mono)','font-size':17,fill:c[0],
+      'font-weight':600,'letter-spacing':'.08em'}); n.textContent=c[1]; g.appendChild(n);
+    let y=76;
+    wrapT(c[2],17).forEach((ln,j)=>{
+      const h=mk('text',{x:22,y:y+j*25,'font-family':'var(--sans)','font-size':19,
+        fill:'var(--ink)','font-weight':600}); h.textContent=ln; g.appendChild(h); });
+    y += wrapT(c[2],17).length*25 + 20;
+    wrapT(c[3],20).forEach((ln,j)=>{
+      const t=mk('text',{x:22,y:y+j*23,'font-family':'var(--sans)','font-size':16,
+        fill:'var(--ink-2)','font-weight':300}); t.textContent=ln; g.appendChild(t); });
+    g.appendChild(mk('line',{x1:22,y1:286,x2:330,y2:286,stroke:'var(--rule)'}));
+    wrapT(c[4],21).slice(0,4).forEach((ln,j)=>{
+      const t=mk('text',{x:22,y:314+j*22,'font-family':'var(--sans)','font-size':15.5,
+        fill:c[0],'font-weight':400}); t.textContent=ln; g.appendChild(t); });
+    G.appendChild(g); gs.push(g);
+    if(i<2) G.appendChild(mk('path',{d:'M'+(i*374+354)+',200 h16',stroke:'var(--rule)','stroke-width':1.4}));
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:400,delay:220*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- ICS — 수렴 */
+S({tag:'THEY CONVERGE', ov:'[[피동 잔열제거의 해법은 하나로 수렴한다||Passive decay heat removal converges on one answer]]',
+src:'[[<b>출처</b> 본 교재 9.4절 · ICS 는 독립 3계열 · 계열당 약 33 MW · 증기를 IC 관 내부에서 응축시켜 닫힌 고리로 용기에 되돌림||<b>Source</b> This textbook &#167;9.4 · three independent trains, about 33 MW each; steam condenses inside the IC tubes and returns to the vessel in a closed loop]]',
+abbr:'[[<b>ICS</b> 격리응축기계통 · <b>주복수기</b> 터빈을 나온 증기를 물로 되돌리는 열교환기 · <b>계열</b> 같은 기능을 독립적으로 수행하는 한 벌의 기기||<b>ICS</b> Isolation Condenser System · <b>main condenser</b> the heat exchanger that turns turbine exhaust back into water · <b>train</b> one independent set of equipment performing the function]]',
+html:`<h2 class="t">[[노형이 무엇이든 <em>증기 → 수조에서 응축 → 중력 회수</em>로 수렴함||All roads lead to <em>steam &#8594; condense &#8594; gravity return</em>]]</h2>
+<ul class="b">
+  <li>[[NuScale DHRS, i-SMR PAFS, BWRX-300 ICS는 <b>작동 원리가 정확히 같음</b>. 차이는 <b class="cool">증기를 어디서 가져오느냐</b>임||NuScale&#8217;s DHRS, i-SMR&#8217;s PAFS and BWRX-300&#8217;s ICS <b>work on exactly the same principle</b>. They differ in <b class="cool">where the steam is taken from</b>]]</li>
+  <li>[[PWR형은 <b>증기발생기 2차측</b>에서, BWRX-300은 <b>원자로용기에서 직접</b> — BWR에는 2차계통이 없기 때문임||The PWR types take it from <b>the secondary side of a steam generator</b>; BWRX-300 takes it <b>straight from the vessel</b>, because a BWR has no secondary loop]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 410" role="img" aria-label="[[세 설계의 피동 잔열제거계통이 증기를 어디서 가져와 어디서 응축시키는지 나란히 놓은 그림||Where each design's passive decay heat removal takes its steam and where it condenses it]]">
+  <g id="cv-three"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#cv-three'), gs=[];
+  const T=[
+    ['NuScale','DHRS','var(--cool)',TX('증기발생기 2차측','the secondary side of the SG'),
+     TX('2계열 · 각 100% 용량','2 trains, each 100%'),TX('응축기가 원자로건물 수조에 잠김','condenser submerged in the reactor building pool')],
+    ['i-SMR','PAFS','var(--ok)',TX('증기발생기 2차측','the secondary side of the SG'),
+     TX('36 h 냉각 + 36 h 유지','36 h cool + 36 h hold'),TX('응축기가 냉각수조에 잠김','condenser submerged in the cooling tank')],
+    ['BWRX-300','ICS','var(--amber)',TX('원자로용기에서 직접','straight from the reactor vessel'),
+     TX('3계열 · 계열당 약 33 MW','3 trains, about 33 MW each'),TX('IC 가 격납 외부 수조에 잠김','IC submerged in a pool outside the containment')]
+  ];
+  T.forEach((t,i)=>{
+    const g=mk('g',{transform:'translate('+(i*374)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:352,height:250,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:352,height:3,fill:t[2]}));
+    const n=mk('text',{x:22,y:38,'font-family':'var(--mono)','font-size':16,fill:'var(--ink-3)'});
+    n.textContent=t[0]; g.appendChild(n);
+    const k=mk('text',{x:22,y:74,'font-family':'var(--mono)','font-size':24,fill:t[2],
+      'font-weight':600}); k.textContent=t[1]; g.appendChild(k);
+    let y=114;
+    [[TX('증기를 어디서','steam comes from'),t[3]],
+     [TX('구성','configuration'),t[4]],
+     [TX('어디서 응축','where it condenses'),t[5]]].forEach(r=>{
+      const kk=mk('text',{x:22,y:y,class:'lbl',fill:t[2]}); kk.textContent=r[0]; g.appendChild(kk);
+      const L=wrapT(r[1],21);
+      L.forEach((ln,j)=>{ const e=mk('text',{x:22,y:y+22+j*21,'font-family':'var(--sans)',
+        'font-size':16,fill:'var(--ink-2)','font-weight':300}); e.textContent=ln; g.appendChild(e); });
+      y += 22 + L.length*21 + 12;
+    });
+    G.appendChild(g); gs.push(g);
+  });
+  /* 아래 — 공통 원리 */
+  const c=mk('g',{transform:'translate(0,276)',opacity:0}); G.appendChild(c); gs.push(c);
+  c.appendChild(mk('rect',{width:1100,height:124,fill:'var(--ground)',stroke:'var(--ok)','stroke-width':1.8}));
+  c.appendChild(mk('text',{x:24,y:34,class:'lbl',fill:'var(--ok)'})).textContent=
+    TX('셋의 공통 원리','the principle all three share');
+  const STEP=[TX('증기를 만든다','Make steam'),TX('수조에 잠긴 열교환기에서 응축시킨다','Condense it in a submerged exchanger'),
+              TX('중력으로 되돌린다','Return it by gravity'),TX('닫힌 고리 — 밖에서 넣지 않는다','A closed loop - nothing added')];
+  STEP.forEach((s,i)=>{
+    const x=24+i*272;
+    c.appendChild(mk('circle',{cx:x+8,cy:74,r:7,fill:'var(--ok)'}));
+    wrapT(s,17).forEach((ln,j)=>{
+      c.appendChild(mk('text',{x:x+26,y:(wrapT(s,17).length>1?68:79)+j*21,'font-family':'var(--sans)',
+        'font-size':16.5,fill:'var(--ink)','font-weight':300})).textContent=ln; });
+    if(i<3) c.appendChild(mk('path',{d:'M'+(x+250)+',74 h14',stroke:'var(--ok)','stroke-width':1.4}));
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:380,delay:200*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- 세 노형 종합 */
+S({tag:'ALL THREE', ov:'[[세 노형 종합 비교||All three, side by side]]',
+src:'[[<b>출처</b> 본 교재 9.7절 표 9.2 · NuScale은 US460 기준 · 값은 각 설계의 1차 자료||<b>Source</b> This textbook &#167;9.7, Table 9.2 · NuScale values are US460 · each figure from that design&#8217;s primary source]]',
+abbr:'[[<b>일체형 PWR</b> 증기발생기·가압기까지 용기 안에 넣은 가압경수로 · <b>기포 구동</b> 노심에서 생긴 증기 기포의 부력으로 순환시키는 방식 · <b>격리</b> 파단이 나면 밸브로 끊어 막는 대응||<b>integral PWR</b> a PWR with the steam generator and pressuriser inside the vessel · <b>void-driven</b> circulation by the buoyancy of steam voids made in the core · <b>isolation</b> closing valves to shut off a break]]',
+html:`<h2 class="t">[[세 설계가 <em>같은 네 문제</em>에 서로 다르게 답했음||Three designs, <em>four shared problems</em>, three different answers]]</h2>
+<ul class="b">
+  <li>[[읽어야 할 것은 <b>답의 목록이 아니라 답들 사이의 연결</b>임. 설계 하나를 바꾸면 세 개가 따라 움직임||What to read is <b>not the list of answers but the links between them</b>. Change one choice and three others move]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 440" role="img" aria-label="[[NuScale US460·i-SMR·BWRX-300의 노형·출력·순환·압력·증기발생기·LOCA 대응·잔열제거·격납·붕산·농축도·수명 비교표||A comparison of NuScale US460, i-SMR and BWRX-300 across type, power, circulation, pressure, steam generator, LOCA approach, decay heat removal, containment, boron, enrichment and design life]]">
+  <g id="at-tab"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#at-tab');
+  const R=[
+    [TX('노형','Type'),TX('일체형 PWR','integral PWR'),TX('일체형 PWR','integral PWR'),TX('자연순환 BWR','natural-circ BWR')],
+    [TX('모듈당 열출력','Thermal per module'),'250 MWt','540 MWt','870 MWt'],
+    [TX('모듈당 전기출력','Electrical per module'),'77 MWe','170 MWe','300 MWe'],
+    [TX('1차 순환','Primary circulation'),TX('자연순환','natural'),TX('강제 · RCP 4대','forced, 4 RCPs'),TX('자연순환 · 기포 구동','natural, void-driven')],
+    [TX('운전압력','Operating pressure'),'13.8 MPa','15.5 MPa',TX('약 7 MPa','about 7 MPa')],
+    [TX('증기발생기','Steam generator'),TX('나선형 2대','helical ×2'),TX('나선형 1대','helical ×1'),TX('없음','none')],
+    [TX('대형 LOCA 대응','Large LOCA approach'),TX('배관 제거','pipes removed'),TX('배관 제거','pipes removed'),TX('격리밸브로 격리','isolated by valves')],
+    [TX('잔열 제거','Decay heat removal'),'DHRS','PAFS',TX('ICS — 3계열 × 33 MW','ICS - 3 × 33 MW')],
+    [TX('격납','Containment'),TX('수조 침지 강재','submerged steel'),TX('소형 강재','small steel'),TX('건식 강판-콘크리트','dry steel-concrete')],
+    [TX('붕산','Soluble boron'),TX('사용','used'),TX('미사용','not used'),TX('사용 (BWR 방식)','used, BWR style')],
+    [TX('농축도','Enrichment'),TX('4.95% 미만','under 4.95%'),TX('5% 미만','under 5%'),TX('평균 3.81%','3.81% avg')],
+    [TX('설계수명','Design life'),TX('60년','60 years'),TX('80년','80 years'),TX('60년','60 years')]
+  ];
+  const X=[0,330,600,870], COL=['var(--ink-3)','var(--cool)','var(--ok)','var(--amber)'];
+  [[TX('항목','Item'),0],['NuScale US460',330],['i-SMR',600],['BWRX-300',870]].forEach((h,i)=>{
+    const t=mk('text',{x:h[1],y:16,class:'lbl',fill:COL[i]}); t.textContent=h[0]; G.appendChild(t);
+  });
+  G.appendChild(mk('line',{x1:0,y1:26,x2:1100,y2:26,stroke:'var(--rule)'}));
+  const gs=[];
+  R.forEach((r,i)=>{
+    const y=52+i*32, g=mk('g',{opacity:0});
+    const k=mk('text',{x:0,y:y,'font-family':'var(--sans)','font-size':16.5,fill:'var(--ink)',
+      'font-weight':400}); k.textContent=r[0]; g.appendChild(k);
+    [1,2,3].forEach(c=>{
+      const v=mk('text',{x:X[c],y:y,'font-family':'var(--mono)','font-size':15.5,
+        fill:'var(--ink-2)','font-weight':400}); v.textContent=r[c]; g.appendChild(v);
+    });
+    g.appendChild(mk('line',{x1:0,y1:y+11,x2:1100,y2:y+11,stroke:'var(--rule)','stroke-opacity':0.6}));
+    G.appendChild(g); gs.push(g);
+  });
+  const note=mk('text',{x:0,y:436,'font-family':'var(--sans)','font-size':16,fill:'var(--cool)',
+    'font-weight':400,opacity:0}); G.appendChild(note);
+  note.textContent=TX('BWRX-300 만 증기발생기가 없다 — 그래서 터빈실도 방사선 구역이 된다(5장)',
+                      'Only BWRX-300 has no steam generator - which is why its turbine hall is a radiation area (ch. 5)');
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); note.setAttribute('opacity',1); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:260,delay:65*i,fill:'forwards'}));
+  note.animate([{opacity:0},{opacity:1}],{duration:400,delay:1000,fill:'forwards'});
+}});
+</script>

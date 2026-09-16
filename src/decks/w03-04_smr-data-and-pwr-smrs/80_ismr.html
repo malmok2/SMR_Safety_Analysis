@@ -1,0 +1,597 @@
+<script>
+/* ================================================================
+   SECTION 07 — i-SMR  (교재 7장)
+   ================================================================ */
+SECT('07 · [[i-SMR||i-SMR]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;07 i-SMR — 펌프를 남긴 설계||&#167;07 i-SMR - the pump kept in]]',
+html:`[[<div class="no">07</div><h2>i-SMR</h2><div class="ln"></div>
+<p>한국형 혁신형 소형모듈원자로. NuScale과 같은 일체형이면서 <b>순환 방식·반응도 제어·격납 개념</b>이 다르다.
+사양과 계통 구성은 IAEA ARIS에 등록된 설계기술서를 1차 자료로 삼는다.</p>||<div class="no">07</div><h2>i-SMR</h2><div class="ln"></div>
+<p>Korea&#8217;s innovative SMR. Integral like NuScale, but different in <b>circulation, reactivity control and containment</b>.
+Its specifications come from the Design Status Report lodged with IAEA ARIS.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 모듈 구성 */
+S({tag:'INSIDE THE MODULE', ov:'[[i-SMR 모듈 — 구성 기기와 유로||Inside the i-SMR module - components and flow path]]',
+src:'[[<b>출처</b> 본 교재 7.1 · 7.2절 표 7.1 · IAEA ARIS, i-SMR Design Status Report||<b>Source</b> This textbook &#167;&#167;7.1-7.2, Table 7.1 · IAEA ARIS, i-SMR Design Status Report]]',
+abbr:'[[<b>RCP</b> 원자로냉각재펌프 · <b>PZR</b> 가압기 · <b>EDV</b> 비상감압밸브 · <b>ERV</b> 비상재순환밸브 · <b>CSB</b> 노심지지배럴 · <b>UGS</b> 상부안내구조물 · <b>ECT</b> 비상냉각수조||<b>RCP</b> reactor coolant pump · <b>PZR</b> pressuriser · <b>EDV</b> emergency depressurisation valve · <b>ERV</b> emergency recirculation valve · <b>CSB</b> core support barrel · <b>UGS</b> upper guide structure · <b>ECT</b> emergency cooling tank]]',
+html:`<h2 class="t">[[구조는 같고 <em>구동원만</em> 다름 — 부력 대신 펌프가 돌림||Same structure, <em>different driver</em> - a pump, not buoyancy]]</h2>
+<ul class="b">
+  <li>[[둘 다 <b>가운데로 올라가 바깥으로 내려오는 고리</b>이고, 둘 다 증기발생기가 그 하강 경로에 놓여 있음||Both are <b>a loop that rises in the middle and falls on the outside</b>, and both put the steam generator on the descending leg]]</li>
+  <li>[[다른 것은 <b class="ok">냉각재펌프 4대를 용기에 직접 붙였다</b>는 것. 배관을 없애는 목적은 그대로 달성함||The difference is <b class="ok">four coolant pumps bolted straight onto the vessel</b>. The pipes are still gone]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 790 440" role="img" aria-label="[[i-SMR 모듈 단면 — 가압기·냉각재펌프 4대·하강관 안의 나선형 증기발생기·노심과 EDV·ERV||An i-SMR module section - pressuriser, four coolant pumps, the helical steam generator inside the downcomer, the core, and the EDV and ERV]]">
+    <g id="is-cut"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <table class="d sm" id="is-tab"></table>
+  </div>
+</div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#is-cut'), CX=290;
+  /* 강재 격납용기 */
+  G.appendChild(mk('rect',{x:CX-140,y:26,width:280,height:378,rx:26,fill:'var(--ground)',
+    stroke:'var(--ok)','stroke-width':2}));
+  G.appendChild(mk('text',{x:CX-134,y:398,class:'lbl',fill:'var(--ok)'}))
+   .textContent=TX('강재 격납용기 · 설계압력 5 MPa','steel containment · 5 MPa design');
+  /* 원자로용기 */
+  G.appendChild(mk('rect',{x:CX-96,y:48,width:192,height:326,rx:40,fill:'var(--panel)',
+    stroke:'var(--rule)','stroke-width':1.6}));
+  /* 가압기 */
+  G.appendChild(mk('rect',{x:CX-96,y:48,width:192,height:52,rx:38,fill:'var(--hot)',opacity:0.12}));
+  G.appendChild(mk('path',{d:'M'+(CX-96)+',100 h192',stroke:'var(--rule)','stroke-width':1.2}));
+  /* 냉각재펌프 4대 — 용기 상부에 직결 */
+  [-1,1].forEach(s=>{ [0,1].forEach(j=>{
+    G.appendChild(mk('rect',{x:CX+s*(84+j*0)-(s<0?36:0),y:112+j*30,width:36,height:22,
+      fill:'var(--cool)',opacity:0.55}));
+  });});
+  /* 노심지지배럴 안쪽 상승 유로 */
+  G.appendChild(mk('rect',{x:CX-34,y:118,width:68,height:150,fill:'var(--hot)',opacity:0.16}));
+  G.appendChild(mk('rect',{x:CX-34,y:118,width:68,height:150,fill:'none',stroke:'var(--rule)'}));
+  /* 하강관 안의 나선형 증기발생기 — 8구역 */
+  [-1,1].forEach(s=>{
+    for(let k=0;k<4;k++)
+      G.appendChild(mk('rect',{x:CX+s*80-(s>0?0:24),y:156+k*26,width:24,height:20,
+        fill:'var(--cool)',opacity:0.32}));
+  });
+  /* 노심 */
+  G.appendChild(mk('rect',{x:CX-52,y:280,width:104,height:62,fill:'var(--hot)',opacity:0.30}));
+  G.appendChild(mk('rect',{x:CX-52,y:280,width:104,height:62,fill:'none',stroke:'var(--hot)','stroke-width':1.4}));
+  /* 유로 */
+  const up=mk('path',{d:'M'+CX+',276 V130',fill:'none',stroke:'none'});
+  const dn=mk('path',{d:'M'+(CX+68)+',140 V288',fill:'none',stroke:'none'});
+  G.appendChild(up); G.appendChild(dn);
+  const defs=mk('defs',{}); G.appendChild(defs);
+  [['isup','var(--hot)'],['isdn','var(--cool)']].forEach(m=>{
+    const a=mk('marker',{id:m[0],viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:6,markerHeight:6,orient:'auto'});
+    a.appendChild(mk('path',{d:'M0,0 L10,5 L0,10 z',fill:m[1]})); defs.appendChild(a);
+  });
+  G.appendChild(mk('path',{d:'M'+CX+',274 V132',fill:'none',stroke:'var(--hot)','stroke-width':2.2,
+    'marker-end':'url(#isup)'}));
+  G.appendChild(mk('path',{d:'M'+(CX+70)+',142 V284',fill:'none',stroke:'var(--cool)','stroke-width':2.2,
+    'marker-end':'url(#isdn)'}));
+  const P=[
+    ['①',CX-60,   72,'L',TX('가압기 (PZR)','Pressuriser')],
+    ['②',CX+72,   64,'R',TX('비상감압밸브 (EDV) ×2','Emergency depressurisation valves &#215;2')],
+    ['③',CX,     108,'L',TX('내장형 제어봉구동장치','Internal control rod drives')],
+    ['④',CX+84,  122,'R',TX('원자로냉각재펌프 ×4 — 무밀봉 캔드모터','Coolant pumps &#215;4 - sealless canned motor')],
+    ['⑤',CX+80,  208,'R',TX('나선형 관류 증기발생기 — 하강관 안, 8구역','Helical once-through SG - in the downcomer, 8 zones')],
+    ['⑥',CX,     260,'L',TX('노심지지배럴 (CSB) · 상부안내구조물','Core support barrel and upper guide structure')],
+    ['⑦',CX+96,  318,'R',TX('비상재순환밸브 (ERV) ×2','Emergency recirculation valves &#215;2')],
+    ['⑧',CX,     312,'L',TX('노심 — 17×17 · 69다발','Core - 17&#215;17, 69 assemblies')]
+  ];
+  const marks=[];
+  P.forEach(p=>{
+    const g=mk('g',{opacity:0});
+    g.appendChild(mk('path',{d:'M'+p[1]+','+p[2]+' H'+(p[3]==='L'?152:470),fill:'none',
+      stroke:'var(--rule)','stroke-width':1,'stroke-dasharray':'2 3'}));
+    g.appendChild(mk('circle',{cx:p[1],cy:p[2],r:3.4,fill:'var(--ok)'}));
+    const t=mk('text',{x:p[3]==='L'?146:476,y:p[2]+5,'text-anchor':p[3]==='L'?'end':'start',
+      'font-family':'var(--mono)','font-size':15,fill:'var(--ok)','font-weight':600});
+    t.textContent=p[0]; g.appendChild(t);
+    G.appendChild(g); marks.push(g);
+  });
+  const T=el.querySelector('#is-tab');
+  const R=[['①','PZR',TX('1차계통 압력 유지','holds primary pressure')],
+           ['②','EDV ×2',TX('고온·고압수를 격납으로','hot high-pressure water to containment')],
+           ['③','CRDM',TX('코일·모터가 전부 용기 안','coils and motor all inside')],
+           ['④','RCP ×4',TX('무밀봉 캔드모터형','sealless canned motor')],
+           ['⑤',TX('증기발생기','Steam generator'),TX('하강관 안 · 8구역','in the downcomer, 8 zones')],
+           ['⑥','CSB · UGS',TX('상승 유로 형성 · 노심 지지','forms the riser, supports the core')],
+           ['⑦','ERV ×2',TX('응축수를 용기로 회수','returns condensate to the vessel')],
+           ['⑧',TX('노심','Core'),TX('17×17 · 69다발','17&#215;17, 69 assemblies')]];
+  T.innerHTML=tr(R.map(r=>'<tr><td style="width:26px;color:var(--ok)">'+r[0]+'</td>'
+    +'<td>'+r[1]+'</td><td>'+r[2]+'</td></tr>').join(''));
+  if(RM){ marks.forEach(m=>m.setAttribute('opacity',1)); return; }
+  marks.forEach((m,i)=>m.animate([{opacity:0},{opacity:1}],{duration:280,delay:200+90*i,fill:'forwards'}));
+  flow(up,{n:5,color:'var(--hot)',r:3.2,speed:0.2});
+  flow(dn,{n:5,color:'var(--cool)',r:3.2,speed:0.2});
+}});
+
+
+/* ---------------------------------------------------------------- 관통부를 줄인다 */
+S({tag:'FEWER PENETRATIONS', ov:'[[일체형의 본질은 관통부를 줄이는 것||The point of going integral is fewer penetrations]]',
+src:'[[<b>출처</b> 본 교재 7.2.2절 · 설계 자료를 읽을 때 <b>용기에 뚫린 구멍의 목록</b>을 세어 보면 그 설계의 성격이 드러남||<b>Source</b> This textbook &#167;7.2.2 · count <b>the holes in the pressure boundary</b> and the character of a design shows itself]]',
+abbr:'[[<b>축봉 파손(seal LOCA)</b> 펌프 축 밀봉부가 깨져 냉각재가 새는 사고 경로 · <b>캔드모터</b> 축이 밖으로 나오지 않는 밀폐형 펌프 · <b>관통부</b> 압력경계를 뚫고 지나는 구멍||<b>seal LOCA</b> coolant escaping through a failed pump shaft seal · <b>canned motor</b> a pump whose shaft never leaves the pressure boundary · <b>penetration</b> a hole through the pressure boundary]]',
+html:`<h2 class="t">[[일체형의 본질은 &#8220;배관을 없앤다&#8221;보다 <em>&#8220;구멍을 줄인다&#8221;</em>에 가까움||Integral is about <em>removing holes</em>, not pipes]]</h2>
+<ul class="b">
+  <li>[[세 가지 선택이 전부 <b>같은 방침</b>으로 묶임 — 압력경계를 뚫는 구멍을 줄인다||All three choices fold into <b>one policy</b> - fewer holes through the pressure boundary]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 440" role="img" aria-label="[[하강관 안 증기발생기·무밀봉 캔드모터 펌프·내장형 제어봉구동장치 세 선택과 각각이 없애는 누설 경로||Three choices - steam generator in the downcomer, sealless canned-motor pumps, internal control rod drives - and the leak path each removes]]">
+  <g id="fp-cards"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const C=[
+    ['var(--cool)',TX('증기발생기가 하강관 안에 있다','The SG sits inside the downcomer'),
+     TX('하강 유동이 지나는 자리에 전열면을 두었다. 별도의 셸측 공간을 만들지 않아 용기 부피를 아낀다.',
+        'The heat transfer surface sits where the down-flow already passes. No separate shell space, so vessel volume is saved.'),
+     TX('없애는 것 — 용기 부피와 그만큼의 벽 두께','What it removes - vessel volume, and the wall thickness that goes with it')],
+    ['var(--ok)',TX('펌프가 무밀봉 캔드모터형이다','The pumps are sealless canned motors'),
+     TX('대형 PWR의 냉각재펌프는 축봉이 있고, 축봉 파손은 확률론적 안전성평가에서 무시할 수 없는 사고 경로다.',
+        'A large PWR coolant pump has a shaft seal, and seal failure is a path that probabilistic safety assessment cannot ignore.'),
+     TX('없애는 것 — 축봉 파손(seal LOCA) 경로','What it removes - the seal LOCA path')],
+    ['var(--amber)',TX('제어봉구동장치가 용기 안에 있다','The rod drives are inside the vessel'),
+     TX('코일 스택·모터·연장축이 전부 용기 내부에 있다. 대형 PWR에서 용기 상부 헤드 관통부 부식은 실제로 큰 문제였다.',
+        'Coil stack, motor and extension shaft are all inside. Corrosion of upper-head penetrations has been a real problem in large PWRs.'),
+     TX('없애는 것 — 상부 헤드 관통부','What it removes - the upper-head penetrations')]
+  ];
+  const G=el.querySelector('#fp-cards'), gs=[];
+  C.forEach((c,i)=>{
+    const g=mk('g',{transform:'translate('+(i*374)+',6)',opacity:0});
+    g.appendChild(mk('rect',{width:352,height:420,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:352,height:3,fill:c[0]}));
+    const n=mk('text',{x:22,y:42,'font-family':'var(--mono)','font-size':22,fill:c[0],
+      'font-weight':600}); n.textContent='①②③'[i]; g.appendChild(n);
+    let y=42;
+    wrapT(c[1],16).forEach((ln,j)=>{
+      const h=mk('text',{x:56,y:y+j*25,'font-family':'var(--sans)','font-size':18.5,
+        fill:'var(--ink)','font-weight':600}); h.textContent=ln; g.appendChild(h); });
+    y += wrapT(c[1],16).length*25 + 26;
+    wrapT(c[2],20).forEach((ln,j)=>{
+      const t=mk('text',{x:22,y:y+j*23,'font-family':'var(--sans)','font-size':16,
+        fill:'var(--ink-2)','font-weight':300}); t.textContent=ln; g.appendChild(t); });
+    /* 없애는 것 — 카드 아래에 고정 */
+    g.appendChild(mk('line',{x1:22,y1:322,x2:330,y2:322,stroke:'var(--rule)'}));
+    wrapT(c[3],19).forEach((ln,j)=>{
+      const t=mk('text',{x:22,y:350+j*23,'font-family':'var(--sans)','font-size':16.5,
+        fill:c[0],'font-weight':400}); t.textContent=ln; g.appendChild(t); });
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:400,delay:200*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- 사양 */
+S({tag:'SPECIFICATIONS', ov:'[[i-SMR 주요 사양 — 설계값과 목표값을 구분||i-SMR specifications - design values and target values kept apart]]',
+src:'[[<b>출처</b> 본 교재 7.3절 표 7.2 · IAEA ARIS, i-SMR Design Status Report · 접근일 2026-09-16||<b>Source</b> This textbook &#167;7.3, Table 7.2 · IAEA ARIS, i-SMR Design Status Report · accessed 2026-09-16]]',
+abbr:'[[<b>MW(th)</b> 열출력 · <b>MWe</b> 전기출력 · <b>abs</b> 절대압 · <b>무붕산</b> 붕산을 반응도 제어에 쓰지 않는 운전 · <b>안전정지지진</b> 그 값까지 안전기능을 지켜야 하는 지진 세기||<b>MW(th)</b> thermal power · <b>MWe</b> electrical power · <b>abs</b> absolute pressure · <b>soluble-boron-free</b> no boric acid used for reactivity control · <b>SSE</b> safe shutdown earthquake]]',
+html:`<h2 class="t">[[<em>목표값</em>과 <em>설계값</em>은 반드시 구분해 적어야 함||<em>Target values</em> and <em>design values</em> must be written apart]]</h2>
+<ul class="b">
+  <li>[[노심손상빈도는 <b>확률론적 안전성평가로 확인해야 하는 값</b>이지 사양서에 적어 확정되는 값이 아님. 홍보 자료에서 이 구분이 자주 사라짐||Core damage frequency is <b>a value that probabilistic assessment must establish</b>, not one a spec sheet settles. Promotional material often loses the distinction]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 440" role="img" aria-label="[[i-SMR 의 출력·압력·온도·유량·연료·안전계통 사양과, 그와 구분해 표시한 설계 목표값||i-SMR specifications for power, pressure, temperature, flow, fuel and safety systems, with design targets shown separately]]">
+  <g id="sp-tab"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#sp-tab'), gs=[];
+  const COL=[
+    [TX('출력','Power'),'var(--hot)',
+     [[TX('모듈당 정격 열출력','Rated thermal per module'),'540 MW(th)'],
+      [TX('모듈당 전기출력','Electrical per module'),'170 MWe'],
+      [TX('기준 발전소','Reference plant'),TX('4모듈 · 680 MWe','4 modules · 680 MWe')],
+      [TX('주기 길이','Cycle length'),TX('24개월','24 months')]]],
+    [TX('열수력','Thermal-hydraulics'),'var(--cool)',
+     [[TX('1차계통 운전압력','Primary pressure'),'15.5 MPa (abs)'],
+      [TX('노심 입구 / 출구','Core inlet / outlet'),'286 / 321 °C'],
+      [TX('1차 유량','Primary flow'),'2 658 kg/s'],
+      [TX('증기발생기','Steam generator'),TX('나선형 관류 1대 · 8구역','helical once-through, 8 zones')]]],
+    [TX('노심·계통','Core and systems'),'var(--ok)',
+     [[TX('핵연료','Fuel'),TX('17×17 · 69다발 · 5% 미만','17×17 · 69 assemblies · under 5%')],
+      [TX('붕산','Soluble boron'),TX('사용하지 않음','not used')],
+      [TX('안전계통','Safety systems'),'PAFS · PECCS · PCCS'],
+      [TX('무조작 대처시간','Unattended coping'),TX('72시간 이상','72 hours or more')]]]
+  ];
+  COL.forEach((c,i)=>{
+    const g=mk('g',{transform:'translate('+(i*374)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:352,height:262,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:352,height:3,fill:c[1]}));
+    const h=mk('text',{x:22,y:36,class:'lbl',fill:c[1]}); h.textContent=c[0]; g.appendChild(h);
+    c[2].forEach((r,j)=>{
+      const y=70+j*48;
+      const k=mk('text',{x:22,y:y,'font-family':'var(--sans)','font-size':15,fill:'var(--ink-3)',
+        'font-weight':300}); k.textContent=r[0]; g.appendChild(k);
+      const v=mk('text',{x:22,y:y+22,'font-family':'var(--mono)','font-size':17,fill:'var(--ink)',
+        'font-weight':500}); v.textContent=r[1]; g.appendChild(v);
+      if(j<3) g.appendChild(mk('line',{x1:22,y1:y+32,x2:330,y2:y+32,stroke:'var(--rule)'}));
+    });
+    G.appendChild(g); gs.push(g);
+  });
+  /* 아래 — 목표값은 따로 */
+  const tg=mk('g',{transform:'translate(0,286)',opacity:0}); G.appendChild(tg); gs.push(tg);
+  tg.appendChild(mk('rect',{width:1100,height:146,fill:'var(--ground)',stroke:'var(--amber)','stroke-width':1.6}));
+  tg.appendChild(mk('text',{x:22,y:34,class:'lbl',fill:'var(--amber)'})).textContent=
+    TX('아래는 설계값이 아니라 설계 목표값 — 인용할 때 반드시 그렇게 적는다',
+       'Below are design targets, not design values - always cite them as such');
+  const TG=[[TX('설계수명','Design life'),TX('80년','80 years'),0],
+            [TX('내진설계','Seismic'),TX('0.5 g 안전정지지진','0.5 g SSE'),0],
+            [TX('노심손상빈도','Core damage frequency'),TX('1.0×10⁻⁹ /MY 이하','below 1.0×10⁻⁹ /MY'),1],
+            [TX('건설단가','Capital cost'),TX('3 500 $/kWe 이하','below 3 500 $/kWe'),1],
+            [TX('모듈 1기 건설공기','Build time per module'),TX('24개월','24 months'),1]];
+  TG.forEach((t,i)=>{
+    const x=22+i*216;
+    const k=mk('text',{x:x,y:74,'font-family':'var(--sans)','font-size':15,
+      fill:t[2]?'var(--amber)':'var(--ink-3)','font-weight':300}); k.textContent=t[0]; tg.appendChild(k);
+    wrapT(t[1],13).forEach((ln,j)=>{
+      const v=mk('text',{x:x,y:100+j*22,'font-family':'var(--mono)','font-size':16,
+        fill:t[2]?'var(--amber)':'var(--ink-2)','font-weight':t[2]?600:400});
+      v.textContent=ln; tg.appendChild(v); });
+    if(t[2]) tg.appendChild(mk('text',{x:x,y:'138',class:'lbl',fill:'var(--amber)'}))
+      .textContent=TX('목표값','target');
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:380,delay:180*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- 펌프를 남기면 */
+S({tag:'WHY KEEP THE PUMP', ov:'[[펌프를 남기면 무엇이 달라지는가 — ΔT = 35 K||What keeping the pump changes - ΔT = 35 K]]',
+src:'[[<b>출처</b> 본 교재 7.4절 · <code>Q = ṁ c<sub>p</sub> ΔT = 2 658 × 5.5 × (321−286) ≈ 512 MW</code> — 정격 540 MWt와 5% 안쪽||<b>Source</b> This textbook &#167;7.4 · <code>Q = &#7745; c<sub>p</sub> &#916;T = 2 658 &#215; 5.5 &#215; (321&#8722;286) &#8776; 512 MW</code>, within 5% of the rated 540 MWt]]',
+abbr:'[[<b>상관식</b> 실험으로 얻은 열전달·마찰 계산식 · <b>적용 범위</b> 그 상관식이 검증된 조건의 범위 · <b>검증시험</b> 상관식과 계통 성능을 실험으로 확인하는 일||<b>correlation</b> a heat-transfer or friction formula fitted to experiment · <b>range of applicability</b> the conditions over which it was validated · <b>validation testing</b> confirming correlations and system performance by experiment]]',
+html:`<h2 class="t">[[펌프를 남긴 진짜 이유는 <em>검증 부담을 줄이려는 것</em>임||The pump stays <em>to cut the validation burden</em>]]</h2>
+<ul class="b">
+  <li>[[강제순환에서는 유량이 <b>입력값</b>임. 그래서 노심 온도상승을 대형 PWR과 <b class="cool">비슷하게(약 35 K) 유지</b>할 수 있음||With forced circulation the flow is <b>an input</b>. So the core temperature rise can be <b class="cool">held near a large PWR&#8217;s, about 35 K</b>]]</li>
+  <li>[[열수력 조건이 기존 PWR과 비슷하면 <b class="ok">검증된 상관식·계통 코드·실험 데이터베이스를 그대로</b> 쓸 수 있음 — 설계 선택이 곧 검증 부담의 선택임||Similar conditions mean <b class="ok">validated correlations, system codes and test databases carry over</b>. Choosing a design is choosing a validation burden]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 410" role="img" aria-label="[[자연순환은 유량이 물리로 정해지고 강제순환은 설계자가 고르는 차이, 그리고 그것이 검증 부담으로 이어지는 흐름||Flow set by physics in natural circulation versus chosen by the designer in forced circulation, and how that feeds into the validation burden]]">
+  <g id="kp-fig"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#kp-fig'), gs=[];
+  const CH=[
+    ['var(--cool)',TX('자연순환 (NuScale)','Natural circulation (NuScale)'),
+     [TX('유량이 밀도차와 높이차로 정해진다','Flow is set by density and height difference'),
+      TX('설계자가 고를 수 없다 — ΔT 도 따라 정해진다','The designer cannot choose it - ΔT follows'),
+      TX('저유속·저압력강하 영역은 기존 상관식의 적용 범위 밖일 수 있다','Low-velocity, low-drop regimes can fall outside existing correlations'),
+      TX('→ 별도의 검증시험이 필요해진다','→ separate validation tests become necessary')]],
+    ['var(--ok)',TX('강제순환 (i-SMR)','Forced circulation (i-SMR)'),
+     [TX('유량이 입력값이다 — 펌프 4대가 2 658 kg/s','Flow is an input - four pumps give 2 658 kg/s'),
+      TX('ΔT = 321 − 286 = 35 K 로 잡았다','ΔT was set at 321 − 286 = 35 K'),
+      TX('대형 PWR 의 30~35 K 와 거의 같다','Almost the same as a large PWR at 30-35 K'),
+      TX('→ 검증된 상관식과 코드를 그대로 쓴다','→ validated correlations and codes carry over')]]
+  ];
+  CH.forEach((c,i)=>{
+    const g=mk('g',{transform:'translate('+(i*562)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:540,height:236,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:540,height:3,fill:c[0]}));
+    const h=mk('text',{x:22,y:42,'font-family':'var(--sans)','font-size':20,fill:c[0],
+      'font-weight':600}); h.textContent=c[1]; g.appendChild(h);
+    let y=78;
+    c[2].forEach(t=>{
+      const L=wrapT(t,32);
+      L.forEach((ln,j)=>{
+        const e=mk('text',{x:22,y:y+j*22,'font-family':'var(--sans)','font-size':16,
+          fill:ln.indexOf('→')===0?c[0]:'var(--ink-2)','font-weight':300});
+        e.textContent=ln; g.appendChild(e); });
+      y += L.length*22 + 10;
+    });
+    G.appendChild(g); gs.push(g);
+  });
+  /* 아래 — 검산 */
+  const f=mk('g',{transform:'translate(0,262)',opacity:0}); G.appendChild(f); gs.push(f);
+  f.appendChild(mk('rect',{width:1102,height:140,fill:'var(--ground)',stroke:'var(--cool)','stroke-width':1.6}));
+  f.appendChild(mk('text',{x:24,y:34,class:'lbl',fill:'var(--cool)'})).textContent=
+    TX('같은 식으로 사양표를 검산한다 (4.4절)','the same relation checks the spec table (§4.4)');
+  f.appendChild(mk('text',{x:24,y:82,'font-family':'var(--mono)','font-size':25,fill:'var(--ink)'}))
+   .textContent='Q = ṁ cp ΔT = 2 658 × 5.5 × (321 − 286) ≈ 512 MW';
+  f.appendChild(mk('text',{x:24,y:118,'font-family':'var(--sans)','font-size':17,
+    fill:'var(--ok)','font-weight':400})).textContent=
+    TX('정격 540 MWt 와 5 % 안쪽 — ARIS 의 값들은 자기들끼리 정합적이다',
+       'Within 5% of the rated 540 MWt - the ARIS values are self-consistent');
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:400,delay:200*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- 안전계통 셋 */
+S({tag:'PAFS · PECCS · PCCS', ov:'[[i-SMR 공학적안전설비 — 셋 다 피동||i-SMR engineered safety features - all three passive]]',
+src:'[[<b>출처</b> 본 교재 7.5절 표 7.3 · PAFS 성능 요건 36시간 냉각 + 36시간 유지 · PCCS 24시간 내 최고압의 절반||<b>Source</b> This textbook &#167;7.5, Table 7.3 · PAFS: 36 h to cool plus 36 h to hold · PCCS: half the peak pressure within 24 h]]',
+abbr:'[[<b>PAFS</b> 피동보조급수계통 · <b>PECCS</b> 피동비상노심냉각계통 · <b>PCCS</b> 피동격납냉각계통 · <b>RSS</b> 원자로안전계통 · <b>ECT</b> 비상냉각수조||<b>PAFS</b> Passive Auxiliary Feedwater System · <b>PECCS</b> Passive Emergency Core Cooling System · <b>PCCS</b> Passive Containment Cooling System · <b>RSS</b> Reactor Safety System · <b>ECT</b> emergency cooling tank]]',
+html:`<h2 class="t">[[&#8220;72시간&#8221;이 아니라 <em>36시간 냉각 + 36시간 유지</em>임||It is not &#8220;72 hours&#8221; but <em>36 hours cooling plus 36 hours holding</em>]]</h2>
+<ul class="b">
+  <li>[[앞 36시간은 <b>냉각</b>(온도를 내린다), 뒤 36시간은 <b>유지</b>(내린 상태를 지킨다) — 서로 다른 요건임||The first 36 h is <b>cooling</b> (bring the temperature down); the next 36 h is <b>holding</b> (keep it there). Different requirements]]</li>
+  <li>[[전자는 <b class="cool">열제거 용량</b>의 문제이고 후자는 <b class="cool">수조 재고</b>의 문제임. 설계 검증도 둘로 나뉨||The first is a question of <b class="cool">heat removal capacity</b>, the second of <b class="cool">pool inventory</b>. The validation splits the same way]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 410" role="img" aria-label="[[PAFS·PECCS·PCCS 세 계통이 맡는 안전기능과 작동 방식, 그리고 36+36 시간 요건의 구조||What each of PAFS, PECCS and PCCS does and how it acts, and how the 36+36 hour requirement is built]]">
+  <g id="sf-cards"></g><g id="sf-time"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const S3=[
+    ['PAFS','var(--ok)',TX('잔열 제거','Decay heat removal'),
+     TX('정상 급수 상실 시 증기발생기 2차측에서 자연순환으로 응축·회수한다. 검증 시험 — PASCAL · LAPLACE · ATLAS-PAFS.',
+        'On loss of normal feed, the secondary side condenses and returns by natural circulation. Validated by PASCAL, LAPLACE and ATLAS-PAFS.')],
+    ['PECCS','var(--cool)',TX('노심 냉각 · 재고 유지','Core cooling and inventory'),
+     TX('용기–격납 차압이 설정치에 닿으면 EDV 가 열리고, 응축 후 ERV 로 재순환한다. 전자 신호가 아니라 압력 자체가 작동 신호다.',
+        'When the vessel-to-containment differential reaches its setpoint the EDVs open; after condensing, the ERVs recirculate. Pressure itself is the actuation signal, not an electronic one.')],
+    ['PCCS','var(--amber)',TX('격납 압력 · 온도 억제','Containment pressure and temperature'),
+     TX('격납 내 증기를 응축해 열을 ECT 로 버린다. 설계기준사고 시 24시간 안에 격납 압력을 최고 압력의 절반까지 낮춘다.',
+        'Condenses containment steam and dumps the heat to the emergency cooling tank. In a design-basis accident it halves the peak containment pressure within 24 h.')]
+  ];
+  const G=el.querySelector('#sf-cards'), gs=[];
+  S3.forEach((s,i)=>{
+    const g=mk('g',{transform:'translate('+(i*374)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:352,height:236,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:352,height:3,fill:s[1]}));
+    const n=mk('text',{x:22,y:44,'font-family':'var(--mono)','font-size':22,fill:s[1],
+      'font-weight':600}); n.textContent=s[0]; g.appendChild(n);
+    const k=mk('text',{x:22,y:72,'font-family':'var(--sans)','font-size':17,fill:'var(--ink)',
+      'font-weight':500}); k.textContent=s[2]; g.appendChild(k);
+    wrapT(s[3],20).slice(0,7).forEach((ln,j)=>{
+      const t=mk('text',{x:22,y:104+j*22,'font-family':'var(--sans)','font-size':15.5,
+        fill:'var(--ink-2)','font-weight':300}); t.textContent=ln; g.appendChild(t); });
+    G.appendChild(g); gs.push(g);
+  });
+  /* 36 + 36 */
+  const T=el.querySelector('#sf-time');
+  const y=286, X0=0, W=1100;
+  T.appendChild(mk('text',{x:0,y:274,class:'lbl'})).textContent=
+    TX('PAFS 성능 요건 — 운전원 조치 없이','PAFS performance requirement - with no operator action');
+  const bars=[];
+  [[0,0.5,'var(--cool)',TX('앞 36시간 — 냉각','first 36 h - cool it down'),
+    TX('붕괴열을 제거하고 안전정지 상태까지 온도를 내린다 → 열제거 용량의 문제',
+       'Remove decay heat and bring the plant to safe shutdown → a question of heat removal capacity')],
+   [0.5,1,'var(--ok)',TX('뒤 36시간 — 유지','next 36 h - hold it there'),
+    TX('그 상태를 36시간 이상 유지한다 → 수조 재고의 문제',
+       'Hold that state for at least 36 more hours → a question of pool inventory')]]
+  .forEach(b=>{
+    const r=mk('rect',{x:X0+b[0]*W,y:y,width:'0',height:40,fill:b[2],opacity:0.55});
+    T.appendChild(r); bars.push([r,(b[1]-b[0])*W]);
+    const t=mk('text',{x:X0+b[0]*W+18,y:y+27,'font-family':'var(--sans)','font-size':18,
+      fill:'var(--on-accent)','font-weight':600}); t.textContent=b[3]; T.appendChild(t);
+    wrapT(b[4],30).forEach((ln,j)=>{
+      const e=mk('text',{x:X0+b[0]*W,y:y+66+j*22,'font-family':'var(--sans)','font-size':16,
+        fill:'var(--ink-2)','font-weight':300}); e.textContent=ln; T.appendChild(e); });
+  });
+  T.appendChild(mk('line',{x1:X0+W/2,y1:y-6,x2:X0+W/2,y2:y+46,stroke:'var(--ground)','stroke-width':2}));
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1));
+          bars.forEach(b=>b[0].setAttribute('width',b[1])); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:380,delay:180*i,fill:'forwards',easing:'ease-out'}));
+  bars.forEach((b,i)=>b[0].animate([{width:'0px'},{width:b[1]+'px'}],
+    {duration:600,delay:800+280*i,fill:'forwards',easing:'cubic-bezier(.2,.7,.3,1)'}));
+}});
+
+
+/* ---------------------------------------------------------------- PECCS 5단계 */
+S({tag:'PECCS SEQUENCE', ov:'[[PECCS — EDV로 내보내고 ERV로 되돌린다||PECCS - out through the EDVs, back through the ERVs]]',
+src:'[[<b>출처</b> 본 교재 7.5.2절 · 작동 신호는 <b>용기–격납 차압</b>이 설정치에 도달하는 것 — 전자 신호가 아님||<b>Source</b> This textbook &#167;7.5.2 · the actuation signal is <b>the vessel-to-containment differential pressure</b> reaching its setpoint, not an electronic trip]]',
+abbr:'[[<b>EDV</b> 비상감압밸브 · <b>ERV</b> 비상재순환밸브 · <b>플래싱</b> 고압 포화수가 감압되며 순간적으로 증기로 바뀌는 현상 · <b>임계유동</b> 더 감압해도 유량이 늘지 않는 한계 상태||<b>EDV</b> emergency depressurisation valve · <b>ERV</b> emergency recirculation valve · <b>flashing</b> saturated water turning to steam the instant pressure drops · <b>critical flow</b> the choked state where further depressurisation adds no flow]]',
+html:`<h2 class="t">[[NuScale ECCS와 <em>논리가 같음</em> — 다른 것은 <s>응축을 누가 맡는가</s>임||Same logic as NuScale&#8217;s ECCS - <s>who condenses</s> differs]]</h2>
+<ul class="b">
+  <li>[[둘 다 <b>감압 &#8594; 격납에서 응축 &#8594; 중력으로 회수</b>. 밖에서 물을 넣지 않음||Both are <b>depressurise &#8594; condense in the containment &#8594; return by gravity</b>. Nothing is pumped in]]</li>
+  <li>[[NuScale은 <b class="cool">격납 내벽 자체</b>가 응축면이고(수조에 잠겨 있으므로), i-SMR은 <b class="ok">PCCS 열교환기</b>가 그 역할을 함||In NuScale <b class="cool">the containment wall itself</b> condenses, because it is submerged; in i-SMR <b class="ok">the PCCS heat exchanger</b> does it]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 410" role="img" aria-label="[[EDV 개방부터 ERV 재순환까지 다섯 단계와 각 단계에서 일어나는 일||The five steps from EDV opening to ERV recirculation, and what happens at each]]">
+  <g id="pq-steps"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const S5=[
+    ['var(--hot-2)',TX('EDV 개방','EDV opens'),
+     TX('원자로용기의 고온·고압 증기와 물을 격납용기로 방출한다','Hot, high-pressure steam and water are released into the containment')],
+    ['var(--hot)',TX('격납 압력 상승','Containment pressure rises'),
+     TX('방출된 증기와 물이 급격히 팽창한다','The released steam and water expand explosively')],
+    ['var(--amber)',TX('PCCS 가 응축','PCCS condenses it'),
+     TX('증기가 PCCS 열교환기에서 응축되고 열은 ECT 로 간다','Steam condenses in the PCCS exchanger and the heat goes to the ECT')],
+    ['var(--cool)',TX('압력 평형','Pressures equalise'),
+     TX('원자로용기와 격납용기의 압력이 충분히 가까워진다','Vessel and containment pressures come close enough')],
+    ['var(--ok)',TX('ERV 개방 → 재순환','ERV opens → recirculation'),
+     TX('격납 환상부에 고인 응축수가 용기로 돌아가고 자연순환이 지속된다','Condensate collected in the annulus returns to the vessel and natural circulation continues')]
+  ];
+  const G=el.querySelector('#pq-steps'), gs=[], W=200, GAP=25;
+  S5.forEach((s,i)=>{
+    const g=mk('g',{transform:'translate('+(i*(W+GAP))+',10)',opacity:0});
+    g.appendChild(mk('rect',{width:W,height:250,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:W,height:4,fill:s[0]}));
+    const n=mk('text',{x:18,y:44,'font-family':'var(--mono)','font-size':26,fill:s[0],
+      'font-weight':600}); n.textContent=String(i+1); g.appendChild(n);
+    wrapT(s[1],11).forEach((ln,j)=>{
+      const h=mk('text',{x:18,y:80+j*24,'font-family':'var(--sans)','font-size':18.5,
+        fill:s[0],'font-weight':600}); h.textContent=ln; g.appendChild(h); });
+    wrapT(s[2],12).slice(0,6).forEach((ln,j)=>{
+      const t=mk('text',{x:18,y:142+j*22,'font-family':'var(--sans)','font-size':15.5,
+        fill:'var(--ink-2)','font-weight':300}); t.textContent=ln; g.appendChild(t); });
+    G.appendChild(g); gs.push(g);
+    if(i<4) G.appendChild(mk('path',{d:'M'+(i*(W+GAP)+W+4)+',135 h16',stroke:'var(--rule)','stroke-width':1.4}));
+  });
+  /* 아래 — 연구실 관점 */
+  const n1=mk('g',{transform:'translate(0,284)',opacity:0}); G.appendChild(n1); gs.push(n1);
+  n1.appendChild(mk('rect',{width:1100,height:114,fill:'var(--ground)',stroke:'var(--hot)','stroke-width':1.6}));
+  n1.appendChild(mk('text',{x:22,y:32,class:'lbl',fill:'var(--hot)'})).textContent=
+    TX('1단계는 밸브를 여는 것으로 끝나지 않는다 — THINK Lab EDV 동적 유체하중 평가',
+       'Step 1 does not end with opening a valve - THINK Lab’s EDV dynamic load work');
+  wrapT(TX('EDV 가 열리면 고압 포화수가 급격히 플래싱하며 임계유동을 일으키고, 그 과정에서 배관·구조물에 동하중이 걸린다. 피동계통이라고 해서 해석이 쉬워지는 것은 아니다.',
+           'When the EDV opens, high-pressure saturated water flashes and chokes, and that puts dynamic loads on the piping and structures. A passive system is not an easier analysis.'),62)
+   .forEach((ln,j)=>{
+      n1.appendChild(mk('text',{x:22,y:64+j*24,'font-family':'var(--sans)','font-size':16.5,
+        fill:'var(--ink-2)','font-weight':300})).textContent=ln; });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:320,delay:150*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- 무붕산 */
+S({tag:'NO SOLUBLE BORON', ov:'[[무붕산 운전 — 이득 넷과 대가 하나||Soluble-boron-free - four gains and one price]]',
+src:'[[<b>출처</b> 본 교재 7.6절 · 가연성흡수체는 Gd₂O₃ 를 UO₂ 에 섞은 봉 형태 · 정지여유도 <code>SDM = ρ<sub>rod</sub> − ρ<sub>stuck</sub> − ρ<sub>defect</sub> − ρ<sub>unc</sub></code>||<b>Source</b> This textbook &#167;7.6 · the burnable absorber is Gd&#8322;O&#8323; mixed into UO&#8322; rods · shutdown margin <code>SDM = &#961;<sub>rod</sub> &#8722; &#961;<sub>stuck</sub> &#8722; &#961;<sub>defect</sub> &#8722; &#961;<sub>unc</sub></code>]]',
+abbr:'[[<b>CVCS</b> 화학체적제어계통 · <b>가연성흡수체</b> 타면서 중성자 흡수 능력이 줄어드는 물질 · <b>감속재 온도계수</b> 감속재 온도가 오를 때 반응도가 변하는 정도 · <b>SDM</b> 정지여유도 · <b>GDC 26</b> 두 개의 독립 반응도 제어계통을 요구하는 조문||<b>CVCS</b> Chemical and Volume Control System · <b>burnable absorber</b> an absorber that depletes as it burns · <b>moderator temperature coefficient</b> how reactivity moves when the moderator heats up · <b>SDM</b> shutdown margin · <b>GDC 26</b> the criterion requiring two independent reactivity control systems]]',
+html:`<h2 class="t">[[붕산을 없애면 <em>GDC 26의 두 번째 계통</em>을 따로 답해야 함||No boron means <em>GDC 26&#8217;s second system</em> needs another answer]]</h2>
+<ul class="b">
+  <li>[[대형 PWR은 부족분을 <b>붕산 주입</b>이라는 두 번째 독립 수단으로 메움. NuScale의 붕소 펠릿도 같은 자리를 채움||A large PWR fills the gap with <b>boron injection</b> as its second independent means. NuScale&#8217;s boron pellets sit in the same slot]]</li>
+  <li>[[i-SMR은 그 자리를 <b class="amb">제어봉 가치와 가연성흡수체 설계</b>로 채워야 함 — 인허가 심사에서 주목받는 항목임||i-SMR must fill it with <b class="amb">rod worth and burnable absorber design</b> - a focus of the licensing review]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 440" role="img" aria-label="[[무붕산 운전의 이득 네 가지와 대가, 그리고 GDC 26의 두 번째 계통을 각 설계가 무엇으로 채우는가||Four gains from dropping soluble boron, the price, and what each design uses for GDC 26's second system]]">
+  <g id="nb-gain"></g><g id="nb-gdc"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#nb-gain'), gs=[];
+  G.appendChild(mk('text',{x:0,y:16,class:'lbl',fill:'var(--ok)'})).textContent=TX('이득','what it gains');
+  const GN=[TX('화학체적제어계통(CVCS)이 대폭 단순해진다 — 붕산 주입·희석·회수 설비가 사라진다',
+               'The CVCS gets much simpler - injection, dilution and recovery equipment all go'),
+            TX('부식 문제가 줄어든다 — 붕산 침전·농축에 따른 문제가 없다',
+               'Less corrosion trouble - no boric acid precipitation or concentration'),
+            TX('감속재 온도계수가 확실히 음(−)으로 유지된다',
+               'The moderator temperature coefficient stays reliably negative'),
+            TX('폐기물이 줄어든다 — 붕산 폐액 처리가 없어진다',
+               'Less waste - no borated liquid to process')];
+  GN.forEach((g0,i)=>{
+    const g=mk('g',{transform:'translate(0,'+(30+i*54)+')',opacity:0});
+    g.appendChild(mk('rect',{width:700,height:44,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:3,height:44,fill:'var(--ok)'}));
+    const n=mk('text',{x:20,y:29,'font-family':'var(--mono)','font-size':16,fill:'var(--ok)',
+      'font-weight':600}); n.textContent='①②③④'[i]; g.appendChild(n);
+    const t=mk('text',{x:48,y:29,'font-family':'var(--sans)','font-size':16.5,fill:'var(--ink)',
+      'font-weight':300}); t.textContent=wrapT(g0,44)[0]; g.appendChild(t);
+    const rest=wrapT(g0,44).slice(1).join(' ');
+    G.appendChild(g); gs.push(g);
+  });
+  /* 대가 */
+  const p=mk('g',{transform:'translate(0,254)',opacity:0}); G.appendChild(p); gs.push(p);
+  p.appendChild(mk('rect',{width:700,height:100,fill:'var(--ground)',stroke:'var(--hot)','stroke-width':1.6}));
+  p.appendChild(mk('text',{x:20,y:30,class:'lbl',fill:'var(--hot)'})).textContent=TX('대가','the price');
+  wrapT(TX('주기 초 잉여반응도를 제어봉과 가연성흡수체만으로 눌러야 한다. 제어봉 가치와 배치, 가연성흡수체 설계 부담이 커지고 정지여유도 확보가 까다로워진다.',
+           'Beginning-of-cycle excess reactivity must be held down by rods and burnable absorbers alone. Rod worth, rod placement and absorber design all get harder, and shutdown margin is harder to prove.'),40)
+   .forEach((ln,j)=>{
+    p.appendChild(mk('text',{x:20,y:58+j*24,'font-family':'var(--sans)','font-size':16.5,
+      fill:'var(--ink-2)','font-weight':300})).textContent=ln; });
+
+  /* 오른쪽 — GDC 26 의 두 번째 계통 */
+  const D=el.querySelector('#nb-gdc');
+  const d=mk('g',{transform:'translate(740,0)',opacity:0}); D.appendChild(d); gs.push(d);
+  d.appendChild(mk('text',{x:0,y:16,class:'lbl',fill:'var(--amber)'})).textContent=
+    TX('GDC 26 — 서로 독립인 두 반응도 제어계통','GDC 26 - two independent reactivity control systems');
+  const W2=[['NuScale','var(--cool)',TX('제어봉','Control rods'),
+             TX('붕산 + ECCS 작동 시 녹는 붕소 펠릿','boric acid, plus boron pellets that dissolve when the ECCS acts')],
+            ['i-SMR','var(--ok)',TX('제어봉','Control rods'),
+             TX('없음 — 가연성흡수체와 제어봉으로 대체해야 함','none - rods and burnable absorbers must stand in')],
+            ['BWRX-300','var(--amber)',TX('제어봉 (FMCRD)','Control rods (FMCRD)'),
+             TX('붕산 (BWR 방식) + 수압 축압기','boric acid the BWR way, plus hydraulic accumulators')]];
+  W2.forEach((w,i)=>{
+    const g=mk('g',{transform:'translate(0,'+(30+i*112)+')'});
+    g.appendChild(mk('rect',{width:360,height:100,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:3,height:100,fill:w[1]}));
+    const n=mk('text',{x:20,y:30,'font-family':'var(--mono)','font-size':16,fill:w[1],
+      'font-weight':600}); n.textContent=w[0]; g.appendChild(n);
+    const a=mk('text',{x:20,y:56,'font-family':'var(--sans)','font-size':15.5,fill:'var(--ink)',
+      'font-weight':400}); a.textContent='1 · '+w[2]; g.appendChild(a);
+    wrapT('2 · '+w[3],23).slice(0,2).forEach((ln,j)=>{
+      const t=mk('text',{x:20,y:78+j*20,'font-family':'var(--sans)','font-size':15.5,
+        fill:i===1?'var(--hot)':'var(--ink-2)','font-weight':300}); t.textContent=ln; g.appendChild(t); });
+    d.appendChild(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:340,delay:130*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- 인허가 */
+S({tag:'LICENSING', ov:'[[i-SMR 인허가 현황 (2026-09)||i-SMR licensing status, as of Sept 2026]]',
+src:'[[<b>출처</b> 본 교재 7.7절 표 7.4 · <b>2026년 9월 기준</b> · 원안위·KINS 보도자료와 심사계획 보고가 1차 근거||<b>Source</b> This textbook &#167;7.7, Table 7.4 · <b>as of September 2026</b> · NSSC and KINS releases and the review plan report are the primary basis]]',
+abbr:'[[<b>표준설계인가</b> 설계 자체를 먼저 심사해 인가받는 제도 · <b>KINS</b> 한국원자력안전기술원 · <b>서류적합성 검토</b> 신청 서류가 심사에 들어갈 요건을 갖췄는지 보는 단계 · <b>스케일링</b> 축소 실험 결과를 실기 규모로 외삽하는 방법론||<b>standard design approval</b> licensing the design itself ahead of a site · <b>KINS</b> Korea Institute of Nuclear Safety · <b>acceptance review</b> checking that an application is complete enough to review · <b>scaling</b> the methodology for extrapolating scaled-test results to full size]]',
+html:`<h2 class="t">[[설계를 <s>종이로만</s> 인가받을 수 없음 — <em>실험으로 보여야</em> 함||A design cannot be licensed <s>on paper alone</s> - <em>the tests must show it</em>]]</h2>
+<ul class="b">
+  <li>[[KINS는 <b>모듈형 설계와 피동안전계통</b>을 중점 검토 대상으로 제시함 — 기존 대형 경수로 심사 경험으로 다루기 어려운 부분임||KINS named <b>the modular layout and the passive safety systems</b> as focus areas - the parts that large-PWR review experience does not cover]]</li>
+  <li>[[<b class="amb">2028-06 주요 검증시험 결과 제출</b>이 눈여겨볼 항목임. 연구실 관점에서는 이 구간이 <b>가장 일거리가 많은 시점</b>임||Watch <b class="amb">the June 2028 milestone for validation test results</b>. From a laboratory&#8217;s point of view this is <b>where the work is</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 410" role="img" aria-label="[[2026년 표준설계인가 신청부터 2028년 검증시험 결과 제출까지의 일정과 중점 검토 대상||The schedule from the 2026 application to the 2028 validation test milestone, and the review focus areas]]">
+  <g id="il-time"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#il-time');
+  const E=[
+    ['2026-02','var(--ok)',   TX('표준설계인가 신청 접수','Standard design approval application docketed'),0],
+    ['2026-03','var(--ok)',   TX('원자력안전위원회, 심사 준비 착수','NSSC begins review preparation'),0],
+    ['2026-08','var(--cool)', TX('KINS 심사계획 보고 — 서류 보완 13건 확인','KINS review plan - 13 items need completion'),0],
+    ['2027-06','var(--amber)',TX('서류 보완 완료 목표','Target: application completed'),1],
+    ['2028-06','var(--amber)',TX('주요 검증시험 결과 제출 목표','Target: validation test results submitted'),1]
+  ];
+  const Y=104, X0=150, X1=970;
+  G.appendChild(mk('line',{x1:X0,y1:Y,x2:X1,y2:Y,class:'axis'}));
+  /* 현재 */
+  const nowX = X0 + 2*(X1-X0)/4;
+  G.appendChild(mk('line',{x1:nowX+38,y1:40,x2:nowX+38,y2:Y+96,stroke:'var(--hot)','stroke-width':1.6,
+    'stroke-dasharray':'5 4'}));
+  G.appendChild(mk('text',{x:nowX+46,y:52,class:'lbl',fill:'var(--hot)'}))
+   .textContent=TX('현재 — 2026년 9월','now - September 2026');
+  const gs=[];
+  E.forEach((e,i)=>{
+    const x=X0+i*(X1-X0)/(E.length-1), g=mk('g',{opacity:0});
+    g.appendChild(mk('circle',{cx:x,cy:Y,r:7,fill:e[1],opacity:e[3]?0.45:1}));
+    const d=mk('text',{x:x,y:Y-22,'text-anchor':'middle','font-family':'var(--mono)','font-size':15,
+      fill:e[1],'font-weight':600,opacity:e[3]?0.7:1}); d.textContent=e[0]; g.appendChild(d);
+    wrapT(e[2],13).forEach((ln,j)=>{
+      const t=mk('text',{x:x,y:Y+34+j*22,'text-anchor':'middle','font-family':'var(--sans)',
+        'font-size':16,fill:'var(--ink-2)','font-weight':300,opacity:e[3]?0.7:1});
+      t.textContent=ln; g.appendChild(t); });
+    G.appendChild(g); gs.push(g);
+  });
+  /* 아래 — 중점 검토 대상과 준비 */
+  const K=[['var(--cool)',TX('KINS 가 짚은 중점 검토 대상','What KINS flagged for focus'),
+            TX('모듈형 설계 · 피동안전계통. 기존 대형 경수로 심사 경험으로 다루기 어려운 두 가지다.',
+               'The modular layout and the passive safety systems - the two things large-PWR review experience does not reach.')],
+           ['var(--ok)',TX('그래서 무엇을 준비하는가','So what is being prepared'),
+            TX('분리효과시험 PASCAL · LAPLACE, 종합효과시험 ATLAS-PAFS. 축소 실험을 실기 규모로 외삽하는 스케일링이 핵심이다.',
+               'Separate-effects tests PASCAL and LAPLACE, integral-effects test ATLAS-PAFS. The core problem is scaling those results up to full size.')]];
+  K.forEach((k,i)=>{
+    const g=mk('g',{transform:'translate('+(10+i*552)+',238)',opacity:0});
+    g.appendChild(mk('rect',{width:528,height:156,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:528,height:3,fill:k[0]}));
+    const h=mk('text',{x:22,y:42,'font-family':'var(--sans)','font-size':19,fill:k[0],
+      'font-weight':600}); h.textContent=k[1]; g.appendChild(h);
+    wrapT(k[2],30).forEach((ln,j)=>{
+      const t=mk('text',{x:22,y:76+j*24,'font-family':'var(--sans)','font-size':16.5,
+        fill:'var(--ink-2)','font-weight':300}); t.textContent=ln; g.appendChild(t); });
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:340,delay:140*i,fill:'forwards',easing:'ease-out'}));
+}});
+</script>

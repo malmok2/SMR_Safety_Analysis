@@ -1,0 +1,403 @@
+<script>
+/* ================================================================
+   SECTION 04 — 교차검증  (교재 4장)
+   ================================================================ */
+SECT('04 · [[교차검증||Cross-checking]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;04 교차검증||&#167;04 Cross-checking]]',
+html:`[[<div class="no">04</div><h2>교차검증</h2><div class="ln"></div>
+<p>도구를 믿지 말라는 얘기가 아니라 <b>어디를 의심해야 하는지</b>를 좁히는 얘기다.
+그리고 이 장의 검산 도구는 열수력 전공자가 이미 갖고 있는 것이다 — 에너지 보존 한 줄.</p>||<div class="no">04</div><h2>Cross-checking</h2><div class="ln"></div>
+<p>Not &#8220;do not trust the tool&#8221; but <b>narrowing down where to be suspicious</b>.
+And the checking tool is one a thermal-hydraulics student already owns - one line of energy conservation.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 인용의 세 층위 */
+S({tag:'CITED ≠ SUPPORTED', ov:'[[링크가 살아 있다 ≠ 그 문서가 그 말을 한다||A live link is not the source saying it]]',
+src:'[[<b>출처</b> 본 교재 4.1절 그림 4.1 · H. Onweller et al., <i>Cited but Not Verified</i>, arXiv:2605.06635 (2026) · 14개 언어모델의 딥리서치 출력을 기계적으로 채점||<b>Source</b> This textbook &#167;4.1, Fig. 4.1 · H. Onweller et al., <i>Cited but Not Verified</i>, arXiv:2605.06635 (2026) · citations from 14 models scored mechanically]]',
+html:`<h2 class="t">[[표면 지표는 멀쩡한데 <em>알맹이만</em> 무너져 있음||The surface metrics hold; only <em>the substance</em> collapses]]</h2>
+<ul class="b">
+  <li>[[딥리서치 출력에는 각주와 링크가 촘촘히 붙고, 눌러 보면 <b>열림</b>. 그래서 신뢰가 감||Deep-research output is dense with footnotes and links, and the links <b>open</b>. That is why it feels trustworthy]]</li>
+  <li>[[그런데 인용된 사실의 <b class="hot">23~61%</b>는 그 출처가 실제로 뒷받침하지 않음 — 링크가 열리는 것과 별개의 문제임||Yet <b class="hot">23-61%</b> of cited facts are not actually supported by the source. Opening is a different question from supporting]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 408" role="img" aria-label="[[링크 유효율·주제 관련성·사실 일치율 세 층위의 값이 아래로 갈수록 떨어지는 그림||Link validity, topical relevance and factual support, falling as you go down]]">
+  <g id="cv-bars"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#cv-bars'), X0=330, W=620;
+  const B=[
+    [TX('링크가 살아 있는가','Does the link work?'),      0.94, 1.00, 'var(--ok)',   '94%+',
+     TX('눌러 보면 열린다','It opens when you click it')],
+    [TX('내용이 주제와 관련 있는가','Is the content relevant?'), 0.80, 1.00, 'var(--amber)','80%+',
+     TX('그 문서가 그 주제를 다루기는 한다','The document is at least about the topic')],
+    [TX('그 출처가 그 사실을 뒷받침하는가','Does it support the claim?'), 0.39, 0.77, 'var(--hot)', '39~77%',
+     TX('여기서 무너진다 — 인용의 23~61% 가 근거 없음',
+        'This is where it breaks - 23-61% of citations are unsupported')]
+  ];
+  const parts=[];
+  B.forEach((b,i)=>{
+    const y=44+i*124;
+    const t=mk('text',{x:0,y:y+22,'font-family':'var(--sans)','font-size':18,fill:'var(--ink)',
+      'font-weight':500}); t.textContent=b[0]; G.appendChild(t);
+    const s=mk('text',{x:0,y:y+46,'font-family':'var(--sans)','font-size':15.5,fill:'var(--ink-2)',
+      'font-weight':300}); s.textContent=b[5]; G.appendChild(s);
+    G.appendChild(mk('rect',{x:X0,y:y,width:W,height:40,fill:'var(--panel)',stroke:'var(--rule)'}));
+    const lo=mk('rect',{x:X0,y:y,width:'0',height:40,fill:b[3],opacity:0.30});
+    const hi=mk('rect',{x:X0,y:y,width:'0',height:40,fill:b[3],opacity:0.70});
+    G.appendChild(lo); G.appendChild(hi);
+    parts.push([hi,b[1]*W],[lo,b[2]*W]);
+    const v=mk('text',{x:X0+W+16,y:y+28,'font-family':'var(--mono)','font-size':21,fill:b[3],
+      'font-weight':600,opacity:0}); v.textContent=b[4]; G.appendChild(v); parts.push([v,null]);
+  });
+  const note=mk('text',{x:0,y:396,class:'lbl'});
+  note.textContent=TX('상위 모델 기준. 밝은 구간이 최고값, 옅은 구간이 하한이다.',
+                      'Top models. The solid band is the best value, the faint band the lower bound.');
+  G.appendChild(note);
+  if(RM){ parts.forEach(p=>{ if(p[1]===null) p[0].setAttribute('opacity',1);
+                             else p[0].setAttribute('width',p[1]); }); return; }
+  parts.forEach((p,i)=>{
+    if(p[1]===null) p[0].animate([{opacity:0},{opacity:1}],{duration:300,delay:700+i*30,fill:'forwards'});
+    else p[0].animate([{width:'0px'},{width:p[1]+'px'}],
+      {duration:620,delay:120*i,fill:'forwards',easing:'cubic-bezier(.2,.7,.3,1)'});
+  });
+}});
+
+
+/* ---------------------------------------------------------------- 깊게 시킬수록 틀린다 */
+S({tag:'DEEPER = WORSE', ov:'[[깊게 시킬수록 정확도가 떨어진다||Dig deeper and it gets less accurate]]',
+src:'[[<b>출처</b> 본 교재 4.1절 · 같은 연구. 도구 호출을 2회에서 150회로 늘린 실험||<b>Source</b> This textbook &#167;4.1 · same study; tool calls raised from 2 to 150 in one run]]',
+html:`<h2 class="t">[[&#8220;더 꼼꼼히 조사해 줘&#8221;는 <s>품질을 높이는</s> 주문이 <em>아님</em>||&#8220;Research it more thoroughly&#8221; is <s>not</s> a quality instruction]]</h2>
+<ul class="b">
+  <li>[[도구 호출을 2회 &#8594; 150회로 늘리면 사실 일치율이 <b class="hot">평균 42%p 떨어짐</b>. 그런데 표면 지표는 <b>92% 이상으로 유지</b>됨||Raise tool calls from 2 to 150 and factual support drops <b class="hot">42 points on average</b> - while the surface metrics <b>hold above 92%</b>]]</li>
+  <li>[[범위를 넓히는 대신 <b class="cool">질문을 나눔</b>. 항목 10개를 한 번에 묻지 말고 두세 개씩 나눠 물으면 정확도가 높음||Split the question instead of widening it. Asking two or three fields at a time beats asking ten at once]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 790 408" role="img" aria-label="[[도구 호출 횟수가 늘어날 때 표면 지표는 유지되고 사실 일치율만 떨어지는 그래프||Surface metrics hold while factual support falls as tool calls increase]]">
+    <g id="dw-plot"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <blockquote class="q">[[더 오래 찾게 시켰더니 보고서는 <b>더 길고 더 그럴듯해지고 더 틀렸다</b>.
+      조사 범위를 넓히면 모델이 다뤄야 할 자료가 늘고, 그 안에서 문장과 출처를 짝짓는 일이 어려워진다.
+      <span class="cite">검토자 입장에서 특히 위험함 — 겉보기 신호가 그대로라 눈으로는 구별되지 않음</span>||Told to search longer, the report came back <b>longer, more plausible and more wrong</b>.
+      A wider search means more material, and pairing each sentence with the right source gets harder.
+      <span class="cite">Dangerous for a reviewer - the visible signals are unchanged, so the eye cannot tell</span>]]</blockquote>
+  </div>
+</div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#dw-plot');
+  const X0=70, X1=740, Y0=344, Y1=36;
+  const X=n=>X0+(Math.log10(n)-Math.log10(2))/(Math.log10(150)-Math.log10(2))*(X1-X0);
+  const Y=v=>Y0-(v-0.3)/0.7*(Y0-Y1);
+  G.appendChild(mk('line',{x1:X0,y1:Y0,x2:X1,y2:Y0,class:'axis'}));
+  G.appendChild(mk('line',{x1:X0,y1:Y0,x2:X0,y2:Y1,class:'axis'}));
+  [[2,'2'],[10,'10'],[50,'50'],[150,'150']].forEach(t=>{
+    G.appendChild(mk('line',{x1:X(t[0]),y1:Y0,x2:X(t[0]),y2:Y0+5,class:'axis'}));
+    const e=mk('text',{x:X(t[0]),y:Y0+22,'text-anchor':'middle',class:'lbl'});
+    e.textContent=t[1]; G.appendChild(e);
+  });
+  [[0.4,'40%'],[0.6,'60%'],[0.8,'80%'],[1.0,'100%']].forEach(t=>{
+    const e=mk('text',{x:X0-10,y:Y(t[0])+4,'text-anchor':'end',class:'lbl'});
+    e.textContent=t[1]; G.appendChild(e);
+    G.appendChild(mk('line',{x1:X0,y1:Y(t[0]),x2:X1,y2:Y(t[0]),class:'grid'}));
+  });
+  const xl=mk('text',{x:X1,y:Y0+46,'text-anchor':'end',class:'lbl'});
+  xl.textContent=TX('한 번의 조사에서 도구를 부른 횟수','tool calls in one research run'); G.appendChild(xl);
+
+  const mkLine=(f,col,dash)=>{
+    const pts=[]; for(let i=0;i<=40;i++){ const n=2*Math.pow(75,i/40); pts.push([X(n),Y(f(n))]); }
+    const p=mk('polyline',{points:poly(pts),fill:'none',stroke:col,'stroke-width':2.4});
+    if(dash) p.setAttribute('stroke-dasharray',dash);
+    G.appendChild(p); return p;
+  };
+  /* 표면 지표는 평평하고, 사실 일치율만 내려간다 */
+  const flat = mkLine(n=>0.955-0.03*(Math.log10(n)-Math.log10(2))/1.875,'var(--ok)');
+  const fall = mkLine(n=>0.77-0.42*(Math.log10(n)-Math.log10(2))/1.875,'var(--hot)');
+  const l1=mk('text',{x:X1-8,y:Y(0.93)-12,'text-anchor':'end','font-family':'var(--sans)',
+    'font-size':16,fill:'var(--ok)','font-weight':500,opacity:0});
+  l1.textContent=TX('표면 지표 — 92% 이상 유지','surface metrics - hold above 92%'); G.appendChild(l1);
+  const l2=mk('text',{x:X1-8,y:Y(0.35)+2,'text-anchor':'end','font-family':'var(--sans)',
+    'font-size':16,fill:'var(--hot)','font-weight':500,opacity:0});
+  l2.textContent=TX('사실 일치율 — 42%p 하락','factual support - down 42 points'); G.appendChild(l2);
+
+  if(RM){ [l1,l2].forEach(x=>x.setAttribute('opacity',1)); return; }
+  [flat,fall].forEach((p,i)=>{ const L=p.getTotalLength();
+    p.style.strokeDasharray=p.getAttribute('stroke-dasharray')||L;
+    if(!p.getAttribute('stroke-dasharray')) p.style.strokeDashoffset=L;
+    p.animate([{strokeDashoffset:L},{strokeDashoffset:0}],
+      {duration:900,delay:200+400*i,fill:'forwards',easing:'ease-out'});
+  });
+  l1.animate([{opacity:0},{opacity:1}],{duration:340,delay:1000,fill:'forwards'});
+  l2.animate([{opacity:0},{opacity:1}],{duration:340,delay:1400,fill:'forwards'});
+}});
+
+
+/* ---------------------------------------------------------------- 네 가지 오류 */
+S({tag:'FOUR FAILURES', ov:'[[AI가 수치를 틀리는 네 가지 방식||Four ways AI gets a number wrong]]',
+src:'[[<b>출처</b> 본 교재 4.2절 표 4.1 · 각각 잡는 법이 다름||<b>Source</b> This textbook &#167;4.2, Table 4.1 · each is caught differently]]',
+abbr:'[[<b>US600 · US460</b> NuScale 의 구·신 설계 명칭 — 각각 160 MWt · 250 MWt · <b>총발전(gross)</b> 발전기 단자 출력 · <b>송전단(net)</b> 소내 소비를 뺀 출력||<b>US600 / US460</b> NuScale’s earlier and later designs, 160 and 250 MWt · <b>gross</b> output at the generator terminals · <b>net</b> output after in-house consumption]]',
+html:`<h2 class="t">[[네 가지 오류는 <em>잡는 법이 각각 다름</em> — 뭉뚱그리면 못 잡음||Each of the four is <em>caught differently</em> - lump them and you catch none]]</h2>
+<ul class="b">
+  <li>[[<b>③ 행 밀림</b>이 가장 중요함. 값이 틀리면 그 값만 틀리는 게 아니라 <b class="cool">옆 값과 물리적으로 안 맞음</b>||<b>&#9314; Row slip</b> matters most. A wrong value does not just sit there wrong - it <b class="cool">stops matching its neighbours physically</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 436" role="img" aria-label="[[세대 혼동·기준 혼동·행 밀림·출처 오귀속 네 유형과 각각의 증상과 대처||Generation mix-up, basis mix-up, row slip and misattribution, each with its symptom and countermeasure]]">
+  <g id="ff-rows"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const R=[
+    ['var(--hot)',  TX('세대 혼동','Generation mix-up'),
+      TX('같은 노형의 구·신 설계값을 섞는다','Mixes an older and newer design of the same reactor'),
+      TX('설계 명칭(US600 / US460)을 프롬프트에 박아 둔다','Nail the design name (US600 / US460) into the prompt')],
+    ['var(--amber)',TX('기준 혼동','Basis mix-up'),
+      TX('모듈당과 발전소 전체, 총발전과 송전단을 섞는다','Mixes per-module with per-plant, gross with net'),
+      TX('단위와 기준을 항목명에 함께 적는다','Write the unit and the basis into the field name itself')],
+    ['var(--cool)', TX('행 밀림','Row slip'),
+      TX('표에서 인접 행 · 열의 값을 가져온다','Picks up the value from the next row or column'),
+      TX('값 옆의 다른 항목도 같이 읽어 정합성을 본다','Read the neighbouring values too and test them for consistency')],
+    ['var(--ok)',   TX('출처 오귀속','Misattribution'),
+      TX('실재하는 문서에, 그 문서에 없는 값을 붙인다','Attaches a value to a real document that does not contain it'),
+      TX('쪽 · 표 번호까지 요구하고 그 쪽을 연다','Demand the page and table number, then open that page')]
+  ];
+  const G=el.querySelector('#ff-rows'), gs=[];
+  G.appendChild(mk('text',{x:252,y:16,class:'lbl'})).textContent=TX('증상','symptom');
+  G.appendChild(mk('text',{x:690,y:16,class:'lbl',fill:'var(--ok)'})).textContent=TX('잡는 법','how to catch it');
+  R.forEach((r,i)=>{
+    const y=28+i*100, g=mk('g',{opacity:0});
+    g.appendChild(mk('rect',{x:0,y:y,width:1084,height:88,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{x:0,y:y,width:3,height:88,fill:r[0]}));
+    const n=mk('text',{x:24,y:y+53,'font-family':'var(--mono)','font-size':24,fill:r[0],
+      'font-weight':600}); n.textContent='①②③④'[i]; g.appendChild(n);
+    const t=mk('text',{x:58,y:y+53,'font-family':'var(--sans)','font-size':19,fill:'var(--ink)',
+      'font-weight':500}); t.textContent=r[1]; g.appendChild(t);
+    wrapT(r[2],26).slice(0,2).forEach((ln,j)=>{
+      const e=mk('text',{x:252,y:y+(wrapT(r[2],26).length>1?38:52)+j*24,'font-family':'var(--sans)',
+        'font-size':16.5,fill:'var(--ink-2)','font-weight':300}); e.textContent=ln; g.appendChild(e); });
+    g.appendChild(mk('line',{x1:668,y1:y+12,x2:668,y2:y+76,stroke:'var(--rule)'}));
+    wrapT(r[3],24).slice(0,2).forEach((ln,j)=>{
+      const e=mk('text',{x:690,y:y+(wrapT(r[3],24).length>1?38:52)+j*24,'font-family':'var(--sans)',
+        'font-size':16.5,fill:'var(--ok)','font-weight':300}); e.textContent=ln; g.appendChild(e); });
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:340,delay:170*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- 물리로 잡는다 (인터랙티브) */
+S({tag:'CATCH IT WITH PHYSICS', ov:'[[열평형 한 줄로 행 밀림을 잡는다||One energy balance catches the row slip]]',
+src:'[[<b>출처</b> 본 교재 4.2 · 4.4절 · 15.5 MPa · 300 °C 부근의 물 정압비열을 <code>c<sub>p</sub> &#8776; 5.5 kJ/(kg·K)</code>로 잡은 어림 계산임||<b>Source</b> This textbook &#167;&#167;4.2 and 4.4 · an estimate taking <code>c<sub>p</sub> &#8776; 5.5 kJ/(kg&#183;K)</code> for water near 15.5 MPa and 300 &#176;C]]',
+abbr:'[[<b>Q</b> 노심 열출력 · <b>ṁ</b> 1차 유량 · <b>c<sub>p</sub></b> 정압비열 · <b>ΔT</b> 노심 입·출구 온도차 · <b>일체형 PWR 통상값</b> 30~50 K||<b>Q</b> core thermal power · <b>&#7745;</b> primary flow · <b>c<sub>p</sub></b> specific heat at constant pressure · <b>&#916;T</b> core temperature rise · <b>typical integral PWR</b> 30-50 K]]',
+html:`<h2 class="t">[[열수력 전공자가 가진 <em>가장 강력한 검증 도구</em>임||The <em>strongest checking tool</em> a thermal-hydraulics student owns]]</h2>
+<ul class="b">
+  <li>[[수치를 두 개 이상 받았으면 반드시 <b>서로 곱하고 나눠 봄</b>. 행이 밀린 값은 물리 관계를 만족하지 못하므로 <b class="cool">원문을 열지 않고도 걸러짐</b>||Got two or more numbers? <b>Multiply and divide them.</b> A slipped row cannot satisfy the physics, so it <b class="cool">falls out before you open the source</b>]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 790 412" role="img" aria-label="[[열출력과 유량을 넣으면 노심 온도차가 나오고, 일체형 PWR 통상 범위와 비교되는 계기||A gauge computing the core temperature rise from power and flow, against the typical integral-PWR band]]">
+    <g id="pc-gauge"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="formula" style="font-size:20px;padding:6px 0">Q = <span class="op">ṁ</span> c<sub>p</sub> ΔT</div>
+    <div class="ctl"><label>[[열출력 Q||Thermal power Q]] <span id="pc-qv">250 MWt</span></label>
+      <input id="pc-q" type="range" min="150" max="900" value="250" step="10"></div>
+    <div class="ctl"><label>[[1차 유량 ṁ||Primary flow ṁ]] <span id="pc-mv">2 658 kg/s</span></label>
+      <input id="pc-m" type="range" min="800" max="4000" value="2658" step="20"></div>
+    <div class="readout" id="pc-out"><span class="k">[[노심 온도차 ΔT||Core temperature rise ΔT]]</span>
+      <span class="v" id="pc-dt">17 <small>K</small></span></div>
+    <div class="btnrow">
+      <button class="btn" id="pc-bad">[[밀린 조합||the slipped pair]]</button>
+      <button class="btn" id="pc-ok">[[i-SMR 실제 값||i-SMR as published]]</button>
+    </div>
+  </div>
+</div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#pc-gauge');
+  const X0=70, X1=740, Y=176, TMAX=80;
+  const X=t=>X0+clamp(t,0,TMAX)/TMAX*(X1-X0);
+  /* 일체형 PWR 의 통상 노심 온도상승 구간 */
+  G.appendChild(mk('rect',{x:X(30),y:Y-62,width:X(50)-X(30),height:124,fill:'var(--ok)',opacity:0.20}));
+  G.appendChild(mk('text',{x:(X(30)+X(50))/2,y:Y-78,'text-anchor':'middle',class:'lbl',
+    fill:'var(--ok)'})).textContent=TX('일체형 PWR 통상값 30~50 K','typical integral PWR, 30-50 K');
+  G.appendChild(mk('line',{x1:X0,y1:Y+62,x2:X1,y2:Y+62,class:'axis'}));
+  for(let t=0;t<=TMAX;t+=10){
+    G.appendChild(mk('line',{x1:X(t),y1:Y+62,x2:X(t),y2:Y+70,class:'axis'}));
+    const e=mk('text',{x:X(t),y:Y+90,'text-anchor':'middle',class:'lbl'});
+    e.textContent=String(t); G.appendChild(e);
+  }
+  G.appendChild(mk('text',{x:X1,y:Y+118,'text-anchor':'end',class:'lbl'}))
+   .textContent=TX('노심 입·출구 온도차 ΔT (K)','core temperature rise ΔT (K)');
+  const nd=mk('polygon',{points:poly([[0,-14],[10,10],[-10,10]]),fill:'var(--cool)'});
+  const ndg=mk('g',{transform:'translate('+X(17)+','+(Y+44)+')'}); ndg.appendChild(nd); G.appendChild(ndg);
+  const vtx=mk('text',{x:X(17),y:Y+12,'text-anchor':'middle','font-family':'var(--mono)',
+    'font-size':38,fill:'var(--cool)','font-weight':600}); vtx.textContent='17'; G.appendChild(vtx);
+  const msg=mk('text',{x:X0,y:340,'font-family':'var(--sans)','font-size':16.5,
+    fill:'var(--hot)','font-weight':400}); G.appendChild(msg);
+
+  const q=el.querySelector('#pc-q'), m=el.querySelector('#pc-m');
+  const qv=el.querySelector('#pc-qv'), mv=el.querySelector('#pc-mv');
+  const dt=el.querySelector('#pc-dt'), out=el.querySelector('#pc-out');
+  const CP=5.5;
+  function upd(){
+    const Q=+q.value, M=+m.value, T=Q*1000/(M*CP);
+    qv.textContent=fmt(Q)+' MWt';
+    mv.textContent=fmt(M)+' kg/s';
+    dt.innerHTML=fmt(T,1)+' <small>K</small>';
+    ndg.setAttribute('transform','translate('+X(T)+','+(Y+44)+')');
+    vtx.setAttribute('x',X(T)); vtx.textContent=fmt(T,1);
+    const ok = T>=30 && T<=50;
+    out.className='readout '+(ok?'good':'warn');
+    vtx.setAttribute('fill', ok?'var(--ok)':'var(--hot)');
+    nd.setAttribute('fill', ok?'var(--ok)':'var(--hot)');
+    msg.setAttribute('fill', ok?'var(--ok)':'var(--hot)');
+    msg.textContent = ok
+      ? TX('통상 범위 안 — 이 두 값은 같은 노형의 값일 수 있다',
+           'Inside the usual band - these two can belong to the same design')
+      : TX('통상 범위 밖 — 둘 중 하나는 다른 노형의 값이다',
+           'Outside the usual band - one of the two belongs to another design');
+  }
+  q.oninput=m.oninput=upd;
+  el.querySelector('#pc-bad').onclick=()=>{ q.value=250; m.value=2660; upd(); };
+  el.querySelector('#pc-ok').onclick =()=>{ q.value=540; m.value=2660; upd(); };
+  upd();
+}});
+
+
+/* ---------------------------------------------------------------- 3중 대조 + 사례 */
+S({tag:'THREE PASSES', ov:'[[3중 대조와 두 사례||Three passes, and two worked cases]]',
+src:'[[<b>출처</b> 본 교재 4.3~4.5절 · i-SMR 520/540 MWth · NuScale 12.8/13.8 MPa · 두 사례 모두 실제로 부딪힌 것임||<b>Source</b> This textbook &#167;&#167;4.3-4.5 · i-SMR 520 vs 540 MWth, NuScale 12.8 vs 13.8 MPa - both met in practice]]',
+abbr:'[[<b>자기정합성</b> 받은 값들끼리 물리적으로 맞는지 · <b>독립 출처</b> 작성 주체가 다른 두 1차 자료 · <b>psia</b> 절대압 파운드/제곱인치 — 2 000 psia = 13.8 MPa||<b>self-consistency</b> whether the values agree with each other physically · <b>independent source</b> two primary sources written by different bodies · <b>psia</b> pounds per square inch absolute - 2 000 psia = 13.8 MPa]]',
+html:`<h2 class="t">[[세 번을 다 통과하면 인용함. <em>2차에서 걸리면 값을 버림</em>||Cite only after all three passes. <em>Fail pass 2 and the value is discarded</em>]]</h2>
+<ul class="b">
+  <li>[[3차에서 값이 엇갈리면 <b class="amb">엇갈린다는 사실을 함께 적음</b> — 한쪽을 임의로 고르는 것이 가장 위험함||If pass 3 disagrees, <b class="amb">record the disagreement</b>. Silently picking one side is the most dangerous move]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 372" role="img" aria-label="[[자기정합성·원문 확인·독립 출처 세 단계와 520/540 및 12.8/13.8 두 사례의 판정||Three passes - self-consistency, opening the source, an independent source - and how the two cases resolved]]">
+  <g id="tp-flow"></g>
+  <g id="tp-cases"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#tp-flow'), gs=[];
+  const P=[
+    ['var(--cool)',TX('1차 — 자기정합성','Pass 1 - self-consistency'),
+     TX('받은 값들끼리 물리적으로 맞는가. 원문을 열지 않고 할 수 있어 가장 싸다.',
+        'Do the values agree physically? The cheapest pass - no source needed.')],
+    ['var(--amber)',TX('2차 — 원문 확인','Pass 2 - open the source'),
+     TX('지목된 문서의 그 쪽을 연다. 요약이 아니라 PDF 를 연다. 출처 오귀속이 여기서 잡힌다.',
+        'Open that page of that document - the PDF, not the summary. Misattribution dies here.')],
+    ['var(--ok)',TX('3차 — 독립 출처','Pass 3 - an independent source'),
+     TX('작성 주체가 다른 두 번째 1차 자료. 둘 다 같은 보도자료를 베낀 것이면 독립이 아니다.',
+        'A second primary source by a different body. Two copies of one press release are not independent.')]
+  ];
+  P.forEach((p,i)=>{
+    const g=mk('g',{transform:'translate('+(i*374)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:352,height:150,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:352,height:3,fill:p[0]}));
+    const h=mk('text',{x:22,y:40,'font-family':'var(--sans)','font-size':19,fill:p[0],
+      'font-weight':600}); h.textContent=p[1]; g.appendChild(h);
+    wrapT(p[2],22).forEach((ln,j)=>{
+      const t=mk('text',{x:22,y:70+j*23,'font-family':'var(--sans)','font-size':16,
+        fill:'var(--ink-2)','font-weight':300}); t.textContent=ln; g.appendChild(t); });
+    G.appendChild(g); gs.push(g);
+    if(i<2) G.appendChild(mk('path',{d:'M'+(i*374+352)+',75 h22',stroke:'var(--rule)','stroke-width':1.4}));
+  });
+
+  const C=el.querySelector('#tp-cases');
+  const K=[
+    [TX('사례 A · i-SMR 열출력','Case A · i-SMR thermal power'),'520 MWth  vs  540 MW(th)',
+     TX('1차 대조로는 판별되지 않는다 — 두 값 모두 열효율이 통상 범위 안이다.',
+        'Pass 1 cannot separate them - both give a thermal efficiency inside the usual band.'),
+     TX('2차 대조에서 ARIS 쪽만 유량·온도가 함께 제시되어 검산된다(512 MW, 5% 안쪽). 인용은 540 으로 하고 520 은 각주로 남긴다.',
+        'In pass 2 only ARIS supplies flow and temperatures, and they check out (512 MW, within 5%). Cite 540 and footnote the 520.')],
+    [TX('사례 B · NuScale 운전압력','Case B · NuScale operating pressure'),'12.8 MPa  vs  13.8 MPa',
+     TX('둘 다 맞다. 다른 설계다 — 12.8 은 US600(160 MWt), 13.8 은 US460(250 MWt) 값이다.',
+        'Both are right. Different designs - 12.8 is US600 (160 MWt), 13.8 is US460 (250 MWt).'),
+     TX('원문 단위가 2 000 psia 다. 단위계가 바뀌는 지점을 항상 의심한다 — 반올림이 옮긴 사람에게 달려 있다.',
+        'The source says 2 000 psia. Always suspect the point where the unit system changes - the rounding is the transcriber’s.')]
+  ];
+  K.forEach((k,i)=>{
+    const g=mk('g',{transform:'translate('+(i*562)+',182)',opacity:0});
+    g.appendChild(mk('rect',{width:540,height:186,fill:'var(--ground)',stroke:'var(--rule)'}));
+    const h=mk('text',{x:20,y:34,'font-family':'var(--sans)','font-size':18,fill:'var(--ink)',
+      'font-weight':600}); h.textContent=k[0]; g.appendChild(h);
+    const v=mk('text',{x:20,y:66,'font-family':'var(--mono)','font-size':20,fill:'var(--hot)'});
+    v.textContent=k[1]; g.appendChild(v);
+    let y=98;
+    [[k[2],'var(--ink-2)'],[k[3],'var(--ok)']].forEach(r=>{
+      const L=wrapT(r[0],35);
+      L.forEach((ln,j)=>{ const t=mk('text',{x:20,y:y+j*22,'font-family':'var(--sans)',
+        'font-size':15.5,fill:r[1],'font-weight':300}); t.textContent=ln; g.appendChild(t); });
+      y += L.length*22 + 10;
+    });
+    C.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:360,delay:180*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- 체크리스트 */
+S({tag:'CHECKLIST', ov:'[[검증 체크리스트 여섯 줄||A six-line verification checklist]]',
+src:'[[<b>출처</b> 본 교재 4.6절 · 작업을 끝내기 전에 이 여섯 줄을 확인함||<b>Source</b> This textbook &#167;4.6 · run through these six before calling the work done]]',
+html:`<h2 class="t">[[끝내기 전에 <em>여섯 줄</em>||<em>Six lines</em> before you call it done]]</h2>
+<ul class="b">
+  <li>[[1부 전체가 이 여섯 줄로 압축됨. 여섯이 다 채워지면 그 표는 <b>발표 자리에서 질문을 견딤</b>||All of Part I compresses into these six. Tick all six and the table <b>survives the question in the room</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 418" role="img" aria-label="[[출처·1차자료·물리정합·세대기준·엇갈림표기·접근일 여섯 항목의 체크리스트||A checklist of six items - source, primary tier, physical consistency, generation and basis, recorded disagreement, access date]]">
+  <g id="ck-list"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const L=[
+    [TX('모든 수치에 문서명 · 쪽(또는 표) 번호가 붙어 있다',
+        'Every value carries a document name and a page or table number'), TX('1.4절','§1.4')],
+    [TX('각 수치의 출처가 1차 자료다 — 기사 · 요약이 아니다',
+        'Every source is primary - not an article, not a summary'),       TX('1.2절','§1.2')],
+    [TX('같은 노형의 값들끼리 물리적으로 정합적이다 — 열평형 검산 통과',
+        'Values of one design agree physically - the energy balance closes'), TX('4.2절','§4.2')],
+    [TX('설계 세대 · 기준(모듈당/전체, 총발전/송전단)이 섞이지 않았다',
+        'No mixing of design generations or bases (per module vs plant, gross vs net)'), TX('4.5절','§4.5')],
+    [TX('출처가 엇갈리는 값은 엇갈린다고 적혀 있다',
+        'Where sources disagree, the disagreement is written down'),      TX('4.4절','§4.4')],
+    [TX('접근일이 기록되어 있다','The access date is recorded'),          TX('2.4절','§2.4')]
+  ];
+  const G=el.querySelector('#ck-list'), gs=[];
+  L.forEach((l,i)=>{
+    const y=i*68, g=mk('g',{opacity:0});
+    g.appendChild(mk('rect',{x:24,y:y+16,width:22,height:22,fill:'none',stroke:'var(--ok)',
+      'stroke-width':1.6}));
+    g.appendChild(mk('path',{d:'M29,'+(y+27)+' l5,6 l9,-12',fill:'none',stroke:'var(--ok)',
+      'stroke-width':2.2,'stroke-linecap':'round'}));
+    const t=mk('text',{x:64,y:y+34,'font-family':'var(--sans)','font-size':19,fill:'var(--ink)',
+      'font-weight':300}); t.textContent=l[0]; g.appendChild(t);
+    const s=mk('text',{x:1084,y:y+34,'text-anchor':'end',class:'lbl'});
+    s.textContent=l[1]; g.appendChild(s);
+    g.appendChild(mk('line',{x1:24,y1:y+56,x2:1084,y2:y+56,stroke:'var(--rule)'}));
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:300,delay:130*i,fill:'forwards',easing:'ease-out'}));
+}});
+</script>

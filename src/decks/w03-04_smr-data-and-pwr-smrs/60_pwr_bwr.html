@@ -1,0 +1,370 @@
+<script>
+/* ================================================================
+   SECTION 05 — PWR과 BWR, 그리고 일체형  (교재 5장)
+   ================================================================ */
+SECT('05 · [[PWR · BWR · 일체형||PWR, BWR, integral]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;05 PWR과 BWR, 그리고 일체형||&#167;05 PWR, BWR, and going integral]]',
+html:`[[<div class="no">05</div><h2>PWR과 BWR,<br>그리고 일체형</h2><div class="ln"></div>
+<p>2부의 출발점. 경수로 두 계보가 갈라지는 지점은 <b>증기를 어디서 만드는가</b> 하나다.
+그리고 SMR이 왜 “일체형”이라는 형태로 수렴했는지를 본다.</p>||<div class="no">05</div><h2>PWR, BWR,<br>and going integral</h2><div class="ln"></div>
+<p>Where Part II starts. The two light-water lines split on one question - <b>where the steam is made</b>.
+Then: why SMRs converged on the integral layout.</p>]]`});
+
+
+/* ---------------------------------------------------------------- PWR vs BWR */
+S({tag:'WHERE THE STEAM IS MADE', ov:'[[증기를 어디서 만드는가 — PWR과 BWR||Where the steam is made - PWR and BWR]]',
+src:'[[<b>출처</b> 본 교재 5.1절 표 5.1 · 운전압력은 대표값(PWR 약 15.5 MPa · BWR 약 7 MPa)||<b>Source</b> This textbook &#167;5.1, Table 5.1 · representative pressures: PWR about 15.5 MPa, BWR about 7 MPa]]',
+abbr:'[[<b>PWR</b> 가압경수로 · <b>BWR</b> 비등경수로 · <b>랭킨 사이클</b> 물을 끓여 증기로 터빈을 돌리는 열기관 순환 · <b>기수분리기</b> 증기와 물을 갈라 내는 장치||<b>PWR</b> Pressurized Water Reactor · <b>BWR</b> Boiling Water Reactor · <b>Rankine cycle</b> the steam power cycle · <b>steam separator</b> splits steam from water]]',
+html:`<h2 class="t">[[갈라지는 지점은 <em>하나</em>뿐임 — 증기를 어디서 만드는가||They split on <em>one thing</em> - where the steam gets made]]</h2>
+<ul class="b">
+  <li>[[<b>PWR</b>은 1차계통을 높은 압력으로 눌러 <b>노심에서 끓지 않게</b> 함. 열은 증기발생기에서 2차측으로 넘김||A <b>PWR</b> holds the primary at high pressure so <b>the core never boils</b>; heat crosses to the secondary in a steam generator]]</li>
+  <li>[[<b>BWR</b>은 노심에서 직접 끓여 그 증기를 터빈으로 보냄. 증기발생기가 없고 <b class="hot">터빈실도 방사선 구역</b>이 됨||A <b>BWR</b> boils in the core and sends that steam to the turbine. No steam generator - and <b class="hot">the turbine hall becomes a radiation area</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 410" role="img" aria-label="[[PWR의 2계통 분리 구성과 BWR의 1계통 직접 구성을 나란히 그린 계통도||A two-loop PWR beside a single-loop BWR]]">
+  <g id="pb-pwr"></g><g id="pb-bwr"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const paths=[];
+  function loop(G, ox, title, col, twoLoop){
+    const hd=mk('text',{x:ox,y:22,'font-family':'var(--sans)','font-size':20,fill:col,
+      'font-weight':600}); hd.textContent=title; G.appendChild(hd);
+    /* 노심 */
+    G.appendChild(mk('rect',{x:ox+30,y:200,width:80,height:110,fill:'var(--panel)',
+      stroke:'var(--hot)','stroke-width':1.6}));
+    const c=mk('text',{x:ox+70,y:262,'text-anchor':'middle',class:'ttl',fill:'var(--hot)'});
+    c.textContent=TX('노심','Core'); G.appendChild(c);
+    if(twoLoop){
+      /* 증기발생기 */
+      G.appendChild(mk('rect',{x:ox+210,y:150,width:74,height:160,fill:'var(--panel)',
+        stroke:'var(--cool)','stroke-width':1.6}));
+      const g1=mk('text',{x:ox+247,y:340,'text-anchor':'middle',class:'lbl',fill:'var(--cool)'});
+      g1.textContent=TX('증기발생기','Steam generator'); G.appendChild(g1);
+      /* 1차 고리 — 노심과 증기발생기 사이 */
+      const p1=mk('path',{d:'M'+(ox+110)+',224 H'+(ox+210)+' M'+(ox+210)+',292 H'+(ox+110),
+        fill:'none',stroke:'var(--hot)','stroke-width':2}); G.appendChild(p1);
+      G.appendChild(mk('path',{d:'M'+(ox+110)+',224 H'+(ox+170)+' V292 H'+(ox+110),fill:'none',
+        stroke:'none'}));
+      const l1=mk('text',{x:ox+160,y:212,'text-anchor':'middle',class:'lbl',fill:'var(--hot)'});
+      l1.textContent=TX('1차 · 15.5 MPa','primary 15.5 MPa'); G.appendChild(l1);
+      /* 2차 고리 — 증기발생기에서 터빈으로 */
+      const p2=mk('path',{d:'M'+(ox+284)+',176 H'+(ox+390),fill:'none',stroke:'var(--cool)',
+        'stroke-width':2}); G.appendChild(p2); paths.push(p2);
+      G.appendChild(mk('path',{d:'M'+(ox+390)+',286 H'+(ox+284),fill:'none',stroke:'var(--cool)',
+        'stroke-width':2}));
+      const l2=mk('text',{x:ox+336,y:168,'text-anchor':'middle',class:'lbl',fill:'var(--cool)'});
+      l2.textContent=TX('2차계통 · 깨끗함','secondary · clean'); G.appendChild(l2);
+      turbine(G, ox+390, 'var(--cool)', TX('터빈실 방사선 낮음','turbine hall: low radiation'));
+      paths.push(p1);
+    } else {
+      /* 노심에서 바로 터빈으로 */
+      G.appendChild(mk('rect',{x:ox+30,y:150,width:80,height:46,fill:'var(--panel)',
+        stroke:'var(--rule)'}));
+      const sp=mk('text',{x:ox+70,y:178,'text-anchor':'middle',class:'lbl'});
+      sp.textContent=TX('기수분리기','separator'); G.appendChild(sp);
+      const p=mk('path',{d:'M'+(ox+110)+',172 H'+(ox+390),fill:'none',stroke:'var(--hot)',
+        'stroke-width':2}); G.appendChild(p); paths.push(p);
+      G.appendChild(mk('path',{d:'M'+(ox+390)+',292 H'+(ox+110),fill:'none',stroke:'var(--hot)',
+        'stroke-width':2}));
+      const l=mk('text',{x:ox+250,y:164,'text-anchor':'middle',class:'lbl',fill:'var(--hot)'});
+      l.textContent=TX('방사화된 증기가 그대로 간다 · 약 7 MPa',
+                       'activated steam goes straight through · about 7 MPa'); G.appendChild(l);
+      turbine(G, ox+390, 'var(--hot)', TX('터빈실도 방사선 구역','turbine hall is a radiation area'));
+    }
+  }
+  function turbine(G, x, col, note){
+    G.appendChild(mk('polygon',{points:poly([[x,150],[x+70,134],[x+70,318],[x,302]]),
+      fill:'var(--panel)',stroke:col,'stroke-width':1.6}));
+    const t=mk('text',{x:x+35,y:232,'text-anchor':'middle',class:'ttl',fill:col});
+    t.textContent=TX('터빈','Turbine'); G.appendChild(t);
+    wrapT(note,12).forEach((ln,j)=>{
+      const e=mk('text',{x:x+35,y:348+j*18,'text-anchor':'middle',class:'lbl',fill:col});
+      e.textContent=ln; G.appendChild(e); });
+  }
+  loop(el.querySelector('#pb-pwr'),  30, TX('PWR — 증기발생기에서 만든다','PWR - made in a steam generator'), 'var(--cool)', 1);
+  loop(el.querySelector('#pb-bwr'), 610, TX('BWR — 노심에서 바로 만든다','BWR - made in the core'), 'var(--hot)', 0);
+  el.querySelector('#pb-bwr').appendChild(mk('line',{x1:580,y1:40,x2:580,y2:370,
+    stroke:'var(--rule)','stroke-dasharray':'4 5'}));
+  if(RM) return;
+  paths.forEach(p=>{ const L=p.getTotalLength(); flow(p,{n:6,color:p.getAttribute('stroke'),r:3.4,speed:0.2}); });
+}});
+
+
+/* ---------------------------------------------------------------- 구조적 차이 */
+S({tag:'CONTROL ROD DIRECTION', ov:'[[제어봉 삽입 방향 — 전원을 잃으면 어떻게 되는가||Control rod direction - what happens when power is lost]]',
+src:'[[<b>출처</b> 본 교재 5.1.2절 표 5.1 · 9장 BWRX-300의 FMCRD를 볼 때 이 차이를 기억할 것||<b>Source</b> This textbook &#167;5.1.2, Table 5.1 · remember this when the BWRX-300 FMCRD comes up in ch. 9]]',
+abbr:'[[<b>제어봉</b> 중성자를 흡수해 반응도를 낮추는 봉 · <b>축압기</b> 압축 기체로 힘을 저장해 두는 용기 · <b>FMCRD</b> 미세운동 제어봉구동장치(BWRX-300)||<b>control rod</b> absorbs neutrons to cut reactivity · <b>accumulator</b> a vessel storing force in compressed gas · <b>FMCRD</b> Fine Motion Control Rod Drive (BWRX-300)]]',
+html:`<h2 class="t">[[PWR은 전원을 잃으면 제어봉이 <em>떨어진다</em>. BWR은 <s>그렇지 않다</s>||Lose power and a PWR&#8217;s rods <em>fall</em>. A BWR&#8217;s <s>do not</s>]]</h2>
+<ul class="b">
+  <li>[[BWR은 노심 위쪽이 기수분리기·건조기로 채워지므로 제어봉을 <b>아래에서 밀어 넣어야</b> 함 — 구조가 강제한 선택임||A BWR&#8217;s core is capped by separators and dryers, so rods must be <b>driven in from below</b> - the structure forces it]]</li>
+  <li>[[그래서 BWR은 별도의 <b class="amb">수압·전동 구동장치와 축압기</b>가 필요함. 안전해석에서 자주 되돌아오는 항목임||So a BWR needs <b class="amb">hydraulic and electric drives with accumulators</b>. It comes back often in safety analysis]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 790 415" role="img" aria-label="[[PWR은 위에서 중력으로, BWR은 아래에서 구동력으로 제어봉을 넣는 구조 비교||Rods dropping by gravity from above in a PWR versus being driven up from below in a BWR]]">
+    <g id="cr-fig"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <table class="d sm">
+      <tr><th>[[항목||Item]]</th><th>PWR</th><th>BWR</th></tr>
+      <tr><td>[[증기 생성||Steam made in]]</td><td>[[증기발생기||Steam generator]]</td><td>[[노심||The core]]</td></tr>
+      <tr><td>[[사이클||Cycle]]</td><td>[[2계통 분리||Two loops]]</td><td>[[1계통||One loop]]</td></tr>
+      <tr><td>[[운전압력||Pressure]]</td><td class="n">15.5 MPa</td><td class="n">7 MPa</td></tr>
+      <tr><td>[[증기발생기||Steam generator]]</td><td>[[있음||Yes]]</td><td>[[없음||No]]</td></tr>
+      <tr class="mark"><td>[[제어봉 삽입||Rod insertion]]</td><td>[[위 &#8594; 아래 · 중력||Top down &#183; gravity]]</td><td>[[아래 &#8594; 위 · 구동력||Bottom up &#183; driven]]</td></tr>
+      <tr><td>[[터빈실 방사선||Turbine hall]]</td><td>[[낮음||Low]]</td><td>[[높음||High]]</td></tr>
+    </table>
+  </div>
+</div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#cr-fig');
+  const rods=[];
+  function side(ox, title, col, down, note){
+    const hd=mk('text',{x:ox+110,y:24,'text-anchor':'middle','font-family':'var(--sans)',
+      'font-size':19,fill:col,'font-weight':600}); hd.textContent=title; G.appendChild(hd);
+    /* 용기 */
+    G.appendChild(mk('rect',{x:ox+20,y:48,width:180,height:250,fill:'var(--panel)',
+      stroke:'var(--rule)','stroke-width':1.4}));
+    /* 노심 */
+    G.appendChild(mk('rect',{x:ox+48,y:down?188:96,width:124,height:96,fill:'var(--ground)',
+      stroke:'var(--hot)','stroke-width':1.4}));
+    const c=mk('text',{x:ox+110,y:down?244:152,'text-anchor':'middle',class:'lbl',fill:'var(--hot)'});
+    c.textContent=TX('노심','core'); G.appendChild(c);
+    if(!down){
+      G.appendChild(mk('rect',{x:ox+48,y:212,width:124,height:70,fill:'var(--ground)',
+        stroke:'var(--rule)'}));
+      const s=mk('text',{x:ox+110,y:252,'text-anchor':'middle',class:'lbl'});
+      s.textContent=TX('기수분리기 · 건조기','separator + dryer'); G.appendChild(s);
+    }
+    /* 제어봉 세 개 */
+    for(let i=0;i<3;i++){
+      const x=ox+68+i*38;
+      const r=mk('rect',{x:x,y:down?62:284,width:10,height:down?110:0,fill:col});
+      G.appendChild(r); rods.push([r,down]);
+    }
+    const a=mk('path',{d: down ? 'M'+(ox+110)+',312 v-24' : 'M'+(ox+110)+',312 v-24',
+      fill:'none',stroke:col,'stroke-width':0});
+    G.appendChild(a);
+    wrapT(note,13).forEach((ln,j)=>{
+      const e=mk('text',{x:ox+110,y:330+j*21,'text-anchor':'middle','font-family':'var(--sans)',
+        'font-size':16,fill:col,'font-weight':300}); e.textContent=ln; G.appendChild(e); });
+  }
+  side(0,   'PWR', 'var(--ok)',  1,
+       TX('전원이 끊기면 그대로 떨어진다 — 차단이 곧 작동이다',
+          'Cut the power and they drop - cutting it is the action'));
+  side(400, 'BWR', 'var(--amber)', 0,
+       TX('전원이 끊겨도 저절로 들어가지 않는다 — 수압 축압기가 따로 필요하다',
+          'They do not insert on their own - a separate hydraulic accumulator is needed'));
+  G.appendChild(mk('line',{x1:380,y1:40,x2:380,y2:376,stroke:'var(--rule)','stroke-dasharray':'4 5'}));
+  if(RM){ rods.forEach(r=>r[0].setAttribute('height',r[1]?110:96)); return; }
+  rods.forEach((r,i)=>{
+    if(r[1]) r[0].animate([{height:'0px'},{height:'110px'}],
+      {duration:500,delay:300+90*i,fill:'forwards',easing:'cubic-bezier(.4,0,.6,1)'});
+    else {
+      r[0].setAttribute('y',284);
+      r[0].animate([{height:'0px',y:'284px'},{height:'96px',y:'188px'}],
+        {duration:900,delay:900+90*i,fill:'forwards',easing:'linear'});
+    }
+  });
+}});
+
+
+/* ---------------------------------------------------------------- 일체형 = 사고 제거 */
+S({tag:'REMOVE THE ACCIDENT', ov:'[[일체형 — 안전계통을 개선하는 게 아니라 사고를 제거한다||Integral - not a better safety system but a removed accident]]',
+src:'[[<b>출처</b> 본 교재 5.2절 · 대형 LOCA 는 1차계통 대구경 배관의 완전 파단 시나리오임||<b>Source</b> This textbook &#167;5.2 · a large LOCA is the double-ended rupture of a large primary pipe]]',
+abbr:'[[<b>LOCA</b> 냉각재상실사고 · <b>A<sub>break</sub></b> 파단면적 · <b>ṁ<sub>loss</sub></b> 유출 유량 · <b>축압기</b> 압축 기체로 물을 밀어 넣는 피동 주입 탱크||<b>LOCA</b> Loss-of-Coolant Accident · <b>A<sub>break</sub></b> break area · <b>&#7745;<sub>loss</sub></b> escaping flow · <b>accumulator</b> a passive tank that pushes water in with compressed gas]]',
+html:`<h2 class="t">[[안전계통을 <s>더 잘 만드는</s> 게 아니라, 막아야 할 <em>사고를 없앰</em>||Not <s>a better safety system</s> - the accident itself is <em>removed</em>]]</h2>
+<ul class="b">
+  <li>[[대형 PWR의 안전주입 · 축압기 · 재순환계통은 전부 <b>대구경 배관 파단이라는 한 시나리오</b>에 대비해 존재함||Safety injection, accumulators and recirculation in a large PWR all exist for <b>one scenario</b> - a large pipe break]]</li>
+  <li>[[배관이 없으면 그 시나리오 자체가 사라짐. <b class="cool">파단면적이 0이면 유출 유량도 0</b>임||No pipe, no scenario. <b class="cool">Zero break area means zero escaping flow</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 410" role="img" aria-label="[[루프형 배치의 대구경 배관과 일체형 배치에서 그 배관이 사라진 모습, 그리고 남는 냉각재 상실 경로||A loop layout with its large pipes, the integral layout with those pipes gone, and the leak paths that remain]]">
+  <g id="ri-loop"></g><g id="ri-int"></g><g id="ri-rest"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  /* 왼쪽 — 루프형. 굵은 배관이 용기 옆구리에 붙어 있다. */
+  const A=el.querySelector('#ri-loop');
+  A.appendChild(mk('text',{x:20,y:22,'font-family':'var(--sans)','font-size':19,
+    fill:'var(--hot)','font-weight':600})).textContent=TX('루프형 — 배관이 있다','Loop layout - the pipes are there');
+  A.appendChild(mk('rect',{x:40,y:100,width:96,height:180,fill:'var(--panel)',stroke:'var(--rule)','stroke-width':1.4}));
+  A.appendChild(mk('rect',{x:240,y:80,width:70,height:200,fill:'var(--panel)',stroke:'var(--cool)','stroke-width':1.4}));
+  A.appendChild(mk('text',{x:88,y:196,'text-anchor':'middle',class:'lbl'})).textContent=TX('원자로용기','RPV');
+  A.appendChild(mk('text',{x:275,y:302,'text-anchor':'middle',class:'lbl',fill:'var(--cool)'})).textContent=TX('증기발생기','SG');
+  const pipe=mk('path',{d:'M136,136 H240 M240,244 H136',fill:'none',stroke:'var(--hot)','stroke-width':11,
+    'stroke-linecap':'butt',opacity:0.85});
+  A.appendChild(pipe);
+  A.appendChild(mk('text',{x:188,y:120,'text-anchor':'middle',class:'lbl',fill:'var(--hot)'}))
+   .textContent=TX('대구경 1차 배관','large primary pipe');
+  const burst=mk('g',{opacity:0}); A.appendChild(burst);
+  burst.appendChild(mk('circle',{cx:188,cy:136,r:17,fill:'var(--hot-2)'}));
+  burst.appendChild(mk('text',{x:188,y:88,'text-anchor':'middle',class:'lbl',fill:'var(--hot-2)'}))
+       .textContent=TX('완전 파단 = 대형 LOCA','double-ended break = large LOCA');
+  A.appendChild(mk('text',{x:20,y:346,'font-family':'var(--sans)','font-size':16.5,
+    fill:'var(--ink-2)','font-weight':300})).textContent=
+    TX('안전주입 · 축압기 · 재순환계통이 이 하나에 대비해 존재한다',
+       'Injection, accumulators and recirculation all exist for this one case');
+
+  /* 오른쪽 — 일체형. 배관이 통째로 없다. */
+  const B=el.querySelector('#ri-int');
+  B.appendChild(mk('text',{x:600,y:22,'font-family':'var(--sans)','font-size':19,
+    fill:'var(--ok)','font-weight':600})).textContent=TX('일체형 — 배관이 없다','Integral - no pipes at all');
+  B.appendChild(mk('rect',{x:620,y:80,width:170,height:200,fill:'var(--panel)',stroke:'var(--ok)','stroke-width':1.6}));
+  B.appendChild(mk('rect',{x:648,y:190,width:114,height:76,fill:'var(--ground)',stroke:'var(--hot)','stroke-width':1.3}));
+  B.appendChild(mk('text',{x:705,y:236,'text-anchor':'middle',class:'lbl',fill:'var(--hot)'})).textContent=TX('노심','core');
+  B.appendChild(mk('rect',{x:648,y:100,width:114,height:66,fill:'var(--ground)',stroke:'var(--cool)','stroke-width':1.3}));
+  B.appendChild(mk('text',{x:705,y:138,'text-anchor':'middle',class:'lbl',fill:'var(--cool)'})).textContent=TX('증기발생기','SG');
+  B.appendChild(mk('text',{x:705,y:302,'text-anchor':'middle',class:'lbl',fill:'var(--ok)'}))
+   .textContent=TX('둘이 한 용기 안에 있다','both inside one vessel');
+  const fm=mk('g',{opacity:0}); B.appendChild(fm);
+  fm.appendChild(mk('text',{x:600,y:346,'font-family':'var(--mono)','font-size':21,fill:'var(--ok)'}))
+    .textContent='A_break → 0    ⇒    ṁ_loss → 0';
+
+  /* 남는 경로 — 사라지는 것은 대형 LOCA 뿐이다 */
+  const C=el.querySelector('#ri-rest');
+  const rest=mk('g',{opacity:0}); C.appendChild(rest);
+  rest.appendChild(mk('rect',{x:600,y:358,width:500,height:48,fill:'var(--panel)',stroke:'var(--amber)'}));
+  wrapT(TX('남는 것 — 계측 관통부 · 급수·증기 노즐 · 감압밸브 = 소구경 파단',
+           'What remains - instrument penetrations, feed and steam nozzles, relief valves'), 30)
+    .forEach((ln,j)=>{
+      rest.appendChild(mk('text',{x:616,y:380+j*20,'font-family':'var(--sans)','font-size':15.5,
+        fill:'var(--amber)','font-weight':300})).textContent=ln; });
+
+  if(RM){ [burst,fm,rest].forEach(x=>x.setAttribute('opacity',1)); return; }
+  burst.animate([{opacity:0},{opacity:1}],{duration:420,delay:500,fill:'forwards'});
+  fm.animate([{opacity:0},{opacity:1}],{duration:420,delay:1000,fill:'forwards'});
+  rest.animate([{opacity:0},{opacity:1}],{duration:420,delay:1400,fill:'forwards'});
+  flow(pipe,{n:5,color:'var(--ink)',r:2.6,speed:0.16});
+}});
+
+
+/* ---------------------------------------------------------------- 득실 */
+S({tag:'THE PRICE', ov:'[[일체형이 얻는 것과 잃는 것||What the integral layout gains and loses]]',
+src:'[[<b>출처</b> 본 교재 5.2절 표 5.2 · 일체형 SMR 의 안전해석은 대형 LOCA 가 아니라 <b>소구경 파단과 감압 과도</b>가 주된 시나리오가 됨||<b>Source</b> This textbook &#167;5.2, Table 5.2 · for an integral SMR the leading scenarios are <b>small breaks and depressurisation transients</b>, not a large LOCA]]',
+html:`<h2 class="t">[[대가가 안 보이면 <em>아직 다 읽지 않은 것</em>임||If you cannot see the price, <em>you have not finished reading</em>]]</h2>
+<ul class="b">
+  <li>[[일체형에서도 LOCA가 완전히 사라지지는 않음. 용기에는 여전히 <b>관통부 · 노즐 · 감압밸브</b>가 붙어 있음||A LOCA does not vanish entirely. The vessel still carries <b>penetrations, nozzles and relief valves</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 440" role="img" aria-label="[[일체형 배치가 얻는 네 가지와 잃는 네 가지를 짝지어 놓은 그림||Four gains and four losses of the integral layout, paired]]">
+  <g id="pz-cols"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const P=[
+    [TX('대구경 배관 파단 시나리오 제거','The large-break scenario is removed'),
+     TX('용기가 커지고 두꺼워진다','The vessel grows larger and thicker')],
+    [TX('안전계통 단순화','The safety systems get simpler'),
+     TX('증기발생기를 용기 안에서 정비해야 한다','The steam generator must be serviced inside the vessel')],
+    [TX('계통 수 감소로 부지 면적 축소','Fewer systems, so a smaller site'),
+     TX('제작 · 수송 난이도 상승','Harder to fabricate and to transport')],
+    [TX('방사선 구역 축소','Smaller radiation areas'),
+     TX('출력이 용기 크기에 묶인다','Output is tied to how big the vessel can be')]
+  ];
+  const G=el.querySelector('#pz-cols'), gs=[];
+  G.appendChild(mk('text',{x:20,y:18,class:'lbl',fill:'var(--ok)'})).textContent=TX('얻는 것','what it gains');
+  G.appendChild(mk('text',{x:592,y:18,class:'lbl',fill:'var(--hot)'})).textContent=TX('잃는 것','what it loses');
+  P.forEach((r,i)=>{
+    const y=34+i*96, g=mk('g',{opacity:0});
+    [[20,r[0],'var(--ok)'],[592,r[1],'var(--hot)']].forEach(c=>{
+      g.appendChild(mk('rect',{x:c[0],y:y,width:508,height:84,fill:'var(--panel)',stroke:'var(--rule)'}));
+      g.appendChild(mk('rect',{x:c[0],y:y,width:3,height:84,fill:c[2]}));
+      const L=wrapT(c[1],24);
+      L.forEach((ln,j)=>{
+        const t=mk('text',{x:c[0]+22,y:y+(L.length>1?36:52)+j*26,'font-family':'var(--sans)',
+          'font-size':18.5,fill:'var(--ink)','font-weight':300}); t.textContent=ln; g.appendChild(t); });
+    });
+    g.appendChild(mk('text',{x:560,y:y+50,'text-anchor':'middle','font-family':'var(--mono)',
+      'font-size':17,fill:'var(--ink-3)'})).textContent='⇄';
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:340,delay:170*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- 세 갈래 */
+S({tag:'THREE ANSWERS', ov:'[[세 갈래 — 펌프를 없앤다 · 남긴다 · 끓인다||Three answers - drop the pump, keep it, or boil]]',
+src:'[[<b>출처</b> 본 교재 5.3절 · 6~9장에서 하나씩 봄||<b>Source</b> This textbook &#167;5.3 · each is taken up in turn in chapters 6-9]]',
+html:`<h2 class="t">[[&#8220;배관을 없애는 것&#8221;과 &#8220;펌프를 없애는 것&#8221;은 <em>별개의 선택</em>임||Removing the pipes and removing the pump are <em>separate choices</em>]]</h2>
+<ul class="b">
+  <li>[[일체형을 택한 뒤에도 갈림길이 하나 더 있음 — <b>냉각재를 무엇으로 돌리는가</b>||Even after going integral one fork remains - <b>what drives the coolant round</b>]]</li>
+  <li>[[세 설계는 <b class="cool">같은 질문에 서로 다르게 답함</b>. 우열이 아니라 무엇을 최적화했는가의 차이임||The three <b class="cool">answer one question differently</b>. Not better or worse - a difference in what was optimised]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 410" role="img" aria-label="[[자연순환 NuScale, 강제순환 i-SMR, 기포 구동 BWRX-300 세 갈래와 각각의 대가||Three branches - natural circulation, forced circulation, and void-driven - with the price of each]]">
+  <g id="ta-tree"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#ta-tree');
+  /* 뿌리 질문 — 셋이 같은 질문에 답하고 있다는 것을 먼저 보인다 */
+  G.appendChild(mk('rect',{x:380,y:4,width:360,height:48,fill:'var(--panel)',
+    stroke:'var(--cool)','stroke-width':1.6}));
+  G.appendChild(mk('text',{x:560,y:34,'text-anchor':'middle','font-family':'var(--sans)',
+    'font-size':18,fill:'var(--cool)','font-weight':600})).textContent=
+    TX('배관 파단을 어떻게 다룰 것인가','How do we deal with a pipe break?');
+  const B=[
+    ['NuScale VOYGR','var(--cool)','6', TX('펌프를 없앤다','Drop the pump'),
+     TX('높이차와 밀도차가 돌린다','Height and density difference drive it'),
+     TX('움직이는 부품이 사라진다','No moving parts left'),
+     TX('유량을 벌려면 용기가 길어진다','The vessel has to get longer')],
+    ['i-SMR','var(--ok)','7', TX('펌프를 남긴다','Keep the pump'),
+     TX('배관 없이 용기에 직결한다','Bolted to the vessel, no pipe'),
+     TX('유량이 설계 변수가 된다','Flow becomes a design variable'),
+     TX('전원과 회전기계가 남는다','Power and rotating machinery stay')],
+    ['BWRX-300','var(--amber)','9', TX('노심에서 끓인다','Boil in the core'),
+     TX('기포의 부력이 돌린다','Void buoyancy drives it'),
+     TX('증기발생기가 아예 없다','No steam generator at all'),
+     TX('배관이 남아 격리로 다룬다','Pipes remain; isolation handles them')]
+  ];
+  const gs=[];
+  B.forEach((b,i)=>{
+    const x=i*374, cx=x+176;
+    G.appendChild(mk('path',{d:'M560,52 V74 M'+cx+',74 V96 M'+cx+',74 H560',
+      fill:'none',stroke:'var(--rule)','stroke-width':1.3}));
+    const g=mk('g',{transform:'translate('+x+',96)',opacity:0});
+    g.appendChild(mk('rect',{width:352,height:306,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:352,height:3,fill:b[1]}));
+    const n=mk('text',{x:22,y:32,class:'lbl',fill:b[1]});
+    n.textContent=TX(b[2]+'장','ch. '+b[2]); g.appendChild(n);
+    const h=mk('text',{x:22,y:66,'font-family':'var(--sans)','font-size':21,fill:b[1],
+      'font-weight':600}); h.textContent=b[3]; g.appendChild(h);
+    const d=mk('text',{x:22,y:92,'font-family':'var(--mono)','font-size':15,fill:'var(--ink-2)'});
+    d.textContent=b[0]; g.appendChild(d);
+    /* 칸 폭 308 px 에 글자 16 px — 줄바꿈 단위는 19 가 한계다 */
+    let y=124;
+    wrapT(b[4],19).forEach((ln,j)=>{
+      const t=mk('text',{x:22,y:y+j*23,'font-family':'var(--sans)','font-size':16.5,
+        fill:'var(--ink)','font-weight':400}); t.textContent=ln; g.appendChild(t); });
+    y += wrapT(b[4],19).length*23 + 20;
+    [[TX('얻는 것','gains'),b[5],'var(--ok)'],[TX('대가','the price'),b[6],'var(--hot)']]
+      .forEach(r=>{
+        const k=mk('text',{x:22,y:y,class:'lbl',fill:r[2]}); k.textContent=r[0]; g.appendChild(k);
+        const L=wrapT(r[1],19);
+        L.forEach((ln,j)=>{ const t=mk('text',{x:22,y:y+24+j*22,'font-family':'var(--sans)',
+          'font-size':16,fill:'var(--ink-2)','font-weight':300}); t.textContent=ln; g.appendChild(t); });
+        y += 24 + L.length*22 + 16;
+      });
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:380,delay:300+180*i,fill:'forwards',easing:'ease-out'}));
+}});
+</script>
