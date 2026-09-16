@@ -1,0 +1,329 @@
+<script>
+/* ================================================================
+   SECTION 03 — AI로 수집하기  (교재 3장)
+   ================================================================ */
+SECT('03 · [[AI로 수집하기||Collecting with AI]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;03 AI로 수집하기||&#167;03 Collecting with AI]]',
+html:`[[<div class="no">03</div><h2>AI로 수집하기</h2><div class="ln"></div>
+<p>이 장은 “AI로 조사시키기”가 아니라 “AI에게 어디까지 시키고 <b>어디서 끊는가</b>”를 다룬다.
+결론은 첫 문장에 나온다 — AI는 3장에서 끝내고, 4장은 사람이 한다.</p>||<div class="no">03</div><h2>Collecting with AI</h2><div class="ln"></div>
+<p>Not &#8220;let AI do the research&#8221; but &#8220;how far to let it go and <b>where to cut it off</b>.&#8221;
+The conclusion is in the first line - AI stops at chapter 3; chapter 4 is done by a person.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 잘하는 일 / 못하는 일 */
+S({tag:'WHAT IT CAN', ov:'[[AI가 잘하는 일과 못하는 일은 갈린다||What AI does well and badly splits cleanly]]',
+src:'[[<b>출처</b> 본 교재 3.1절 · 못하는 두 가지는 성능 문제가 아니라 <b>확률적 생성</b>이라는 작동 방식에서 옴||<b>Source</b> This textbook &#167;3.1 · the two failures come from <b>probabilistic generation</b> itself, not from model quality]]',
+html:`<h2 class="t">[[못하는 두 가지는 <em>모델을 바꿔도</em> 그대로임||The two failures stay <em>whatever model you use</em>]]</h2>
+<ul class="b">
+  <li>[[&#8220;숫자를 정확히 옮기는 일&#8221;을 못 하는 것은 성능 부족이 아니라 <b>작동 방식</b>임 — 확률적으로 다음 토큰을 고르는 구조임||Getting a number across intact is not a capability gap but <b>how it works</b> - it picks the next token by probability]]</li>
+  <li>[[&#8220;모른다고 말하는 일&#8221;도 마찬가지임. 자료에 없으면 비워 두는 게 맞지만 <b class="hot">그럴듯한 값을 채우는 쪽으로 기움</b>||Same for &#8220;saying it does not know.&#8221; A blank is the right answer, but it <b class="hot">leans towards filling it in plausibly</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 350" role="img" aria-label="[[AI가 구조적으로 잘하는 두 가지와 못하는 두 가지를 나란히 놓은 그림||Two things AI does structurally well and two it does badly, side by side]]">
+  <g id="cw-good" opacity="0">
+    <rect x="0" y="26" width="540" height="300" fill="var(--panel)" stroke="var(--rule)"/>
+    <rect x="0" y="26" width="540" height="3" fill="var(--ok)"/>
+    <text x="24" y="62" class="lbl" fill="var(--ok)">[[구조적으로 잘하는 일||what it does structurally well]]</text>
+  </g>
+  <g id="cw-bad" opacity="0">
+    <rect x="580" y="26" width="540" height="300" fill="var(--panel)" stroke="var(--rule)"/>
+    <rect x="580" y="26" width="540" height="3" fill="var(--hot)"/>
+    <text x="604" y="62" class="lbl" fill="var(--hot)">[[구조적으로 못하는 일||what it structurally cannot do]]</text>
+  </g>
+  <g id="cw-items"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#cw-items');
+  const IT=[
+    [0,'var(--ok)', TX('흩어진 것을 모으는 일','Pulling scattered things together'),
+      TX('다섯 개 노형의 사양을 한 표로 만드는 작업 — 사람이 하면 반나절, AI 는 1분.',
+         'Turning five designs into one table takes a person half a day and the model a minute.')],
+    [1,'var(--ok)', TX('어디를 봐야 하는지 찾아 주는 일','Pointing to where to look'),
+      TX('&#8220;i-SMR 사양이 정리된 1차 자료가 어디 있나&#8221;에 ARIS 설계기술서를 짚어 주는 것.',
+         'Asked where the primary source for i-SMR specs is, it names the ARIS Design Status Report.')],
+    [2,'var(--hot)',TX('숫자를 정확히 옮기는 일','Carrying a number across intact'),
+      TX('표에서 값을 읽어 문장으로 옮기는 과정에서 행이 밀리거나 단위가 바뀐다.',
+         'Reading a value out of a table into a sentence shifts rows and swaps units.')],
+    [3,'var(--hot)',TX('모른다고 말하는 일','Saying that it does not know'),
+      TX('자료에 없으면 비워 두는 게 맞지만, 그럴듯한 값을 채워 넣는 쪽으로 기운다.',
+         'A blank is correct when the source is silent, but it leans towards a plausible fill.')]
+  ];
+  const gs=[];
+  IT.forEach(it=>{
+    const col=it[0]<2?0:1, row=it[0]%2;
+    const g=mk('g',{transform:'translate('+(col?604:24)+','+(96+row*112)+')',opacity:0});
+    const n=mk('text',{x:0,y:20,'font-family':'var(--mono)','font-size':22,fill:it[1],
+      'font-weight':600}); n.textContent='①②①②'[it[0]]; g.appendChild(n);
+    const t=mk('text',{x:34,y:20,'font-family':'var(--sans)','font-size':20,fill:'var(--ink)',
+      'font-weight':500}); t.textContent=it[2]; g.appendChild(t);
+    wrapT(it[3].replace(/&#8220;/g,'“').replace(/&#8221;/g,'”'),30)
+      .forEach((ln,j)=>{ const e=mk('text',{x:0,y:52+j*24,'font-family':'var(--sans)',
+        'font-size':16.5,fill:'var(--ink-2)','font-weight':300}); e.textContent=ln; g.appendChild(e); });
+    G.appendChild(g); gs.push(g);
+  });
+  const gd=el.querySelector('#cw-good'), bd=el.querySelector('#cw-bad');
+  if(RM){ [gd,bd].concat(gs).forEach(x=>x.setAttribute('opacity',1)); return; }
+  gd.animate([{opacity:0},{opacity:1}],{duration:380,fill:'forwards'});
+  bd.animate([{opacity:0},{opacity:1}],{duration:380,delay:500,fill:'forwards'});
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:320,delay:(i<2?220:720)+150*(i%2),fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 5단계 */
+S({tag:'FIVE STEPS', ov:'[[5단계 — AI 구간과 사람 구간||Five steps - the AI stretch and the human stretch]]',
+src:'[[<b>출처</b> 본 교재 3.1절 그림 3.1 · 3.4절 · 주황 구간만 AI가 하고 초록 구간은 사람이 원문을 열어서 함||<b>Source</b> This textbook &#167;&#167;3.1 (Fig. 3.1) and 3.4 · AI does only the amber stretch; the green stretch means opening the source yourself]]',
+html:`<h2 class="t">[[AI 구간은 <em>2단계 하나</em>뿐임 — 나머지는 사람이 함||AI owns <em>step 2 only</em> - the rest is yours]]</h2>
+<ul class="b">
+  <li>[[1단계에서 <b>AI를 쓰지 않는 것</b>이 중요함. 무엇이 필요한지는 사람이 알고, AI에게 맡기면 비교의 축이 흔들림||Not using AI in step 1 matters. You know what you need; let the model choose and the axis of comparison wobbles]]</li>
+  <li>[[3단계에서 <b class="hot">AI의 역할이 끝남</b>. 4단계는 PDF를 열어 눈으로 읽음 — 쪽 번호만 AI에게 물어 시간을 줄임||AI&#8217;s job <b class="hot">ends at step 3</b>. Step 4 means opening the PDF and reading with your eyes - ask the model only for the page number]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 350" role="img" aria-label="[[질문 고정·후보 탐색·원문 확보·수치 대조·기록의 다섯 단계와 AI가 맡는 구간||Five steps - fix the question, find candidates, get the sources, check the values, record - and which one AI covers]]">
+  <g id="fs-steps"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const S5=[
+    [TX('질문 고정','Fix the question'), 'var(--cool)', TX('사람','human'),
+     TX('항목 10개와 단위를 먼저 확정한다. 여기서 AI 를 쓰지 않는다.',
+        'Settle the ten fields and their units. Do not use AI here.')],
+    [TX('후보 탐색','Find candidates'), 'var(--amber)', 'AI',
+     TX('1차 자료의 위치를 찾는다. 값이 아니라 문서명·쪽·표 번호를 묻는다.',
+        'Locate the primary sources. Ask for document, page and table - not the value.')],
+    [TX('원문 확보','Get the sources'), 'var(--ok)', TX('사람','human'),
+     TX('지목된 문서를 PDF 로 내려받는다. 여기서 AI 의 역할이 끝난다.',
+        'Download the named documents. AI’s job ends here.')],
+    [TX('수치 대조','Check the values'), 'var(--ok)', TX('사람','human'),
+     TX('PDF 를 열어 항목별로 값을 읽는다. 쪽 번호만 물어 시간을 줄인다.',
+        'Open the PDF and read each value. Ask only for page numbers to save time.')],
+    [TX('기록','Record'), 'var(--ok)', TX('사람','human'),
+     TX('값 · 단위 · 출처 · 접근일 · 비고를 남긴다(1.4절 다섯 줄).',
+        'Write value, unit, source, access date and note - the five lines of §1.4.')]
+  ];
+  const G=el.querySelector('#fs-steps'), gs=[], W=210, GAP=12;
+  S5.forEach((d,i)=>{
+    const x=i*(W+GAP), g=mk('g',{transform:'translate('+x+',30)',opacity:0});
+    g.appendChild(mk('rect',{width:W,height:262,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:W,height:4,fill:d[1]}));
+    const n=mk('text',{x:18,y:40,'font-family':'var(--mono)','font-size':13,fill:d[1],
+      'letter-spacing':'.12em'}); n.textContent=(i+1)+' · '+d[2]; g.appendChild(n);
+    const t=mk('text',{x:18,y:76,'font-family':'var(--sans)','font-size':20,fill:'var(--ink)',
+      'font-weight':600}); t.textContent=d[0]; g.appendChild(t);
+    wrapT(d[3],12).forEach((ln,j)=>{
+      const e=mk('text',{x:18,y:114+j*24,'font-family':'var(--sans)','font-size':15.5,
+        fill:'var(--ink-2)','font-weight':300}); e.textContent=ln; g.appendChild(e); });
+    G.appendChild(g); gs.push(g);
+  });
+  /* AI 구간을 한 번에 보이게 묶는다 */
+  const band=mk('g',{opacity:0}); G.appendChild(band);
+  band.appendChild(mk('rect',{x:222,y:16,width:210,height:290,fill:'none',stroke:'var(--amber)',
+    'stroke-width':1.6,'stroke-dasharray':'6 5'}));
+  const bl=mk('text',{x:327,y:326,'text-anchor':'middle',class:'lbl',fill:'var(--amber)'});
+  bl.textContent=TX('AI 가 하는 구간은 여기까지','this is as far as AI goes'); band.appendChild(bl);
+  const hl=mk('text',{x:1110,y:326,'text-anchor':'end',class:'lbl',fill:'var(--ok)'});
+  hl.textContent=TX('여기부터는 원문을 직접 연다','from here you open the source yourself');
+  band.appendChild(hl);
+  if(RM){ gs.concat([band]).forEach(x=>x.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:320,delay:140*i,fill:'forwards',easing:'ease-out'}));
+  band.animate([{opacity:0},{opacity:1}],{duration:420,delay:900,fill:'forwards'});
+}});
+
+
+/* ---------------------------------------------------------------- 도구 세 갈래 */
+S({tag:'THREE TOOLS', ov:'[[도구 세 갈래 — 딥리서치 · 문서 Q&A · 직접 연결||Three kinds of tool - deep research, document Q&A, direct connection]]',
+src:'[[<b>출처</b> 본 교재 3.2절 표 3.1 · 2026년 9월 기준의 갈래임||<b>Source</b> This textbook &#167;3.2, Table 3.1 · the landscape as of September 2026]]',
+abbr:'[[<b>MCP</b> 언어모델이 외부 도구·데이터를 호출하는 표준 규약 · <b>API</b> 프로그램이 데이터베이스에 직접 질의하는 통로 · <b>ADAMS</b> NRC 문서 공개 시스템||<b>MCP</b> Model Context Protocol, a standard for calling external tools and data · <b>API</b> a programmatic query channel into a database · <b>ADAMS</b> the NRC document system]]',
+html:`<h2 class="t">[[신뢰도가 가장 높은 것은 <em>문장을 짓지 않는</em> 도구임||The most trustworthy tool is the one that <em>does not compose sentences</em>]]</h2>
+<ul class="b">
+  <li>[[직접 연결형(API · MCP)은 AI가 문장을 지어내는 대신 <b>데이터베이스를 조회</b>함 — 생성된 문장이 아니라 <b class="ok">조회된 레코드</b>임||A direct connection (API, MCP) has the model <b>query the database</b> instead of composing - what comes back is <b class="ok">a record, not a sentence</b>]]</li>
+  <li>[[연구실에서 도구를 만든다면 <b>검색·목록 조회부터</b>. &#8220;무엇이 있는지&#8221;를 정확히 반환하는 도구 하나가 그럴듯한 요약 열 개보다 나음||Building lab tooling? <b>Start with search and listing.</b> One tool that returns exactly what exists beats ten plausible summaries]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 348" role="img" aria-label="[[딥리서치형·문서 Q&A형·직접 연결형 세 도구의 적합 단계와 위험||Three tool families with the step each suits and the risk each carries]]">
+  <g id="tt3"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const T=[
+    [TX('딥리서치형','Deep research'), 'var(--hot)',
+     TX('스스로 검색·열람하며 보고서를 만든다','Searches and reads on its own, then writes a report'),
+     TX('2단계 — 후보 탐색','Step 2 - finding candidates'),
+     TX('출처는 붙지만 수치가 어긋난다','Citations appear, but the numbers drift')],
+    [TX('문서 Q&A형','Document Q&A'), 'var(--amber)',
+     TX('내가 올린 PDF 안에서만 답한다','Answers only from the PDF you uploaded'),
+     TX('3~4단계 — 원문 독해','Steps 3-4 - reading the source'),
+     TX('표를 잘못 읽는다 — 병합 셀·각주·헤더 단위','Misreads tables - merged cells, footnotes, units in headers')],
+    [TX('직접 연결형','Direct connection'), 'var(--ok)',
+     TX('API · MCP 로 데이터베이스를 직접 조회','Queries the database directly through an API or MCP'),
+     TX('2~3단계 — 자동 수집','Steps 2-3 - automated collection'),
+     TX('구현 비용과 권한','Implementation cost and access rights')]
+  ];
+  const G=el.querySelector('#tt3'), gs=[];
+  T.forEach((d,i)=>{
+    const g=mk('g',{transform:'translate('+(i*374)+',6)',opacity:0});
+    g.appendChild(mk('rect',{width:352,height:330,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:352,height:3,fill:d[1]}));
+    const h=mk('text',{x:22,y:44,'font-family':'var(--sans)','font-size':21,fill:d[1],
+      'font-weight':600}); h.textContent=d[0]; g.appendChild(h);
+    let y=84;
+    [[TX('하는 일','what it does'),d[2],'var(--ink)'],
+     [TX('적합한 단계','where it fits'),d[3],'var(--cool)'],
+     [TX('위험','the risk'),d[4],'var(--hot)']].forEach(r=>{
+      const k=mk('text',{x:22,y:y,class:'lbl',fill:r[2]}); k.textContent=r[0]; g.appendChild(k);
+      const L=wrapT(r[1],23);
+      L.forEach((ln,j)=>{ const e=mk('text',{x:22,y:y+26+j*24,'font-family':'var(--sans)',
+        'font-size':16.5,fill:r[2]==='var(--ink)'?'var(--ink)':'var(--ink-2)','font-weight':300});
+        e.textContent=ln; g.appendChild(e); });
+      y += 26 + L.length*24 + 24;
+    });
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:400,delay:200*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- 프롬프트 */
+S({tag:'PROMPTING', ov:'[[프롬프트 — 나쁜 예와 좋은 예||Prompting - a bad example and a good one]]',
+src:'[[<b>출처</b> 본 교재 3.3절 · 결과 품질의 대부분은 <b>질문을 얼마나 좁혔는가</b>로 결정됨||<b>Source</b> This textbook &#167;3.3 · most of the output quality is decided by <b>how narrow the question was</b>]]',
+html:`<h2 class="t">[[&#8220;모르면 <em>비워 두라</em>&#8221; 한 줄이 실무에서 가장 효과가 큼||One line does the most work: &#8220;<em>leave it blank</em> if you don&#8217;t know&#8221;]]</h2>
+<ul class="b">
+  <li>[[이 줄이 없으면 모델은 <b>빈칸을 남기는 것보다 채우는 쪽</b>을 택함. 그리고 비워진 칸은 그 자체로 유용한 정보임||Without it the model <b>prefers filling a blank to leaving it</b>. And a blank is itself information]]</li>
+  <li>[[좋은 프롬프트가 하는 일은 넷임 — <b>항목 고정 · 출처 등급 제한 · 빈칸 허용 · 알려진 함정 차단</b>||A good prompt does four things - <b>fix the fields, limit the source tier, allow blanks, block the known trap</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 346" role="img" aria-label="[[좁히지 않은 프롬프트와 네 가지 규칙을 건 프롬프트를 나란히 놓은 그림||An unconstrained prompt beside one carrying four explicit rules]]">
+  <g id="pr-bad" opacity="0">
+    <rect x="0" y="22" width="420" height="310" fill="var(--panel)" stroke="var(--rule)"/>
+    <rect x="0" y="22" width="420" height="3" fill="var(--hot)"/>
+    <text x="22" y="56" class="lbl" fill="var(--hot)">[[나쁜 예||the bad one]]</text>
+    <text x="22" y="98" font-family="var(--mono)" font-size="17" fill="var(--ink)">[[NuScale이랑 i-SMR 비교해 줘||Compare NuScale and i-SMR]]</text>
+    <g id="pr-bt"></g>
+  </g>
+  <g id="pr-good" opacity="0">
+    <rect x="460" y="22" width="660" height="310" fill="var(--panel)" stroke="var(--rule)"/>
+    <rect x="460" y="22" width="660" height="3" fill="var(--ok)"/>
+    <text x="482" y="56" class="lbl" fill="var(--ok)">[[좋은 예 — 네 가지 규칙||the good one - four rules]]</text>
+    <g id="pr-gt"></g>
+  </g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const B=el.querySelector('#pr-bt');
+  [TX('무엇을 비교할지가 비어 있다','What to compare is missing'),
+   TX('어느 시점 기준인지가 비어 있다','As of when is missing'),
+   TX('어떤 단위로 답할지가 비어 있다','In what units is missing')].forEach((t,i)=>{
+    const e=mk('text',{x:22,y:146+i*30,'font-family':'var(--sans)','font-size':16.5,
+      fill:'var(--ink-2)','font-weight':300}); e.textContent='• '+t; B.appendChild(e);
+  });
+  wrapT(TX('그래서 모델은 학습 데이터에 있던 일반적인 SMR 비교 문단을 재생한다. 그럴듯하고, 출처가 없고, 대개 몇 년 전 값이다.',
+           'So the model replays a generic SMR comparison paragraph from training. Plausible, unsourced, and usually years out of date.'),26)
+    .forEach((ln,j)=>{ const e=mk('text',{x:22,y:252+j*24,'font-family':'var(--sans)',
+      'font-size':16,fill:'var(--hot)','font-weight':300}); e.textContent=ln; B.appendChild(e); });
+
+  const G=el.querySelector('#pr-gt');
+  const R=[
+    [TX('항목을 고정','Fix the fields'),
+     TX('열출력 · 전기출력 · 모듈 수 · 운전압력 · 입출구 온도 · 유량 · 증기발생기 · 펌프 · 연료 · 설계수명',
+        'thermal, electrical, module count, pressure, inlet/outlet, flow, SG, pumps, fuel, design life')],
+    [TX('출처 등급을 제한','Limit the source tier'),
+     TX('ARIS 설계기술서 · NRC 인허가 문서 · 설계사 공식 사양서만. 뉴스 기사는 쓰지 마라.',
+        'ARIS reports, NRC documents and official vendor specs only. No news articles.')],
+    [TX('빈칸을 허용','Allow blanks'),
+     TX('확인되지 않은 항목은 비워 두고 “미확인”이라 적어라. 추정값을 채우지 마라.',
+        'Leave unconfirmed fields blank and write “not confirmed.” Do not fill in estimates.')],
+    [TX('알려진 함정을 차단','Block the known trap'),
+     TX('US600(160 MWt) 자료와 US460(250 MWt) 자료를 섞지 마라.',
+        'Do not mix US600 (160 MWt) material with US460 (250 MWt) material.')]
+  ];
+  let y=92;
+  R.forEach((r,i)=>{
+    const n=mk('text',{x:482,y:y,'font-family':'var(--mono)','font-size':15,fill:'var(--ok)',
+      'font-weight':600}); n.textContent='①②③④'[i]+'  '+r[0]; G.appendChild(n);
+    const L=wrapT(r[1],44);
+    L.forEach((ln,j)=>{ const e=mk('text',{x:504,y:y+24+j*22,'font-family':'var(--sans)',
+      'font-size':15.5,fill:'var(--ink-2)','font-weight':300}); e.textContent=ln; G.appendChild(e); });
+    y += 24 + L.length*22 + 16;
+  });
+  const bad=el.querySelector('#pr-bad'), good=el.querySelector('#pr-good');
+  if(RM){ bad.setAttribute('opacity',1); good.setAttribute('opacity',1); return; }
+  bad.animate([{opacity:0},{opacity:1}],{duration:400,fill:'forwards'});
+  good.animate([{opacity:0},{opacity:1}],{duration:400,delay:560,fill:'forwards'});
+}});
+
+
+/* ---------------------------------------------------------------- 값이 아니라 위치 */
+S({tag:'ASK FOR PLACE', ov:'[[값을 묻지 말고 위치를 묻는다||Ask for the place, not the value]]',
+src:'[[<b>출처</b> 본 교재 3.3.1절 · 값을 물으면 모델은 <b>생성</b>하고, 위치를 물으면 <b>검색</b>함||<b>Source</b> This textbook &#167;3.3.1 · ask for a value and the model <b>generates</b>; ask for a place and it <b>searches</b>]]',
+html:`<h2 class="t">[[생성된 값은 <s>검증이 필요</s>하고, 위치는 <em>열어 보면 끝</em>임||A generated value <s>needs verification</s>; a place is <em>settled by opening it</em>]]</h2>
+<ul class="b">
+  <li>[[두 프롬프트의 차이는 한 줄이지만, <b>검증 비용</b>이 전혀 다름 — 이것이 3장 전체에서 가장 실용적인 요령임||The two prompts differ by one line but the <b>cost of checking</b> is entirely different - the most practical trick in this chapter]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 790 396" role="img" aria-label="[[값을 묻는 프롬프트와 위치를 묻는 프롬프트의 검증 경로 비교||The verification path for a prompt that asks for a value versus one that asks for a place]]">
+    <g id="ap-flow"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">[[값을 물으면||ask for the value]]</span>
+      <span class="v" style="font-size:16.5px;line-height:1.45">[[모델이 <b>생성</b>한다 &#8594; 참인지 거짓인지 알 수 없음 &#8594; 원문을 열어 확인해야 함||the model <b>generates</b> &#8594; you cannot tell true from false &#8594; you must open the source anyway]]</span></div>
+    <div class="readout good"><span class="k">[[위치를 물으면||ask for the place]]</span>
+      <span class="v" style="font-size:16.5px;line-height:1.45">[[모델이 <b>검색</b>한다 &#8594; 열어 보면 바로 참이거나 거짓 &#8594; 확인이 한 번에 끝남||the model <b>searches</b> &#8594; opening it settles the matter &#8594; one check and done]]</span></div>
+  </div>
+</div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#ap-flow');
+  /* 상자 높이를 글 줄 수에서 뽑는다 — 손으로 잡으면 영문에서 반드시 넘친다 */
+  const put=(x,y,w,txt,col,mono)=>{
+    const px = mono?14:16.5;
+    const lines = wrapT(txt, (w-32)/px, mono?0.62:0.5);
+    const h = 22 + lines.length*23 + 14;
+    const g=mk('g',{opacity:0});
+    g.appendChild(mk('rect',{x:x,y:y,width:w,height:h,fill:'var(--panel)',stroke:col||'var(--rule)'}));
+    lines.forEach((ln,j)=>{
+      const t=mk('text',{x:x+16,y:y+30+j*23,'font-family':mono?'var(--mono)':'var(--sans)',
+        'font-size':px,fill:col||'var(--ink-2)','font-weight':300});
+      t.textContent=ln; g.appendChild(t); });
+    G.appendChild(g); return [g,h];
+  };
+  const gs=[], L=[], R=[];
+  L.push(put(0,0,368,TX('i-SMR 의 1차계통 운전압력은 몇 MPa 인가?',
+                        'What is the i-SMR primary operating pressure in MPa?'),'var(--hot)',1));
+  L.push(put(0,128,368,TX('\u201c15.5 MPa 입니다\u201d \u2014 맞을 수도 있고, 다른 노형 값일 수도 있다',
+                          '\u201cIt is 15.5 MPa\u201d - could be right, could be another design\u2019s value'),'var(--ink-2)'));
+  L.push(put(0,266,368,TX('확인하려면 결국 원문을 연다 \u2014 절약된 것이 없다',
+                          'To be sure you open the source anyway - nothing was saved'),'var(--hot)'));
+  R.push(put(422,0,368,TX('그 값이 적힌 1차 자료의 문서명 \u00b7 절 \u00b7 표 번호만 알려 줘',
+                          'Name only the document, section and table where that value appears'),'var(--ok)',1));
+  R.push(put(422,128,368,TX('\u201cARIS i-SMR Design Status Report, Table 1\u201d',
+                            '\u201cARIS i-SMR Design Status Report, Table 1\u201d'),'var(--ink-2)'));
+  R.push(put(422,266,368,TX('그 표를 열면 바로 참이거나 거짓 \u2014 한 번에 끝난다',
+                            'Open that table and it is true or false at once - one check'),'var(--ok)'));
+  L.concat(R).forEach(x=>gs.push(x[0]));
+  [[184,L],[606,R]].forEach(c=>{
+    const x=c[0], col=c[1];
+    G.appendChild(mk('path',{d:'M'+x+','+col[0][1]+' V128',stroke:'var(--rule)','stroke-width':1.4,fill:'none'}));
+    G.appendChild(mk('path',{d:'M'+x+','+(128+col[1][1])+' V266',stroke:'var(--rule)','stroke-width':1.4,fill:'none'}));
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:320,delay:[0,240,480,160,400,640][i],fill:'forwards'}));
+}});
+</script>

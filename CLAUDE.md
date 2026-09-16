@@ -284,7 +284,9 @@ node pdf.js w02-03_smr-design-requirements ko        # 한 언어만
    `<g>`의 `transform`은 통째로 날아가 요소가 원점으로 튀고, `<line>`의 `x1 y1 x2 y2`는
    Chrome에서 CSS 속성이 아니라 **조용히 무시된다**(4장 300 MWe 경계선이 v1.0 내내 안 보였다).
    움직여야 하면 래퍼 `<g>`를 하나 더 두거나, `opacity`·`stroke-dashoffset`만 애니메이션한다.
-   `rect`의 `width`·`height`, `circle`의 `cx cy r`은 CSS 기하 속성이라 동작한다.
+   `rect`의 `width`·`height`, `circle`의 `cx cy r`은 CSS 기하 속성이라 동작한다 —
+   **다만 값에 단위를 붙여야 한다.** `[{width:0},{width:160}]`처럼 맨 숫자를 주면 Chrome이
+   **조용히 무시한다**(4장 SMR 구역 띠가 v1.0 내내 안 칠해졌다). `[{width:'0px'},{width:'160px'}]`로 쓴다.
 2. **단일 파일을 유지한다.** 외부 이미지·JS·CSS 금지. 그림은 전부 인라인 SVG로 그린다.
    **글꼴도 파일 안에 있다** — 덱에 쓰인 글자만 남긴 Pretendard·IBM Plex Mono 서브셋(388 KB)을
    base64로 심었다. 그래서 인터넷이 없어도 글꼴까지 그대로 나온다.

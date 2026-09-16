@@ -1,0 +1,455 @@
+<script>
+/* ================================================================
+   SECTION 02 — 레거시 3대 소스  (교재 2장)
+   ================================================================ */
+SECT('02 · [[레거시 3대 소스||The three legacy sources]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;02 레거시 3대 소스||&#167;02 The three legacy sources]]',
+html:`[[<div class="no">02</div><h2>레거시 3대 소스</h2><div class="ln"></div>
+<p>ARIS · US NRC · OECD/NEA 대시보드. 셋을 “SMR 데이터베이스”라고 뭉뚱그리면 매번 세 곳을 다 뒤지게 된다.
+각자 답할 수 있는 질문이 다르다는 것을 알면 한 곳만 열면 된다.</p>||<div class="no">02</div><h2>The three legacy sources</h2><div class="ln"></div>
+<p>ARIS, the US NRC, and the OECD/NEA dashboard. Lump them together as &#8220;SMR databases&#8221; and you will
+search all three every time. Know which question each one answers and you open only one.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 역할 분담 */
+S({tag:'DIVISION OF LABOUR', ov:'[[세 자료원은 서로 다른 질문에 답한다||Each source answers a different question]]',
+src:'[[<b>출처</b> 본 교재 2.1절 표 2.1||<b>Source</b> This textbook &#167;2.1, Table 2.1]]',
+abbr:'[[<b>ARIS</b> IAEA 노형 정보 시스템 · <b>NRC</b> 미국 원자력규제위원회 · <b>NEA</b> OECD 원자력기구 · <b>PRIS</b> IAEA 운전원전 정보 시스템||<b>ARIS</b> Advanced Reactors Information System · <b>NRC</b> US Nuclear Regulatory Commission · <b>NEA</b> OECD Nuclear Energy Agency · <b>PRIS</b> Power Reactor Information System]]',
+html:`<h2 class="t">[[&#8220;어느 데이터베이스를 여는가&#8221;는 <em>질문이 정함</em>||<em>The question</em> decides which database you open]]</h2>
+<ul class="b">
+  <li>[[셋을 한 덩어리로 보면 매번 세 곳을 뒤지게 됨. <b>질문 → 자료원</b>이 정해져 있음||Treat them as one and you search all three every time. <b>Question &#8594; source</b> is a fixed mapping]]</li>
+  <li>[[각 자료원이 <b class="hot">못 하는 것</b>을 아는 것이 더 중요함 — 거기서 자료를 찾으면 시간만 날림||Knowing what each <b class="hot">cannot</b> do matters more - looking there wastes the afternoon]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 350" role="img" aria-label="[[세 자료원이 답하는 질문과 답하지 못하는 것을 나란히 놓은 표||What each of the three sources answers and what it cannot answer]]">
+  <g id="dl-cards"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const C=[
+    ['IAEA ARIS','var(--ok)',
+     TX('이 노형의 설계 사양은 무엇인가','What are this design’s specifications?'),
+     TX('오늘 이 사업이 어디까지 갔는지','How far this project has got today')],
+    ['US NRC','var(--cool)',
+     TX('규제기관이 무엇을 검토·승인했는가','What has the regulator reviewed and approved?'),
+     TX('미국 밖의 노형','Designs outside the United States')],
+    ['OECD/NEA','var(--amber)',
+     TX('이 설계는 상용화까지 어디쯤 왔는가','How close is this design to deployment?'),
+     TX('설계의 기술적 세부','The technical detail of the design')]
+  ];
+  const G=el.querySelector('#dl-cards'), gs=[];
+  C.forEach((c,i)=>{
+    const g=mk('g',{transform:'translate('+(i*374)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:352,height:330,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:352,height:3,fill:c[1]}));
+    const h=mk('text',{x:22,y:42,'font-family':'var(--mono)','font-size':19,fill:c[1],
+      'font-weight':600,'letter-spacing':'.06em'}); h.textContent=c[0]; g.appendChild(h);
+    const k1=mk('text',{x:22,y:84,class:'lbl',fill:c[1]});
+    k1.textContent=TX('답하는 질문','answers'); g.appendChild(k1);
+    wrapT(c[2],22).forEach((ln,j)=>{ const e=mk('text',{x:22,y:112+j*26,'font-family':'var(--sans)',
+      'font-size':17.5,fill:'var(--ink)','font-weight':400}); e.textContent=ln; g.appendChild(e); });
+    g.appendChild(mk('line',{x1:22,y1:212,x2:330,y2:212,stroke:'var(--rule)'}));
+    const k2=mk('text',{x:22,y:242,class:'lbl',fill:'var(--hot)'});
+    k2.textContent=TX('못 하는 것','cannot do'); g.appendChild(k2);
+    wrapT(c[3],22).forEach((ln,j)=>{ const e=mk('text',{x:22,y:270+j*26,'font-family':'var(--sans)',
+      'font-size':17.5,fill:'var(--ink-2)','font-weight':300}); e.textContent=ln; g.appendChild(e); });
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:400,delay:200*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- ARIS */
+S({tag:'ARIS', ov:'[[ARIS — 설계 사양의 1차 자료||ARIS - the primary source for specifications]]',
+src:'[[<b>출처</b> 본 교재 2.2절 · <b>ARIS</b> https://aris.iaea.org · 국가별 검색 결과는 2026년 9월 접근 기준||<b>Source</b> This textbook &#167;2.2 · <b>ARIS</b> https://aris.iaea.org · country results as accessed September 2026]]',
+abbr:'[[<b>DSR</b> 설계기술서 — 설계자가 직접 작성해 IAEA 에 제출한 문서 · <b>HTGR</b> 고온가스로 · <b>SFR</b> 소듐냉각고속로 · <b>MSR</b> 용융염로||<b>DSR</b> Design Status Report - written and submitted by the designer itself · <b>HTGR</b> High-Temperature Gas-cooled Reactor · <b>SFR</b> Sodium-cooled Fast Reactor · <b>MSR</b> Molten Salt Reactor]]',
+html:`<h2 class="t">[[ARIS를 <em>1차 자료</em>로 만드는 것은 설계기술서 하나임||One thing makes ARIS <em>primary</em> - the Design Status Report]]</h2>
+<ul class="b">
+  <li>[[<b>설계자가 직접 작성해 제출한</b> 설계기술서(DSR)를 PDF로 받을 수 있음 — 숫자에 책임 주체가 있음||You can download the Design Status Report <b>written and submitted by the designer</b> - someone is accountable for the numbers]]</li>
+  <li>[[IAEA 양식을 따르므로 <b>압력·온도·유량·연료</b>가 빠짐없이 들어감. 국내 노형도 영문 사양은 브로슈어보다 ARIS가 나음||It follows the IAEA template, so <b>pressure, temperature, flow and fuel</b> are all there. Even for Korean designs, ARIS beats the vendor brochure]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 790 330" role="img" aria-label="[[국가 필터를 미국·러시아·한국으로 걸었을 때 ARIS 검색 결과의 성격 차이||How ARIS search results differ when filtered to the United States, Russia and Korea]]">
+    <text x="0" y="16" class="lbl">[[국가 필터를 바꾸면 보이는 것 — 설계 상태의 분포||What changes when you switch the country filter - the spread of design status]]</text>
+    <g id="ar-bars"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout hi"><span class="k">[[검색 필터||Search filters]]</span>
+      <span class="v" style="font-size:16px;line-height:1.45">[[노형 · 냉각재 · 감속재 · 설계 상태 · 국가 · 출력 범위||Type · coolant · moderator · design status · country · power range]]</span></div>
+    <blockquote class="q">[[미국은 <b>개념이 많고</b>, 러시아는 <b>실물이 있다</b>. 2026년 현재 실제로 전기를 만들고 있는 SMR은 러시아와 중국에 있음.
+      <span class="cite">예 · Akademik Lomonosov — KLT-40S 2기를 실은 부유식 발전소, 2020-05 상업운전, 기당 35 MWe</span>||The United States has <b>many concepts</b>; Russia has <b>hardware</b>. As of 2026 the SMRs actually making electricity are in Russia and China.
+      <span class="cite">Example - Akademik Lomonosov: a floating plant carrying two KLT-40S units, commercial operation May 2020, about 35 MWe each</span>]]</blockquote>
+  </div>
+</div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  /* 세 나라의 설계 상태 구성. 막대 길이는 상대 비율을 보이려는 것이고, 절대 건수가 아니다. */
+  const ST=[[TX('개념설계','Conceptual'),'var(--ink-3)'],
+            [TX('기본·상세설계','Basic / detailed'),'var(--amber)'],
+            [TX('건설 중','Under construction'),'var(--cool)'],
+            [TX('운전 중','Operating'),'var(--ok)']];
+  const C=[[TX('미국','United States'),[0.72,0.20,0.06,0.02]],
+           [TX('러시아','Russia'),     [0.30,0.24,0.22,0.24]],
+           [TX('한국','Korea'),        [0.42,0.48,0.10,0.00]]];
+  const G=el.querySelector('#ar-bars'), bars=[], X0=126, W=600;
+  C.forEach((c,i)=>{
+    const y=52+i*82;
+    const n=mk('text',{x:0,y:y+22,'font-family':'var(--sans)','font-size':18,fill:'var(--ink)',
+      'font-weight':500}); n.textContent=c[0]; G.appendChild(n);
+    let x=X0;
+    c[1].forEach((v,j)=>{
+      if(v<=0) return;
+      const w=v*W;
+      const r=mk('rect',{x:x,y:y,width:0,height:30,fill:ST[j][1],opacity:0.85});
+      G.appendChild(r); bars.push([r,w]); x+=w;
+    });
+  });
+  const lg=mk('g',{transform:'translate(0,300)'}); G.appendChild(lg);
+  let lx=0;
+  ST.forEach(s=>{
+    lg.appendChild(mk('rect',{x:lx,y:0,width:11,height:11,fill:s[1],opacity:0.85}));
+    const t=mk('text',{x:lx+17,y:10,class:'lbl'}); t.textContent=s[0]; lg.appendChild(t);
+    lx += 17 + s[0].length*(/[가-힯]/.test(s[0])?8.4:7.0) + 26;
+  });
+  if(RM){ bars.forEach(b=>b[0].setAttribute('width',b[1])); return; }
+  bars.forEach((b,i)=>b[0].animate([{width:'0px'},{width:b[1]+'px'}],
+    {duration:520,delay:90*i,fill:'forwards',easing:'cubic-bezier(.2,.7,.3,1)'}));
+}});
+
+
+/* ---------------------------------------------------------------- NRC · ADAMS */
+S({tag:'US NRC · ADAMS', ov:'[[ADAMS — 문서에서 문서로 타고 간다||ADAMS - follow document to document]]',
+src:'[[<b>출처</b> 본 교재 2.3절 · <b>접근번호로 직접 열기</b> https://www.nrc.gov/docs/MLxxxx/MLxxxxxxxxx.pdf||<b>Source</b> This textbook &#167;2.3 · <b>open by accession number</b> https://www.nrc.gov/docs/MLxxxx/MLxxxxxxxxx.pdf]]',
+abbr:'[[<b>ADAMS</b> NRC 문서 공개 시스템 · <b>RAI</b> 규제기관이 보내는 추가정보요구 · <b>FSER</b> 최종 안전성평가보고서 · <b>ML번호</b> ADAMS 문서 접근번호||<b>ADAMS</b> Agencywide Documents Access and Management System · <b>RAI</b> Request for Additional Information · <b>FSER</b> Final Safety Evaluation Report · <b>ML number</b> ADAMS accession number]]',
+html:`<h2 class="t">[[ADAMS는 <s>검색으로</s> 쓰는 게 아니라 <em>참고문헌으로</em> 씀||ADAMS is not worked by <s>search</s> but by <em>reference list</em>]]</h2>
+<ul class="b">
+  <li>[[NRC가 주고받은 문서를 거의 전부 공개함 — 신청서 · 질의(RAI) · 답변 · 최종보고서(FSER). <b>공개 자료 중 가장 깊음</b>||Nearly every document the NRC exchanged is public - applications, RAIs, responses, the FSER. <b>The deepest public material there is</b>]]</li>
+  <li>[[키워드를 넣으면 수백 건이 쏟아지고 원하는 문서는 없음. 요령은 <b class="cool">FSER 한 편의 참고문헌 목록</b>에서 접근번호를 훑는 것임||Keywords return hundreds of hits and not the one you want. The trick is <b class="cool">the reference list of one FSER</b>, which carries every accession number that matters]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 330" role="img" aria-label="[[키워드 검색과 참고문헌 추적의 차이를 나란히 비교한 그림||Keyword search compared with following a reference list]]">
+  <g id="ad-bad" opacity="0">
+    <rect x="0" y="26" width="530" height="286" fill="var(--panel)" stroke="var(--rule)"/>
+    <rect x="0" y="26" width="530" height="3" fill="var(--hot)"/>
+    <text x="24" y="62" class="lbl" fill="var(--hot)">[[흔히 하는 방식||the usual way]]</text>
+    <text x="24" y="96" font-family="var(--sans)" font-size="21" fill="var(--ink)" font-weight="500">[[키워드 검색||Keyword search]]</text>
+    <g id="ad-noise"></g>
+    <text x="24" y="292" font-family="var(--sans)" font-size="16.5" fill="var(--ink-2)" font-weight="300">[[수백 건이 쏟아지고, 정작 원하는 문서는 없다||Hundreds of hits, and not the one you want]]</text>
+  </g>
+  <g id="ad-good" opacity="0">
+    <rect x="590" y="26" width="530" height="286" fill="var(--panel)" stroke="var(--rule)"/>
+    <rect x="590" y="26" width="530" height="3" fill="var(--ok)"/>
+    <text x="614" y="62" class="lbl" fill="var(--ok)">[[더 빠른 방식||the faster way]]</text>
+    <text x="614" y="96" font-family="var(--sans)" font-size="21" fill="var(--ink)" font-weight="500">[[문서에서 문서로||Document to document]]</text>
+    <g id="ad-chain"></g>
+    <text x="614" y="292" font-family="var(--sans)" font-size="16.5" fill="var(--ink-2)" font-weight="300">[[핵심 문서의 접근번호가 전부 거기 적혀 있다||Every accession number that matters is listed there]]</text>
+  </g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  /* 왼쪽 — 검색 결과의 잡음. 대부분 회색, 한 건만 쓸모 있다. */
+  const N=el.querySelector('#ad-noise');
+  for(let i=0;i<8;i++){
+    const y=124+i*19, hit=(i===5);
+    N.appendChild(mk('rect',{x:24,y:y,width:(hit?300:180+((i*67)%260)),height:9,
+      fill:hit?'var(--ok)':'var(--rule)'}));
+    if(hit){ const t=mk('text',{x:334,y:y+9,class:'lbl',fill:'var(--ok)'});
+      t.textContent=TX('← 이 한 건','← the one'); N.appendChild(t); }
+  }
+  /* 오른쪽 — FSER 한 편에서 갈라져 나가는 참고문헌 */
+  const C=el.querySelector('#ad-chain');
+  C.appendChild(mk('rect',{x:614,y:124,width:190,height:38,fill:'var(--ground)',
+    stroke:'var(--ok)','stroke-width':1.6}));
+  const f=mk('text',{x:628,y:148,'font-family':'var(--mono)','font-size':15,fill:'var(--ok)'});
+  f.textContent='FSER'; C.appendChild(f);
+  const ML=['ML25136A329','ML24291B117','ML23077A044','ML22305C902'];
+  ML.forEach((m,i)=>{
+    const y=124+i*38;
+    C.appendChild(mk('path',{d:'M804,143 H846 V'+(y+19)+' H886',fill:'none',stroke:'var(--rule)',
+      'stroke-width':1.2}));
+    C.appendChild(mk('rect',{x:886,y:y,width:196,height:30,fill:'var(--ground)',stroke:'var(--rule)'}));
+    const t=mk('text',{x:900,y:y+20,'font-family':'var(--mono)','font-size':14,fill:'var(--ink-2)'});
+    t.textContent=m; C.appendChild(t);
+  });
+  const bad=el.querySelector('#ad-bad'), good=el.querySelector('#ad-good');
+  if(RM){ bad.setAttribute('opacity',1); good.setAttribute('opacity',1); return; }
+  bad.animate([{opacity:0},{opacity:1}],{duration:420,fill:'forwards'});
+  good.animate([{opacity:0},{opacity:1}],{duration:420,delay:600,fill:'forwards'});
+}});
+
+
+/* ---------------------------------------------------------------- NEA 대시보드 전환 */
+S({tag:'NEA DASHBOARD', ov:'[[인쇄판에서 디지털 대시보드로||From printed report to digital dashboard]]',
+src:'[[<b>출처</b> 본 교재 2.4절 · OECD/NEA SMR 디지털 대시보드(2025-07 개설, 연중 갱신) · 제3판 데이터 기준일 2025-02-14||<b>Source</b> This textbook &#167;2.4 · OECD/NEA SMR digital dashboard (opened July 2025, updated through the year) · Third Edition data cut-off 14 Feb 2025]]',
+abbr:'[[<b>NEA</b> OECD 원자력기구 · <b>대시보드</b> 설계별 사업 성숙도를 여섯 차원으로 평가해 보여 주는 화면||<b>NEA</b> OECD Nuclear Energy Agency · <b>dashboard</b> a screen scoring each design’s deployment maturity on six dimensions]]',
+html:`<h2 class="t">[[2025년 7월부터 <em>디지털 대시보드가 주(主)</em>임 — PDF가 아님||Since July 2025 <em>the digital dashboard is the main source</em>, not the PDF]]</h2>
+<ul class="b">
+  <li>[[인쇄판은 <b>데이터 기준일에 고정</b>되고, 디지털은 연중 여러 차례 갱신 창구를 엶 (최근 갱신에 개발사 14곳 참여)||The printed edition is <b>frozen at its cut-off date</b>; the digital one opens submission windows through the year (14 vendors in the latest round)]]</li>
+  <li>[[<b class="hot">대시보드에 없다 &#8800; 그런 설계가 없다</b> — 개발사가 요청하면 빠짐. 추적 129건 중 수록은 79건임||<b class="hot">Absent from the dashboard &#8800; no such design</b> - a vendor can ask to be left out. 79 of 129 tracked designs are listed]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 330" role="img" aria-label="[[인쇄판과 디지털 대시보드의 갱신 모델 차이, 그리고 추적 129건 중 수록 79건의 관계||The update model of the printed edition versus the digital dashboard, and 79 of 129 tracked designs being listed]]">
+  <g id="nd-time"></g>
+  <g id="nd-scope"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const T=el.querySelector('#nd-time');
+  const t0=(x,y,s,c,sz)=>{const e=mk('text',{x:x,y:y,'font-family':'var(--sans)','font-size':sz||17,
+    fill:c||'var(--ink-2)','font-weight':300}); e.textContent=s; T.appendChild(e); return e;};
+  /* 위 — 인쇄판: 점 세 개가 뚝뚝 떨어져 있다 */
+  t0(0,18,TX('인쇄판 (연 1회)','Printed edition (annual)'),'var(--amber)',15);
+  T.appendChild(mk('line',{x1:0,y1:52,x2:700,y2:52,stroke:'var(--rule)'}));
+  [[70,'2023'],[300,'2024'],[530,'2025-07']].forEach(p=>{
+    T.appendChild(mk('circle',{cx:p[0],cy:52,r:7,fill:'var(--amber)'}));
+    const e=mk('text',{x:p[0],y:76,class:'lbl','text-anchor':'middle'}); e.textContent=p[1]; T.appendChild(e);
+  });
+  t0(714,58,TX('판이 나온 날에 데이터가 멈춘다','data freezes on publication day'),'var(--ink-3)',15);
+  /* 아래 — 디지털: 촘촘한 눈금 */
+  t0(0,132,TX('디지털 대시보드 (연중 갱신)','Digital dashboard (rolling)'),'var(--cool)',15);
+  T.appendChild(mk('line',{x1:0,y1:166,x2:700,y2:166,stroke:'var(--rule)'}));
+  const ticks=[];
+  for(let i=0;i<14;i++){
+    const c=mk('circle',{cx:40+i*48,cy:166,r:5,fill:'var(--cool)',opacity:0});
+    T.appendChild(c); ticks.push(c);
+  }
+  t0(714,172,TX('같은 URL 이 두 달 뒤 다른 값을 보인다','the same URL shows a different value two months later'),'var(--ink-3)',15);
+  t0(714,196,TX('→ 인용에 접근일을 반드시 적는다','→ always record the access date'),'var(--amber)',15);
+
+  /* 아래 — 수록 범위 막대 */
+  const S2=el.querySelector('#nd-scope');
+  S2.appendChild(mk('text',{x:0,y:250,class:'lbl'})).textContent=
+    TX('NEA 가 추적 중인 설계 129건 중 대시보드 수록 79건','79 of the 129 designs NEA tracks are listed on the dashboard');
+  S2.appendChild(mk('rect',{x:0,y:262,width:1084,height:34,fill:'var(--panel)',stroke:'var(--rule)'}));
+  const fill=mk('rect',{x:0,y:262,width:0,height:34,fill:'var(--cool)',opacity:0.28});
+  S2.appendChild(fill);
+  S2.appendChild(mk('line',{x1:664,y1:262,x2:664,y2:296,stroke:'var(--cool)','stroke-width':2}));
+  const a=mk('text',{x:16,y:284,'font-family':'var(--mono)','font-size':16,fill:'var(--cool)'});
+  a.textContent=TX('수록 79','listed 79'); S2.appendChild(a);
+  const b=mk('text',{x:680,y:284,'font-family':'var(--mono)','font-size':16,fill:'var(--ink-3)'});
+  b.textContent=TX('빠진 50 — 미희망 · 개발 정체 · 취소',
+                   'excluded 50 - opted out or dormant'); S2.appendChild(b);
+
+  if(RM){ ticks.forEach(t=>t.setAttribute('opacity',1)); fill.setAttribute('width',664); return; }
+  ticks.forEach((t,i)=>t.animate([{opacity:0},{opacity:1}],
+    {duration:190,delay:340+44*i,fill:'forwards'}));
+  fill.animate([{width:'0px'},{width:'664px'}],{duration:640,delay:1000,fill:'forwards',
+    easing:'cubic-bezier(.2,.7,.3,1)'});
+}});
+
+
+/* ---------------------------------------------------------------- 여섯 차원 */
+S({tag:'SIX DIMENSIONS', ov:'[[여섯 차원 — 가장 낮은 축이 속도를 정한다||Six dimensions - the lowest axis sets the pace]]',
+src:'[[<b>출처</b> 본 교재 2.4.2 · 2.4.3절 표 2.2 · 평가하는 것은 기술 성숙도가 아니라 <b>사업 성숙도</b>임||<b>Source</b> This textbook &#167;&#167;2.4.2-2.4.3, Table 2.2 · what is scored is <b>deployment</b> maturity, not technical maturity]]',
+abbr:'[[<b>HALEU</b> 농축도 5~20% 구간의 저농축 우라늄 · <b>MOU</b> 구속력 없는 양해각서 · <b>수용성</b> 지역사회·이해관계자와의 합의||<b>HALEU</b> High-Assay Low-Enriched Uranium, 5-20% enrichment · <b>MOU</b> non-binding memorandum of understanding · <b>engagement</b> agreements with the community and stakeholders]]',
+html:`<h2 class="t">[[카드를 읽을 때는 평균이 아니라 <em>가장 낮은 축</em>을 봄||Read the card by its <em>lowest axis</em>, never its average]]</h2>
+<ul class="b">
+  <li>[[여섯 축이 고르게 3점인 설계와, 다섯 축이 5점이고 한 축이 0점인 설계 중 <b>먼저 지어지는 쪽은 전자</b>임||Between a design scoring a flat 3 on all six and one scoring 5 on five axes and 0 on one, <b>the flat one gets built first</b>]]</li>
+  <li>[[설계는 끝났는데 연료를 못 구하거나, 인허가는 났는데 자금이 없는 사례가 <b class="hot">실제로 대부분</b>임||A finished design with no fuel, or a licensed design with no money, is <b class="hot">the common case</b>]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 790 340" role="img" aria-label="[[여섯 차원 육각형에 고른 설계와 한 축이 빈 설계를 겹쳐 그린 그림||A hexagon of the six dimensions with an even design and a design with one empty axis overlaid]]">
+    <g id="sd-web"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <table class="d sm">
+      <tr><td>[[인허가||Licensing]]</td><td>[[규제기관 사전협의 · 설계승인 · 건설허가||Pre-application, design approval, construction permit]]</td></tr>
+      <tr><td>[[부지||Siting]]</td><td>[[부지 소유자의 결정, 건설 인허가 준비도||Site owner’s decision, permitting readiness]]</td></tr>
+      <tr><td>[[자금||Financing]]</td><td>[[약정 · 계약 · 투자 유치의 성격과 규모||Nature and size of commitments, contracts, investment]]</td></tr>
+      <tr><td>[[공급망||Supply chain]]</td><td>[[양해각서 &#8594; 구속력 있는 계약 &#8594; 합작||MOU &#8594; binding contract &#8594; joint venture]]</td></tr>
+      <tr><td>[[수용성||Engagement]]</td><td>[[지역사회 협약 · 공청회 · 이익공유 건수||Community agreements, hearings, benefit sharing]]</td></tr>
+      <tr><td>[[연료||Fuel]]</td><td>[[공급 가능성. HALEU가 필요하면 그 확보 경로||Availability; if HALEU is needed, how it is secured]]</td></tr>
+    </table>
+  </div>
+</div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#sd-web'), cx=200, cy=176, R=126;
+  const AX=[TX('인허가','Licensing'),TX('부지','Siting'),TX('자금','Financing'),
+            TX('공급망','Supply'),TX('수용성','Engage'),TX('연료','Fuel')];
+  const pt=(i,r)=>{const a=-Math.PI/2+i*Math.PI/3; return [cx+r*Math.cos(a), cy+r*Math.sin(a)];};
+  for(let k=1;k<=5;k++){
+    const p=[]; for(let i=0;i<6;i++) p.push(pt(i,R*k/5));
+    G.appendChild(mk('polygon',{points:poly(p),fill:'none',stroke:'var(--rule)','stroke-width':k===5?1.2:0.6}));
+  }
+  for(let i=0;i<6;i++){
+    const e=pt(i,R);
+    G.appendChild(mk('line',{x1:cx,y1:cy,x2:e[0],y2:e[1],stroke:'var(--rule)','stroke-width':0.6}));
+    const l=pt(i,R+26), t=mk('text',{x:l[0],y:l[1]+5,'text-anchor':'middle',class:'lbl',fill:'var(--ink-2)'});
+    t.textContent=AX[i]; G.appendChild(t);
+  }
+  const mkPoly=(v,col,dash)=>{
+    const p=[]; for(let i=0;i<6;i++) p.push(pt(i,R*v[i]/5));
+    const g=mk('polygon',{points:poly(p),fill:col,'fill-opacity':0.18,stroke:col,
+      'stroke-width':2,opacity:0});
+    if(dash) g.setAttribute('stroke-dasharray',dash);
+    G.appendChild(g); return g;
+  };
+  const even = mkPoly([3,3,3,3,3,3],'var(--ok)');
+  const spiky= mkPoly([5,5,5,5,5,0.15],'var(--hot)','5 4');
+  const lg=mk('g',{transform:'translate(392,128)'}); G.appendChild(lg);
+  [[ 'var(--ok)',  TX('고르게 3점 — 먼저 지어진다','flat 3 - gets built first')],
+   [ 'var(--hot)', TX('한 축이 0점 — 그 축이 속도를 정한다','one axis at 0 - it sets the pace')]]
+   .forEach((L,i)=>{
+     lg.appendChild(mk('rect',{x:0,y:i*74,width:11,height:11,fill:L[0]}));
+     const w=wrapT(L[1],15);
+     w.forEach((ln,j)=>{ const t=mk('text',{x:20,y:i*74+10+j*20,class:'lbl',fill:'var(--ink-2)'});
+       t.textContent=ln; lg.appendChild(t); });
+   });
+  if(RM){ even.setAttribute('opacity',1); spiky.setAttribute('opacity',1); return; }
+  even.animate([{opacity:0},{opacity:1}],{duration:500,delay:200,fill:'forwards'});
+  spiky.animate([{opacity:0},{opacity:1}],{duration:500,delay:900,fill:'forwards'});
+}});
+
+
+/* ---------------------------------------------------------------- HALEU 병목 */
+S({tag:'FUEL BOTTLENECK', ov:'[[HALEU — 배치 순서를 정하는 병목||HALEU - the bottleneck that sets the order of deployment]]',
+src:'[[<b>출처</b> 본 교재 2.4.5절 그림 2.17 · 2.18 · 농축도 값은 각 설계의 공개 사양||<b>Source</b> This textbook &#167;2.4.5, Figs. 2.17-2.18 · enrichment values from each design’s published specification]]',
+abbr:'[[<b>HALEU</b> 고분석 저농축 우라늄 — 농축도 5~20% 구간 · <b>천연 우라늄</b> U-235 가 0.711% · <b>고농축</b> 20% 초과||<b>HALEU</b> High-Assay Low-Enriched Uranium, 5-20% enrichment · <b>natural uranium</b> 0.711% U-235 · <b>highly enriched</b> above 20%]]',
+html:`<h2 class="t">[[먼저 지어지는 이유는 기술 우열이 아니라 <em>공급망 준비도</em>임||The order is set by <em>supply-chain readiness</em>, not merit]]</h2>
+<ul class="b">
+  <li>[[가스냉각 · 고속 · 용융염 계열은 대개 <b>HALEU</b>를 요구함. 기술적으로 검증된 연료지만 2023년까지 OECD 국가에 <b class="hot">상업 공급이 없었음</b>||Gas-cooled, fast and molten-salt designs mostly need <b>HALEU</b>. It is a proven fuel, but until 2023 there was <b class="hot">no commercial supply</b> in OECD countries]]</li>
+  <li>[[경수로형 SMR 셋은 모두 <b class="ok">5% 미만</b> — 기존 연료 공급망을 그대로 씀. 이것이 먼저 배치되는 가장 현실적인 이유임||All three light-water SMRs sit <b class="ok">below 5%</b> and use the existing fuel supply chain. That is the practical reason they go first]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 338" role="img" aria-label="[[천연 우라늄에서 고농축까지의 농축도 계층과 세 노형의 위치, 그리고 두 구간이 사업에 주는 차이||The enrichment ladder with the three designs marked, and what each band means for a project]]">
+  <g id="hl-scale"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#hl-scale');
+  /* 0~25% 를 비선형으로 펼친다 — 실제로 쓰이는 저농축 구간을 크게 보이게 하려는 것 */
+  const X=v=>60+Math.pow(v/25,0.55)*1000;
+  const BAND=[[0,0.711,'var(--ink-3)',TX('천연 0.711%','natural 0.711%')],
+              [0.711,5,'var(--ok)',   TX('경수로용 3~5%','light-water 3-5%')],
+              [5,20,'var(--amber)',   TX('HALEU 5~20%','HALEU 5-20%')],
+              [20,25,'var(--hot)',    TX('20% 초과','above 20%')]];
+  const hd=mk('text',{x:60,y:26,'font-family':'var(--sans)','font-size':18,fill:'var(--ink)',
+    'font-weight':500}); hd.textContent=TX('우라늄 농축도 계층','The uranium enrichment ladder');
+  G.appendChild(hd);
+  const bars=[];
+  BAND.forEach(b=>{
+    const x=X(b[0]), w=X(b[1])-x;
+    const r=mk('rect',{x:x,y:46,width:0,height:52,fill:b[2],opacity:0.55});
+    G.appendChild(r); bars.push([r,w]);
+    G.appendChild(mk('line',{x1:x,y1:46,x2:x,y2:98,stroke:b[2],'stroke-width':1.4}));
+    const t=mk('text',{x:x+8,y:120,class:'lbl',fill:b[2]}); t.textContent=b[3]; G.appendChild(t);
+  });
+  G.appendChild(mk('line',{x1:60,y1:98,x2:1060,y2:98,class:'axis'}));
+
+  /* 세 노형 — 축 아래 삼각 표식으로만 찍고, 이름은 아래 한 줄에 모은다 */
+  const D=[[4.95,'NuScale US460',TX('4.95% 미만','below 4.95%')],
+           [4.60,'i-SMR',        TX('5% 미만','below 5%')],
+           [3.81,'BWRX-300',     TX('평균 3.81%','3.81% average')]];
+  const pins=[];
+  D.forEach(d=>{
+    const x=X(d[0]), g=mk('g',{opacity:0});
+    g.appendChild(mk('polygon',{points:poly([[x-6,46],[x+6,46],[x,60]]),fill:'var(--ok)'}));
+    G.appendChild(g); pins.push(g);
+  });
+  const row=mk('g',{transform:'translate(60,152)'}); G.appendChild(row);
+  let rx=0;
+  D.forEach(d=>{
+    const g=mk('g',{transform:'translate('+rx+',0)',opacity:0});
+    g.appendChild(mk('circle',{cx:7,cy:-5,r:6,fill:'var(--ok)'}));
+    const n=mk('text',{x:22,y:1,'font-family':'var(--sans)','font-size':18,fill:'var(--ink)',
+      'font-weight':500}); n.textContent=d[1]; g.appendChild(n);
+    const nw=22+widT(d[1],18)+16;
+    const v=mk('text',{x:nw,y:1,'font-family':'var(--mono)','font-size':15,fill:'var(--ok)'});
+    v.textContent=d[2]; g.appendChild(v);
+    row.appendChild(g); pins.push(g);
+    rx += nw + widT(d[2],15) + 44;
+  });
+
+  /* 아래 — 같은 그림이 말하는 대비. 왼쪽 띠에 있으면 바로 짓고, 오른쪽 띠면 연료부터 구해야 한다. */
+  const CO=[['var(--ok)',  TX('3~5% 구간의 설계','Designs in the 3-5% band'),
+             TX('기존 연료 공급망을 그대로 쓴다. 연료 때문에 멈추는 일이 없다.',
+                'They use the existing fuel supply chain. Fuel never stops them.')],
+            ['var(--amber)',TX('HALEU 가 필요한 설계','Designs that need HALEU'),
+             TX('설계가 끝나도 연료 확보 경로부터 세워야 한다. 2023년까지 OECD 상업 공급이 없었다.',
+                'Even with the design finished, a fuel route must be built first. No OECD supply until 2023.')]];
+  const boxes=[];
+  CO.forEach((c,i)=>{
+    const g=mk('g',{transform:'translate('+(60+i*512)+',196)',opacity:0});
+    g.appendChild(mk('rect',{width:488,height:118,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:488,height:3,fill:c[0]}));
+    const h=mk('text',{x:20,y:38,'font-family':'var(--sans)','font-size':19,fill:c[0],
+      'font-weight':600}); h.textContent=c[1]; g.appendChild(h);
+    wrapT(c[2],31).forEach((ln,j)=>{
+      const t=mk('text',{x:20,y:70+j*24,'font-family':'var(--sans)','font-size':16.5,
+        fill:'var(--ink-2)','font-weight':300}); t.textContent=ln; g.appendChild(t); });
+    G.appendChild(g); boxes.push(g);
+  });
+
+
+  if(RM){ bars.forEach(b=>b[0].setAttribute('width',b[1]));
+          pins.forEach(x=>x.setAttribute('opacity',1));
+          boxes.forEach(b=>b.setAttribute('opacity',1)); return; }
+  bars.forEach((b,i)=>b[0].animate([{width:'0px'},{width:b[1]+'px'}],
+    {duration:480,delay:120*i,fill:'forwards',easing:'cubic-bezier(.2,.7,.3,1)'}));
+  pins.forEach((x,i)=>x.animate([{opacity:0},{opacity:1}],
+    {duration:320,delay:740+110*i,fill:'forwards'}));
+  boxes.forEach((b,i)=>b.animate([{opacity:0},{opacity:1}],
+    {duration:380,delay:1050+200*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 다섯 개의 숫자 */
+S({tag:'FIVE NUMBERS', ov:'[[같은 대시보드에서 나온 다섯 개의 숫자||Five numbers from the same dashboard]]',
+src:'[[<b>출처</b> 본 교재 2.4.7절 표 2.3 · 다섯 다 맞음. 세는 대상과 시점이 다를 뿐임||<b>Source</b> This textbook &#167;2.4.7, Table 2.3 · all five are correct; they count different things at different times]]',
+html:`<h2 class="t">[[&#8220;NEA에 따르면 SMR 설계는 <s>OO개</s>&#8221;는 <em>거의 틀린 문장</em>임||&#8220;According to NEA there are <s>N</s> SMR designs&#8221; is <em>almost always wrong</em>]]</h2>
+<ul class="b">
+  <li>[[한 절 안에만 숫자가 다섯 개 나옴 — <b>98 · 56 · 74 · 129 · 79</b>. 모순처럼 보이지만 다섯 다 맞음||One section alone carries five numbers - <b>98, 56, 74, 129, 79</b>. They look contradictory; all five are right]]</li>
+  <li>[[1.1절의 <b class="cool">&#8220;무엇을 세는지가 다르다&#8221;</b>가 여기서 그대로 재현됨. 어느 숫자를 쓰든 <b>무엇을 센 것인지와 시점</b>을 같이 적음||&#167;1.1&#8217;s <b class="cool">&#8220;they count different things&#8221;</b> repeats here. Whichever you use, write down <b>what it counted and when</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 382" role="img" aria-label="[[98·56·74·129·79 다섯 숫자가 각각 무엇을 언제 센 값인지 정리한 표||What each of the five numbers 98, 56, 74, 129 and 79 counted, and when]]">
+  <g id="fn-rows"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const R=[
+    ['98', 'var(--ink-3)',TX('전 세계에서 확인된 설계 (개발 중단분 포함)','Designs identified worldwide, including discontinued'), TX('제2판 · 2024','2nd Edition · 2024')],
+    ['56', 'var(--ink-3)',TX('그중 대시보드가 평가한 설계','Of those, the ones the dashboard scored'),                     TX('제2판 · 2024','2nd Edition · 2024')],
+    ['74', 'var(--amber)',TX('제3판 보고서의 평가 대상','The Third Edition report’s scope'),                          TX('제3판 · 2025-07 (기준일 2025-02-14)','3rd Edition · Jul 2025 (cut-off 14 Feb 2025)')],
+    ['129','var(--cool)', TX('NEA 가 추적 중인 설계','Designs NEA tracks'),                                              TX('디지털 대시보드 · 상시','Digital dashboard · rolling')],
+    ['79', 'var(--cool)', TX('그중 디지털 대시보드에 수록된 설계','Of those, the ones listed on the digital dashboard'),   TX('디지털 대시보드 · 상시','Digital dashboard · rolling')]
+  ];
+  const G=el.querySelector('#fn-rows'), gs=[];
+  G.appendChild(mk('text',{x:118,y:16,class:'lbl'})).textContent=TX('무엇을 센 것인가','what it counted');
+  G.appendChild(mk('text',{x:710,y:16,class:'lbl'})).textContent=TX('시점','when');
+  R.forEach((r,i)=>{
+    const y=34+i*69, g=mk('g',{opacity:0});
+    g.appendChild(mk('line',{x1:0,y1:y+58,x2:1084,y2:y+58,stroke:'var(--rule)'}));
+    const n=mk('text',{x:96,y:y+40,'text-anchor':'end','font-family':'var(--mono)','font-size':34,
+      fill:r[1],'font-weight':600}); n.textContent=r[0]; g.appendChild(n);
+    const t=mk('text',{x:118,y:y+40,'font-family':'var(--sans)','font-size':18.5,fill:'var(--ink)',
+      'font-weight':300}); t.textContent=r[2]; g.appendChild(t);
+    const w=mk('text',{x:710,y:y+40,'font-family':'var(--sans)','font-size':16.5,fill:'var(--ink-2)',
+      'font-weight':300}); w.textContent=r[3]; g.appendChild(w);
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:320,delay:150*i,fill:'forwards',easing:'ease-out'}));
+}});
+</script>

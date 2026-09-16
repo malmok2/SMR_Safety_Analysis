@@ -1,0 +1,131 @@
+<script>
+/* ================================================================
+   표지 · 이 강의의 구조 · 문제 장면
+   ================================================================ */
+S({bare:true, cls:'cover', ov:'[[표지||Cover]]',
+html:`<div class="kick">[[한양대학교 원자력공학과 · THINK Lab · NUE4067||Hanyang University · Dept. of Nuclear Engineering · THINK Lab · NUE4067]]</div>
+<h1>[[SMR <span>자료를 찾는 법</span>과<br>PWR형 SMR||<span>Finding SMR Data</span>,<br>and PWR-type SMRs]]</h1>
+<div class="ln"></div>
+<div class="meta">
+  [[ARIS·NRC·NEA에서 AI까지, 그리고 <b>NuScale과 i-SMR</b>을 나란히 놓고 읽기<br>
+  3~4주차 강의 · 지도교수 <b>송민섭</b> · Rev1.0 · 2026년 9월||From ARIS, NRC and NEA to AI - then reading <b>NuScale and i-SMR</b> side by side<br>
+  Weeks 3-4 · Instructor <b>Minseop Song</b> · Rev1.0 · September 2026]]
+</div>
+<div class="hint">[[<kbd>&#8594;</kbd> 다음 &nbsp; <kbd>&#8592;</kbd> 이전 &nbsp; <kbd>O</kbd> 목차 &nbsp; <kbd>L</kbd> 한/영 &nbsp; <kbd>T</kbd> 배경 &nbsp; <kbd>P</kbd> 인쇄·PDF &nbsp; <kbd>F</kbd> 전체화면||<kbd>&#8594;</kbd> Next &nbsp; <kbd>&#8592;</kbd> Prev &nbsp; <kbd>O</kbd> Index &nbsp; <kbd>L</kbd> KO/EN &nbsp; <kbd>T</kbd> Theme &nbsp; <kbd>P</kbd> Print·PDF &nbsp; <kbd>F</kbd> Fullscreen]]</div>`,
+init(el){
+  if(RM) return;
+  const h1=el.querySelector('h1'), ln=el.querySelector('.ln');
+  h1.style.opacity=0; ln.style.width='0px';
+  h1.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],
+    {duration:700,easing:'cubic-bezier(.2,.7,.3,1)',fill:'forwards'});
+  ln.animate([{width:'0px'},{width:'120px'}],{duration:600,delay:500,fill:'forwards'});
+}});
+
+
+/* ---------------------------------------------------------------- 문제 장면 */
+S({tag:'THE PROBLEM', ov:'[["그 숫자 어디서 나온 거야?"||"Where did that number come from?"]]',
+src:'[[<b>출처</b> 본 교재 0.1절 · 각 수치는 4.4 · 4.5절에서 다시 다룸||<b>Source</b> This textbook, &#167;0.1 · each value is revisited in &#167;&#167;4.4 and 4.5]]',
+html:`<h2 class="t">[[30분이면 끝날 일에 <em>하루</em>가 가는 이유||Why a <em>half-hour</em> job eats a whole day]]</h2>
+<ul class="b">
+  <li>[[SMR 과제 첫 주에 반드시 받는 지시 — <b class="q">&#8220;NuScale이랑 i-SMR 사양 좀 정리해 와&#8221;</b>||The instruction every new SMR project gives in week one - <b class="q">&#8220;Put together the NuScale and i-SMR specs&#8221;</b>]]</li>
+  <li>[[검색하면 자료는 쏟아지는데 <b>숫자가 서로 안 맞음</b>. 판단 근거가 없어 가장 최근 기사를 베끼게 됨||Search and the material pours in, but <b>the numbers disagree</b>. With no basis to judge, you end up copying the most recent article]]</li>
+  <li>[[발표하면 질문이 옴 — <b class="hot">&#8220;그 숫자 어디서 나온 거야?&#8221;</b> 답을 못 하면 <b>표 전체가 무의미</b>해짐||Then the question comes - <b class="hot">&#8220;Where did that number come from?&#8221;</b> No answer, and <b>the whole table is worthless</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 362" role="img" aria-label="[[같은 항목에 대해 자료마다 다른 값이 적혀 있는 세 가지 예||Three examples of the same quantity written differently across sources]]">
+  <g id="pb-rows"></g>
+  <text x="30" y="352" class="lbl">[[셋 다 &#8220;틀린 자료&#8221;가 아니다 — 무엇을 세었는지, 언제 세었는지가 다를 뿐이다||None of the three is a &#8220;bad source&#8221; - they count different things, at different times]]</text>
+</svg>
+</div></div>`,
+init(el){
+  const G=el.querySelector('#pb-rows');
+  const R=[
+    { y:  6, q:TX('i-SMR 모듈당 열출력','i-SMR thermal power per module'),
+      a:['520 MWth','540 MW(th)'],
+      w:[TX('국내 일부 자료','some domestic sources'), TX('IAEA ARIS 설계기술서','IAEA ARIS design report')] },
+    { y:118, q:TX('NuScale 모듈당 전기출력','NuScale electrical output per module'),
+      a:['50 MWe','60 MWe','77 MWe'],
+      w:[TX('2020년 US600','2020, US600'), TX('중간 개정','interim revision'), TX('2025년 US460','2025, US460')] },
+    { y:230, q:TX('NuScale 1차계통 운전압력','NuScale primary operating pressure'),
+      a:['12.8 MPa','13.8 MPa'],
+      w:[TX('US600','US600'), TX('US460 = 2 000 psia','US460 = 2 000 psia')] }
+  ];
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const cards=[];
+  R.forEach(r=>{
+    const g=mk('g',{transform:'translate(0,'+r.y+')'}); G.appendChild(g);
+    const q=mk('text',{x:30,y:20,class:'lbl'}); q.textContent=r.q; g.appendChild(q);
+    r.a.forEach((v,i)=>{
+      const x=30+i*268, c=mk('g',{transform:'translate('+x+',34)',opacity:0});
+      c.appendChild(mk('rect',{width:244,height:58,fill:'var(--panel)',
+        stroke:i===r.a.length-1?'var(--cool)':'var(--rule)','stroke-width':1.5}));
+      const v1=mk('text',{x:16,y:28,'font-family':'var(--mono)','font-size':22,
+        fill:i===r.a.length-1?'var(--cool)':'var(--ink)','font-weight':600});
+      v1.textContent=v; c.appendChild(v1);
+      const v2=mk('text',{x:16,y:47,class:'lbl'}); v2.textContent=r.w[i]; c.appendChild(v2);
+      g.appendChild(c); cards.push(c);
+    });
+  });
+  if(RM){ cards.forEach(c=>c.setAttribute('opacity',1)); return; }
+  cards.forEach((c,i)=>c.animate([{opacity:0},{opacity:1}],
+    {duration:340,delay:160*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- 로드맵 */
+S({tag:'ROADMAP', ov:'[[이 강의의 구조 — 1부 자료, 2부 설계||How this deck is built - Part I data, Part II designs]]',
+src:'[[<b>출처</b> 본 교재 0.2절 표 0.1 · Tier 는 난이도 — 1은 학부, 2는 대학원 수준||<b>Source</b> This textbook &#167;0.2, Table 0.1 · Tier is difficulty - 1 undergraduate, 2 graduate]]',
+html:`<h2 class="t">[[자료를 찾는 법과 설계를 읽는 법은 <em>같은 일</em>임||Finding data and reading a design are <em>the same job</em>]]</h2>
+<ul class="b">
+  <li>[[<b>1부</b>는 숫자를 확정하는 절차, <b>2부</b>는 그 절차로 PWR형 SMR 세 기를 실제로 읽는 연습임||<b>Part I</b> is the procedure for pinning a number down; <b>Part II</b> applies it to three PWR-type SMRs]]</li>
+  <li>[[2부의 비교표(8장)는 1부 절차로 <b>한 칸씩 채운 결과</b>물임 — 채우지 못한 칸은 비워 둠||The comparison table in ch. 8 is <b>Part I filled in cell by cell</b> - what could not be confirmed stays blank]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 375" role="img" aria-label="[[1부 네 장과 2부 여섯 장의 구성, 그리고 둘을 잇는 관계||The four chapters of Part I and six of Part II, and the link between them]]">
+  <g id="rm-p1"></g><g id="rm-p2"></g>
+  <path id="rm-link" d="M545,196 H575" stroke="var(--cool)" stroke-width="1.6" fill="none"
+        marker-end="url(#rmar)"/>
+  <defs><marker id="rmar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+    orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--cool)"/></marker></defs>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const P1={ t:TX('1부 · 자료를 확정한다','Part I · Pin the data down'), col:'var(--amber)', x:30, w:515,
+    it:[['1',TX('설계 자료는 어디에 있는가 — 출처의 3계층','Where the data lives - three tiers of sources')],
+        ['2',TX('레거시 3대 소스 — ARIS · NRC · NEA','The three legacy sources - ARIS · NRC · NEA')],
+        ['3',TX('AI로 수집하기 — 어디까지 시키는가','Collecting with AI - how far to let it go')],
+        ['4',TX('교차검증 — AI가 틀리는 방식','Cross-checking - how AI gets numbers wrong')]] };
+  const P2={ t:TX('2부 · 설계를 읽는다','Part II · Read the designs'), col:'var(--cool)', x:575, w:515,
+    it:[['5',TX('PWR과 BWR, 그리고 일체형','PWR, BWR, and going integral')],
+        ['6',TX('NuScale VOYGR — 펌프를 없앤 설계','NuScale VOYGR - the pump taken out')],
+        ['7',TX('i-SMR — 펌프를 남긴 설계','i-SMR - the pump kept in')],
+        ['8',TX('정면 비교 — 두 일체형','Head to head - the two integral designs')],
+        ['9',TX('대조군 BWRX-300 — 끓여서 순환','Control case BWRX-300 - boil to circulate')],
+        ['10',TX('정리 — 같은 문제, 세 가지 답','Wrap-up - one problem, three answers')]] };
+  const boxes=[];
+  [P1,P2].forEach(P=>{
+    const G=el.querySelector(P===P1?'#rm-p1':'#rm-p2');
+    const h=mk('text',{x:P.x,y:18,'font-family':'var(--mono)','font-size':13,fill:P.col,
+      'letter-spacing':'.14em'}); h.textContent=P.t; G.appendChild(h);
+    P.it.forEach((it,i)=>{
+      const g=mk('g',{transform:'translate('+P.x+','+(34+i*54)+')',opacity:0});
+      g.appendChild(mk('rect',{width:P.w,height:44,fill:'var(--panel)',stroke:'var(--rule)'}));
+      g.appendChild(mk('rect',{width:3,height:44,fill:P.col}));
+      const n=mk('text',{x:20,y:28,'font-family':'var(--mono)','font-size':16,fill:P.col,
+        'font-weight':600}); n.textContent=it[0]; G.appendChild(g); g.appendChild(n);
+      const t=mk('text',{x:56,y:28,'font-family':'var(--sans)','font-size':17,fill:'var(--ink)',
+        'font-weight':300}); t.textContent=it[1]; g.appendChild(t);
+      boxes.push(g);
+    });
+  });
+  const lk=el.querySelector('#rm-link');
+  if(RM){ boxes.forEach(b=>b.setAttribute('opacity',1)); return; }
+  lk.style.opacity=0;
+  boxes.forEach((b,i)=>b.animate([{opacity:0},{opacity:1}],
+    {duration:300,delay:90*i,fill:'forwards',easing:'ease-out'}));
+  lk.animate([{opacity:0},{opacity:1}],{duration:400,delay:1000,fill:'forwards'});
+}});
+</script>

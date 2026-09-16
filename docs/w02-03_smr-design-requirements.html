@@ -138,6 +138,11 @@ ul.b li code,.mono{font-family:var(--mono);font-size:.94em;letter-spacing:-.01em
   border-top:1px solid var(--rule);margin-top:12px}
 .src{font-size:12.5px;color:var(--ink-3);font-weight:300;line-height:1.35}
 .src b{color:var(--ink-2);font-weight:500}
+/* 약어 풀이 — 푸터 맨 윗줄. 어려운 약어가 나오는 장에서 그 자리에 뜻을 단다.
+   본문이 아니라 각주이므로 --ink-3 을 쓰고, 약어 자체만 --ink-2 로 한 단계 올린다. */
+.abbr{display:block;margin-bottom:6px;font-family:var(--mono);font-size:11.5px;
+  color:var(--ink-3);letter-spacing:.02em;line-height:1.6}
+.abbr b{color:var(--ink-2);font-weight:600;letter-spacing:.06em}
 .foot .sp{flex:1}
 .brand{font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--ink-3)}
 
@@ -481,14 +486,47 @@ function track(obj,key,get,k=6){
 /* ---------- 선 그래프 ---------- */
 function poly(pts){ return pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' '); }
 
-/* ---------- 슬라이드 한 장의 뼈대(레일·본문·푸터) ---------- */
+/* ---------- SVG 안에서 줄을 나눈다 ----------
+   SVG <text> 에는 자동 줄바꿈이 없다. 한글은 공백이 드물어 단어 기준으로 자르면 칸을 넘으므로
+   글자 폭으로 센다 — 한글 1.0, 라틴 lat(기본 0.5 · 모노는 0.62). 공백이 있으면 거기서 끊고,
+   없으면 글자 사이에서 끊는다(한글은 그래도 된다).
+   n 은 "한글 몇 자 폭"이다. 폭 W px 칸에 글자 크기 px 로 넣으려면 n = W/px 로 준다. */
+const CJK = /[가-힣ㄱ-ㅎㅏ-ㅣ一-龥]/;
+function wrapT(s, n, lat){
+  lat = lat || 0.5;
+  const out=[]; let cur='', w=0, sp=-1;
+  for(const c of String(s)){
+    const u = CJK.test(c) ? 1 : lat;
+    if(w + u > n){
+      if(sp > 0){ out.push(cur.slice(0,sp)); cur = cur.slice(sp+1); }
+      else { out.push(cur); cur=''; }
+      w = 0; for(const d of cur) w += CJK.test(d) ? 1 : lat; sp = -1;
+    }
+    if(c === ' ') sp = cur.length;
+    cur += c; w += u;
+  }
+  if(cur.trim()) out.push(cur);
+  return out.map(x => x.trim());
+}
+/* 글자열의 어림 폭(px). 칸을 나눠 배치할 때 쓴다. */
+function widT(s, px, lat){
+  lat = lat || 0.55; let w = 0;
+  for(const c of String(s)) w += CJK.test(c) ? px : px*lat;
+  return w;
+}
+
+/* ---------- 슬라이드 한 장의 뼈대(레일·본문·푸터) ----------
+   s.abbr 은 푸터 맨 윗줄에 붙는 약어 풀이다. 어려운 약어가 본문에 나오면
+   그 장 안에서 바로 뜻을 볼 수 있게 한다. 형식: '<b>ECCS</b> 비상노심냉각계통 · <b>RVV</b> …' */
 function frame(s,i){
   if(s.bare) return s.html;
   const sec = SEC.filter(x=>x.at<=i).slice(-1)[0];
   return '<div class="rail"><span class="tag">'+(s.tag||(sec?sec.name:''))+'</span>'
        + '<span class="sp"></span><span class="num">'+String(i+1).padStart(2,'0')+' / '+D.length+'</span></div>'
        + s.html
-       + '<div class="foot"><span class="src">'+(s.src||'')+'</span><span class="sp"></span>'
+       + '<div class="foot"><span class="src">'
+       +   (s.abbr ? '<span class="abbr">'+s.abbr+'</span>' : '')
+       +   (s.src||'')+'</span><span class="sp"></span>'
        + '<span class="brand">THINK LAB · HANYANG</span></div>';
 }
 
@@ -750,7 +788,7 @@ init(el){
   b.setAttribute('y2',22);
   b.animate([{opacity:0},{opacity:1}],{duration:420,delay:380,fill:'forwards'});
   bl.animate([{opacity:0},{opacity:1}],{duration:300,delay:480,fill:'forwards'});
-  z.animate([{width:0},{width:160}],{duration:600,delay:520,fill:'forwards',easing:'ease-out'});
+  z.animate([{width:'0px'},{width:'160px'}],{duration:600,delay:520,fill:'forwards',easing:'ease-out'});
 }});
 </script>
 <script>

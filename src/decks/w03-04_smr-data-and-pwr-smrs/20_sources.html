@@ -1,0 +1,241 @@
+<script>
+/* ================================================================
+   SECTION 01 — 설계 자료는 어디에 있는가  (교재 1장)
+   ================================================================ */
+SECT('01 · [[자료는 어디에 있는가||Where the data lives]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;01 자료는 어디에 있는가||&#167;01 Where the data lives]]',
+html:`[[<div class="no">01</div><h2>자료는 어디에 있는가</h2><div class="ln"></div>
+<p>이 장에는 계산이 없다. 대신 앞으로 모든 장에서 쓸 출처 판단의 기준을 세운다.
+같은 값이 왜 다르게 적히는지 알면, 자료가 엇갈릴 때 당황하지 않는다.</p>||<div class="no">01</div><h2>Where the data lives</h2><div class="ln"></div>
+<p>No calculations here. Instead we set the yardstick for judging sources that every later chapter
+will use. Once you know why the same quantity gets written differently, conflicting data stops being alarming.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 네 가지 이유 */
+S({tag:'WHY THEY DIFFER', ov:'[[같은 값이 왜 다르게 적히는가 — 네 가지||Why the same value is written differently - four reasons]]',
+src:'[[<b>출처</b> 본 교재 1.1절 · 네 원인 모두 SMR 자료에서 흔하게 나타남||<b>Source</b> This textbook &#167;1.1 · all four are common in SMR literature]]',
+html:`<h2 class="t">[[숫자가 엇갈리는 이유는 <em>넷</em>이고, 넷 다 흔함||There are <em>four</em> reasons numbers disagree, and all four are common]]</h2>
+<ul class="b">
+  <li>[[네 경우 모두 <b>어느 쪽도 거짓이 아님</b> — 무엇을 언제 세었는지가 다를 뿐임||In all four cases <b>neither side is false</b> - they count different things at different times]]</li>
+  <li>[[그래서 자료를 볼 때 묻는 첫 질문이 &#8220;맞나 틀리나&#8221;가 아니라 <b class="cool">&#8220;무엇을 센 값인가&#8221;</b>임||So the first question is not &#8220;is it right?&#8221; but <b class="cool">&#8220;what did it count?&#8221;</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 400" role="img" aria-label="[[설계 변경·기준 차이·시점 차이·재인용이라는 네 가지 원인과 각각의 실제 예||Four causes - design change, different basis, different date, copy of a copy - each with a real example]]">
+  <g id="wd-cards"></g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const C=[
+    [TX('설계가 바뀐다','The design changes'), 'var(--hot)',
+     TX('NuScale 모듈당 160 → 250 MWt. 2020년 자료의 50 MWe와 2025년 자료의 77 MWe는 둘 다 맞다 — 앞이 US600, 뒤가 US460이다.',
+        'NuScale went from 160 to 250 MWt per module. 50 MWe in a 2020 source and 77 MWe in a 2025 one are both right - the first is US600, the second US460.')],
+    [TX('무엇을 세는지가 다르다','They count different things'), 'var(--cool)',
+     TX('열출력인가 전기출력인가. 모듈당인가 발전소 전체인가. i-SMR의 170 MWe는 모듈당이고 680 MWe는 4모듈 합이다. 섞으면 4배가 틀린다.',
+        'Thermal or electrical? Per module or per plant? i-SMR’s 170 MWe is per module, 680 MWe is four of them. Mix the two and you are off by a factor of four.')],
+    [TX('자료의 시점이 다르다','They were written at different times'), 'var(--amber)',
+     TX('IAEA SMR 부클릿은 판이 나올 때마다 갱신되지만, 최신판이 2024년판이면 2026년 현황은 그 안에 없다.',
+        'The IAEA SMR booklet is refreshed each edition, but if the latest is 2024 then nothing from 2026 is in it.')],
+    [TX('베낀 것을 또 베낀다','A copy of a copy'), 'var(--ink-3)',
+     TX('기사 A가 오타를 내면 B~Z가 그 오타를 옮긴다. 검색 결과 20건의 원출처가 하나일 수 있다. 같은 숫자가 여러 곳에 나온다는 것은 신뢰의 근거가 못 된다.',
+        'Article A makes a typo and B through Z carry it. Twenty search hits can trace to one origin. A number appearing in many places is not evidence that it is right.')]
+  ];
+  const G=el.querySelector('#wd-cards'), cards=[];
+  C.forEach((c,i)=>{
+    const x=(i%2)*570, y=Math.floor(i/2)*208;
+    const g=mk('g',{transform:'translate('+x+','+y+')',opacity:0});
+    g.appendChild(mk('rect',{width:550,height:190,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:550,height:3,fill:c[1]}));
+    const n=mk('text',{x:22,y:48,'font-family':'var(--mono)','font-size':27,fill:c[1],
+      'font-weight':600}); n.textContent='①②③④'[i]; g.appendChild(n);
+    const t=mk('text',{x:62,y:48,'font-family':'var(--sans)','font-size':22,fill:'var(--ink)',
+      'font-weight':500}); t.textContent=c[0]; g.appendChild(t);
+    /* 본문은 손으로 줄바꿈 — SVG 에는 자동 줄바꿈이 없다 */
+    wrapT(c[2], 28).forEach((ln,j)=>{
+      const e=mk('text',{x:22,y:92+j*29,'font-family':'var(--sans)','font-size':17.5,
+        fill:'var(--ink-2)','font-weight':300}); e.textContent=ln; g.appendChild(e);
+    });
+    G.appendChild(g); cards.push(g);
+  });
+  if(RM){ cards.forEach(c=>c.setAttribute('opacity',1)); return; }
+  cards.forEach((c,i)=>c.animate([{opacity:0},{opacity:1}],
+    {duration:380,delay:200*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- 출처의 3계층 */
+S({tag:'THREE TIERS', ov:'[[출처의 3계층 — 1차·2차·3차||Three tiers of sources - primary, secondary, tertiary]]',
+src:'[[<b>출처</b> 본 교재 1.2절 그림 1.1 · 3차 자료에서 본 숫자는 인용 전에 반드시 한 층 아래로 내려가 확인할 것||<b>Source</b> This textbook &#167;1.2, Fig. 1.1 · a number seen in a tertiary source must be traced down one tier before it is cited]]',
+abbr:'[[<b>ARIS</b> IAEA 노형 정보 시스템 · <b>DSR</b> ARIS 설계기술서 · <b>PRIS</b> IAEA 운전원전 정보 시스템 · <b>KINS</b> 한국원자력안전기술원||<b>ARIS</b> Advanced Reactors Information System · <b>DSR</b> Design Status Report · <b>PRIS</b> Power Reactor Information System · <b>KINS</b> Korea Institute of Nuclear Safety]]',
+html:`<h2 class="t">[[자료를 볼 때 먼저 묻는 것 — <em>이건 몇 차 자료인가</em>||The first question about any source - <em>which tier is this?</em>]]</h2>
+<ul class="b">
+  <li>[[위로 갈수록 <b>빠르고</b>, 아래로 갈수록 <b>검증되어</b> 있음. 탐색은 위에서, 인용은 아래에서 함||The higher you go the <b>faster</b> it is; the lower, the more <b>verified</b>. Explore at the top, cite from the bottom]]</li>
+  <li>[[AI가 생성한 요약은 전부 <b class="hot">3차 자료</b>임 — 방향을 잡는 데는 좋고 숫자를 가져오는 데는 쓰면 안 됨||Anything an AI summarises is <b class="hot">tertiary</b> - fine for orientation, never for numbers]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 790 380" role="img" aria-label="[[1차·2차·3차 자료를 사다리꼴로 쌓고 각 층의 예를 적은 그림||A trapezoid stack of primary, secondary and tertiary sources with examples in each layer]]">
+    <g id="tt-tiers"></g>
+    <g id="tt-ax" opacity="0">
+      <line x1="748" y1="40" x2="748" y2="330" class="axis" stroke="var(--ink-3)"/>
+      <path d="M744,46 L748,36 L752,46" fill="none" stroke="var(--ink-3)" stroke-width="1.2"/>
+      <path d="M744,324 L748,334 L752,324" fill="none" stroke="var(--ink-3)" stroke-width="1.2"/>
+      <text x="740" y="70" class="lbl" text-anchor="end">[[빠름||fast]]</text>
+      <text x="740" y="316" class="lbl" text-anchor="end">[[검증됨||verified]]</text>
+    </g>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">[[3차 — 요약·해설||Tertiary - summaries]]</span>
+      <span class="v" style="font-size:17px;line-height:1.4">[[기사 · 블로그 · 발표자료 · <b>AI 요약</b>||Articles · blogs · slide decks · <b>AI summaries</b>]]</span></div>
+    <div class="readout"><span class="k">[[2차 — 편집된 DB||Secondary - edited databases]]</span>
+      <span class="v" style="font-size:17px;line-height:1.4">[[ARIS SMR 부클릿 · NEA 대시보드 · IAEA PRIS||ARIS SMR booklet · NEA dashboard · IAEA PRIS]]</span></div>
+    <div class="readout good"><span class="k">[[1차 — 책임 주체가 있음||Primary - someone is accountable]]</span>
+      <span class="v" style="font-size:17px;line-height:1.4">[[NRC 인허가 문서 · ARIS 설계기술서(DSR) · 원안위·KINS 심사보고서||NRC licensing documents · ARIS Design Status Reports · KINS review reports]]</span></div>
+  </div>
+</div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const G=el.querySelector('#tt-tiers');
+  /* 사다리꼴 — 위가 좁고 아래가 넓다. 넓이가 곧 검증의 두께다. */
+  const T=[
+    { y: 36, h:90, w1:190, w2:330, col:'var(--hot)',  n:'3',
+      t:TX('3차 자료 — 요약과 해설','Tertiary - summary and commentary'),
+      s:TX('숫자를 가져오지 않는다','never take a number from here') },
+    { y:136, h:90, w1:330, w2:480, col:'var(--amber)', n:'2',
+      t:TX('2차 자료 — 편집된 데이터베이스','Secondary - edited databases'),
+      s:TX('편집 시점에 멈춰 있다','frozen at its edit date') },
+    { y:236, h:98, w1:480, w2:650, col:'var(--ok)',   n:'1',
+      t:TX('1차 자료 — 설계자·규제기관이 직접 낸 문서','Primary - issued by the designer or regulator'),
+      s:TX('인용은 여기서 한다','this is where you cite from') }
+  ];
+  const cx=350, gs=[];
+  T.forEach(d=>{
+    const g=mk('g',{opacity:0});
+    g.appendChild(mk('polygon',{points:poly([[cx-d.w1/2,d.y],[cx+d.w1/2,d.y],
+      [cx+d.w2/2,d.y+d.h],[cx-d.w2/2,d.y+d.h]]),
+      fill:'var(--panel)',stroke:d.col,'stroke-width':1.6}));
+    const n=mk('text',{x:cx,y:d.y+34,'text-anchor':'middle','font-family':'var(--mono)',
+      'font-size':15,fill:d.col,'letter-spacing':'.14em'}); n.textContent=d.n+'′'; g.appendChild(n);
+    const t=mk('text',{x:cx,y:d.y+d.h/2+18,'text-anchor':'middle','font-family':'var(--sans)',
+      'font-size':17,fill:'var(--ink)','font-weight':500}); t.textContent=d.t; g.appendChild(t);
+    const s=mk('text',{x:cx,y:d.y+d.h-8,'text-anchor':'middle',class:'lbl'});
+    s.textContent=d.s; g.appendChild(s);
+    G.appendChild(g); gs.push(g);
+  });
+  const ax=el.querySelector('#tt-ax');
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); ax.setAttribute('opacity',1); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:420,delay:180*i,fill:'forwards',easing:'ease-out'}));
+  ax.animate([{opacity:0},{opacity:1}],{duration:400,delay:760,fill:'forwards'});
+}});
+
+
+/* ---------------------------------------------------------------- 속도 ↔ 검증도 */
+S({tag:'SPEED vs RIGOUR', ov:'[[속도와 검증도는 반대로 간다||Speed and rigour pull in opposite directions]]',
+src:'[[<b>출처</b> 본 교재 1.3절 그림 1.2 · 두 축을 동시에 만족하는 자료원은 존재하지 않음||<b>Source</b> This textbook &#167;1.3, Fig. 1.2 · no source satisfies both axes at once]]',
+abbr:'[[<b>ADAMS</b> NRC 문서 공개 시스템 · <b>FSER</b> 최종 안전성평가보고서 · <b>NEA</b> OECD 원자력기구||<b>ADAMS</b> Agencywide Documents Access and Management System · <b>FSER</b> Final Safety Evaluation Report · <b>NEA</b> Nuclear Energy Agency]]',
+html:`<h2 class="t">[[빠른 것은 <s>틀리기 쉽고</s>, 맞는 것은 <em>느림</em>||What is fast is <s>easy to get wrong</s>; what is right is <em>slow</em>]]</h2>
+<ul class="b">
+  <li>[[AI 기반 수집이 매력적인 이유와 위험한 이유가 같음 — <b class="hot">가장 빠르고 가장 덜 검증된 자리</b>에 앉아 있음||AI collection is attractive and dangerous for the same reason - it sits in <b class="hot">the fastest, least verified corner</b>]]</li>
+  <li>[[그래서 작업 방식은 단순함. <b>탐색은 빠른 쪽에서, 인용은 느린 쪽에서</b>||So the working rule is simple: <b>explore on the fast side, cite from the slow side</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 375" role="img" aria-label="[[가로축 갱신 속도, 세로축 검증 단계에 주요 자료원을 배치한 산점도||A scatter of sources with update speed on the x axis and verification depth on the y axis]]">
+  <line x1="120" y1="322" x2="1060" y2="322" class="axis"/>
+  <line x1="120" y1="30"  x2="120"  y2="322" class="axis"/>
+  <text x="1060" y="350" class="lbl" text-anchor="end">[[갱신이 빠름 &#8594;||faster to update &#8594;]]</text>
+  <text x="120" y="18" class="lbl">[[&#8593; 검증 단계가 많음||&#8593; more verification]]</text>
+  <g id="sr-dots"></g>
+  <g id="sr-band" opacity="0">
+    <rect x="700" y="228" width="352" height="90" fill="var(--hot)" opacity="0.10"/>
+    <text x="1044" y="252" class="lbl" text-anchor="end" fill="var(--hot)">[[빠르지만 검증이 없는 구역||fast, but unverified]]</text>
+  </g>
+</svg>
+</div></div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  /* x = 갱신 속도(0 느림 → 1 빠름),  y = 검증 단계(0 적음 → 1 많음) */
+  const P=[
+    [0.06,0.96,'var(--ok)',   TX('NRC ADAMS 원본 \u2014 FSER \u00b7 RAI','NRC ADAMS originals - FSER, RAI'), 'start'],
+    [0.18,0.80,'var(--ok)',   TX('ARIS 설계기술서','ARIS Design Status Report'),                 'start'],
+    [0.34,0.60,'var(--amber)',TX('IAEA SMR 부클릿 (연 1회)','IAEA SMR booklet (annual)'),         'start'],
+    [0.52,0.50,'var(--amber)',TX('NEA 디지털 대시보드','NEA digital dashboard'),                  'start'],
+    [0.60,0.30,'var(--ink-3)',TX('설계사 브로슈어','Vendor brochures'),                           'end'],
+    [0.80,0.16,'var(--hot)',  TX('뉴스 기사','News articles'),                                    'end'],
+    [0.95,0.06,'var(--hot)',  TX('AI 요약 · 딥리서치 보고서','AI summaries · deep-research reports'),'end']
+  ];
+  const X=v=>120+v*920, Y=v=>322-v*286;
+  const G=el.querySelector('#sr-dots'), gs=[];
+  P.forEach(p=>{
+    const g=mk('g',{opacity:0});
+    g.appendChild(mk('circle',{cx:X(p[0]),cy:Y(p[1]),r:7,fill:p[2]}));
+    const anc=p[4], dx=anc==='end'? -14 : 14;
+    const t=mk('text',{x:X(p[0])+dx,y:Y(p[1])+5,'text-anchor':anc,'font-family':'var(--sans)',
+      'font-size':16,fill:'var(--ink-2)','font-weight':300}); t.textContent=p[3];
+    g.appendChild(t); G.appendChild(g); gs.push(g);
+  });
+  const band=el.querySelector('#sr-band');
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); band.setAttribute('opacity',1); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
+    {duration:320,delay:120*i,fill:'forwards',easing:'ease-out'}));
+  band.animate([{opacity:0},{opacity:1}],{duration:500,delay:1000,fill:'forwards'});
+}});
+
+
+/* ---------------------------------------------------------------- 다섯 줄 기록 */
+S({tag:'FIVE LINES', ov:'[[수치 하나를 확정하는 다섯 줄||Five lines that pin one number down]]',
+src:'[[<b>출처</b> 본 교재 1.4절 표 1.1 · 이 다섯이 채워지면 인용해도 됨||<b>Source</b> This textbook &#167;1.4, Table 1.1 · once these five are filled in, the value may be cited]]',
+html:`<h2 class="t">[[값 하나에 <em>다섯 줄</em>을 붙임 — 이게 채워지면 인용해도 됨||Attach <em>five lines</em> to every value - once they are filled in, cite it]]</h2>
+<ul class="b">
+  <li>[[값·단위·출처·접근일·비고를 <b>한 줄에 같이</b> 적어 두면, 반년 뒤 &#8220;이거 어디서 났지&#8221;로 날리는 시간이 사라짐||Write value, unit, source, access date and note <b>on one line</b> and you never lose a day to &#8220;where did this come from?&#8221;]]</li>
+  <li>[[<b class="amb">접근일</b>이 특히 중요함 — 인허가 현황처럼 빨리 낡는 값은 접근일이 값 자체만큼 중요함||The <b class="amb">access date</b> matters most - for fast-ageing values like licensing status it is as important as the value]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 780 355" role="img" aria-label="[[값·단위와 정의·출처·접근일·비고 다섯 항목을 i-SMR 열출력으로 채운 예||The five fields - value, unit and definition, source, access date, note - filled in for i-SMR thermal power]]">
+    <g id="fl-rows"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <blockquote class="q">[[이 절차가 번거로워 보인다면, <b>안전해석 보고서가 왜 그렇게 두꺼운지</b> 생각해 보면 됨.
+      인허가 문서의 상당 부분은 &#8220;이 숫자가 어디서 왔는가&#8221;를 증명하는 데 쓰임. 계산 자체보다
+      <b>입력값의 출처와 불확실도</b>를 대는 일이 더 길다.
+      <span class="cite">원자력 연계 &#183; 지금 배우는 습관이 그대로 V&amp;V의 입구임</span>||If the procedure feels tedious, consider <b>why safety analysis reports are so thick</b>.
+      Much of a licensing document exists to prove where each number came from. Establishing
+      <b>the provenance and uncertainty of the inputs</b> takes longer than the calculation itself.
+      <span class="cite">Nuclear link &#183; this habit is the doorway to V&amp;V</span>]]</blockquote>
+  </div>
+</div>`,
+init(el){
+  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
+    for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const R=[
+    [TX('값','Value'),            '540',                                           'var(--cool)'],
+    [TX('단위 · 정의','Unit &#183; definition'.replace('&#183;','·')),
+                                  TX('MW(th), 모듈당 정격 노심 열출력','MW(th), rated core thermal power per module'), 'var(--ink)'],
+    [TX('출처','Source'),         TX('IAEA ARIS, i-SMR Design Status Report','IAEA ARIS, i-SMR Design Status Report'), 'var(--ink)'],
+    [TX('접근일','Access date'),  '2026-09-16',                                    'var(--amber)'],
+    [TX('비고','Note'),           TX('국내 일부 자료는 520 MWth 로 표기 — 4장 참조','Some domestic sources say 520 MWth - see ch. 4'), 'var(--ink-2)']
+  ];
+  const G=el.querySelector('#fl-rows'), gs=[];
+  R.forEach((r,i)=>{
+    const y=i*70;
+    const g=mk('g',{transform:'translate(0,'+y+')',opacity:0});
+    g.appendChild(mk('rect',{width:780,height:58,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:3,height:58,fill:r[2]}));
+    const k=mk('text',{x:22,y:24,class:'lbl'}); k.textContent=r[0]; g.appendChild(k);
+    const v=mk('text',{x:22,y:47,'font-family':'var(--sans)','font-size':18,fill:r[2],
+      'font-weight':i===0?600:400}); v.textContent=r[1]; g.appendChild(v);
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0,transform:'translate(0px,'+(i*70+10)+'px)'},
+    {opacity:1,transform:'translate(0px,'+(i*70)+'px)'}],
+    {duration:360,delay:150*i,fill:'forwards',easing:'cubic-bezier(.2,.7,.3,1)'}));
+}});
+</script>
