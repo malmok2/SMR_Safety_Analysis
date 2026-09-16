@@ -255,6 +255,7 @@ blockquote.q .cite{display:block;margin-top:9px;font-family:var(--mono);font-siz
 
 /* ---------- 인쇄(PDF) 모드 — 46장을 한 번에 지면에 펼친다 ---------- */
 #sheets{display:none}
+[hidden]{display:none!important}   /* .btn 의 display 보다 세게 */
 #ptool{display:none}
 body.printing{display:block;place-items:initial;overflow:auto;height:auto}
 body.printing #stage,body.printing #prog,body.printing #help,body.printing #ov,

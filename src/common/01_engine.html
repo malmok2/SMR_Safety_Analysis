@@ -62,7 +62,18 @@ function applyStatic(){
   if(q('pt-print'))q('pt-print').textContent = TX('Ctrl+P · PDF로 저장','Ctrl+P · Save as PDF');
   if(q('pt-dl'))   q('pt-dl').textContent = TX('미리 만든 PDF 내려받기','Download prepared PDF');
   if(q('pt-back')) q('pt-back').textContent = TX('슬라이드로 돌아가기','Back to the slides');
-  if(q('pt-dl'))   q('pt-dl').href = (DECK.slug || '') + (LANG==='en' ? '.en' : '') + '.pdf';
+  /* 미리 만든 PDF 는 덱 옆에 그 파일이 같이 있을 때만 쓸모가 있다. HTML 하나만 떼어
+     배포하면(zip · LMS 첨부) 옆에 PDF 가 없으므로 버튼을 감춘다 — 죽은 링크를 보이지 않는다.
+     file:// 은 fetch 가 막혀 확인할 수 없다. 그때도 감춘다: 옆에 PDF 가 있으면 학생이
+     직접 열면 되고, 없으면 바로 옆 'Ctrl+P · PDF로 저장' 으로 만들면 된다. */
+  const dl=q('pt-dl');
+  if(dl){
+    dl.href = (DECK.slug || '') + (LANG==='en' ? '.en' : '') + '.pdf';
+    dl.hidden = true;
+    if(location.protocol==='http:' || location.protocol==='https:'){
+      fetch(dl.href,{method:'HEAD'}).then(r=>{ if(r.ok) dl.hidden=false; }).catch(()=>{});
+    }
+  }
 }
 /* 이 덱이 무엇인가 — build 가 머리말의 DECK 자리에 window.DECK 을 꽂는다.
    제목과 배포용 PDF 이름이 덱마다 다르므로 엔진에 박아 두지 않는다. */
