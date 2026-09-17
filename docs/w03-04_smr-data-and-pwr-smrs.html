@@ -2976,39 +2976,76 @@ html:`<h2 class="t">[[<em>ECCS</em> — RVV 방출과 RRV 회수||<em>ECCS</em> 
 init(el){
   const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
     for(const k in at) e.setAttribute(k,at[k]); return e;};
-  const G=el.querySelector('#ec-fig'), CX=270;
-  G.appendChild(mk('rect',{x:20,y:16,width:500,height:378,fill:'var(--cool)',opacity:0.07}));
-  G.appendChild(mk('rect',{x:CX-122,y:30,width:244,height:350,rx:104,fill:'var(--ground)',
-    stroke:'var(--ok)','stroke-width':2.2}));
-  G.appendChild(mk('rect',{x:CX-86,y:52,width:172,height:306,rx:74,fill:'var(--panel)',
-    stroke:'var(--rule)','stroke-width':1.6}));
-  G.appendChild(mk('rect',{x:CX-44,y:282,width:88,height:56,fill:'var(--hot)',opacity:0.30}));
-  /* 격납 바닥에 고이는 물 */
-  const pool=mk('rect',{x:CX-118,y:340,width:236,height:'0',fill:'var(--cool)',opacity:0.34});
-  G.appendChild(pool);
-  /* 붕소 펠릿 */
+  /* 왼쪽 그림 — 세로 위치
+       원자로건물 수조 28~394 · 격납(CNV) 34~374 · 원자로용기(RPV) 56~352
+       노심 290~338 · RRV 262(하강관 높이) · 물이 차오르는 최종 수위 236 */
+  const G=el.querySelector('#ec-fig'), CX=270, WL=236, BOT=374, RISE=BOT-WL;
+  /* 원자로건물 수조 — 격납이 통째로 잠겨 있다 */
+  G.appendChild(mk('rect',{x:20,y:28,width:500,height:366,fill:'var(--cool)',opacity:0.10}));
+  G.appendChild(mk('rect',{x:20,y:28,width:500,height:2,fill:'var(--cool)',opacity:0.55}));
+  /* 격납용기(CNV) — 같은 테두리를 클립으로도 쓴다 */
+  const cnvD={x:CX-122,y:34,width:244,height:340,rx:104};
+  const cp=mk('clipPath',{id:'ec-cnvclip'}); cp.appendChild(mk('rect',cnvD)); G.appendChild(cp);
+  G.appendChild(mk('rect',Object.assign({},cnvD,
+    {fill:'var(--ground)',stroke:'var(--ok)','stroke-width':2.2})));
+  /* 격납 안에 차오르는 물 — 격납 테두리로 잘라 내므로 밖으로 새지 않는다 */
+  const wet=mk('g',{'clip-path':'url(#ec-cnvclip)'});
+  const pool=mk('rect',{x:CX-124,y:BOT,width:248,height:'0',fill:'var(--cool)',opacity:0.34});
+  const surf=mk('rect',{x:CX-124,y:BOT,width:248,height:2,fill:'var(--cool)',opacity:0.85});
+  wet.appendChild(pool); wet.appendChild(surf); G.appendChild(wet);
+  /* 원자로용기(RPV) — 물 위에 덮어 그린다. 물은 환형공간과 바닥에만 남는다 */
+  const rpvD={x:CX-86,y:56,width:172,height:296,rx:74};
+  G.appendChild(mk('rect',Object.assign({},rpvD,
+    {fill:'var(--panel)',stroke:'var(--rule)','stroke-width':1.6})));
+  /* 용기 안의 물 — 바깥보다 수위가 낮고, 그 차이가 회수를 밀어 준다 */
+  const cp2=mk('clipPath',{id:'ec-rpvclip'}); cp2.appendChild(mk('rect',rpvD)); G.appendChild(cp2);
+  const inw=mk('g',{'clip-path':'url(#ec-rpvclip)'});
+  inw.appendChild(mk('rect',{x:CX-88,y:272,width:176,height:82,fill:'var(--cool)',opacity:0.20}));
+  inw.appendChild(mk('rect',{x:CX-88,y:272,width:176,height:2,fill:'var(--cool)',opacity:0.7}));
+  G.appendChild(inw);
+  /* 상승관(riser) — 그 바깥이 하강관이고, RRV 가 물을 돌려보내는 곳이다 */
+  G.appendChild(mk('rect',{x:CX-48,y:118,width:96,height:172,fill:'none',
+    stroke:'var(--rule)','stroke-width':1.4}));
+  G.appendChild(mk('rect',{x:CX-44,y:290,width:88,height:48,fill:'var(--hot)',opacity:0.30}));
+  G.appendChild(mk('text',{x:CX,y:320,'text-anchor':'middle',class:'lbl',fill:'var(--hot)'}))
+   .textContent=TX('노심','core');
+  /* 붕소 펠릿 — 격납 상부 */
   const pel=mk('g',{});
-  for(let i=0;i<7;i++) pel.appendChild(mk('circle',{cx:CX-60+i*20,cy:48,r:4,fill:'var(--amber)'}));
+  for(let i=0;i<7;i++) pel.appendChild(mk('circle',{cx:CX-40+i*13.3,cy:46,r:3.6,fill:'var(--amber)'}));
   G.appendChild(pel);
-  G.appendChild(mk('text',{x:CX,y:26,'text-anchor':'middle',class:'lbl',fill:'var(--amber)'}))
-   .textContent=TX('붕소 펠릿 — 물이 닿으면 녹는다','boron pellets - they dissolve on contact');
-  /* RVV · RRV */
-  const rvv=mk('circle',{cx:CX,cy:64,r:8,fill:'var(--hot-2)'});
-  const rrv=mk('circle',{cx:CX+86,cy:320,r:8,fill:'var(--cool)'});
-  G.appendChild(rvv); G.appendChild(rrv);
-  G.appendChild(mk('text',{x:CX-16,y:70,'text-anchor':'end',class:'lbl',fill:'var(--hot-2)'}))
-   .textContent='RVV ×2';
-  G.appendChild(mk('text',{x:CX+102,y:326,class:'lbl',fill:'var(--cool)'})).textContent='RRV ×2';
-  const vent=mk('path',{d:'M'+CX+',72 V44 H'+(CX+104)+' V180',fill:'none',stroke:'none'});
-  const ret =mk('path',{d:'M'+(CX+112)+',300 H'+(CX+86)+' V300 M'+(CX+86)+',300 H'+(CX+30),fill:'none',stroke:'none'});
-  G.appendChild(vent); G.appendChild(ret);
-  flow(vent,{n:6,color:'var(--hot-2)',r:3.4,speed:0.2});
-  flow(ret ,{n:5,color:'var(--cool)', r:3.4,speed:0.14});
-  /* 응축 표시 — 격납 내벽 */
-  const drops=mk('g',{});
-  for(let i=0;i<9;i++) drops.appendChild(mk('circle',{cx:CX+108,cy:120+i*24,r:2.6,fill:'var(--cool)'}));
-  G.appendChild(drops);
-  G.appendChild(mk('text',{x:44,y:384,class:'lbl',fill:'var(--cool)'}))
+  G.appendChild(mk('text',{x:CX,y:22,'text-anchor':'middle',class:'lbl',fill:'var(--amber)'}))
+   .textContent=TX('붕소 펠릿','boron pellets');
+  /* RVV — 용기 상부 헤드 · RRV — 하강관 높이의 측벽 */
+  [-30,30].forEach(d=>G.appendChild(mk('circle',{cx:CX+d,cy:62,r:7,fill:'var(--hot-2)'})));
+  [-86,86].forEach(d=>G.appendChild(mk('circle',{cx:CX+d,cy:262,r:7,fill:'var(--cool)'})));
+  /* 유로 — ① 증기는 헤드에서 나와 환형공간을 타고 내려간다 */
+  const vR=mk('path',{d:'M'+(CX+30)+',62 Q'+(CX+92)+',46 '+(CX+104)+',134 V'+(WL-8),
+    fill:'none',stroke:'var(--hot-2)','stroke-width':1,'stroke-dasharray':'3 5',opacity:0.35});
+  const vL=mk('path',{d:'M'+(CX-30)+',62 Q'+(CX-92)+',46 '+(CX-104)+',134 V'+(WL-8),
+    fill:'none',stroke:'var(--hot-2)','stroke-width':1,'stroke-dasharray':'3 5',opacity:0.35});
+  /* ② 응축수는 격납 내벽을 타고 흘러내린다 */
+  const cR=mk('path',{d:'M'+(CX+118)+',142 V'+(WL-4),fill:'none',stroke:'none'});
+  const cL=mk('path',{d:'M'+(CX-118)+',142 V'+(WL-4),fill:'none',stroke:'none'});
+  /* ③ 고인 물은 RRV 를 지나 하강관으로 되돌아간다 */
+  const rR=mk('path',{d:'M'+(CX+108)+',286 V262 H'+(CX+74)+' V306 H'+(CX+46),
+    fill:'none',stroke:'var(--ok)','stroke-width':1,'stroke-dasharray':'3 5',opacity:0.35});
+  const rL=mk('path',{d:'M'+(CX-108)+',286 V262 H'+(CX-74)+' V306 H'+(CX-46),
+    fill:'none',stroke:'var(--ok)','stroke-width':1,'stroke-dasharray':'3 5',opacity:0.35});
+  [vR,vL,cR,cL,rR,rL].forEach(p=>G.appendChild(p));
+  flow(vR,{n:5,color:'var(--hot-2)',r:3.4,speed:0.20});
+  flow(vL,{n:5,color:'var(--hot-2)',r:3.4,speed:0.20});
+  const fC=[flow(cR,{n:4,color:'var(--cool)',r:2.6,speed:0.30}),
+            flow(cL,{n:4,color:'var(--cool)',r:2.6,speed:0.30})];
+  const fR=[flow(rR,{n:5,color:'var(--ok)',r:3.4,speed:0.16}),
+            flow(rL,{n:5,color:'var(--ok)',r:3.4,speed:0.16})];
+  /* 라벨 */
+  G.appendChild(mk('text',{x:CX+114,y:58,class:'lbl',fill:'var(--hot-2)'})).textContent='RVV ×2';
+  G.appendChild(mk('text',{x:CX+128,y:266,class:'lbl',fill:'var(--cool)'})).textContent='RRV ×2';
+  G.appendChild(mk('text',{x:28,y:46,class:'lbl',fill:'var(--ink-3)'}))
+   .textContent=TX('원자로건물 수조','reactor building pool');
+  const wlt=mk('text',{x:CX+128,y:WL+4,class:'lbl',fill:'var(--cool)',opacity:0});
+  wlt.textContent=TX('격납 수위','CNV level'); G.appendChild(wlt);
+  G.appendChild(mk('text',{x:44,y:390,class:'lbl',fill:'var(--cool)'}))
    .textContent=TX('격납이 수조에 잠겨 있어 내벽이 곧 응축면이다',
                    'the containment is submerged, so its inner wall is the condenser');
 
@@ -3022,8 +3059,8 @@ init(el){
       TX('격납 상부의 펠릿이 녹아 1차계통 붕소 농도를 올린다 — GDC 26의 두 번째 수단',
          'Pellets in the upper containment dissolve and raise the primary boron - the second means under GDC 26')],
     ['var(--ok)',   TX('RRV 로 회수','The RRVs return it'),
-      TX('격납 바닥의 물이 하강관으로 돌아온다. 펌프도 전원도 추가 수원도 없다',
-         'Water on the containment floor flows back to the downcomer. No pump, no power, no extra water source')]
+      TX('수위가 RRV 를 덮으면 고인 물이 하강관으로 돌아온다. 펌프도 전원도 추가 수원도 없다',
+         'Once the level covers the RRVs, water returns to the downcomer - no pump, no power, no extra source')]
   ];
   const gs=[];
   S4.forEach((s,i)=>{
@@ -3039,11 +3076,23 @@ init(el){
         fill:'var(--ink-2)','font-weight':300}); t.textContent=ln; g.appendChild(t); });
     G.appendChild(g); gs.push(g);
   });
-  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); pool.setAttribute('height',40); return; }
+  if(RM){
+    gs.forEach(g=>g.setAttribute('opacity',1));
+    pool.setAttribute('y',WL); pool.setAttribute('height',RISE);
+    surf.setAttribute('y',WL); wlt.setAttribute('opacity',1);
+    return;
+  }
   gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],
     {duration:340,delay:200+180*i,fill:'forwards'}));
-  pool.animate([{height:'0px',y:'380px'},{height:'40px',y:'340px'}],
-    {duration:1400,delay:600,fill:'forwards',easing:'ease-out'});
+  /* 물이 차오른다 — y 와 height 를 함께 움직인다(단위를 붙여야 Chrome 이 받는다) */
+  pool.animate([{y:BOT+'px',height:'0px'},{y:WL+'px',height:RISE+'px'}],
+    {duration:1900,delay:500,fill:'forwards',easing:'ease-out'});
+  surf.animate([{y:BOT+'px'},{y:WL+'px'}],
+    {duration:1900,delay:500,fill:'forwards',easing:'ease-out'});
+  wlt.animate([{opacity:0},{opacity:1}],{duration:400,delay:2200,fill:'forwards'});
+  /* 응축은 증기가 올라간 뒤, 회수는 물이 고인 뒤 */
+  fC.forEach(f=>f.on=false); fR.forEach(f=>f.on=false);
+  raf(t=>{ fC.forEach(f=>f.on = t>0.9); fR.forEach(f=>f.on = t>2.0); });
 }});
 
 
