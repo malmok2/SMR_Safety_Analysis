@@ -39,6 +39,14 @@ def read(*p):
 def esc(s):
     return (s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;'))
 
+def size(name):
+    """docs/ 의 파일 크기를 사람이 읽는 꼴로. 없으면 빈 문자열 — 아직 굽지 않은 PDF 가 있다."""
+    f = os.path.join(DOCS, name)
+    if not os.path.exists(f):
+        return ''
+    n = os.path.getsize(f)
+    return ' · %.1f MB' % (n / 1048576.0) if n >= 1048576 else ' · %.0f KB' % (n / 1024.0)
+
 def media(slug):
     """decks/<슬러그>/media/*.webp 를 base64 로 심어 window.IMG 에 꽂는다.
 
@@ -113,15 +121,23 @@ def build_index(decks, fonts):
             '      <div class="lead">%s</div>\n'
             '      <div class="links">\n'
             '        <a class="go" href="%s.html">슬라이드 열기</a>\n'
-            '        <a href="%s.en.html">Slides (English)</a>\n'
-            '        <a href="%s.pdf">PDF</a>\n'
-            '        <a href="%s.en.pdf">PDF (English)</a>\n'
+            '        <a href="%s.en.html">English</a>\n'
+            '        <span class="dl">↓ 내려받기</span>\n'
+            '        <a href="%s.html" download>HTML 한국어%s</a>\n'
+            '        <a href="%s.en.html" download>HTML English%s</a>\n'
+            '        <a href="%s.pdf" download>PDF 한국어%s</a>\n'
+            '        <a href="%s.en.pdf" download>PDF English%s</a>\n'
             '      </div>\n'
             '      <div class="n">%d장 · %s</div>\n'
             '    </div>\n'
             '  </div>'
             % (esc(c.get('week', '')), esc(c['title_ko']), esc(c['title_en']),
-               esc(c.get('lead_ko', '')), c['slug'], c['slug'], c['slug'], c['slug'],
+               esc(c.get('lead_ko', '')),
+               c['slug'], c['slug'],
+               c['slug'], size(c['slug'] + '.html'),
+               c['slug'], size(c['slug'] + '.en.html'),
+               c['slug'], size(c['slug'] + '.pdf'),
+               c['slug'], size(c['slug'] + '.en.pdf'),
                c['slides'], esc(c.get('date', ''))))
     out = tpl.replace('/*@FONTS@*/', fonts, 1).replace('/*@TOKENS@*/', tokens.group(1).strip(), 1)
     out = out.replace('<!--CARDS-->', '\n'.join(cards), 1)

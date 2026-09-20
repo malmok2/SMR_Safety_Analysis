@@ -30,7 +30,10 @@ src/
   fonts.b64.css          심는 글꼴 서브셋(base64) · tools/fonts.py 가 만든다
   fonts.charset.txt      그 서브셋에 든 글자 · check.js 가 대조한다
 docs/                    빌드 산출물. 직접 고치지 말 것 — 항상 src 를 고치고 다시 빌드한다
-  index.html               목차 페이지. build 가 deck.conf 들을 읽어 만든다
+  index.html               목차 페이지. build 가 deck.conf 들을 읽어 만든다.
+                           카드마다 여는 링크와 내려받는 링크(HTML·PDF, 한/영)를 단다 —
+                           내려받기 쪽은 <a download> 라 브라우저에서 열리지 않고 파일로 떨어진다.
+                           파일 크기는 build 가 docs/ 를 재서 링크에 적는다
   <슬러그>.html              덱 — 한국어로 열림
   <슬러그>.en.html           덱 — 영어로 열림
   <슬러그>.pdf · .en.pdf     미리 구운 PDF(한 장 = 한 쪽) · tools/pdf.js 가 굽는다

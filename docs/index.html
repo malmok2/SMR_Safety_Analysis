@@ -110,7 +110,13 @@ h2.sec{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transfor
 .card a:hover{color:var(--cool);border-color:var(--cool)}
 .card a.go{color:var(--on-accent);background:var(--cool);border-color:var(--cool)}
 .card a.go:hover{filter:brightness(1.1)}
+.card .links .dl{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);letter-spacing:.1em;
+  align-self:center;padding:0 2px 0 10px;white-space:nowrap}
 .card .n{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin-top:12px;letter-spacing:.05em}
+.note{font-size:14.5px;color:var(--ink-3);font-weight:300;margin:-4px 0 18px;line-height:1.65}
+.note b{color:var(--ink-2);font-weight:500}
+.note kbd{font-family:var(--mono);font-size:12.5px;color:var(--cool);border:1px solid var(--rule);
+  border-radius:3px;padding:1px 5px}
 .foot{margin-top:72px;padding-top:18px;border-top:1px solid var(--rule);
   font-family:var(--mono);font-size:11.5px;color:var(--ink-3);letter-spacing:.08em;
   display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
@@ -126,6 +132,7 @@ h2.sec{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transfor
   <div class="meta">2026학년도 2학기 · 대학원 · 지도교수 송민섭<br>Hanyang University · Dept. of Nuclear Engineering · THINK Lab</div>
 
   <h2 class="sec">강의 자료 · Lecture materials</h2>
+  <p class="note">HTML 한 파일에 글꼴 · 그림 · 애니메이션이 모두 들어 있음. <b>내려받아 LMS 에 올리거나</b> 인터넷 없는 강의실에서 그대로 열 수 있음 — 열고 <kbd>P</kbd> 를 누르면 그 자리에서 PDF 로도 뽑힘.</p>
   <div class="card">
     <div class="wk">02~03주차</div>
     <div class="body">
@@ -134,9 +141,12 @@ h2.sec{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transfor
       <div class="lead">왜 이렇게 설계했는가를 계산으로 답하기 위한 최소 원리</div>
       <div class="links">
         <a class="go" href="w02-03_smr-design-requirements.html">슬라이드 열기</a>
-        <a href="w02-03_smr-design-requirements.en.html">Slides (English)</a>
-        <a href="w02-03_smr-design-requirements.pdf">PDF</a>
-        <a href="w02-03_smr-design-requirements.en.pdf">PDF (English)</a>
+        <a href="w02-03_smr-design-requirements.en.html">English</a>
+        <span class="dl">↓ 내려받기</span>
+        <a href="w02-03_smr-design-requirements.html" download>HTML 한국어 · 804 KB</a>
+        <a href="w02-03_smr-design-requirements.en.html" download>HTML English · 804 KB</a>
+        <a href="w02-03_smr-design-requirements.pdf" download>PDF 한국어 · 1.2 MB</a>
+        <a href="w02-03_smr-design-requirements.en.pdf" download>PDF English · 626 KB</a>
       </div>
       <div class="n">46장 · 2026-09</div>
     </div>
@@ -149,14 +159,17 @@ h2.sec{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transfor
       <div class="lead">숫자가 어디서 왔는지 대지 못하면 표 전체가 무의미해짐 — 자료를 확정하는 법과 그것으로 세 노형을 읽는 법</div>
       <div class="links">
         <a class="go" href="w03-04_smr-data-and-pwr-smrs.html">슬라이드 열기</a>
-        <a href="w03-04_smr-data-and-pwr-smrs.en.html">Slides (English)</a>
-        <a href="w03-04_smr-data-and-pwr-smrs.pdf">PDF</a>
-        <a href="w03-04_smr-data-and-pwr-smrs.en.pdf">PDF (English)</a>
+        <a href="w03-04_smr-data-and-pwr-smrs.en.html">English</a>
+        <span class="dl">↓ 내려받기</span>
+        <a href="w03-04_smr-data-and-pwr-smrs.html" download>HTML 한국어 · 3.7 MB</a>
+        <a href="w03-04_smr-data-and-pwr-smrs.en.html" download>HTML English · 3.7 MB</a>
+        <a href="w03-04_smr-data-and-pwr-smrs.pdf" download>PDF 한국어 · 6.9 MB</a>
+        <a href="w03-04_smr-data-and-pwr-smrs.en.pdf" download>PDF English · 5.4 MB</a>
       </div>
       <div class="n">86장 · 2026-10</div>
     </div>
   </div>
-  <div class="foot"><span>THINK LAB · HANYANG</span><span>2026-09-16</span></div>
+  <div class="foot"><span>THINK LAB · HANYANG</span><span>2026-09-20</span></div>
 </div>
 </body>
 </html>
