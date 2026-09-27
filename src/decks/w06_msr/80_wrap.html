@@ -1,0 +1,163 @@
+<script>
+/* ================================================================
+   SECTION 18 — 정리와 다음 걸음  (교재 18장)
+   ================================================================ */
+SECT('18 · [[정리와 다음 걸음||Wrap-up and next steps]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;18 정리와 다음 걸음||&#167;18 Wrap-up and next steps]]',
+html:`[[<div class="no">18</div><h2>정리와 다음 걸음</h2><div class="ln"></div>
+<p>세 덱을 다 본 사람이 무엇을 할 수 있어야 하는가 — 한 문장, 다섯 개의 식, 학습 경로,
+그리고 <b>아직 아무도 답하지 못한 질문</b>들.</p>||<div class="no">18</div><h2>Wrap-up and next steps</h2><div class="ln"></div>
+<p>What someone who has seen all three decks should be able to do - one sentence, five equations, a learning path,
+and <b>the questions no one has answered yet</b>.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 한 문장 */
+S({tag:'ONE SENTENCE', ov:'[[세 덱의 한 문장 — 물성표의 한 칸이 노형을 만든다||The three decks in one sentence - one cell of the property table makes the reactor]]',
+src:'[[<b>출처</b> 본 교재 18.1절 · 헬륨 ρc<sub>p</sub> 17 kJ/(m³·K) · 나트륨 Pr 0.005 · FLiBe 융점 459 °C — 표 17.1||<b>Source</b> This textbook &#167;18.1 · helium ρc<sub>p</sub> 17 kJ/(m³·K) · sodium Pr 0.005 · FLiBe melting point 459 °C - Table 17.1]]',
+html:`<h2 class="t">[[세 덱의 한 문장 — <em>물성표의 한 칸</em>이 노형을 만든다||The three decks in one sentence - <em>one cell</em> makes the reactor]]</h2>
+<ul class="b">
+  <li>[[냉각재를 바꾸면 물성표의 어느 한 칸이 튀고, <b>그 한 칸이 그 노형의 모든 설계 결정과 고유 난제를 만듦</b>||Change the coolant and one cell of the property table stands out - <b>and that cell drives every design decision and the hard problem</b>]]</li>
+  <li>[[분석 순서는 셋 다 같음 — <b class="ok">물성 → 전열 → 계통 배치 → 안전 논리 → 해석 도구</b>. 납냉각로 · 히트파이프로 · 초임계 CO₂ 사이클도 이 순서로 접근||The order of analysis is the same for all three - <b class="ok">properties → heat transfer → layout → safety logic → tools</b>. Lead, heat pipes and sCO₂ yield to the same order]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 410" role="img" aria-label="[[헬륨 체적 열용량 17, 나트륨 프란틀수 0.005, 용융염 액체연료와 융점 459 °C 가 각각 만드는 설계 결정||What helium ρcp 17, sodium Pr 0.005, and liquid fuel with a 459 °C melting point each lead to]]">
+  <g id="os"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#os'), gs=[];
+  [[TX('헬륨','Helium'),'ρcp 17','var(--amber)',[TX('7 MPa 가압','7 MPa'),TX('큰 송풍기','big circulator'),TX('흑연 열관성에 기댄 피동안전','passive safety on graphite inertia'),TX('낮은 출력밀도','low power density')]],
+   [TX('나트륨','Sodium'),'Pr 0.005','var(--hot)',[TX('전열 상관식 교체','new correlations'),TX('축방향 전도','axial conduction'),TX('강한 자연순환','strong natural circulation'),TX('화학 반응성 → 중간 루프','reactivity → intermediate loop')]],
+   [TX('용융염','Molten salt'),TX('액체연료 · 459 °C','liquid fuel · 459 °C'),'var(--ok)',[TX('선구핵종 이동','precursor drift'),TX('유체 내 발열 · 온라인 정제','heat in fluid, online cleanup'),TX('오프가스 선원항','off-gas source term'),TX('동결','freezing')]]]
+  .forEach((c,i)=>{
+    const y=i*140, g=mk('g',{transform:'translate(0,'+y+')',opacity:0});
+    g.appendChild(mk('rect',{width:1120,height:124,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:4,height:124,fill:c[2]}));
+    g.appendChild(mk('text',{x:24,y:50,'font-family':'var(--sans)','font-size':20,fill:'var(--ink)','font-weight':600})).textContent=c[0];
+    g.appendChild(mk('text',{x:24,y:90,'font-family':'var(--mono)','font-size':c[1].length>10?16:22,fill:c[2],'font-weight':600})).textContent=c[1];
+    g.appendChild(mk('path',{d:'M232,62 L262,62 M254,55 L263,62 L254,69',stroke:c[2],'stroke-width':2.2,fill:'none'}));
+    c[3].forEach((s,j)=>{ const x=282+j*208;
+      g.appendChild(mk('rect',{x:x,y:22,width:198,height:80,rx:4,fill:'none',stroke:c[2],'stroke-opacity':.55}));
+      wrapT(s,10.5).slice(0,2).forEach((ln,k,a)=>g.appendChild(mk('text',{x:x+99,y:68+(k-(a.length-1)/2)*21,'text-anchor':'middle','font-family':'var(--sans)','font-size':16,fill:'var(--ink)','font-weight':300})).textContent=ln); });
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:380,delay:260*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 다섯 개의 식 */
+S({tag:'FIVE EQUATIONS', ov:'[[꼭 기억할 다섯 개의 식||Five equations to keep]]',
+src:'[[<b>출처</b> 본 교재 18.2절 · 전도 냉각 — 원통 노심 중심과 표면의 온도차(5장) · Mikityuk 상관식(7장) · 선구핵종 수송(13장) · 붕괴열 Way–Wigner, 운전 10⁸ s 가정||<b>Source</b> This textbook &#167;18.2 · conduction - centre-to-surface difference of a cylindrical core (ch. 5) · Mikityuk correlation (ch. 7) · precursor transport (ch. 13) · Way-Wigner decay heat with 10⁸ s of operation]]',
+abbr:'[[<b>q‴</b> 단위 부피당 발열 · <b>R</b> 노심 반지름 · <b>P/D</b> 봉 간격 ÷ 봉 지름 · <b>Pe</b> 페클레수 = Re·Pr · <b>v<sub>f</sub></b> 연료염 유속 · <b>Λ</b> 중성자 세대시간||<b>q‴</b> heat per unit volume · <b>R</b> core radius · <b>P/D</b> pitch ÷ pin diameter · <b>Pe</b> Péclet number = Re·Pr · <b>v<sub>f</sub></b> fuel-salt velocity · <b>Λ</b> neutron generation time]]',
+html:`<h2 class="t">[[꼭 기억할 <em>다섯 개의 식</em>||<em>Five equations</em> to keep]]</h2>
+<div class="body"><div class="fig">
+<table class="d">
+  <tr><th>[[식||Equation]]</th><th>[[무엇을 말하나||What it says]]</th></tr>
+  <tr><td style="font-family:var(--mono);font-size:19px">ṁ = Q / (c<sub>p</sub> ΔT)</td><td>[[유량과 온도차 — 헬륨의 큰 송풍기, 염의 작은 배관||flow and temperature rise - helium&#8217;s big circulator, salt&#8217;s small pipes]]</td></tr>
+  <tr><td style="font-family:var(--mono);font-size:19px">ΔT<sub>max</sub> = q‴R² / (4k)</td><td>[[전도 냉각의 한계 — <b>노심 지름이 출력을 정함</b>||the limit of conduction cooling - <b>core diameter sets the power</b>]]</td></tr>
+  <tr><td style="font-family:var(--mono);font-size:19px">Nu = 0.047(1 − e<sup>−3.8(P/D−1)</sup>)(Pe<sup>0.77</sup> + 250)</td><td>[[액체금속 전열 — Pr 대신 Pe 하나로||liquid-metal heat transfer - Pe instead of Pr]]</td></tr>
+  <tr><td style="font-family:var(--mono);font-size:19px">∂c<sub>i</sub>/∂t + ∇·(c<sub>i</sub><b>v</b><sub>f</sub>) = (β<sub>i</sub>/Λ)n − λ<sub>i</sub>c<sub>i</sub></td><td>[[순환연료의 선구핵종 — 이류항 하나가 더 붙음||precursors in circulating fuel - one advection term more]]</td></tr>
+  <tr class="mark"><td style="font-family:var(--mono);font-size:19px">P<sub>d</sub>/P<sub>0</sub> = 0.0622[t<sup>−0.2</sup> − (t+10⁸)<sup>−0.2</sup>]</td><td>[[붕괴열 — <b>모든 피동안전 논거의 출발점</b>||decay heat - <b>where every passive-safety argument starts</b>]]</td></tr>
+</table>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 학습 경로 */
+S({tag:'LEARNING PATH', ov:'[[학습 경로 네 단계||A four-step learning path]]',
+src:'[[<b>출처</b> 본 교재 18.3절 · 벤치마크는 쉬운 것부터 — EBR-II SHRT-45R 은 IAEA CRP 공개 · HTTR LOFC 는 OECD-NEA 과제로 한국 참여||<b>Source</b> This textbook &#167;18.3 · benchmarks easiest first - EBR-II SHRT-45R is public through an IAEA CRP · HTTR LOFC is an OECD-NEA project with Korea participating]]',
+abbr:'[[<b>CRP</b> IAEA 공동연구과제 · <b>SHRT-45R</b> EBR-II 의 제어봉 없는 유량상실 시험 · <b>LOFC</b> 강제냉각 상실 · <b>III권</b> 연구실 교재 「원자로 계통코드 직접 만들기」 III권||<b>CRP</b> IAEA Coordinated Research Project · <b>SHRT-45R</b> EBR-II&#8217;s unprotected loss-of-flow test · <b>LOFC</b> loss of forced cooling · <b>Volume III</b> the lab text <i>Building a Reactor System Code</i>, Vol. III]]',
+html:`<h2 class="t">[[<em>학습 경로</em> 네 단계||A four-step <em>learning path</em>]]</h2>
+<ul class="b">
+  <li>[[<b>30줄짜리 계산이 발표자료의 숫자가 맞는지 검증해 줌</b> — 그리고 수렴이 안 되는 지점에서 배우는 것이 가장 많음||<b>A 30-line calculation checks whether a slide&#8217;s numbers are right</b> - and you learn most where the solver refuses to converge]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 360" role="img" aria-label="[[직접 계산, 계통코드에 노형 넣기, 벤치마크 풀기, 1차 출처 확인의 네 단계||Four steps - calculate, put a reactor in the code, solve a benchmark, check a primary source]]">
+  <g id="lp"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#lp'), gs=[];
+  [[TX('직접 계산해 본다','Calculate it yourself'),TX('2.3절 송풍기 동력 · 5.2절 전도 냉각 · 7.3절 전열 상관식 비교의 코드를 돌려 볼 것','run the codes for §2.3 circulator power, §5.2 conduction cooling and §7.3 correlation comparison'),'var(--cool)'],
+   [TX('계통코드에 노형을 넣는다','Put a reactor in the code'),TX('III권 코드에 6.3절(헬륨)이나 11.3절(나트륨) 예제를 넣고 정상상태를 맞춰 볼 것','add the §6.3 helium or §11.3 sodium example to the Volume III code and reach steady state'),'var(--ok)'],
+   [TX('벤치마크를 하나 푼다','Solve a benchmark'),TX('① EBR-II SHRT-45R — 우리 코드로도 정성 재현 ② MSRE 펌프 기동 — 코드 수정 필요, 물리 선명 ③ HTTR LOFC — 고체 열구조 모델이 핵심','① EBR-II SHRT-45R - qualitative with our code ② MSRE pump start - code changes, clear physics ③ HTTR LOFC - solid heat structures are key'),'var(--amber)'],
+   [TX('1차 출처를 확인한다','Check a primary source'),TX('각주 하나를 골라 1차 출처를 직접 찾아갈 것 — 「SMR 자료를 찾는 법」의 실전 연습','pick one footnote and trace it to the primary source - practice for Finding SMR Data'),'var(--hot)']]
+  .forEach((c,i)=>{
+    const x=i*283, g=mk('g',{transform:'translate('+x+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:270,height:352,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:270,height:3,fill:c[2]}));
+    g.appendChild(mk('text',{x:20,y:52,'font-family':'var(--mono)','font-size':32,fill:c[2],'font-weight':600})).textContent=TX((i+1)+'단계','Step '+(i+1));
+    wrapT(c[0],13).slice(0,2).forEach((ln,j)=>g.appendChild(mk('text',{x:20,y:94+j*24,'font-family':'var(--sans)','font-size':19,fill:'var(--ink)','font-weight':600})).textContent=ln);
+    wrapT(c[1],14.5).slice(0,8).forEach((ln,j)=>g.appendChild(mk('text',{x:20,y:160+j*22,'font-family':'var(--sans)','font-size':15.5,fill:'var(--ink-2)','font-weight':300})).textContent=ln);
+    if(i<3) g.appendChild(mk('path',{d:'M272,176 L281,176',stroke:c[2],'stroke-width':2}));
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:340,delay:220*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 연계 교재 */
+S({tag:'COMPANION TEXTS', ov:'[[THINK Lab 연계 교재 지도||Map of THINK Lab companion texts]]',
+src:'[[<b>출처</b> 본 교재 표 18.1 · 앞의 두 교재가 이 과목의 2~4주차 덱||<b>Source</b> This textbook, Table 18.1 · the first two texts are this course&#8217;s weeks 2-4 decks]]',
+abbr:'[[<b>ESF</b> 공학적안전설비 · <b>PSA</b> 확률론적 안전성평가 · <b>HAZID</b> 위험요소 식별 기법 · <b>굴절률 일치</b> 모형과 유체의 굴절률을 맞춰 벽 너머 유동을 보는 기법||<b>ESF</b> engineered safety features · <b>PSA</b> probabilistic safety assessment · <b>HAZID</b> hazard identification · <b>index matching</b> matching model and fluid refractive indices to see flow through walls]]',
+html:`<h2 class="t">[[THINK Lab <em>연계 교재</em> 지도||Map of THINK Lab <em>companion texts</em>]]</h2>
+<div class="body"><div class="fig">
+<table class="d">
+  <tr><th>[[무엇이 필요할 때||When you need]]</th><th>[[볼 교재||Read]]</th></tr>
+  <tr class="mark"><td>[[SMR 설계요건, 심층방어, ESF 일반||SMR design requirements, defence in depth, ESFs]]</td><td>[[「SMR 설계요건과 공학적안전설비」 — 2~3주차||<i>SMR Design Requirements and ESFs</i> - weeks 2-3]]</td></tr>
+  <tr class="mark"><td>[[자료 출처(ARIS · NRC · NEA 대시보드), PWR형 SMR||Data sources (ARIS, NRC, NEA Dashboard), PWR SMRs]]</td><td>[[「SMR 자료를 찾는 법과 PWR형 SMR」 — 3~4주차||<i>Finding SMR Data and PWR-type SMRs</i> - weeks 3-4]]</td></tr>
+  <tr><td>[[제어체적 코드 만들기||Building a control-volume code]]</td><td>[[「원자로 계통코드 직접 만들기」 I · II · III||<i>Building a Reactor System Code</i> I, II, III]]</td></tr>
+  <tr><td>[[HTGR 전용 코드, 공기유입||HTGR code, air ingress]]</td><td>[[「GAMMA+ 입문」||<i>Introduction to GAMMA+</i>]]</td></tr>
+  <tr><td>[[이상유동, 유동양식||Two-phase flow, flow regimes]]</td><td>[[「이상유동 기초와 유동양식」, 「유동 불안정성」||<i>Two-Phase Flow and Flow Regimes</i>, <i>Flow Instabilities</i>]]</td></tr>
+  <tr><td>[[축소 실험 설계||Designing scaled tests]]</td><td>[[「스케일링 방법론」||<i>Scaling Methodology</i>]]</td></tr>
+  <tr><td>[[위험도 평가||Risk assessment]]</td><td>[[「PSA 입문」, 「HAZID 방법론」||<i>Introduction to PSA</i>, <i>HAZID Methodology</i>]]</td></tr>
+  <tr><td>[[유동 가시화||Flow visualisation]]</td><td>[[「굴절률 일치 유동가시화」||<i>Index-Matched Flow Visualisation</i>]]</td></tr>
+</table>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 틀리기 쉬운 열 가지 */
+S({tag:'TEN COMMON MISTAKES', ov:'[[발표에서 틀리기 쉬운 열 가지||Ten common mistakes in presentations]]',
+src:'[[<b>출처</b> 본 교재 18.5절 · 각 항목의 1차 출처는 해당 장(2 · 7 · 9 · 14 · 5장) · HTR-PM 출력은 2026년 5월 기준||<b>Source</b> This textbook &#167;18.5 · primary sources in the relevant chapters (2, 7, 9, 14, 5) · HTR-PM power as of May 2026]]',
+abbr:'[[<b>FCCI</b> 연료–피복재 화학 상호작용 · <b>MWt · MWe</b> 열출력 · 전기출력 · <b>NaOH</b> 수산화나트륨 — 감속재 후보였던 것||<b>FCCI</b> fuel-cladding chemical interaction · <b>MWt · MWe</b> thermal and electric power · <b>NaOH</b> sodium hydroxide - once a moderator candidate]]',
+html:`<h2 class="t">[[발표에서 <em>틀리기 쉬운</em> 열 가지||Ten <em>common mistakes</em> in presentations]]</h2>
+<ul class="b">
+  <li>[[모두 <b>1차 출처를 한 번만 확인하면 걸러짐</b> — 언론 기사와 오래된 발표자료를 재인용하는 습관이 이런 오류를 퍼뜨림||All are <b>caught by checking the primary source once</b> - re-quoting press articles and old slides is what spreads them]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d sm">
+  <tr><th>[[흔히 쓰는 말||Often said]]</th><th>[[사실||Actually]]</th></tr>
+  <tr><td>[[HTR-PM 은 정격 500 MWt 로 운전 중||HTR-PM runs at its rated 500 MWt]]</td><td>[[모듈당 165 MWt, 인가 최대 200 MWt — 평형 노심 도달 후 상승 예정||165 MWt per module, licensed to 200 - rising after the equilibrium core]]</td></tr>
+  <tr><td>[[헬륨 음속은 약 1000 m/s||Helium sound speed is ~1000 m/s]]</td><td>[[실온 값 — 750 °C 에서는 1882 m/s||room temperature - 1882 m/s at 750 °C]]</td></tr>
+  <tr><td>[[나트륨 ρ = 1014 − 0.235T 의 T 는 섭씨||Sodium ρ = 1014 − 0.235T takes °C]]</td><td>[[켈빈 — 섭씨로 쓰면 7 % 틀림||kelvin - 7 % off in °C]]</td></tr>
+  <tr><td>[[4S 는 루프형||4S is a loop design]]</td><td>[[풀형 (도시바 NRC 제출 문서)||pool (Toshiba&#8217;s NRC submittal)]]</td></tr>
+  <tr><td>[[Oklo Aurora 는 히트파이프로||Oklo Aurora is a heat-pipe reactor]]</td><td>[[2020 설계는 폐기 — 현재는 풀형 나트륨 고속로||the 2020 design was dropped - now a sodium pool fast reactor]]</td></tr>
+  <tr><td>[[SEALER 는 나트륨로||SEALER is sodium-cooled]]</td><td>[[납 냉각||lead-cooled]]</td></tr>
+  <tr><td>[[Seaborg CMSR 은 NaOH 감속||Seaborg&#8217;s CMSR is NaOH-moderated]]</td><td>[[2023년 흑연으로 바뀜 — 회사명도 Saltfoss||graphite since 2023 - and the company is now Saltfoss]]</td></tr>
+  <tr><td>[[ThorCon 은 500 MWt||ThorCon is 500 MWt]]</td><td>[[500 MWe (250 MWe × 2)||500 MWe (2 × 250 MWe)]]</td></tr>
+  <tr><td>[[USNC MMR 은 15 MWt||USNC&#8217;s MMR is 15 MWt]]</td><td>[[옛 설계 — NRC 에 접수된 KRONOS 는 45 MWth||the old design - KRONOS as docketed is 45 MWth]]</td></tr>
+  <tr class="mark"><td>[[SFR 온도 상한은 나트륨 비점 883 °C||The SFR limit is 883 °C sodium boiling]]</td><td>[[실제 상한은 금속연료 FCCI 공정 650~725 °C||the real limit is the FCCI eutectic, 650-725 °C]]</td></tr>
+</table>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 남은 질문 */
+S({tag:'OPEN QUESTIONS', ov:'[[이 교재가 답하지 못한 질문들||Questions this textbook could not answer]]',
+src:'[[<b>출처</b> 본 교재 18.6절 · 흑연 열전도도 불확실도 −86 % 는 대부분 1 dpa 이전 데이터 · Hastelloy-N 은 ASME Sec. III Div.5 미등재||<b>Source</b> This textbook &#167;18.6 · the −86 % graphite conductivity uncertainty rests mostly on data below 1 dpa · Hastelloy-N is not listed in ASME Sec. III Div. 5]]',
+abbr:'[[<b>dpa</b> 원자당 변위 수 — 조사 손상의 척도 · <b>위그너 에너지</b> 조사된 흑연에 쌓였다가 풀리는 격자 에너지 · <b>EPZ</b> 비상계획구역 · <b>ASME Div.5</b> 고온 원자로 기기 설계 기준||<b>dpa</b> displacements per atom - a measure of irradiation damage · <b>Wigner energy</b> lattice energy stored in irradiated graphite · <b>EPZ</b> emergency planning zone · <b>ASME Div. 5</b> the high-temperature reactor component code]]',
+html:`<h2 class="t">[[이 교재가 <em>답하지 못한 질문</em>들||<em>Questions</em> this textbook could not answer]]</h2>
+<ul class="b">
+  <li>[[연구 주제를 찾는 사람에게는 본문보다 유용할 수 있음 — <b class="ok">선체 운동과 결합한 MSR 열수력이 가장 비어 있는 칸</b>||For anyone looking for a research topic this may beat the main text - <b class="ok">MSR thermal hydraulics coupled to hull motion is the emptiest cell</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d sm">
+  <tr><th style="width:110px">[[노형||Reactor]]</th><th>[[남은 질문||Open question]]</th></tr>
+  <tr><td style="color:var(--amber)">VHTR</td><td>[[조사 흑연 열전도도 불확실도(−86 %)가 사고 해석에 주는 영향 · 페블베드 벽 근처 우회 유로의 다공성 매질 모델 · HTGR 온도에서 조사한 흑연의 위그너 에너지 방출률 실측 없음||effect of the −86 % irradiated-graphite conductivity uncertainty on accident results · wall bypass in porous-medium pebble-bed models · no Wigner-release data for graphite irradiated at HTGR temperature]]</td></tr>
+  <tr><td style="color:var(--hot)">SFR</td><td>[[양의 보이드가 실제 발동하는 사고(유로 폐색 → 국부 비등)의 적분 실험 없음 · 상부 플레넘 열성층화의 1차원 표현 — <b>유동가시화가 쓰일 자리</b> · 전자기펌프의 관성 부재 보상(코스트다운 설계)||no integral test where positive void really acts (blockage → local boiling) · 1-D treatment of upper-plenum stratification - <b>where our visualisation fits</b> · making up for an EM pump&#8217;s missing inertia (coast-down design)]]</td></tr>
+  <tr class="mark"><td>MSR</td><td>[[동결 · 재용융 모델을 갖춘 계통코드 없음 · <b>선체 운동과 결합한 MSR 열수력 문헌이 사실상 없음</b> · 염–커버가스 분배 열화학 물성 부족(PIRT 최우선) · 산화환원 제어 실패를 PSA 에 넣는 법 · 경사 상태 드레인 탱크의 임계 안전||no system code with freeze/remelt · <b>essentially no literature on MSR TH under hull motion</b> · salt / cover-gas partition data (PIRT top) · redox-control failure in a PSA · drain-tank criticality when heeled]]</td></tr>
+  <tr><td style="color:var(--cool)">[[공통||All]]</td><td>[[Hastelloy-N 의 ASME Sec. III Div.5 등재 — <b>기술이 아니라 코드가 병목</b> · 비경수로 선원항과 EPZ 산정 방법론||listing Hastelloy-N in ASME Sec. III Div. 5 - <b>the code, not the technology, is the bottleneck</b> · non-LWR source terms and EPZ sizing]]</td></tr>
+</table>
+</div></div>`});
+</script>

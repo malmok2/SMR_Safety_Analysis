@@ -1,0 +1,81 @@
+<script>
+/* ================================================================
+   약어 · 닫는 장
+   ================================================================ */
+SECT('[[약어||Abbreviations]]');
+
+S({tag:'ABBREVIATIONS 1/2', ov:'[[약어 (1/2) — 노형 · 연료 · 노물리||Abbreviations (1 of 2) - reactors, fuel, reactor physics]]',
+src:'[[<b>출처</b> 본 교재 12~15장 · 각 장 하단의 약어 줄과 같은 내용임||<b>Source</b> This textbook, chs. 12-15 · the same entries as the abbreviation line under each slide]]',
+html:`<h2 class="t">[[약어 (1/2) — 노형 · 연료 · 노물리||Abbreviations (1 of 2) - reactors, fuel, reactor physics]]</h2>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 470" role="img" aria-label="[[노형·연료·노물리 관련 약어의 원어와 뜻||Reactor, fuel and physics abbreviations with expansions and meanings]]">
+  <g id="ab1"></g>
+</svg>
+</div></div>`,
+init(el){ abbrTable(el,'#ab1',[
+  ['MSR','Molten Salt Reactor',TX('용융염로 — 이 덱은 주로 액체연료형','this deck: mostly liquid-fuel')],
+  ['MSRE','Molten Salt Reactor Experiment',TX('ORNL 8 MWt 실험로 (1965~69)','ORNL’s 8 MWt test reactor (1965-69)')],
+  ['MSBR','Molten Salt Breeder Reactor',TX('ORNL 의 Th-U 증식로 개념','ORNL’s Th-U breeder concept')],
+  ['MSFR · MCFR','Molten Salt / Chloride Fast Reactor',TX('유럽 고속 MSR · TerraPower 염화물 고속로','European fast MSR · TerraPower chloride')],
+  ['FHR','Fluoride-salt High-temp. Reactor',TX('불화염 냉각 + 고체 TRISO 연료 (Kairos)','salt-cooled, solid TRISO fuel (Kairos)')],
+  ['IMSR · CMSR','Integral / Compact MSR',TX('Terrestrial Energy · Saltfoss(옛 Seaborg)','Terrestrial Energy · Saltfoss (ex-Seaborg)')],
+  ['TMSR-LF1','Thorium MSR - Liquid Fuel 1',TX('중국 2 MWt 액체연료 시험로 — 운전 중','China’s 2 MWt liquid-fuel test reactor')],
+  ['MCRE','Molten Chloride Reactor Experiment',TX('미국 용융염화물 임계실험로','US molten-chloride critical experiment')],
+  ['FLiBe · FLiNaK','LiF-BeF₂ · LiF-NaF-KF',TX('불화물 염 — FLiBe 융점 459 °C','fluoride salts - FLiBe melts at 459 °C')],
+  ['LEU · HALEU','(High-Assay) Low-Enriched U',TX('농축도 5 % 미만 · 5~20 %','below 5 % · 5-20 % enrichment')],
+  ['Th-U · Pa-233','Thorium-uranium cycle',TX('Th-232 → Pa-233 → U-233 전환','Th-232 → Pa-233 → U-233 conversion')],
+  ['βeff','Effective delayed-neutron fraction',TX('순환하면 줄어듦 — MSRE 654 → 431 pcm','drops when fuel moves - 654 → 431 pcm')],
+  ['pcm · $','per cent mille · dollar',TX('10⁻⁵ Δk/k · βeff 로 나눈 반응도','10⁻⁵ Δk/k · reactivity over βeff')],
+  ['U(IV)/U(III)','Redox ratio',TX('염의 산화환원 지표 — 부식을 좌우함','redox index of the salt - governs corrosion')],
+  ['Hastelloy-N','—',TX('니켈–몰리브덴 합금 — ASME Div.5 미등재','Ni-Mo alloy - not listed in ASME Div. 5')]
+]);}});
+
+
+S({tag:'ABBREVIATIONS 2/2', ov:'[[약어 (2/2) — 안전 · 해상 · 코드||Abbreviations (2 of 2) - safety, sea, codes]]',
+src:'[[<b>출처</b> 본 교재 14~17장 · 인허가 · 선급 현황은 <b>2026년 9월 기준</b>||<b>Source</b> This textbook, chs. 14-17 · licensing and class status <b>as of September 2026</b>]]',
+html:`<h2 class="t">[[약어 (2/2) — 안전 · 해상 · 코드||Abbreviations (2 of 2) - safety, sea, codes]]</h2>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 470" role="img" aria-label="[[안전·해상·코드 약어의 원어와 뜻||Safety, marine and code abbreviations with expansions and meanings]]">
+  <g id="ab2"></g>
+</svg>
+</div></div>`,
+init(el){ abbrTable(el,'#ab2',[
+  ['PIRT','Phenomena Identification and Ranking',TX('현상 식별 · 중요도 순위표','phenomena and importance ranking')],
+  ['PDC','Principal Design Criteria',TX('주요설계기준 — NRC 비경수로용 RG 1.232','NRC non-LWR criteria, RG 1.232')],
+  ['PSA','Probabilistic Safety Assessment',TX('확률론적 안전성평가','probabilistic safety assessment')],
+  ['EPZ','Emergency Planning Zone',TX('비상계획구역','emergency planning zone')],
+  ['ASME Div.5','ASME Sec. III Division 5',TX('고온 원자로 기기 설계 기준','high-temperature reactor components')],
+  ['IMO · MSC','Int’l Maritime Org. · Safety Cttee',TX('국제해사기구 · 해사안전위원회','UN maritime body and its safety committee')],
+  ['SOLAS','Safety of Life at Sea',TX('해상인명안전협약 — 원자력선 규정 포함','includes the nuclear-ship chapter')],
+  ['AiP · NTQ','Approval in Principle · New Tech. Qual.',TX('선급의 기본승인 · 신기술자격 5단계','class approval stages')],
+  ['ABS · LR · KR','—',TX('미국 · 영국 · 한국 선급','US, UK and Korean class societies')],
+  ['KRISO','Korea Res. Inst. of Ships & Ocean Eng.',TX('선박해양플랜트연구소','ship and ocean research institute')],
+  ['ORNL','Oak Ridge National Laboratory',TX('MSRE 를 운전하고 MSBR 을 설계한 곳','ran MSRE, designed MSBR')],
+  ['SAM','System Analysis Module',TX('ANL MOOSE 기반 계통코드 — MSRE 모델 공개','ANL code - public MSRE model')],
+  ['Griffin','—',TX('INL 중성자 수송 코드 — SAM 과 결합','INL neutronics, coupled to SAM')],
+  ['MARS-MSR','—',TX('KAERI 계통코드의 MSR 확장 — 25.5 s 진동 재현','KAERI code for MSRs - 25.5 s ripple')],
+  ['EDV','Emergency Depressurisation Valve',TX('비상감압밸브 — THINK Lab R134a 실험','THINK Lab R134a tests')]
+]);}});
+
+
+S({bare:true, cls:'cover', ov:'[[닫는 장||Closing]]',
+html:`<div class="kick">[[NUE4067 · 비경수로 편 ③ · 6주차||NUE4067 · Non-LWR part 3 · Week 6]]</div>
+<h1>[[부족한 것은 아이디어가 아니라<br><span>데이터</span>다||What is missing is not ideas<br>but <span>data</span>]]</h1>
+<div class="ln"></div>
+<div class="meta">
+  [[헬륨 · 나트륨 · 용융염의 설계 개념은 1960년대에 이미 다 나왔다.<br>
+  지금 필요한 것은 그 개념이 맞는지 확인해 줄 실험과, 그 실험을 재현할 수 있는 해석 도구다.<br><br>
+  그것이 우리가 하는 일이다.||The design concepts for helium, sodium and molten salt were all on the table by the 1960s.<br>
+  What is needed now is the experiments that test them, and the tools that can reproduce those experiments.<br><br>
+  That is our work.]]
+</div>
+<div class="hint">[[<kbd>O</kbd> 목차 &nbsp; <kbd>L</kbd> 한/영 &nbsp; <kbd>T</kbd> 배경 &nbsp; <kbd>P</kbd> 인쇄·PDF &nbsp; &nbsp; THINK Lab · 한양대학교 원자력공학과||<kbd>O</kbd> Index &nbsp; <kbd>L</kbd> KO/EN &nbsp; <kbd>T</kbd> Theme &nbsp; <kbd>P</kbd> Print·PDF &nbsp; &nbsp; THINK Lab · Hanyang University]]</div>`,
+init(el){
+  if(RM) return;
+  const h1=el.querySelector('h1'), ln=el.querySelector('.ln');
+  h1.style.opacity=0; ln.style.width='0px';
+  h1.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],
+    {duration:700,easing:'cubic-bezier(.2,.7,.3,1)',fill:'forwards'});
+  ln.animate([{width:'0px'},{width:'120px'}],{duration:600,delay:500,fill:'forwards'});
+}});
+</script>

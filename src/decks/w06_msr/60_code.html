@@ -1,0 +1,195 @@
+<script>
+/* ================================================================
+   SECTION 16 — 용융염으로 계통코드를 돌린다  (교재 16장)
+   ================================================================ */
+SECT('16 · [[용융염 계통코드||Molten salt in a system code]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;16 용융염으로 계통코드를 돌린다||&#167;16 Running a system code on molten salt]]',
+html:`[[<div class="no">16</div><h2>용융염으로 계통코드를 돌린다</h2><div class="ln"></div>
+<p>헬륨과 나트륨은 물성 클래스와 상관식만 바꾸면 III권 코드로 어느 정도 풀린다. 용융염은 다르다.
+<b>코드 구조 자체</b>를 건드려야 하는 유일한 노형이다 — 그래도 작업량은 생각보다 작다.</p>||<div class="no">16</div><h2>Running a system code on molten salt</h2><div class="ln"></div>
+<p>Helium and sodium mostly run in the Volume III code once properties and correlations change. Molten salt does not.
+It is the only case that needs <b>the code structure itself</b> changed - though less work than you might think.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 바꿀 것 */
+S({tag:'WHAT MUST CHANGE', ov:'[[용융염에서 바꿔야 할 다섯 가지||Five things to change for molten salt]]',
+src:'[[<b>출처</b> 본 교재 16.1절 · RELAP5-3D 문서도 &#8220;전열·마찰 상관식이 주로 물 기준으로 검증되었으므로 용융염에 대해 별도 평가가 필요&#8221;하다고 명시||<b>Source</b> This textbook &#167;16.1 · the RELAP5-3D documentation itself says heat-transfer and friction correlations were validated mainly for water and need separate assessment for molten salt]]',
+abbr:'[[<b>물성 클래스</b> 코드에서 p · h 로 ρ · T 등을 돌려주는 객체 · <b>구성모델</b> 마찰 · 열전달 상관식 · <b>플러깅</b> 응고로 유로가 막히는 것||<b>property class</b> the code object returning ρ, T and more from p and h · <b>closures</b> friction and heat-transfer correlations · <b>plugging</b> a flow path blocked by solidification]]',
+html:`<h2 class="t">[[용융염에서 바꿔야 할 <em>다섯 가지</em>||<em>Five things</em> to change for molten salt]]</h2>
+<ul class="b">
+  <li>[[앞의 둘은 앞 장들과 같은 종류의 작업이고, <b class="hot">뒤의 셋이 코드를 다시 짜게 만듦</b>||The first two are the same kind of work as before; <b class="hot">the last three force the code to be restructured</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d">
+  <tr><th>[[무엇||What]]</th><th>[[왜||Why]]</th><th>[[종류||Kind]]</th></tr>
+  <tr><td>[[물성 클래스||Property class]]</td><td>[[염 물성표 — 열전도도 불확실도 10~50 %||salt tables - conductivity uncertain by 10-50 %]]</td><td>[[교체||swap]]</td></tr>
+  <tr><td>[[전열 · 마찰 상관식||Heat transfer · friction]]</td><td>[[기존 식은 물 기준 검증 — 염에 대해 별도 평가||validated for water - reassess for salt]]</td><td>[[교체||swap]]</td></tr>
+  <tr class="mark"><td>[[발열 위치||Where heat is made]]</td><td>[[연료봉이 아니라 유체 안에서 발열||in the fluid, not a fuel rod]]</td><td>[[구조 변경||restructure]]</td></tr>
+  <tr class="mark"><td>[[선구핵종 수송||Precursor transport]]</td><td>[[점동특성에 이류항이 붙음 (13장)||advection added to point kinetics (ch. 13)]]</td><td>[[구조 변경||restructure]]</td></tr>
+  <tr class="mark"><td>[[동결 판정||Freezing]]</td><td>[[T &lt; T<sub>melt</sub> 에서 응고 · 플러깅||solidification and plugging below T<sub>melt</sub>]]</td><td>[[구조 변경||restructure]]</td></tr>
+</table>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 발열 · 선구핵종 */
+S({tag:'HEAT IN THE FLUID · PRECURSORS', ov:'[[구조 변경 1 · 2 — 유체 내 발열과 선구핵종 수송||Changes 1 and 2 - heat in the fluid, and precursor transport]]',
+src:'[[<b>출처</b> 본 교재 16.2절 · MSRE 기준 핵분열 12 % 가 노심 채널 밖(상부 플레넘 6 · 다운커머 3 · 하부 플레넘 3 %) · 반응도 방정식의 마지막 항에는 노심 체적 안의 c<sub>i</sub> 만 들어감||<b>Source</b> This textbook &#167;16.2 · at MSRE 12 % of fission is outside the core channels (upper plenum 6, downcomer 3, lower plenum 3 %) · only c<sub>i</sub> inside core volumes enters the last term of the kinetics equation]]',
+abbr:'[[<b>q‴</b> 단위 부피당 발열 · <b>도너셀</b> 흐름이 오는 쪽 값을 쓰는 1차 상류 차분 · <b>Junction.donor()</b> III권 코드의 상류 값 선택 함수 · <b>Volume</b> 제어체적 클래스||<b>q‴</b> heat per unit volume · <b>donor cell</b> first-order upwinding · <b>Junction.donor()</b> the Volume III upwind selector · <b>Volume</b> the control-volume class]]',
+html:`<h2 class="t">[[구조 변경 1 · 2 — <em>유체 내 발열</em>과 선구핵종 수송||Changes 1 and 2 - <em>heat in the fluid</em>, and precursor transport]]</h2>
+<ul class="b">
+  <li>[[III권에서 열은 HeatStructure가 고체에서 유체로 넘겨줌 — MSR은 <b>에너지 방정식에 체적 열원을 직접</b> 넣고, 각 제어체적에 q<sub>fission</sub> · q<sub>decay</sub> 필드를 둠||In Volume III heat passes from a HeatStructure to the fluid - an MSR puts <b>a volumetric source straight into the energy equation</b>, with q<sub>fission</sub> and q<sub>decay</sub> fields per volume]]</li>
+  <li>[[선구핵종은 <b class="ok">III권에서 엔탈피를 도너셀로 이송한 것과 똑같은 형태</b> — Volume에 스칼라 6개(6그룹)를 붙이고 Junction.donor()를 재사용. 작업량은 생각보다 작음||Precursors move <b class="ok">exactly as enthalpy was donor-celled in Volume III</b> - six scalars (six groups) on each Volume, Junction.donor() reused. Less work than it looks]]</li>
+</ul>
+<div class="body"><div class="fig">
+<div class="formula" style="font-size:18px;text-align:left;line-height:2.25;padding-left:30px">
+  <small>[[변경 1 · 유체 내 발열||Change 1 · heat in the fluid]]</small><br>
+  ∂(ρh)/∂t <span class="op">+</span> ∇·(ρ<b>v</b>h) <span class="op">=</span> q‴<sub>fission</sub> <span class="op">+</span> q‴<sub>decay</sub> <span class="op">+</span> ∇·(k∇T)<br>
+  <small>[[변경 2 · 제어체적 j 의 선구핵종 그룹 i||Change 2 · precursor group i in volume j]]</small><br>
+  V<sub>j</sub> dc<sub>i,j</sub>/dt <span class="op">=</span> Σ<sub>in</sub> V̇<sub>k</sub>c<sub>i,k</sub> <span class="op">−</span> Σ<sub>out</sub> V̇<sub>k</sub>c<sub>i,j</sub> <span class="op">+</span> V<sub>j</sub>(β<sub>i</sub>/Λ)n<sub>j</sub> <span class="op">−</span> λ<sub>i</sub>c<sub>i,j</sub>V<sub>j</sub><br>
+  dn/dt <span class="op">=</span> ((ρ − β)/Λ) n <span class="op">+</span> Σ<sub>i</sub> λ<sub>i</sub>c<sub>i,<b style="color:var(--hot)">core</b></sub></div>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 동결 */
+S({tag:'FREEZING MODEL', ov:'[[구조 변경 3 — 동결 판정과 유효 비열법||Change 3 - freezing, and the effective heat-capacity method]]',
+src:'[[<b>출처</b> 본 교재 16.2절 · L 융해잠열, ΔT<sub>mushy</sub> 고액 공존 온도폭 · 응고가 시작되면 Junction 의 면적과 손실계수를 고체분율의 함수로||<b>Source</b> This textbook &#167;16.2 · L latent heat of fusion, ΔT<sub>mushy</sub> the solid-liquid range · once freezing starts, Junction area and loss coefficient become functions of solid fraction]]',
+abbr:'[[<b>유효 비열법</b> 잠열을 고액 공존 구간에 퍼뜨려 비열에 더하는 근사 · <b>고액 공존(mushy)</b> 고체와 액체가 섞인 온도 구간 · <b>고체분율</b> 체적 중 얼어붙은 비율||<b>effective heat capacity</b> spreading latent heat over the melting range as extra c<sub>p</sub> · <b>mushy zone</b> the temperature range where solid and liquid coexist · <b>solid fraction</b> the frozen share of a volume]]',
+html:`<h2 class="t">[[구조 변경 3 — <em>동결 판정</em>과 유효 비열법||Change 3 - <em>freezing</em>, and the effective heat-capacity method]]</h2>
+<ul class="b">
+  <li>[[가장 단순하지만 놓치기 쉬움 — 잠열과 고액 공존을 다루고, 응고가 시작되면 <b>유로 면적이 줄고 마찰이 급증</b>하도록 Junction을 바꿔야 함||The simplest change and the easiest to miss - handle latent heat and the mushy zone, and make the Junction <b>lose area and gain friction</b> as it freezes]]</li>
+  <li>[[대부분의 계통코드에 응고 · 재용융 모델이 없어 <b class="amb">&#8220;융점 아래로 내려가는 시점&#8221;에서 멈추는 해석</b>이 많음 — 의미는 있지만, 동결 플러그 작동 시간이나 국부 플러깅 전파를 보려면 반드시 모델을 넣어야 함||Most system codes lack freezing and remelting, so many analyses <b class="amb">stop at &#8220;the moment it drops below the melting point&#8221;</b> - useful, but plug timing and plug propagation need the model]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <div class="formula" style="font-size:22px;padding:14px 0">T<sub>j</sub> <span class="op">&lt;</span> T<sub>melt</sub> <span class="op">⇒</span> [[응고 시작||freezing starts]]</div>
+  <div class="formula" style="font-size:22px;padding:14px 0">c<sub>p,eff</sub> <span class="op">=</span> c<sub>p</sub> <span class="op">+</span> L / ΔT<sub>mushy</sub> &nbsp;&nbsp;<small>(T<sub>sol</sub> &lt; T &lt; T<sub>liq</sub>)</small></div>
+  <div class="formula" style="font-size:22px;padding:14px 0">A<sub>jct</sub>(φ<sub>s</sub>) , K<sub>jct</sub>(φ<sub>s</sub>)</div>
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">[[FLiBe 융점||FLiBe melting point]]</span><span class="v">459<small>°C</small></span></div>
+    <div class="readout"><span class="k">[[MSRE 연료염 융점||MSRE fuel salt melts]]</span><span class="v">434<small>°C</small></span></div>
+    <div class="readout hi"><span class="k">[[해상 MSR 에서 더 중요||Matters more at sea]]</span><span class="v" style="font-size:15.5px;line-height:1.5">[[장기 정박 · 정전 · 입거가 육상보다 훨씬 자주 옴||long lay-ups, blackouts and docking come far more often]]</span></div>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 염 물성 클래스 */
+S({tag:'SALT PROPERTY CLASS', ov:'[[염 물성 클래스 — 밀도는 맞고 점성은 온도 함수로||The salt property class - density fits, viscosity must follow temperature]]',
+src:'[[<b>계산</b> 본 교재 16.3절 · III권 FLiBe() = DenseLiquid(2413, 0.488, T 는 켈빈) · 650 °C: 2413 − 0.488 × 923 = 1963 vs 실측식 1969 (0.3 %) · μ = 1.16×10⁻⁴ exp(3755/T) · MSRE 연료염(ANL SAM): ρ = 2810.7 − 0.6707(T − 722.15), μ = 8.4×10⁻⁴ exp(4340/T), k 1.0, c<sub>p</sub> 1884 · 흑연 ρ 1869.6, k 81.3, c<sub>p</sub> 1698.4(900 K)||<b>Calculation</b> This textbook &#167;16.3 · Volume III FLiBe() = DenseLiquid(2413, 0.488, T in kelvin) · at 650 °C 2413 − 0.488 × 923 = 1963 against 1969 measured (0.3 %) · μ = 1.16×10⁻⁴ exp(3755/T) · MSRE salt (ANL SAM): ρ = 2810.7 − 0.6707(T − 722.15), μ = 8.4×10⁻⁴ exp(4340/T), k 1.0, c<sub>p</sub> 1884 · graphite ρ 1869.6, k 81.3, c<sub>p</sub> 1698.4 (900 K)]]',
+abbr:'[[<b>DenseLiquid</b> III권의 선형 밀도 액체 클래스 · <b>MoltenSalt</b> 여기서 새로 만드는 하위 클래스 — 온도 의존 점성과 동결 판정을 더함||<b>DenseLiquid</b> Volume III&#8217;s linear-density liquid class · <b>MoltenSalt</b> the subclass built here - adding temperature-dependent viscosity and a freeze check]]',
+html:`<h2 class="t">[[염 물성 클래스 — 밀도는 맞고 <em>점성은 온도 함수로</em>||The salt property class - density fits, <em>viscosity must follow temperature</em>]]</h2>
+<ul class="b">
+  <li>[[밀도는 실측식과 <b class="ok">0.3 % 차이</b>로 잘 맞음. 문제는 점성 — 상수 5.6 mPa·s로 박혀 있는데 실제로는 650 °C 6.8, 500 °C <b class="hot">15.0 mPa·s</b>. 150 K 내려가면 2배가 넘음||Density agrees with measurement to <b class="ok">0.3 %</b>. Viscosity is the problem - fixed at 5.6 mPa·s, really 6.8 at 650 °C and <b class="hot">15.0 at 500 °C</b>. More than double over 150 K]]</li>
+  <li>[[동결 근처를 보려면 <b>반드시 온도 함수로</b> — MSRE 연료염은 물성이 또 다르므로 ANL SAM 값을 인용할 것||Near freezing it <b>must be a function of temperature</b> - and MSRE fuel salt differs again; cite ANL&#8217;s SAM values]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <div class="formula" style="font-size:14.5px;text-align:left;line-height:1.75;padding:12px 18px;background:var(--panel);border:1px solid var(--rule)">
+class MoltenSalt(DenseLiquid):<br>
+&nbsp;&nbsp;def viscosity(self, T):&nbsp;&nbsp;&nbsp;&nbsp;<small># T [K]</small><br>
+&nbsp;&nbsp;&nbsp;&nbsp;return self.mu_A*np.exp(self.mu_B/max(T, self.T_melt))<br>
+&nbsp;&nbsp;def frozen(self, T):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return T &lt; self.T_melt<br><br>
+flibe = MoltenSalt(2413.0, 0.488, cp=2390.0, k=1.1,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mu_A=1.16e-4, mu_B=3755.0, T_melt=732.15)</div>
+  </div>
+  <div class="side">
+    <div class="readout good"><span class="k">[[ρ(650 °C) · III권 대 실측||ρ(650 °C) · Vol. III vs measured]]</span><span class="v">1963 / 1969</div>
+    <div class="readout hi"><span class="k">μ(650 °C)</span><span class="v">6.8<small>mPa·s</small></span></div>
+    <div class="readout warn"><span class="k">μ(500 °C)</span><span class="v">15.0<small>mPa·s</small></span></div>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 펌프 기동 벤치마크 */
+S({tag:'MSRE PUMP START-UP BENCHMARK', ov:'[[MSRE 펌프 기동 벤치마크 — 새 MSR 코드의 첫 검증||The MSRE pump start-up benchmark - first test of any new MSR code]]',
+src:'[[<b>출처</b> 본 교재 16.4절 · 입력 — 노심 체류 17 s, 노심 밖 8.2 s, 총 25.2 s, 6그룹(U-235), βeff(정지) 654 pcm, 온도계수 −13.14 pcm/K · 기대 답 — 준정상 반응도 손실 212 pcm(실측), βeff(순환) 431 pcm, 25.2 s 주기의 감쇠 진동 · 곡선은 모양만 보이는 개념도||<b>Source</b> This textbook &#167;16.4 · inputs - 17 s in core, 8.2 s outside, 25.2 s loop, six groups (U-235), βeff static 654 pcm, coefficient −13.14 pcm/K · expected - quasi-steady loss 212 pcm (measured), βeff circulating 431 pcm, a decaying oscillation with a 25.2 s period · the curve is a concept shape]]',
+abbr:'[[<b>전이시간</b> 연료가 루프를 한 바퀴 도는 시간 · <b>준정상</b> 진동이 가라앉은 뒤의 거의 일정한 상태 · <b>감쇠 진동</b> 폭이 점점 줄어드는 출렁임||<b>transit time</b> one trip round the loop · <b>quasi-steady</b> nearly steady once oscillation dies out · <b>damped oscillation</b> a swing that shrinks each cycle]]',
+html:`<h2 class="t">[[MSRE <em>펌프 기동 벤치마크</em> — 새 MSR 코드의 첫 검증||The MSRE <em>pump start-up benchmark</em> - first test of any new MSR code]]</h2>
+<ul class="b">
+  <li>[[선구핵종 이동을 직접 겨냥한 <b>유일한 실측 데이터</b> — 정지 상태에서 임계인 노심의 펌프를 기동하고, 제어봉을 고정한 채 반응도 손실을 계산함||The <b>only measured data</b> aimed directly at precursor drift - start the pump on a critical core, rods fixed, and compute the reactivity loss]]</li>
+  <li>[[첫 연료 덩어리가 한 바퀴 돌아오는 <b>25.2초마다 반응도가 출렁임</b> — <b class="ok">이 진동이 나오면 수송 모델이 제대로 들어간 것</b>, 안 나오면 어딘가에서 평균을 내 버린 것||Reactivity ripples <b>every 25.2 s</b> as the first slug comes round - <b class="ok">see the ripple and transport is in right</b>; miss it and something has been averaged away]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 800 330" role="img" aria-label="[[펌프 기동 후 반응도 손실이 25.2초 주기로 출렁이며 212 pcm으로 수렴하는 개념 곡선||Concept curve - after pump start the reactivity loss ripples with a 25.2 s period and settles at 212 pcm]]">
+    <g id="bm-ax"></g>
+    <path id="bm-c" d="" fill="none" stroke="var(--cool)" stroke-width="3"/>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">[[준정상 반응도 손실 (실측)||Quasi-steady loss (measured)]]</span><span class="v">212<small>pcm</small></span></div>
+    <div class="readout hi"><span class="k">[[진동 주기 = 전이시간||Ripple period = transit time]]</span><span class="v">25.2<small>s</small></span></div>
+    <div class="readout"><span class="k">βeff [[정지 → 순환||static → moving]]</span><span class="v">654 &#8594; 431<small>pcm</small></span></div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, ax=el.querySelector('#bm-ax'), X0=70, X1=770, Y0=40, Y1=280, T=150;
+  const sx=t=>X0+t/T*(X1-X0), sy=r=>Y0+r/260*(Y1-Y0);
+  [0,50,100,150,200,250].forEach(r=>{ ax.appendChild(mk('line',{x1:X0,x2:X1,y1:sy(r),y2:sy(r),class:'grid'}));
+    ax.appendChild(mk('text',{x:X0-10,y:sy(r)+4,'text-anchor':'end',class:'lbl'})).textContent=(r?'−':'')+r; });
+  [0,25.2,50.4,75.6,100.8,126].forEach(t=>ax.appendChild(mk('text',{x:sx(t),y:Y1+20,'text-anchor':'middle',class:'lbl'})).textContent=t.toFixed(t?1:0)+' s');
+  ax.appendChild(mk('text',{x:X0,y:22,class:'lbl'})).textContent=TX('반응도 손실 pcm (아래로 갈수록 큼) · 모양은 개념','reactivity loss, pcm (down = larger) · shape is conceptual');
+  ax.appendChild(mk('line',{x1:X0,x2:X1,y1:sy(212),y2:sy(212),stroke:'var(--hot)','stroke-dasharray':'7 5','stroke-width':1.6}));
+  ax.appendChild(mk('text',{x:X1,y:sy(212)+20,'text-anchor':'end',class:'lbl',fill:'var(--hot)'})).textContent=TX('실측 212 pcm','measured 212 pcm');
+  let d=''; for(let i=0;i<=300;i++){ const t=T*i/300, base=212*(1-Math.exp(-t/9)), rip=38*Math.exp(-t/45)*Math.sin(2*Math.PI*t/25.2);
+    d+=(d?'L':'M')+sx(t).toFixed(1)+','+sy(Math.max(0,base+rip*(t>4?1:t/4))).toFixed(1); }
+  const c=el.querySelector('#bm-c'); c.setAttribute('d',d);
+  if(RM) return;
+  const L=c.getTotalLength(); c.style.strokeDasharray=L; c.style.strokeDashoffset=L;
+  c.animate([{strokeDashoffset:L},{strokeDashoffset:0}],{duration:2600,fill:'forwards',easing:'ease-out'});
+}});
+
+
+/* ---------------------------------------------------------------- 코드 지형도 */
+S({tag:'CODE LANDSCAPE · MARS', ov:'[[MSR 계통해석 코드 지형도 — 그리고 한국 코드 MARS||MSR system codes - and Korea&#8217;s MARS]]',
+src:'[[<b>출처</b> 본 교재 16.5절 · SAM 의 MSRE 모델은 ANL/NSE-23/8 로 공개 · MARS-MSR: 정재준 · 조연제 · 이현철 · 윤병조, Nucl. Eng. Technol. 58(10), 2026||<b>Source</b> This textbook &#167;16.5 · SAM&#8217;s MSRE model is public as ANL/NSE-23/8 · MARS-MSR: J. Jeong, Y. Cho, H. Lee, B. Yun, Nucl. Eng. Technol. 58(10), 2026]]',
+abbr:'[[<b>MARS</b> KAERI 의 계통 열수력 코드(RELAP5 · COBRA 계열) · <b>FUNaK</b> 불화물 연료염의 한 종류 · <b>흑연 스트링거</b> 노심을 이루는 흑연 막대 · <b>다중물리 결합</b> 중성자 · 열수력 등을 함께 푸는 것||<b>MARS</b> KAERI&#8217;s system thermal-hydraulics code (RELAP5 and COBRA lineage) · <b>FUNaK</b> a fluoride fuel salt · <b>graphite stringer</b> the graphite bars forming the core · <b>multiphysics coupling</b> solving neutronics and thermal hydraulics together]]',
+html:`<h2 class="t">[[MSR 계통해석 <em>코드 지형도</em> — 그리고 한국 코드 MARS||MSR system <em>codes</em> - and Korea&#8217;s MARS]]</h2>
+<ul class="b">
+  <li>[[<b class="ok">MARS-MSR이 이 교재에서 가장 주목할 코드</b> — 한국 코드로 한국 저자가 MSR을 푼 사례이고, 25.5초 주기 반응도 진동을 재현함. 해상 부유식 MSR 과제에서 해석 도구를 고를 때 1순위 검토 대상||<b class="ok">MARS-MSR is the code to watch here</b> - a Korean code applied to MSRs by Korean authors, reproducing the 25.5 s reactivity ripple. First candidate for the floating-MSR project]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d sm">
+  <tr><th>[[코드||Code]]</th><th>[[무엇을 담나||What it has]]</th><th>[[주의||Caveat]]</th></tr>
+  <tr><td>SAM (ANL)</td><td>[[스칼라 수송으로 선구핵종 추적, Griffin 과 다중물리 결합. MSRE 모델 공개(ANL/NSE-23/8)||scalar transport for precursors, coupled to Griffin. MSRE model public (ANL/NSE-23/8)]]</td><td>[[흑연 스트링거 구속을 표현하려고 반경방향 유속을 인위적으로 억제(문서에 명시)||radial velocity suppressed artificially to mimic the stringers (documented)]]</td></tr>
+  <tr><td>Griffin / Squirrel (INL)</td><td>[[공간 동특성과 점동특성 비교 — 13장의 βeff 값을 낸 코드||spatial and point kinetics compared - the source of ch. 13&#8217;s βeff values]]</td><td>—</td></tr>
+  <tr><td>RELAP5 / TRACE</td><td>[[개조 연구 여럿||several adaptations]]</td><td>[[전열 · 마찰 상관식이 물 기준 — 그대로 쓰면 안 됨||correlations are water-based - not to be used as is]]</td></tr>
+  <tr class="mark"><td>[[MARS (KAERI / 부산대) ★||MARS (KAERI / Pusan) ★]]</td><td>[[선구핵종 수송 · 염 물성(LiF-BeF₂-ZrF₄-UF₄, LiF-BeF₂, KCl-UCl₃, FUNaK) · 수송 기반 붕괴열 · MSR 반응도 피드백. MSRE 펌프 기동/정지 + 자연순환 3건 벤치마크||precursor transport · salt properties (LiF-BeF₂-ZrF₄-UF₄, LiF-BeF₂, KCl-UCl₃, FUNaK) · transported decay heat · MSR feedback. Benchmarked on MSRE pump start/stop and three natural-circulation tests]]</td><td>[[전이시간 약 25.5 s 주기 반응도 진동 재현에 성공||reproduced the ~25.5 s reactivity ripple]]</td></tr>
+</table>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 우리가 할 일 */
+S({tag:'WHAT WE SHOULD DO', ov:'[[MSR 열수력에서 비어 있는 네 자리||Four empty seats in MSR thermal hydraulics]]',
+src:'[[<b>출처</b> 본 교재 16.6절 · 연구실 R134a EDV 동하중 실험 · 스케일링 방법론 · 유동가시화 · CFD · 계통코드||<b>Source</b> This textbook &#167;16.6 · the lab&#8217;s R134a EDV dynamic-load tests, scaling methodology, flow visualisation, CFD and system codes]]',
+abbr:'[[<b>6자유도</b> 선체의 세 방향 병진과 세 축 회전 · <b>EDV</b> 비상감압밸브 · <b>R134a</b> 상사 실험용 냉매 · <b>PIRT</b> 현상 식별 · 중요도 순위표||<b>six degrees of freedom</b> a hull&#8217;s three translations and three rotations · <b>EDV</b> emergency depressurisation valve · <b>R134a</b> a refrigerant used in similarity tests · <b>PIRT</b> Phenomena Identification and Ranking Table]]',
+html:`<h2 class="t">[[MSR 열수력에서 <em>비어 있는 네 자리</em>||<em>Four empty seats</em> in MSR thermal hydraulics]]</h2>
+<ul class="b">
+  <li>[[네 가지 모두 실험과 해석이 같이 필요한 주제이고, <b class="ok">우리 연구실의 도구(유동가시화 · 스케일링 · CFD · 계통코드)로 접근 가능</b>함 — 비어 있다는 것은 기여할 자리가 있다는 뜻||All four need experiment and analysis together, and <b class="ok">our lab&#8217;s tools - visualisation, scaling, CFD, system codes - reach them</b>. Empty means there is room to contribute]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 380" role="img" aria-label="[[동결·재용융 모델, 선체 운동 결합, 화학-열수력 결합, 선원항 모델의 네 빈자리||Four gaps - freeze/remelt models, hull-motion coupling, chemistry-TH coupling, source-term models]]">
+  <g id="we-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#we-g'), gs=[];
+  [['1',TX('동결 · 재용융 모델','Freeze and remelt models'),TX('어느 시스템 코드도 제대로 갖고 있지 않음 — 해상에서 더욱 중요','no system code has one properly - even more important at sea'),'var(--cool)'],
+   ['2',TX('선체 운동과의 결합','Coupling to hull motion'),TX('6자유도 운동 하의 자연순환 · 커버가스 슬로싱 · 드레인 탱크 임계 안전 — 문헌이 사실상 없음. R134a EDV 동하중 실험 · 스케일링이 여기 쓰임','natural circulation, cover-gas sloshing and drain-tank criticality under 6-DOF motion - essentially no literature. The R134a EDV tests and scaling apply'),'var(--hot)'],
+   ['3',TX('화학–열수력 결합','Chemistry-TH coupling'),TX('산화환원 상태가 부식을 통해 장기 건전성에 주는 영향을 모델에 넣기','bringing redox-driven corrosion and long-term integrity into the model'),'var(--amber)'],
+   ['4',TX('선원항 모델','Source-term models'),TX('염–커버가스 분배 열화학 물성 부족 — PIRT 최우선','salt / cover-gas partition data missing - PIRT top priority'),'var(--ok)']]
+  .forEach((c,i)=>{
+    const x=(i%2)*570, y=Math.floor(i/2)*190, g=mk('g',{transform:'translate('+x+','+y+')',opacity:0});
+    g.appendChild(mk('rect',{width:550,height:178,fill:'var(--panel)',stroke:i===1?c[3]:'var(--rule)','stroke-width':i===1?2:1}));
+    g.appendChild(mk('rect',{width:4,height:178,fill:c[3]}));
+    g.appendChild(mk('text',{x:26,y:52,'font-family':'var(--mono)','font-size':36,fill:c[3],'font-weight':600})).textContent=c[0];
+    g.appendChild(mk('text',{x:76,y:48,'font-family':'var(--sans)','font-size':21,fill:'var(--ink)','font-weight':600})).textContent=c[1];
+    wrapT(c[2],28).slice(0,4).forEach((ln,j)=>g.appendChild(mk('text',{x:76,y:88+j*24,'font-family':'var(--sans)','font-size':16,fill:'var(--ink-2)','font-weight':300})).textContent=ln);
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:340,delay:180*i,fill:'forwards'}));
+}});
+</script>

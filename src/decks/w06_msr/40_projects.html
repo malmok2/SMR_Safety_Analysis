@@ -1,0 +1,327 @@
+<script>
+/* ================================================================
+   SECTION 14 — 지금 지어지고 있는 MSR 들, 그리고 바다 위로  (교재 14장)
+   이 장이 가장 빨리 낡는다 — 2026-09 기준.
+   ================================================================ */
+SECT('14 · [[지어지는 MSR · 바다||MSRs being built · at sea]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;14 지금 지어지고 있는 MSR 들 — 그리고 바다 위로||&#167;14 MSRs being built now - and going to sea]]',
+html:`[[<div class="no">14</div><h2>지어지는 MSR과 바다</h2><div class="ln"></div>
+<p>2026년 9월 현재 상태를 정확히 정리한다. <b>이 장이 가장 빨리 낡는다</b>. 회사 이름과 사양이 자주 바뀌므로
+분류 축을 먼저 세우고, 숫자마다 출처와 날짜를 붙인다.</p>||<div class="no">14</div><h2>MSRs being built, and the sea</h2><div class="ln"></div>
+<p>An exact picture as of September 2026. <b>This chapter ages fastest</b>. Company names and specs change often,
+so set the classification axes first and date every number.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 네 갈래 */
+S({tag:'FOUR AXES', ov:'[[MSR 프로젝트를 가르는 네 축||The four axes that separate MSR projects]]',
+src:'[[<b>출처</b> 본 교재 14.1절 · 이 분류를 먼저 세우면 어지러운 이름들이 정리됨||<b>Source</b> This textbook &#167;14.1 · set these axes first and the tangle of names sorts itself out]]',
+abbr:'[[<b>LEU · HALEU</b> 농축도 5 % 미만 · 5~20 % 우라늄 · <b>MCFR</b> TerraPower 용융염화물 고속로 · <b>열중성자</b> 흑연으로 감속한 느린 중성자||<b>LEU, HALEU</b> uranium under 5 % and 5-20 % enriched · <b>MCFR</b> TerraPower&#8217;s Molten Chloride Fast Reactor · <b>thermal</b> slow neutrons moderated by graphite]]',
+html:`<h2 class="t">[[MSR 프로젝트를 가르는 <em>네 축</em>||The <em>four axes</em> that separate MSR projects]]</h2>
+<ul class="b">
+  <li>[[Kairos KP-FHR은 <b>고체연료 · 불화물 · 열중성자 · HALEU</b>, TerraPower MCFR은 <b>액체연료 · 염화물 · 고속 · HALEU</b> — 같은 &#8220;MSR&#8221;이지만 전혀 다른 원자로임||Kairos KP-FHR is <b>solid fuel · fluoride · thermal · HALEU</b>; TerraPower MCFR is <b>liquid fuel · chloride · fast · HALEU</b> - both &#8220;MSRs&#8221;, entirely different reactors]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d">
+  <tr><th>[[축||Axis]]</th><th>[[갈래 ①||Branch &#9312;]]</th><th>[[갈래 ②||Branch &#9313;]]</th><th>Kairos KP-FHR</th><th>TerraPower MCFR</th></tr>
+  <tr><td>[[연료 형태||Fuel form]]</td><td>[[액체연료 (염에 녹임)||liquid (dissolved)]]</td><td>[[고체연료 FHR (TRISO + 염)||solid FHR (TRISO + salt)]]</td><td class="n">②</td><td class="n">①</td></tr>
+  <tr><td>[[염 종류||Salt]]</td><td>[[불화물 (FLiBe 등)||fluoride (FLiBe etc.)]]</td><td>[[염화물 (NaCl-UCl₃ 등)||chloride (NaCl-UCl₃ etc.)]]</td><td class="n">①</td><td class="n">②</td></tr>
+  <tr><td>[[스펙트럼||Spectrum]]</td><td>[[열중성자 (흑연 감속)||thermal (graphite)]]</td><td>[[고속 (감속재 없음)||fast (no moderator)]]</td><td class="n">①</td><td class="n">②</td></tr>
+  <tr><td>[[연료 사이클||Fuel cycle]]</td><td>[[우라늄 (LEU/HALEU)||uranium (LEU/HALEU)]]</td><td>[[토륨||thorium]]</td><td class="n">①</td><td class="n">①</td></tr>
+</table>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 상압 출력 */
+S({tag:'POWER AT LOW PRESSURE', ov:'[[상압인데 출력이 나오는 이유 — 체적 열용량과 배관 하나||Why low pressure still gives high power - heat capacity and one pipe]]',
+src:'[[<b>계산</b> 본 교재 14.2절 · FLiBe 650 °C ρc<sub>p</sub> = 1969 × 2390 = 4.71×10⁶ J/(m³·K) · V̇ = Q/(ρc<sub>p</sub>ΔT) · 배관 유속 3 m/s · IMSR 초기 설계 400 MWt, ΔT 100 K &#8594; 0.85 m³/s, 단면 0.28 m², 지름 약 60 cm||<b>Calculation</b> This textbook &#167;14.2 · FLiBe at 650 °C ρc<sub>p</sub> = 1969 × 2390 = 4.71×10⁶ J/(m³·K) · V̇ = Q/(ρc<sub>p</sub>ΔT) · pipe velocity 3 m/s · early IMSR 400 MWt with ΔT 100 K &#8594; 0.85 m³/s, 0.28 m², about 60 cm bore]]',
+abbr:'[[<b>체적 열용량</b> 같은 부피가 1 K 데워질 때 담는 열 · <b>V̇</b> 체적유량 · <b>IMSR</b> Terrestrial Energy 일체형 용융염로||<b>volumetric heat capacity</b> heat stored per volume per kelvin · <b>V̇</b> volume flow · <b>IMSR</b> Terrestrial Energy&#8217;s Integral Molten Salt Reactor]]',
+html:`<h2 class="t">[[상압인데 출력이 나오는 이유 — <em>체적 열용량과 배관 하나</em>||Why low pressure still gives high power - <em>heat capacity and one pipe</em>]]</h2>
+<ul class="b">
+  <li>[[FLiBe ρc<sub>p</sub> <b>4707 kJ/(m³·K)</b>는 물(15.5 MPa, 310 °C)의 3870보다 큼 — 같은 부피유량으로 물보다 많은 열을 나름||FLiBe&#8217;s ρc<sub>p</sub> of <b>4707 kJ/(m³·K)</b> beats water&#8217;s 3870 at 15.5 MPa and 310 °C - more heat per volume moved]]</li>
+  <li>[[<b class="ok">상압 배관 하나로 400 MW를 나름</b> — 15 MPa 배관과는 제작 난이도가 완전히 다름||<b class="ok">One low-pressure pipe carries 400 MW</b> - a completely different fabrication problem from 15 MPa piping]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <div class="formula" style="font-size:22px;padding:4px 0 10px">Q <span class="op">=</span> ρ V̇ c<sub>p</sub> ΔT &nbsp;&nbsp; &#8594; &nbsp;&nbsp; V̇ <span class="op">=</span> Q / (ρc<sub>p</sub>ΔT)</div>
+  <svg viewBox="0 0 800 330" role="img" aria-label="[[열출력과 노심 온도차에 따라 필요한 배관 지름이 바뀌는 모습 — 3 m/s 기준||The pipe bore needed for a given power and core ΔT, at 3 m/s]]">
+    <g id="pw-g"></g>
+    <circle id="pw-c" cx="400" cy="160" r="60" fill="var(--amber)" opacity="0.35" stroke="var(--amber)" stroke-width="2"/>
+    <text id="pw-t" x="400" y="166" text-anchor="middle" class="val" fill="var(--ink)">60 cm</text>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout hi"><span class="k">[[체적유량 V̇||Volume flow V̇]]</span><span class="v" id="pw-v">0.85<small>m³/s</small></span></div>
+    <div class="readout good"><span class="k">[[배관 지름 (3 m/s)||Pipe bore (3 m/s)]]</span><span class="v" id="pw-d">60<small>cm</small></span></div>
+    <div class="ctl"><label>[[열출력 Q||Thermal power Q]] <span id="pw-qs">400 MWt</span></label>
+      <input type="range" id="pw-q" min="50" max="900" step="10" value="400"></div>
+    <div class="ctl"><label>[[노심 ΔT||Core ΔT]] <span id="pw-ts">100 K</span></label>
+      <input type="range" id="pw-dt" min="20" max="200" step="5" value="100"></div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#pw-g'), rc=4.71e6;
+  G.appendChild(mk('text',{x:400,y:24,'text-anchor':'middle',class:'lbl'})).textContent=TX('상압 배관 단면 (축척 — 원 지름 1 px = 1 cm × 2)','low-pressure pipe section (scale - 1 cm = 2 px)');
+  const q=el.querySelector('#pw-q'), dt=el.querySelector('#pw-dt');
+  function upd(){
+    const Q=+q.value*1e6, T=+dt.value, V=Q/(rc*T), A=V/3, d=Math.sqrt(4*A/Math.PI);
+    el.querySelector('#pw-v').innerHTML=V.toFixed(2)+'<small>m³/s</small>';
+    el.querySelector('#pw-d').innerHTML=Math.round(d*100)+'<small>cm</small>';
+    el.querySelector('#pw-c').setAttribute('r',Math.min(150,d*100));
+    el.querySelector('#pw-t').textContent=Math.round(d*100)+' cm';
+    el.querySelector('#pw-qs').textContent=q.value+' MWt'; el.querySelector('#pw-ts').textContent=dt.value+' K';
+  }
+  q.oninput=upd; dt.oninput=upd; upd();
+}});
+
+
+/* ---------------------------------------------------------------- Kairos */
+S({tag:'KAIROS KP-FHR', ov:'[[Kairos Power KP-FHR — 고체연료 FHR 과 Hermes 1 · 2||Kairos Power KP-FHR - the solid-fuel FHR, and Hermes 1 and 2]]',
+src:'[[<b>출처</b> 본 교재 14.3절 · <b>2026년 9월 기준</b> · Hermes 1 건설완료 기한 2026년 말 &#8594; 2029-04-30 (28개월 연장, 2026-04-21 NRC) · ASME Sec. III Div.5 등재 재료는 2¼Cr-1Mo · 9Cr-1Mo · 304SS · 316SS · Alloy 800H 뿐||<b>Source</b> This textbook &#167;14.3 · <b>as of September 2026</b> · Hermes 1 completion moved from end-2026 to 30 April 2029 (28 months, NRC, 21 April 2026) · the only ASME Sec. III Div.5 materials are 2¼Cr-1Mo, 9Cr-1Mo, 304SS, 316SS and Alloy 800H]]',
+abbr:'[[<b>FHR</b> 불화염 냉각 고온로 · <b>316H</b> 고온용 316 스테인리스강 · <b>ET-10</b> Ibiden 흑연 등급 · <b>PPA</b> 전력구매계약 · <b>TVA</b> 테네시강유역개발공사||<b>FHR</b> fluoride-salt-cooled high-temperature reactor · <b>316H</b> high-temperature grade 316 stainless · <b>ET-10</b> an Ibiden graphite grade · <b>PPA</b> power purchase agreement · <b>TVA</b> Tennessee Valley Authority]]',
+html:`<h2 class="t">[[Kairos Power <em>KP-FHR</em> — 고체연료 FHR 과 Hermes 1 · 2||Kairos Power <em>KP-FHR</em> - the solid-fuel FHR, and Hermes 1 and 2]]</h2>
+<ul class="b">
+  <li>[[<b class="amb">Kairos가 316H를 택한 이유가 교육적임</b> — Hastelloy-N이 성능은 좋지만 ASME Div.5에 없음. <b>성능이 아니라 코드 등재 여부가 재료를 정했고</b>, 650 °C로 낮춘 것도 같은 이유||<b class="amb">Why Kairos chose 316H is instructive</b> - Hastelloy-N performs better but is not in ASME Div.5. <b>Code listing, not performance, chose the material</b>, and the 650 °C limit too]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <table class="d sm">
+    <tr><th>[[항목||Item]]</th><th>[[값 · 현황||Value · status]]</th></tr>
+    <tr><td>[[노형||Type]]</td><td>[[FLiBe 냉각 + TRISO 환형 페블 (연료염 아님) · 온라인 재장전||FLiBe coolant + annular TRISO pebbles (not fuel salt) · online refuelling]]</td></tr>
+    <tr><td>[[조건||Conditions]]</td><td class="n">[[출구 650 °C · 거의 대기압 · HALEU 19.75 % · 316H · ET-10||650 °C outlet · near atmospheric · HALEU 19.75 % · 316H · ET-10]]</td></tr>
+    <tr class="mark"><td>Hermes 1 · 35 MWt</td><td>[[비발전 실증. 2023-12 NRC 건설허가 — <b>미국 최초 비경수로 건설허가</b>. 2025-05-01 안전관련 공사. 완료 기한 2029-04-30 로 연장||non-power demonstration. NRC construction permit Dec 2023 - <b>the first US non-LWR permit</b>. Safety-related work 1 May 2025. Deadline moved to 30 April 2029]]</td></tr>
+    <tr><td>Hermes 2 · 50 MWe</td><td>[[2024-11 건설허가 · Google–TVA PPA 후 50 MWe 로 상향 · 2026-04-17 원자력 공사 착수 · 2030 계통연결 목표||permit Nov 2024 · raised to 50 MWe after the Google-TVA PPA · nuclear construction 17 April 2026 · grid target 2030]]</td></tr>
+    <tr><td>[[상용형||Commercial]]</td><td class="n">[[2 × 75 MWe = 150 MWe, 확장 시 450~600 MWe||2 × 75 MWe = 150 MWe, up to 450-600 MWe]]</td></tr>
+  </table>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- IMSR · ThorCon */
+S({tag:'IMSR · THORCON', ov:'[[IMSR 와 ThorCon — 교체형 코어 유닛과 조선소 건조||IMSR and ThorCon - replaceable core units and shipyard construction]]',
+src:'[[<b>출처</b> 본 교재 14.3절 · <b>2026년 9월 기준</b> · IMSR 2025 말 NRC 주요설계기준(PDC) 안전성평가 승인 · ThorCon 은 인도네시아 BAPETEN 에 첫 원전 인허가 신청||<b>Source</b> This textbook &#167;14.3 · <b>as of September 2026</b> · IMSR principal design criteria approved by NRC late 2025 · ThorCon filed Indonesia&#8217;s first nuclear licence application with BAPETEN]]',
+abbr:'[[<b>PDC</b> 주요설계기준 · <b>BAPETEN</b> 인도네시아 원자력규제청 · <b>Can</b> ThorCon 의 교체형 원자로 모듈||<b>PDC</b> principal design criteria · <b>BAPETEN</b> Indonesia&#8217;s nuclear regulator · <b>Can</b> ThorCon&#8217;s replaceable reactor module]]',
+html:`<h2 class="t">[[<em>IMSR</em> 와 ThorCon — 교체형 코어 유닛과 조선소 건조||<em>IMSR</em> and ThorCon - replaceable core units and shipyard construction]]</h2>
+<ul class="b">
+  <li>[[두 설계 모두 부품 수명 문제를 <b>정비가 아니라 통째 교체</b>로 풂 — IMSR은 7년, ThorCon은 8년마다||Both solve component life by <b>swapping the whole unit rather than maintaining it</b> - every 7 years for IMSR, 8 for ThorCon]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 380" role="img" aria-label="[[IMSR 과 ThorCon 의 규모·개념·현황||IMSR and ThorCon - size, concept and status]]">
+  <g id="it-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#it-g'), gs=[];
+  [['Terrestrial Energy — IMSR',TX('캐나다/미국 · 액체연료 일체형','Canada/US · integral liquid-fuel'),'var(--cool)',
+     [TX('노심 · 펌프 · 열교환기를 하나의 코어 유닛에 — 7년마다 통째 교체','core, pump and HX in one unit - replaced every 7 years'),
+      TX('구 400 MWt / 195 MWe → 2026 현재 882 MWt / 392 MWe · 최고 585 °C','was 400 MWt / 195 MWe → now 882 MWt / 392 MWe · 585 °C peak'),
+      TX('2025 말 NRC PDC 승인 · 건설허가 미제출','NRC PDC approval late 2025 · no construction application'),
+      TX('2026-06 텍사스 A&M RELLIS 약 77에이커 지상권 · 2025-10 나스닥 상장','June 2026 Texas A&M RELLIS ground lease, ~77 acres · Nasdaq listing Oct 2025')]],
+   ['ThorCon',TX('미국/인도네시아 · 조선소 건조','US/Indonesia · shipyard-built'),'var(--amber)',
+     [TX('500 MWe = 250 MWe × 2 Can — 조선소에서 블록으로 만들어 바지선으로 예인','500 MWe = two 250 MWe Cans - built in blocks, towed on a barge'),
+      TX('Can 은 8년 운전 후 통째 교체','each Can is swapped after 8 years'),
+      TX('2025-02 BAPETEN 부지평가 제출 — 인도네시아 첫 원전 인허가 신청','Feb 2025 site programme to BAPETEN - Indonesia’s first nuclear application'),
+      TX('2025-08 클라사 섬 부지 승인 · 운전 목표 2032 이전 · 건설허가 없음','Aug 2025 Kelasa island site approved · operation before 2032 · no permit yet')]]]
+  .forEach((c,i)=>{
+    const g=mk('g',{transform:'translate('+(i*570)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:550,height:372,fill:'var(--panel)',stroke:c[2]}));
+    g.appendChild(mk('rect',{width:550,height:4,fill:c[2]}));
+    g.appendChild(mk('text',{x:24,y:44,'font-family':'var(--sans)','font-size':21,fill:c[2],'font-weight':600})).textContent=c[0];
+    g.appendChild(mk('text',{x:24,y:72,class:'lbl'})).textContent=c[1];
+    c[3].forEach((t,j)=>wrapT(t,29).slice(0,2).forEach((ln,k)=>g.appendChild(mk('text',{x:24,y:118+j*66+k*24,'font-family':'var(--sans)','font-size':16.5,fill:k?'var(--ink-2)':'var(--ink)','font-weight':300})).textContent=(k?'  ':'· ')+ln));
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:380,delay:300*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- TMSR-LF1 */
+S({tag:'TMSR-LF1', ov:'[[TMSR-LF1 — 지금 운전 중인 유일한 액체연료 MSR||TMSR-LF1 - the only liquid-fuel MSR running today]]',
+src:'[[<b>출처</b> 본 교재 14.3절 표 14.1 · 간쑤성 우웨이 · 2 MWt · FLiBe + ZrF₄ + UF₄(HALEU 19.75 %) + ThF₄ · 630 &#8594; 650 °C · 흑연 감속 · 후속 TMSR-LF2(10 MWt) · TMSR-SF2(100 MWt) 일정 미확정||<b>Source</b> This textbook &#167;14.3, Table 14.1 · Wuwei, Gansu · 2 MWt · FLiBe + ZrF₄ + UF₄ (HALEU 19.75 %) + ThF₄ · 630 &#8594; 650 °C · graphite-moderated · follow-ons TMSR-LF2 (10 MWt) and TMSR-SF2 (100 MWt) unscheduled]]',
+abbr:'[[<b>TMSR-LF1</b> 토륨 용융염로 · 액체연료 1호 · <b>Th-U 전환</b> Th-232 가 U-233 으로 바뀌는 것 · <b>Pa-233</b> 그 중간 생성물 — 검출되면 전환이 일어났다는 증거||<b>TMSR-LF1</b> Thorium Molten Salt Reactor - Liquid Fuel 1 · <b>Th-U conversion</b> Th-232 becoming U-233 · <b>Pa-233</b> the intermediate - finding it proves conversion happened]]',
+html:`<h2 class="t">[[<em>TMSR-LF1</em> — 지금 운전 중인 유일한 액체연료 MSR||<em>TMSR-LF1</em> - the only liquid-fuel MSR running today]]</h2>
+<ul class="b">
+  <li>[[세계에서 유일하게 <b>지금 돌아가는 액체연료 MSR</b> — 2024-10 토륨 장전 후 전출력 10일 운전으로 <b class="ok">Pa-233을 검출해 Th-U 전환을 실증</b>함||The world&#8217;s only <b>operating liquid-fuel MSR</b> - after loading thorium in Oct 2024, ten days at full power <b class="ok">detected Pa-233 and demonstrated Th-U conversion</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 360" role="img" aria-label="[[TMSR-LF1 건설허가부터 Th-U 전환 실증 발표까지의 연표||TMSR-LF1 from construction permit to the Th-U conversion announcement]]">
+  <g id="tm-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#tm-g'), X0=60, X1=1060, sx=y=>X0+(y-2019.8)/(2026-2019.8)*(X1-X0), gs=[];
+  G.appendChild(mk('line',{x1:X0,x2:X1,y1:180,y2:180,stroke:'var(--ink-3)','stroke-width':2}));
+  [2020,2021,2022,2023,2024,2025].forEach(y=>G.appendChild(mk('text',{x:sx(y),y:206,'text-anchor':'middle',class:'lbl'})).textContent=String(y));
+  const E=[[2020.0,TX('건설허가','construction permit'),'2020-01',70,'start'],
+           [2023.45,TX('운영허가 (10년)','operating licence (10 y)'),'2023-06',70,'end'],
+           [2023.78,TX('최초임계','first criticality'),'2023-10-11',290,'end'],
+           [2024.46,TX('정격 2 MWt','rated 2 MWt'),'2024-06-17',70,'start'],
+           [2024.8,TX('토륨 장전 · 10일 전출력','Th loaded, 10 d full power'),'2024-10',290,'start'],
+           [2025.85,TX('Th-U 전환 공식 발표','Th-U conversion announced'),TX('2025-11 중국과학원','Nov 2025 CAS'),130,'end']];
+  E.forEach((e,i)=>{
+    const x=sx(e[0]), up=e[3]<180, g=mk('g',{opacity:0}), c=i===4||i===5?'var(--ok)':'var(--amber)';
+    g.appendChild(mk('circle',{cx:x,cy:180,r:8,fill:c}));
+    g.appendChild(mk('line',{x1:x,x2:x,y1:up?172:188,y2:up?e[3]+28:e[3]-22,stroke:c,'stroke-dasharray':'3 4'}));
+    const tx=e[4]==='end'?x-6:x+6;
+    g.appendChild(mk('text',{x:tx,y:e[3],'text-anchor':e[4],'font-family':'var(--sans)','font-size':17,fill:c,'font-weight':600})).textContent=e[1];
+    g.appendChild(mk('text',{x:tx,y:e[3]+22,'text-anchor':e[4],class:'lbl'})).textContent=e[2];
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:320,delay:220*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- MCRE · MSR-1 · 그 밖 */
+S({tag:'MCRE · MSR-1 · OTHERS', ov:'[[MCRE · Natura MSR-1 · 그 밖의 MSR||MCRE, Natura MSR-1 and others]]',
+src:'[[<b>출처</b> 본 교재 14.3절 · <b>2026년 9월 기준</b> · MSR-1 은 DOE 시범사업 목표(2026-07-04 까지 3기 이상 임계)의 실제 달성 여부 확인 필요||<b>Source</b> This textbook &#167;14.3 · <b>as of September 2026</b> · whether MSR-1 met the DOE pilot target (three or more reactors critical by 4 July 2026) still needs checking]]',
+abbr:'[[<b>MCRE</b> Molten Chloride Reactor Experiment · <b>ZPPR</b> INL 영출력 물리 시험로 셀 · <b>OTA</b> 기타거래협정 · <b>SSR-W</b> Moltex(현 Nuclea) 정지염 원자로||<b>MCRE</b> Molten Chloride Reactor Experiment · <b>ZPPR</b> the INL Zero Power Physics Reactor cell · <b>OTA</b> other transaction agreement · <b>SSR-W</b> the stable-salt reactor of Moltex (now Nuclea)]]',
+html:`<h2 class="t">[[MCRE · Natura MSR-1 · <em>그 밖의 MSR</em>||MCRE, Natura MSR-1 and <em>other MSRs</em>]]</h2>
+<ul class="b">
+  <li>[[MSR-1은 <b>인허가 경로가 바뀐 사례</b> — 미국 최초 액체연료 MSR 건설허가(NRC)를 받고도 DOE 시범사업으로 먼저 임계에 가는 쪽으로 방향을 틀었음||MSR-1 is <b>a case of a changed licensing path</b> - it held the first US liquid-fuel MSR permit (NRC) yet turned to the DOE pilot route to reach criticality first]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d sm">
+  <tr><th>[[설계||Design]]</th><th>[[규모 · 형식||Size · type]]</th><th>[[현황 (2026-09)||Status (Sept 2026)]]</th></tr>
+  <tr class="mark"><td>TerraPower / Southern — MCRE</td><td class="n">[[200 kWt · 염화물 연료염 · INL ZPPR 셀||200 kWt · chloride fuel salt · INL ZPPR cell]]</td><td>[[세계 최초 고속 스펙트럼 순환연료로 예정. 2025-09 말 최초 고속로용 농축 염화물 연료염 배치 생산 — 임계까지 72~75 배치 필요, 운전 예상 2028. 협력사에 해상 원자력 기업 Core Power||to be the first fast-spectrum circulating-fuel reactor. First enriched chloride fuel-salt batch made late Sept 2025 - 72-75 batches to criticality, operation expected 2028. Partners include the marine-nuclear firm Core Power]]</td></tr>
+  <tr><td>Natura Resources — MSR-1</td><td class="n">[[1 MWt 급 연구로 · ACU 캠퍼스||about 1 MWt research reactor · ACU campus]]</td><td>[[2024-09 NRC 건설허가(미국 최초 액체연료 MSR). 2025-12 DOE 와 OTA — DOE 시범사업 승인으로 임계 먼저. 실제 임계 여부는 확인 필요||NRC permit Sept 2024 (first US liquid-fuel MSR). OTA with DOE Dec 2025 - criticality first under the DOE pilot. Whether it went critical needs checking]]</td></tr>
+  <tr><td>Copenhagen Atomics</td><td class="n">[[100 MWth · 비가압 D₂O 감속 · 토륨 블랭킷||100 MWth · unpressurised D₂O moderator · thorium blanket]]</td><td>[[스위스 PSI 와 협약, 2026년 토륨 용융염 임계실험 목표||agreement with Switzerland&#8217;s PSI; thorium molten-salt critical experiment targeted for 2026]]</td></tr>
+  <tr><td>[[Moltex &#8594; Nuclea Energy||Moltex &#8594; Nuclea Energy]]</td><td class="n">[[SSR-W 300~500 MWe 고속 · 정지염 연료핀||SSR-W 300-500 MWe fast · static-salt fuel pins]]</td><td>[[2026-08 Nuclea 가 Moltex 포트폴리오 전량 인수(WATSS 재활용 공정 포함) — 문헌의 &#8220;Moltex&#8221;는 &#8220;구 Moltex, 현 Nuclea&#8221;로 읽을 것||Nuclea bought the whole Moltex portfolio in Aug 2026, WATSS recycling included - read &#8220;Moltex&#8221; as &#8220;former Moltex, now Nuclea&#8221;]]</td></tr>
+</table>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 바다 위 */
+S({tag:'MSRS AT SEA', ov:'[[바다 위의 MSR — Saltfoss CMSR · MARINA · 용융염 자동차운반선||MSRs at sea - Saltfoss CMSR, MARINA and a salt-reactor car carrier]]',
+src:'[[<b>출처</b> 본 교재 14.4절 · <b>2026년 9월 기준</b> · Seaborg Technologies &#8594; Saltfoss Energy (2025-04) · MARINA 상세 사양(열출력 · 연료염 · 온도) 비공개||<b>Source</b> This textbook &#167;14.4 · <b>as of September 2026</b> · Seaborg Technologies &#8594; Saltfoss Energy (Apr 2025) · MARINA&#8217;s detailed specs (power, fuel salt, temperatures) undisclosed]]',
+abbr:'[[<b>CMSR</b> Compact MSR · <b>ABS · LR</b> 미국선급 · 로이드선급 · <b>AiP</b> 기본승인 · <b>NTQ</b> ABS 신기술자격(5단계) · <b>TEU · CEU</b> 컨테이너 · 자동차 적재 단위 · <b>KRISO</b> 선박해양플랜트연구소||<b>CMSR</b> Compact MSR · <b>ABS, LR</b> American Bureau of Shipping and Lloyd&#8217;s Register · <b>AiP</b> Approval in Principle · <b>NTQ</b> ABS New Technology Qualification (five stages) · <b>TEU, CEU</b> container and car units · <b>KRISO</b> Korea Research Institute of Ships and Ocean Engineering]]',
+html:`<h2 class="t">[[바다 위의 MSR — <em>Saltfoss CMSR · MARINA</em> · 용융염 자동차운반선||MSRs at sea - <em>Saltfoss CMSR, MARINA</em> and a salt-reactor car carrier]]</h2>
+<ul class="b">
+  <li>[[2026년 상반기에만 <b class="ok">한국 주도 해상 MSR 설계가 두 건</b> 선급 승인을 받았음 — THINK Lab 해상 부유식 MSR 과제가 놓인 맥락||In the first half of 2026 alone <b class="ok">two Korean-led marine MSR designs</b> won class approval - the setting for THINK Lab&#8217;s floating-MSR project]]</li>
+  <li>[[<b class="amb">&#8220;NaOH 감속 CMSR&#8221;을 현재형으로 쓰면 틀림</b> — 2023년 초 HALEU 공급 위험으로 LEU 전환하며 흑연으로 바꿈. &#8220;초기 설계는 NaOH 감속이었다&#8221;로 과거형||<b class="amb">&#8220;NaOH-moderated CMSR&#8221; in the present tense is wrong</b> - moving to LEU over HALEU supply risk in early 2023 switched it to graphite. Say &#8220;was originally NaOH-moderated&#8221;]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 360" role="img" aria-label="[[Saltfoss CMSR 파워 바지, KAERI·KRISO·삼성중공업 MARINA 컨테이너선, HD현대 용융염 자동차운반선의 요점||Key facts - the Saltfoss CMSR power barge, the KAERI-KRISO-Samsung MARINA container ship, and the HD Hyundai salt-reactor car carrier]]">
+  <g id="sea-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#sea-g'), gs=[];
+  [['Saltfoss CMSR',TX('덴마크 · 파워 바지','Denmark · power barge'),'var(--cool)',
+     [TX('유닛 100 MWe · 바지당 2기 200 MWe · 최대 8기 800 MWe','100 MWe units · 2 per barge (200 MWe) · up to 8 (800 MWe)'),TX('대기압 · 연료 사이클 12년','atmospheric · 12-year fuel cycle'),TX('ABS 타당성 확인서 — NTQ 5단계 중 1단계','ABS feasibility statement - NTQ stage 1 of 5'),TX('첫 파워 바지 목표 2030 상반기','first barge targeted for H1 2030')]],
+   ['MARINA',TX('KAERI · KRISO · 삼성중공업','KAERI · KRISO · Samsung Heavy'),'var(--ok)',
+     [TX('2026-07-16 ABS 기본승인(AiP)','ABS Approval in Principle, 16 July 2026'),TX('15,000 TEU 컨테이너선 · 25노트','15,000 TEU container ship · 25 knots'),TX('원자로 2기 · 파나마 운하 통과 선형','two reactors · Panama-canal hull'),TX('상세 사양 비공개','detailed specs undisclosed')]],
+   [TX('용융염 자동차운반선','Salt-reactor car carrier'),TX('HD현대중공업 · HD한국조선해양 · 현대글로비스 · G-Marine · KAERI','HD HHI · HD KSOE · Hyundai Glovis · G-Marine · KAERI'),'var(--amber)',
+     [TX('2026-06 로이드선급(LR) 설계 승인','Lloyd’s Register design approval, June 2026'),TX('7,000 CEU 자동차운반선','a 7,000 CEU car carrier'),TX('한국 주도 해상 MSR 두 번째 선급 승인','the second Korean-led marine MSR approval'),'']]]
+  .forEach((c,i)=>{
+    const g=mk('g',{transform:'translate('+(i*378)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:362,height:350,fill:'var(--panel)',stroke:i===1?c[2]:'var(--rule)','stroke-width':i===1?2:1}));
+    g.appendChild(mk('rect',{width:362,height:4,fill:c[2]}));
+    g.appendChild(mk('text',{x:20,y:44,'font-family':'var(--sans)','font-size':21,fill:c[2],'font-weight':600})).textContent=c[0];
+    wrapT(c[1],26,0.62).slice(0,2).forEach((ln,j)=>g.appendChild(mk('text',{x:20,y:72+j*18,class:'lbl'})).textContent=ln);
+    c[3].forEach((t,j)=>{ if(!t) return; wrapT(t,19).slice(0,2).forEach((ln,k)=>g.appendChild(mk('text',{x:20,y:132+j*56+k*23,'font-family':'var(--sans)','font-size':16,fill:k?'var(--ink-2)':'var(--ink)','font-weight':300})).textContent=(k?'  ':'· ')+ln); });
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:360,delay:250*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 국제 규제 */
+S({tag:'MARITIME REGULATION', ov:'[[해상 MSR 의 국제 규제 — IMO 코드와 AiP 의 위치||Maritime rules - the IMO code and where AiP sits]]',
+src:'[[<b>출처</b> 본 교재 14.4절 · IMO 결의 A.491(XII) 1981 「원자력 상선 안전코드」 · 2025-06-26 MSC 110 전면 개정 결정 · SDC 소위 2026-01 회기부터 · 1962 브뤼셀 원자력선 책임협약 미발효||<b>Source</b> This textbook &#167;14.4 · IMO Resolution A.491(XII), 1981 Code of Safety for Nuclear Merchant Ships · full revision decided at MSC 110, 26 June 2025 · SDC sub-committee from its January 2026 session · the 1962 Brussels convention on nuclear ships never entered into force]]',
+abbr:'[[<b>IMO</b> 국제해사기구 · <b>MSC</b> 해사안전위원회 · <b>SDC</b> 선박설계·건조 소위 · <b>SOLAS</b> 해상인명안전협약 · <b>기국 · 항만국</b> 선박이 등록된 나라 · 선박이 들어가는 항구의 나라||<b>IMO</b> International Maritime Organization · <b>MSC</b> Maritime Safety Committee · <b>SDC</b> Ship Design and Construction sub-committee · <b>SOLAS</b> Safety of Life at Sea convention · <b>flag state, port state</b> the ship&#8217;s registry, and the country of the port it enters]]',
+html:`<h2 class="t">[[해상 MSR 의 국제 규제 — <em>IMO 코드</em>와 AiP 의 위치||Maritime rules - <em>the IMO code</em> and where AiP sits]]</h2>
+<ul class="b">
+  <li>[[현행 근거는 <b>1981년 IMO 코드</b> — 45년간 실질 개정 없음, MSR 조항 없음. 실무상 최대 장벽은 <b class="hot">항만국 수용</b>(기항마다 양자협정, 건조 수년 전부터 협상)||The basis is <b>the 1981 IMO code</b> - no real revision in 45 years, nothing on MSRs. The biggest practical barrier is <b class="hot">port-state acceptance</b> (a bilateral deal per port, negotiated years ahead)]]</li>
+  <li>[[<b class="amb">&#8220;AiP를 받았다&#8221;를 인허가를 받았다로 읽으면 안 됨</b> — 선급이 &#8220;명백한 결격 사유가 없다&#8221;고 확인한 것, NTQ 5단계 중 1~2단계||<b class="amb">Do not read &#8220;AiP granted&#8221; as &#8220;licensed&#8221;</b> - the class society found &#8220;no obvious disqualifier&#8221;, stage 1-2 of 5 in NTQ terms]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 330" role="img" aria-label="[[해상 원자력선이 운항하기까지의 단계 — AiP, 상세설계 심사, 건조 검사, 기국 승인, 항만국 협정||Steps before a nuclear ship sails - AiP, detailed design review, construction survey, flag approval, port agreements]]">
+  <g id="rg-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#rg-g'), gs=[];
+  const S5=[[TX('기본승인 (AiP)','Approval in Principle'),TX('결격 사유 없음 확인','no obvious disqualifier'),'var(--ok)',true],
+            [TX('상세설계 심사','Detailed design review'),TX('선급','class society'),'var(--ink-3)',false],
+            [TX('건조 검사','Construction survey'),TX('선급 · 조선소','class and yard'),'var(--ink-3)',false],
+            [TX('기국 승인','Flag-state approval'),TX('등록 국가','registry'),'var(--ink-3)',false],
+            [TX('항만국 협정','Port-state agreements'),TX('기항국마다 양자협정','bilateral, per port'),'var(--hot)',false]];
+  S5.forEach((s,i)=>{
+    const x=i*224, g=mk('g',{transform:'translate('+x+',30)',opacity:0});
+    g.appendChild(mk('rect',{width:204,height:150,fill:s[3]?'var(--ok)':'var(--panel)',opacity:s[3]?0.22:1,stroke:s[2],'stroke-width':s[3]?2:1}));
+    if(s[3]) g.appendChild(mk('rect',{width:204,height:150,fill:'none',stroke:s[2],'stroke-width':2}));
+    g.appendChild(mk('text',{x:18,y:44,'font-family':'var(--mono)','font-size':28,fill:s[2],'font-weight':600})).textContent=String(i+1);
+    wrapT(s[0],11).slice(0,2).forEach((ln,j)=>g.appendChild(mk('text',{x:18,y:86+j*24,'font-family':'var(--sans)','font-size':18,fill:'var(--ink)','font-weight':600})).textContent=ln);
+    g.appendChild(mk('text',{x:18,y:138,class:'lbl'})).textContent=s[1];
+    if(i<4) g.appendChild(mk('path',{d:'M206,75 H220 M214,69 L220,75 L214,81',stroke:'var(--ink-3)','stroke-width':1.6,fill:'none'}));
+    G.appendChild(g); gs.push(g);
+  });
+  G.appendChild(mk('text',{x:102,y:208,'text-anchor':'middle','font-family':'var(--sans)','font-size':16,fill:'var(--ok)','font-weight':600})).textContent=TX('MARINA 는 여기','MARINA is here');
+  const q=mk('g',{transform:'translate(0,236)',opacity:0});
+  q.appendChild(mk('rect',{width:1120,height:84,fill:'var(--panel)',stroke:'var(--rule)'}));
+  q.appendChild(mk('rect',{width:3,height:84,fill:'var(--amber)'}));
+  q.appendChild(mk('text',{x:22,y:36,'font-family':'var(--sans)','font-size':17,fill:'var(--amber)','font-weight':600})).textContent=TX('책임 · 배상의 공백','A gap in liability');
+  q.appendChild(mk('text',{x:22,y:64,'font-family':'var(--sans)','font-size':16,fill:'var(--ink-2)','font-weight':300})).textContent=
+    TX('1962 브뤼셀 원자력선 책임협약은 한 번도 발효된 적 없음 — 보험은 건별 협상. IMO 개정은 SDC 소위에서 2026-01 부터, 완료 시점 미공표',
+       'The 1962 Brussels convention never entered into force - insurance is negotiated case by case. The IMO revision started at SDC in Jan 2026, no end date');
+  G.appendChild(q); gs.push(q);
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:320,delay:180*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 낡은 정보 */
+S({tag:'STALE INFORMATION', ov:'[[자주 인용되는 낡은 정보 — 2026-09 에 확인한 것||Stale information still widely quoted - checked in September 2026]]',
+src:'[[<b>출처</b> 본 교재 14.5절 표 14.2 · 확인 경로 ① IAEA ARIS 설계기술서 ② NRC 신청 현황 페이지 ③ 회사 공식 발표 — 언론 기사만 인용하면 아래 오류를 그대로 옮김||<b>Source</b> This textbook &#167;14.5, Table 14.2 · check via &#9312; IAEA ARIS design reports &#9313; the NRC application pages &#9314; company announcements - quoting only the press copies these errors]]',
+abbr:'[[<b>ARIS</b> IAEA 첨단원자로 정보 시스템 · <b>MWt · MWe</b> 열출력 · 전기출력 — 단위를 섞는 오류가 가장 흔함||<b>ARIS</b> the IAEA Advanced Reactors Information System · <b>MWt, MWe</b> thermal and electrical output - mixing them is the most common error]]',
+html:`<h2 class="t">[[자주 인용되는 <em>낡은 정보</em> — 2026-09 에 확인한 것||<em>Stale information</em> still widely quoted - checked in September 2026]]</h2>
+<ul class="b">
+  <li>[[MSR 분야는 회사 이름과 사양이 자주 바뀜 — 이 장을 쓰면서 확인한 것만 여섯 건임||MSR companies and specs change often - six cases turned up just while writing this chapter]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d">
+  <tr><th>[[옛 정보||Old information]]</th><th>[[현재 (2026-09)||Now (Sept 2026)]]</th></tr>
+  <tr><td>Seaborg Technologies</td><td>[[Saltfoss Energy (2025-04 사명 변경)||Saltfoss Energy (renamed Apr 2025)]]</td></tr>
+  <tr><td>[[Seaborg CMSR = NaOH 감속||Seaborg CMSR = NaOH-moderated]]</td><td>[[흑연 감속 (2023 변경)||graphite-moderated (changed 2023)]]</td></tr>
+  <tr><td>Moltex Energy</td><td>[[Nuclea Energy (2026-08 인수)||Nuclea Energy (acquired Aug 2026)]]</td></tr>
+  <tr><td>IMSR 400 MWt / 195 MWe</td><td class="n">[[882 MWt / 392 MWe (재설계)||882 MWt / 392 MWe (redesigned)]]</td></tr>
+  <tr class="mark"><td>ThorCon 500 MWt</td><td class="n">[[500 MWe (단위 오류가 널리 퍼져 있음)||500 MWe (the unit error is widespread)]]</td></tr>
+  <tr><td>USNC MMR 15 MWt</td><td>[[NANO Nuclear KRONOS, NRC 등록 45 MWth||NANO Nuclear KRONOS, docketed at 45 MWth]]</td></tr>
+</table>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 왜 해상인가 */
+S({tag:'WHY AT SEA', ov:'[[왜 해상인가 — 잘 맞는 넷, 더 어려워지는 셋||Why at sea - four things that fit, three that get harder]]',
+src:'[[<b>출처</b> 본 교재 14.6절 · 경사 상태의 드레인 탱크 임계 안전은 아직 아무도 제대로 다루지 않은 주제||<b>Source</b> This textbook &#167;14.6 · drain-tank criticality with the ship heeled is a topic no one has properly addressed yet]]',
+abbr:'[[<b>슬로싱</b> 용기 속 자유표면이 출렁이는 현상 · <b>건선거 입거</b> 배를 물 밖 도크에 올리는 것 · <b>선원항</b> 사고 시 환경으로 나갈 수 있는 방사성물질의 양과 종류||<b>sloshing</b> a free surface rocking in its tank · <b>dry-docking</b> lifting a ship out of the water · <b>source term</b> the amount and kind of radioactivity that could reach the environment]]',
+html:`<h2 class="t">[[왜 해상인가 — <em>잘 맞는 넷</em>, 더 어려워지는 셋||Why at sea - <em>four things that fit</em>, three that get harder]]</h2>
+<ul class="b">
+  <li>[[<b class="hot">동결 위험은 배에서 더 나쁨</b> — 장기 정박 · 비상 정전 · 건선거 입거 때마다 전 계통을 450 °C 이상으로 유지해야 함||<b class="hot">Freezing is worse on a ship</b> - every long lay-up, blackout or dry-docking means holding the whole plant above 450 °C]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 380" role="img" aria-label="[[MSR이 해상에 잘 맞는 네 가지와 해상에서 더 어려워지는 세 가지||Four ways the MSR suits the sea, and three that get harder]]">
+  <g id="ws-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#ws-g'), gs=[];
+  const A=[[TX('잘 맞는 것','What fits'),'var(--ok)',[TX('상압 — 흔들리는 플랫폼에서 15 MPa 배관을 유지할 필요 없음','low pressure - no 15 MPa piping on a moving deck'),TX('상변화 없음 — 슬로싱과 비등의 결합이 없음(자유표면은 남음)','no phase change - no sloshing-boiling coupling (free surface remains)'),TX('정지 수단이 중력 — 배가 기울어도 중력은 있음','gravity shutdown - still works heeled'),TX('출력밀도가 높아 노심이 작음 — 선박 배치에 유리','high power density, small core - fits a hull')]],
+           [TX('더 어려워지는 것','What gets harder'),'var(--hot)',[TX('동결(459 °C) — 정박 · 정전 · 입거마다 450 °C 이상 유지','freezing (459 °C) - above 450 °C at every lay-up, blackout, docking'),TX('정비 — 1차계통 전체가 고방사성, 해상에서 훨씬 큰 제약','maintenance - a hot primary, far harder at sea'),TX('선원항 — 오프가스 · 삼중수소(15장)','source term - off-gas and tritium (ch. 15)'),'']]];
+  A.forEach((a,i)=>{
+    const g=mk('g',{transform:'translate('+(i*570)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:550,height:372,fill:'var(--panel)',stroke:a[1]}));
+    g.appendChild(mk('rect',{width:550,height:4,fill:a[1]}));
+    g.appendChild(mk('text',{x:24,y:46,'font-family':'var(--sans)','font-size':22,fill:a[1],'font-weight':600})).textContent=a[0];
+    a[2].forEach((t,j)=>{ if(!t) return;
+      g.appendChild(mk('text',{x:24,y:104+j*72,'font-family':'var(--mono)','font-size':16,fill:a[1],'font-weight':600})).textContent=String(j+1);
+      wrapT(t,26).slice(0,2).forEach((ln,k)=>g.appendChild(mk('text',{x:54,y:104+j*72+k*25,'font-family':'var(--sans)','font-size':17,fill:k?'var(--ink-2)':'var(--ink)','font-weight':300})).textContent=ln); });
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:380,delay:350*i,fill:'forwards'}));
+}});
+</script>

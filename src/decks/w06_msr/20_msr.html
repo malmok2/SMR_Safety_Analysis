@@ -1,0 +1,262 @@
+<script>
+/* ================================================================
+   SECTION 12 — 연료가 흐른다, MSR  (교재 12장)
+   ================================================================ */
+SECT('12 · [[연료가 흐른다||The fuel flows]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;12 연료가 흐른다 — MSR||&#167;12 The fuel flows - the MSR]]',
+html:`[[<div class="no">12</div><h2>연료가 흐른다</h2><div class="ln"></div>
+<p>핵연료를 불화물 또는 염화물 염에 녹여 그 염 자체를 순환시킨다. 노심은 그 액체가 임계가 되도록 만든
+흑연 채널 뭉치일 뿐이다. <b>이 한 가지 변경에서 따라 나오는 결과</b>가 이 장의 전부다.</p>||<div class="no">12</div><h2>The fuel flows</h2><div class="ln"></div>
+<p>Fuel is dissolved in a fluoride or chloride salt and the salt itself circulates. The core is just a bundle of graphite channels
+that lets the liquid go critical. <b>What follows from that one change</b> is this whole chapter.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 좋은 쪽 · 나쁜 쪽 */
+S({tag:'GAINS AND COSTS', ov:'[[고체 연료라는 전제를 버리면 — 얻는 것 다섯, 치르는 것 다섯||Dropping solid fuel - five gains, five costs]]',
+src:'[[<b>출처</b> 본 교재 12.1절 · 염 비점 1400 °C 이상, 운전 650~700 °C · Hastelloy-N 은 ASME Sec. III Div.5 미등재||<b>Source</b> This textbook &#167;12.1 · salt boils above 1400 °C; operation at 650-700 °C · Hastelloy-N is not listed in ASME Sec. III Div.5]]',
+abbr:'[[<b>PCI</b> 펠릿–피복재 상호작용 · <b>동결 플러그</b> 드레인 배관을 막아 둔 얼린 염 마개 · <b>산화환원</b> 염의 화학적 산화 · 환원 상태 · <b>입계균열</b> 결정립 경계를 따라 생기는 균열 · <b>ASME Sec. III Div.5</b> 원자력 고온 구조 규격||<b>PCI</b> pellet-cladding interaction · <b>freeze plug</b> a plug of frozen salt in the drain line · <b>redox</b> the oxidation-reduction state of the salt · <b>intergranular cracking</b> cracks along grain boundaries · <b>ASME Sec. III Div.5</b> the high-temperature nuclear construction code]]',
+html:`<h2 class="t">[[고체 연료라는 전제를 버리면 — <em>얻는 것 다섯, 치르는 것 다섯</em>||Dropping solid fuel - <em>five gains, five costs</em>]]</h2>
+<ul class="b">
+  <li>[[<b class="ok">능동 조치가 필요한 것이 &#8220;정지&#8221;가 아니라 &#8220;운전 유지&#8221;</b> — 전원이 끊기면 마개가 녹아 연료가 중력으로 떨어짐. MSR 피동안전 논거의 핵심||<b class="ok">What needs active effort is staying on, not shutting down</b> - lose power and the plug melts and the fuel drops by gravity. The heart of the MSR passive-safety case]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 400" role="img" aria-label="[[액체연료로 얻는 다섯 가지와 치르는 다섯 가지||Five gains and five costs of liquid fuel]]">
+  <g id="gc-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#gc-g'), gs=[];
+  const A=[[TX('얻는 것','Gains'),'var(--ok)',[TX('피복재가 없음 — 피복재 파손 · Zr–물 반응 없음','no cladding - no cladding failure, no Zr-water'),TX('팽윤 · PCI 없음 — 연소도 한계 개념이 사라짐','no swelling or PCI - no burnup limit'),TX('상압 운전 — 비점 1400 °C 이상','atmospheric pressure - boils above 1400 °C'),TX('온라인 재장전 · 온라인 정제','online refuelling and cleanup'),TX('정지 수단이 물리적 — 동결 플러그','a physical shutdown - the freeze plug')]],
+           [TX('치르는 것','Costs'),'var(--hot)',[TX('1차 계통 전체가 연료 경계 — 정비 극난','the whole primary is fuel boundary'),TX('선구핵종이 노심 밖으로 흐름 (13장)','precursors drift out of the core (ch. 13)'),TX('459 °C 아래에서 얾 — 동결 · 플러깅','freezes below 459 °C - plugging'),TX('재료가 없음 — Hastelloy-N 코드 미등재','no qualified material - Hastelloy-N unlisted'),TX('화학이 안전계통 — 산화환원 실패는 부식','chemistry is a safety system - redox')]]];
+  A.forEach((a,i)=>{
+    const g=mk('g',{transform:'translate('+(i*570)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:550,height:392,fill:'var(--panel)',stroke:a[1]}));
+    g.appendChild(mk('rect',{width:550,height:4,fill:a[1]}));
+    g.appendChild(mk('text',{x:24,y:46,'font-family':'var(--sans)','font-size':22,fill:a[1],'font-weight':600})).textContent=a[0];
+    a[2].forEach((t,j)=>{
+      g.appendChild(mk('text',{x:24,y:106+j*64,'font-family':'var(--mono)','font-size':16,fill:a[1],'font-weight':600})).textContent=String(j+1);
+      wrapT(t,26).slice(0,2).forEach((ln,k)=>g.appendChild(mk('text',{x:54,y:106+j*64+k*24,'font-family':'var(--sans)','font-size':17,fill:'var(--ink)','font-weight':300})).textContent=ln);
+    });
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:380,delay:350*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- FLiBe */
+S({tag:'FLiBe PROPERTIES', ov:'[[FLiBe 물성 — 큰 비열, 작은 열전도도, 지수적으로 느는 점성||FLiBe - high heat capacity, low conductivity, exponential viscosity]]',
+src:'[[<b>출처</b> 본 교재 12.2절 표 12.1 · 그림 12.1 · 밀도 2022년 실측(447~820 °C, 0.3 %) · 점성 μ = 1.16×10⁻⁴ exp(3755/T[K]), 불확실도 10~20 % · k ≈ 1.0(10~50 %) · c<sub>p</sub> ≈ 2390(2~3 %) · 점성 수치는 교재 16.3절 식으로 계산||<b>Source</b> This textbook &#167;12.2, Table 12.1, Fig. 12.1 · density measured 2022 (447-820 °C, 0.3 %) · viscosity μ = 1.16×10⁻⁴ exp(3755/T[K]), ±10-20 % · k ≈ 1.0 (±10-50 %) · c<sub>p</sub> ≈ 2390 (±2-3 %) · viscosity values computed from the §16.3 formula]]',
+abbr:'[[<b>FLiBe</b> 2LiF–BeF₂(66–34 mol%) — Li 는 Li-7 을 99.99 % 이상 농축(Li-6 흡수 회피) · <b>FLiNaK</b> LiF–NaF–KF 염 · <b>공정점</b> 혼합물이 가장 낮은 온도에서 녹는 조성||<b>FLiBe</b> 2LiF–BeF₂ (66–34 mol%) - lithium enriched to over 99.99 % Li-7 to avoid Li-6 absorption · <b>FLiNaK</b> a LiF–NaF–KF salt · <b>eutectic</b> the lowest-melting composition]]',
+html:`<h2 class="t">[[FLiBe 물성 — 큰 비열, 작은 열전도도, <em>지수적으로 느는 점성</em>||FLiBe - high heat capacity, low conductivity, <em>exponential viscosity</em>]]</h2>
+<ul class="b">
+  <li>[[체적 열용량 <b class="ok">4707 kJ/(m³·K)</b> — 물보다 큼. 반면 열전도도 약 1.0 W/(m·K)는 나트륨의 1/64 — 전열은 나트륨식이 아니라 <b>Pr이 큰 평범한 액체</b>처럼 다룸||Volumetric heat capacity <b class="ok">4707 kJ/(m³·K)</b> - above water. But conductivity near 1.0 W/(m·K) is 1/64 of sodium - treat it as <b>an ordinary high-Pr liquid</b>, not sodium]]</li>
+  <li>[[식어 갈수록 <b class="hot">펌프가 힘들어짐</b> — 사고 때 자연순환에 불리한 방향. 염화물 염(고속 MSR용)은 밀도·점성·열전도도가 아직 제대로 측정되지 않았으므로 물성 출처를 반드시 밝힐 것||As it cools <b class="hot">pumping gets harder</b> - the wrong way for natural circulation. Chloride salts (fast MSRs) still lack measured density, viscosity and conductivity - always cite the source]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f12_01', cap:'[[FLiBe(실선)와 나트륨(점선)의 밀도 · 점성 — 세로 주황선이 FLiBe 융점 459 °C · 교재 그림 12.1||Density and viscosity of FLiBe (solid) and sodium (dashed) - the orange line is the 459 °C FLiBe melting point · textbook Fig. 12.1]]'})}
+  </div>
+  <div class="side">
+    <div class="readout warn" id="fb-box"><span class="k">[[점성 μ||Viscosity μ]]</span><span class="v" id="fb-mu">6.8<small>mPa·s</small></span></div>
+    <div class="readout"><span class="k">[[밀도 ρ = 2245 − 0.424 T||Density ρ = 2245 − 0.424 T]]</span><span class="v" id="fb-rho">1969<small>kg/m³</small></span></div>
+    <div class="readout hi"><span class="k">[[물 20 °C 대비 점성||Viscosity vs water at 20 °C]]</span><span class="v" id="fb-x">×6.8</div>
+    <div class="ctl"><label>[[염 온도||Salt temperature]] <span id="fb-ts">650 °C</span></label>
+      <input type="range" id="fb-sl" min="440" max="850" step="5" value="650"></div>
+  </div>
+</div>`,
+init(el){
+  const sl=el.querySelector('#fb-sl');
+  function upd(){
+    const T=+sl.value, mu=1.16e-4*Math.exp(3755/(T+273.15))*1000, rho=2245-0.424*T, frozen=T<459;
+    el.querySelector('#fb-mu').innerHTML=frozen?TX('고체','solid'):fmt(mu,1)+'<small>mPa·s</small>';
+    el.querySelector('#fb-rho').innerHTML=frozen?'—':fmt(rho)+'<small>kg/m³</small>';
+    el.querySelector('#fb-x').textContent=frozen?TX('얼었음 (459 °C 아래)','frozen (below 459 °C)'):'×'+fmt(mu/1.0,1);
+    el.querySelector('#fb-ts').textContent=T+' °C';
+    el.querySelector('#fb-box').className='readout '+(frozen?'warn':(mu>10?'warn':'hi'));
+  }
+  sl.oninput=upd; upd();
+  if(RM) return;
+  raf(t=>{ if(t>2.6) return; sl.value=Math.round(lerp(650,500,clamp(t/2.4,0,1))/5)*5; upd(); });
+}});
+
+
+/* ---------------------------------------------------------------- MSRE */
+S({tag:'MSRE', ov:'[[MSRE — 원조이자 유일한 실측 데이터||MSRE - the original, and the only measured data]]',
+src:'[[<b>출처</b> 본 교재 12.3절 표 12.2 · 오크리지국립연구소 1965~1969 · 출력은 ORNL 문서의 &#8220;설계 10 MWt, 실제 도달 약 7.4 MWt, 후일 재평가 약 8 MWt&#8221;를 쓸 것 — 영문 위키백과의 15 MWth 는 어떤 1차 자료와도 맞지 않음||<b>Source</b> This textbook &#167;12.3, Table 12.2 · Oak Ridge, 1965-1969 · use ORNL&#8217;s &#8220;10 MWt design, about 7.4 MWt reached, later reassessed near 8 MWt&#8221; - Wikipedia&#8217;s 15 MWth matches no primary source]]',
+abbr:'[[<b>MSRE</b> Molten Salt Reactor Experiment · <b>ORNL</b> 오크리지국립연구소 · <b>gpm</b> 분당 갤런 · <b>CGB</b> MSRE 흑연 등급 · <b>Hastelloy-N</b> 니켈–몰리브덴 합금||<b>MSRE</b> Molten Salt Reactor Experiment · <b>ORNL</b> Oak Ridge National Laboratory · <b>gpm</b> US gallons a minute · <b>CGB</b> the MSRE graphite grade · <b>Hastelloy-N</b> a nickel-molybdenum alloy]]',
+html:`<h2 class="t">[[<em>MSRE</em> — 원조이자 유일한 실측 데이터||<em>MSRE</em> - the original, and the only measured data]]</h2>
+<ul class="b">
+  <li>[[오늘날 모든 MSR 해석 코드의 검증 데이터는 <b>사실상 여기서</b> 나옴 — 1968-10-02 세계 최초 U-233 운전||Validation data for every MSR code today comes <b>essentially from here</b> - including the world&#8217;s first U-233 operation, 2 October 1968]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d sm">
+  <tr><th>[[항목||Item]]</th><th>[[값||Value]]</th></tr>
+  <tr><td>[[출력||Power]]</td><td class="n">[[설계 10 MWt, 실제 최대 약 7.4 MWt||10 MWt design, about 7.4 MWt reached]]</td></tr>
+  <tr><td>[[최초임계 · U-233 운전 · 최종 정지||Critical · U-233 · final shutdown]]</td><td class="n">[[1965-06-01 (U-235 33 %) · 1968-10-02 · 1969-12||1 Jun 1965 (U-235 33 %) · 2 Oct 1968 · Dec 1969]]</td></tr>
+  <tr><td>[[연료염||Fuel salt]]</td><td class="n">[[LiF-BeF₂-ZrF₄-UF₄ 65-29.1-5-0.9 mol% · 융점 434 °C||LiF-BeF₂-ZrF₄-UF₄ 65-29.1-5-0.9 mol% · melts at 434 °C]]</td></tr>
+  <tr class="mark"><td>[[온도 · 유량||Temperature · flow]]</td><td class="n">[[632 &#8594; 654 °C (ΔT 22 °C) · 1200 gpm ≈ 170 kg/s||632 &#8594; 654 °C (ΔT 22 °C) · 1200 gpm ≈ 170 kg/s]]</td></tr>
+  <tr class="mark"><td>[[루프 순환주기||Loop transit]]</td><td class="n">[[25.2 s (노심 밖 체류 32 %)||25.2 s (32 % outside the core)]]</td></tr>
+  <tr><td>[[감속재 · 구조재||Moderator · structure]]</td><td class="n">[[흑연 CGB, 채널 3.05 × 1.016 cm · Hastelloy-N||graphite CGB, 3.05 × 1.016 cm channels · Hastelloy-N]]</td></tr>
+  <tr><td>[[운전시간||Operating time]]</td><td class="n">[[등가전출력 11,555 h · 연료펌프 19,405 h||11,555 equivalent full-power h · fuel pump 19,405 h]]</td></tr>
+  <tr class="mark"><td>[[등온 온도계수 (실측)||Isothermal temperature coefficient (measured)]]</td><td class="n">−13.14 ± 0.36 pcm/K</td></tr>
+</table>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 증명 · 숙제 */
+S({tag:'WHAT MSRE PROVED', ov:'[[MSRE가 증명한 것과 남긴 숙제||What MSRE proved, and what it left open]]',
+src:'[[<b>출처</b> 본 교재 12.3절 · 삼중수소는 계산 생성량의 6~10 %가 격납 분위기로, 또 6~10 %가 열제거 계통으로 — 실측 분포를 맞추려면 구조재 투과율을 1000배 낮춰야 했음||<b>Source</b> This textbook &#167;12.3 · 6-10 % of calculated tritium reached the containment atmosphere and another 6-10 % the heat-removal system - matching it needed wall permeability cut 1000-fold]]',
+abbr:'[[<b>Xe 스트리핑</b> 헬륨을 뿌려 크세논을 쓸어내는 것 · <b>독작용</b> Xe-135 같은 중성자 흡수 핵종이 반응도를 깎는 것 · <b>입계균열</b> 결정립 경계를 따라 난 균열 · <b>물질수지</b> 들어온 양과 나간 양의 장부||<b>Xe stripping</b> sweeping xenon out with helium · <b>poisoning</b> absorbers like Xe-135 eating reactivity · <b>intergranular cracking</b> cracks along grain boundaries · <b>mass balance</b> the account of what goes in and out]]',
+html:`<h2 class="t">[[MSRE가 <em>증명한 것</em>과 남긴 숙제||What MSRE <em>proved</em>, and what it left open]]</h2>
+<ul class="b">
+  <li>[[전출력 운전 중 제어봉을 <b>의도적으로 인출해도</b> 연료염 열팽창만으로 출력이 스스로 억제되었음||Even with rods <b>deliberately withdrawn</b> at full power, fuel-salt expansion alone held the power down]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 400" role="img" aria-label="[[MSRE가 증명한 다섯 가지와 남긴 세 가지 숙제||Five things MSRE proved and three it left open]]">
+  <g id="pr-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#pr-g'), gs=[];
+  const A=[[TX('증명한 것','Proved'),'var(--ok)',[TX('4년 넘게 용융염 순환 — 막힘도 펌프 정지도 없음','over four years of circulating salt - no plugging, no pump failure'),TX('운전 중 연료 조성 변경 — U-235 → U-233','fuel changed in operation - U-235 → U-233'),TX('Xe 스트리핑 — Xe-135 독작용을 약 1/6로','Xe stripping cut Xe-135 poisoning to about 1/6'),TX('강한 음의 온도계수 실측 — −13.14 pcm/K','a strong negative coefficient, −13.14 pcm/K'),TX('제어봉 인출에도 연료염 팽창으로 출력 억제','power held by salt expansion despite rod withdrawal')]],
+           [TX('남긴 숙제','Left open'),'var(--hot)',[TX('Hastelloy-N 텔루륨 입계균열 — Nb 첨가로 단기 완화','tellurium cracking in Hastelloy-N - Nb helped short-term'),TX('삼중수소 물질수지가 끝내 닫히지 않음','the tritium balance never closed'),TX('오프가스에서 중합 오일 증기가 필터를 막음','polymerised oil vapour clogged off-gas filters')]]];
+  A.forEach((a,i)=>{
+    const g=mk('g',{transform:'translate('+(i*570)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:550,height:392,fill:'var(--panel)',stroke:a[1]}));
+    g.appendChild(mk('rect',{width:550,height:4,fill:a[1]}));
+    g.appendChild(mk('text',{x:24,y:46,'font-family':'var(--sans)','font-size':22,fill:a[1],'font-weight':600})).textContent=a[0];
+    a[2].forEach((t,j)=>{
+      g.appendChild(mk('text',{x:24,y:104+j*62,'font-family':'var(--mono)','font-size':16,fill:a[1],'font-weight':600})).textContent=String(j+1);
+      wrapT(t,26).slice(0,2).forEach((ln,k)=>g.appendChild(mk('text',{x:54,y:104+j*62+k*24,'font-family':'var(--sans)','font-size':17,fill:'var(--ink)','font-weight':300})).textContent=ln);
+    });
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:380,delay:350*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 동결 플러그 */
+S({tag:'FREEZE PLUG · DRAIN TANK', ov:'[[1차 계통과 동결 플러그 · 드레인 탱크 · 오프가스||The primary loop, freeze plug, drain tanks and off-gas]]',
+src:'[[<b>출처</b> 본 교재 12.4절 그림 12.2 · 15.1절 · 드레인 탱크는 임계가 될 수 없는 기하(납작하고 넓은 여러 탱크) · 그림은 순서를 보이는 개념도(시간 임의) — 동결 플러그가 녹는 시간의 공개 정량 데이터는 찾기 어려움(15장)||<b>Source</b> This textbook &#167;12.4, Fig. 12.2; &#167;15.1 · drain tanks have a geometry that cannot go critical (several flat, wide tanks) · the drawing shows the sequence only (time arbitrary) - public quantitative data on freeze-plug melt time are hard to find (ch. 15)]]',
+abbr:'[[<b>동결 플러그</b> 냉각기가 계속 식혀 얼려 둔 염 마개 · <b>드레인 탱크</b> 노심 아래의 미임계 저장조 · <b>오프가스</b> 염에 녹지 않는 Xe · Kr 을 헬륨으로 쓸어 담아 지연탱크에서 붕괴시키는 계통||<b>freeze plug</b> a salt plug kept frozen by an active cooler · <b>drain tank</b> subcritical storage below the core · <b>off-gas</b> the system sweeping out insoluble Xe and Kr with helium to decay in hold-up tanks]]',
+html:`<h2 class="t">[[1차 계통과 <em>동결 플러그</em> · 드레인 탱크 · 오프가스||The primary loop, <em>freeze plug</em>, drain tanks and off-gas]]</h2>
+<ul class="b">
+  <li>[[마개는 냉각기가 <b>계속 식혀 줘야</b> 얼어 있음 — 전원이 끊기면 냉각기가 서고, 마개가 녹고, 연료염이 <b class="ok">중력으로 임계 불가능한 탱크</b>로 떨어짐||The plug stays frozen only <b>while the cooler runs</b> - lose power, the cooler stops, the plug melts, and fuel salt drops by gravity <b class="ok">into tanks that cannot go critical</b>]]</li>
+  <li>[[오프가스 계통은 Xe · Kr을 헬륨으로 쓸어 지연탱크에서 붕괴시킴 — 15장에서 이 계통이 <b class="hot">MSR 선원항의 주역</b>이 됨||The off-gas system sweeps Xe and Kr into hold-up tanks - in ch. 15 it becomes <b class="hot">the main source term</b>]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 800 380" role="img" aria-label="[[노심·펌프·열교환기 고리와 아래의 동결 플러그·드레인 탱크, 위의 오프가스. 전원 상실 시 마개가 녹아 연료가 탱크로 떨어짐||Core, pump and exchanger in a loop, with the freeze plug and drain tanks below and off-gas above; on power loss the plug melts and the fuel drains]]">
+    <g id="fp-g"></g>
+  </svg>
+  <div class="btnrow"><button class="btn act" id="fp-a">[[정상 운전||Normal operation]]</button><button class="btn" id="fp-b">[[전원 상실||Loss of power]]</button></div>
+  </div>
+  <div class="side">
+    <div class="readout hi" id="fp-s1"><span class="k">[[냉각기||Plug cooler]]</span><span class="v" id="fp-v1" style="font-size:20px">[[작동 — 마개 얼어 있음||on - plug frozen]]</span></div>
+    <div class="readout good" id="fp-s2"><span class="k">[[연료염 위치||Fuel salt]]</span><span class="v" id="fp-v2" style="font-size:20px">[[노심 루프 순환||circulating in the loop]]</span></div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#fp-g');
+  /* 루프 */
+  const core=mk('rect',{x:60,y:70,width:130,height:170,rx:10,fill:'var(--hot)',opacity:0.35,stroke:'var(--hot)','stroke-width':1.6}); G.appendChild(core);
+  G.appendChild(mk('rect',{x:320,y:40,width:110,height:60,rx:10,fill:'var(--panel)',stroke:'var(--ink-3)','stroke-width':1.6}));
+  G.appendChild(mk('rect',{x:560,y:60,width:120,height:150,rx:10,fill:'var(--panel)',stroke:'var(--cool)','stroke-width':1.6}));
+  G.appendChild(mk('rect',{x:360,y:0,width:150,height:28,rx:6,fill:'var(--panel)',stroke:'var(--amber)','stroke-width':1.4}));
+  const lp=mk('path',{d:'M190,120 H320 M430,70 H560 M620,210 V260 H125 V240',fill:'none',stroke:'var(--rule)','stroke-width':6});
+  G.appendChild(lp);
+  const loop=mk('path',{d:'M125,90 V120 H375 V70 H560 V210 H620 V260 H125 V240',fill:'none',stroke:'none'}); G.appendChild(loop);
+  const f=flow(loop,{n:18,color:'var(--hot)',r:4,speed:0.07});
+  /* 드레인 */
+  G.appendChild(mk('path',{d:'M125,240 V300',stroke:'var(--rule)','stroke-width':6,fill:'none'}));
+  const plug=mk('rect',{x:113,y:276,width:24,height:18,fill:'var(--cool)'}); G.appendChild(plug);
+  const fan=mk('circle',{cx:170,cy:285,r:12,fill:'none',stroke:'var(--cool)','stroke-width':2}); G.appendChild(fan);
+  const tanks=[], lv=[];
+  [40,150,260].forEach(x=>{ G.appendChild(mk('rect',{x:x,y:320,width:90,height:44,rx:6,fill:'var(--panel)',stroke:'var(--ok)','stroke-width':1.6}));
+    const l=mk('rect',{x:x+3,y:361,width:84,height:0,fill:'var(--hot)',opacity:0.45}); G.appendChild(l); lv.push(l); });
+  G.appendChild(mk('path',{d:'M125,300 V310 M85,310 H305 M85,310 V320 M195,310 V320 M305,310 V320',stroke:'var(--rule)','stroke-width':4,fill:'none'}));
+  const drain=mk('path',{d:'M125,230 V312 H195 V330',fill:'none',stroke:'none'}); G.appendChild(drain);
+  const fd=flow(drain,{n:8,color:'var(--hot)',r:4,speed:0.5}); fd.on=false;
+  const L=(x,y,t,c,a)=>{ const e=mk('text',{x:x,y:y,class:'lbl',fill:c||'var(--ink-2)','text-anchor':a||'start'}); e.textContent=t; G.appendChild(e); };
+  L(125,62,TX('노심 (흑연 채널)','core (graphite channels)'),'var(--hot)','middle');
+  L(375,76,TX('펌프','pump'),null,'middle');
+  L(620,142,TX('1차 열교환기','primary HX'),'var(--cool)','middle');
+  L(435,19,TX('오프가스 (Xe · Kr)','off-gas (Xe, Kr)'),'var(--amber)','middle');
+  L(190,290,TX('동결 플러그 · 냉각기','freeze plug · cooler'),'var(--cool)');
+  L(355,348,TX('드레인 탱크 — 미임계 기하','drain tanks - subcritical'),'var(--ok)');
+  let off=false, t0=0, m=0;
+  const a=el.querySelector('#fp-a'), b=el.querySelector('#fp-b');
+  function mode(v,t){ off=v; t0=t||0; a.classList.toggle('act',!v); b.classList.toggle('act',v); }
+  let now=0;
+  a.onclick=()=>mode(false,now); b.onclick=()=>mode(true,now);
+  raf(t=>{ now=t;
+    const s=off?clamp((t-t0)/1.2,0,1):0, d=off?clamp((t-t0-1.2)/2.2,0,1):0;
+    if(!off){ m=lerp(m,0,0.08); } else m=d;
+    plug.setAttribute('fill', s>0.6?'var(--hot)':'var(--cool)'); plug.setAttribute('opacity',(1-0.6*s).toFixed(2));
+    fan.setAttribute('opacity',(1-0.8*s).toFixed(2));
+    fd.on = off && s>0.6 && d<0.98;
+    f.speed = 0.07*(1-m); f.on = m<0.95;
+    core.setAttribute('opacity',(0.35*(1-m)+0.05).toFixed(2));
+    lv.forEach(l=>{ l.setAttribute('y',(361-30*m).toFixed(1)); l.setAttribute('height',(30*m).toFixed(1)); });
+    el.querySelector('#fp-s1').className='readout '+(off?'warn':'hi');
+    el.querySelector('#fp-v1').textContent=off?(s<0.6?TX('정지 — 마개 녹는 중','off - plug melting'):TX('정지 — 마개 녹음','off - plug melted')):TX('작동 — 마개 얼어 있음','on - plug frozen');
+    el.querySelector('#fp-v2').textContent=off?(d<0.98?TX('드레인 탱크로 떨어지는 중','draining to the tanks'):TX('드레인 탱크 — 미임계','in the drain tanks - subcritical')):TX('노심 루프 순환','circulating in the loop');
+  });
+}});
+
+
+/* ---------------------------------------------------------------- 이름 구분 */
+S({tag:'LIQUID-FUEL MSR VS FHR', ov:'[[노형 이름 구분 — 액체연료 MSR 과 FHR||Telling the names apart - liquid-fuel MSR and FHR]]',
+src:'[[<b>출처</b> 본 교재 12.5절 · 선구핵종 이동 문제(13장)는 액체연료 MSR 에서만 생김||<b>Source</b> This textbook &#167;12.5 · precursor drift (ch. 13) arises only in liquid-fuel MSRs]]',
+abbr:'[[<b>FHR</b> 불화염 냉각 고온로 — 고체 TRISO 연료 · <b>MSFR</b> 유럽 고속 용융염로 개념 · <b>IMSR</b> Terrestrial 의 일체형 MSR · <b>MCRE</b> 용융염화물 임계실험로||<b>FHR</b> fluoride-salt-cooled high-temperature reactor - solid TRISO fuel · <b>MSFR</b> the European molten-salt fast reactor concept · <b>IMSR</b> Terrestrial&#8217;s integral MSR · <b>MCRE</b> Molten Chloride Reactor Experiment]]',
+html:`<h2 class="t">[[노형 이름 구분 — <em>액체연료 MSR</em> 과 FHR||Telling the names apart - <em>liquid-fuel MSR</em> and FHR]]</h2>
+<ul class="b">
+  <li>[[&#8220;MSR&#8221;이라는 말 아래 전혀 다른 두 가지가 섞여 있음 — 발표에서 뭉뚱그리면 바로 지적당함||Two quite different things hide under &#8220;MSR&#8221; - blur them in a talk and you will be corrected]]</li>
+  <li>[[&#8220;Kairos가 용융염로를 짓는다&#8221;는 정확히는 <b class="amb">&#8220;용융염 냉각 고온로를 짓는다&#8221;</b>임||&#8220;Kairos is building a molten salt reactor&#8221; is, precisely, <b class="amb">&#8220;a salt-cooled high-temperature reactor&#8221;</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d">
+  <tr><th></th><th>[[① 액체연료 MSR||&#9312; Liquid-fuel MSR]]</th><th>[[② FHR (불화염 냉각 고온로)||&#9313; FHR (salt-cooled high-temperature)]]</th></tr>
+  <tr><td>[[연료||Fuel]]</td><td>[[염에 녹아 흐름||dissolved in the salt, flowing]]</td><td>[[고체 TRISO||solid TRISO]]</td></tr>
+  <tr><td>[[염의 역할||Role of the salt]]</td><td>[[연료이자 냉각재||fuel and coolant]]</td><td>[[냉각재만||coolant only]]</td></tr>
+  <tr class="mark"><td>[[선구핵종 이동 (13장)||Precursor drift (ch. 13)]]</td><td>[[있음||yes]]</td><td>[[없음||no]]</td></tr>
+  <tr><td>[[가까운 노형||Closest relative]]</td><td>—</td><td>[[핵적으로 HTGR, 열수력적으로 MSR||neutronically an HTGR, thermally an MSR]]</td></tr>
+  <tr><td>[[예||Examples]]</td><td>MSRE · IMSR · ThorCon · TMSR-LF1 · MCRE · MSFR</td><td>Kairos KP-FHR · Hermes</td></tr>
+</table>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 왜 지금 */
+S({tag:'WHY MSR NOW', ov:'[[왜 지금 다시 MSR 인가 — 토륨 · 고온 · 해상||Why MSR again now - thorium, high temperature, the sea]]',
+src:'[[<b>출처</b> 본 교재 12.6절 · MSRE 1969 종료 후 약 40년 공백 · Pa-233 반감기 27일 · TMSR-LF1 은 2024-10 토륨 장전 후 전출력 10일 운전으로 Pa-233 확인||<b>Source</b> This textbook &#167;12.6 · a forty-year gap after MSRE ended in 1969 · Pa-233 half-life 27 days · TMSR-LF1 confirmed Pa-233 after loading thorium in Oct 2024 and running 10 days at full power]]',
+abbr:'[[<b>Th-U 사이클</b> Th-232 가 중성자를 먹고 Pa-233 을 거쳐 U-233 이 되는 증식 경로 · <b>Pa-233</b> 중간 생성물 — 노심에 두면 중성자를 먹어 증식을 방해함||<b>Th-U cycle</b> Th-232 capturing a neutron and becoming U-233 via Pa-233 · <b>Pa-233</b> the intermediate - left in the core it absorbs neutrons and spoils breeding]]',
+html:`<h2 class="t">[[왜 지금 다시 MSR 인가 — <em>토륨 · 고온 · 해상</em>||Why MSR again now - <em>thorium, high temperature, the sea</em>]]</h2>
+<ul class="b">
+  <li>[[MSRE가 1969년에 끝나고 <b>40년 동안 잊혀 있었음</b> — 다시 살아난 이유가 셋이고, 셋째가 우리 연구실에 가장 중요함||After MSRE ended in 1969 the MSR was <b>forgotten for forty years</b> - three reasons revived it, and the third matters most to our lab]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 380" role="img" aria-label="[[MSR이 다시 주목받는 세 이유 — 토륨 사이클, 상압 고온, 해상 적합성||Three reasons the MSR is back - the thorium cycle, high temperature at low pressure, and suitability at sea]]">
+  <g id="wn-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#wn-g'), gs=[];
+  [[TX('토륨','Thorium'),'var(--amber)',TX('Pa-233(반감기 27일)를 노심 밖으로 빼 두었다가 붕괴시켜 넣어야 증식이 잘 됨 — 고체 연료로는 불가능. TMSR-LF1 이 2024-10 Th-U 전환을 실증함.','Breeding works best if Pa-233 (27-day half-life) is taken out and allowed to decay - impossible with solid fuel. TMSR-LF1 demonstrated Th-U conversion in Oct 2024.')],
+   [TX('고온','High temperature'),'var(--hot)',TX('700 °C 급 열을 상압에서 냄 — 수소 생산 · 제철 · 석유화학과 직결.','700 °C-class heat at atmospheric pressure - hydrogen, steel, petrochemicals.')],
+   [TX('해상','The sea'),'var(--cool)',TX('상압이라 용기가 가볍고, 흔들려도 상변화 걱정이 없으며, 동결 플러그는 배가 기울어도 중력으로 작동함 — 부유식 원자력에 구조적으로 잘 맞음(14장).','Light low-pressure vessels, no phase change to slosh, and a freeze plug that works by gravity even with the ship heeled - a structural fit for floating plants (ch. 14).')]]
+  .forEach((c,i)=>{
+    const g=mk('g',{transform:'translate('+(i*378)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:362,height:372,fill:'var(--panel)',stroke:i===2?c[1]:'var(--rule)','stroke-width':i===2?2:1}));
+    g.appendChild(mk('rect',{width:362,height:4,fill:c[1]}));
+    g.appendChild(mk('text',{x:22,y:66,'font-family':'var(--mono)','font-size':42,fill:c[1],'font-weight':600})).textContent=String(i+1);
+    g.appendChild(mk('text',{x:22,y:118,'font-family':'var(--sans)','font-size':24,fill:c[1],'font-weight':600})).textContent=c[0];
+    wrapT(c[2],19).slice(0,7).forEach((ln,j)=>g.appendChild(mk('text',{x:22,y:170+j*27,'font-family':'var(--sans)','font-size':16.5,fill:'var(--ink-2)','font-weight':300})).textContent=ln);
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:380,delay:250*i,fill:'forwards'}));
+}});
+</script>

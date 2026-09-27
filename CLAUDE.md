@@ -7,6 +7,16 @@
 본문은 **한국어와 영어를 함께** 담고 있고(`L` 키), 배경은 **어두운 판과 밝은 판**을 오갈 수 있으며(`T` 키),
 46장을 그대로 **PDF로 내려받을** 수 있다.
 
+지금 쌓인 덱과 교재(2026-10 기준):
+
+| 슬러그 | 주차 | 교재 |
+|---|---|---|
+| `w02-03_smr-design-requirements` | 2~3 | 「SMR 설계요건과 공학적안전설비」 |
+| `w03-04_smr-data-and-pwr-smrs` | 3~4 | 「SMR 자료를 찾는 법과 PWR형 SMR」 |
+| `w05a_htgr-vhtr` · `w05b_sfr` · `w06_msr` | 5~6 | 「물을 쓰지 않는 SMR — VHTR · SFR · MSR」 1~6 · 7~11 · 12~18장 |
+
+비경수로 세 덱은 **섹션 번호가 교재 장 번호와 같다**(HTGR 1~6, SFR 7~11, MSR 12~18).
+
 교재 원본과 그림 소스는 이 저장소에 없다. `C:\Claude\Documents\THINK Lab SMR 설계요건과 공학적안전설비 Rev1.0`
 (별도 저장소 `malmok2/Documents`)에 있다. 수치를 바꿔야 하면 **교재가 기준**이고, 양쪽을 같이 고친다.
 
@@ -112,6 +122,8 @@ S({ html:`...`, src:'출처', abbr:'<b>ECCS</b> 비상노심냉각계통 · …'
 | `flow(path, {n, color, r, speed})` | SVG `<path>` 위로 입자를 흘린다. 반환 객체의 `.speed`·`.on`·`.dir`을 바꾸면 실시간 반응 |
 | `track(obj, key, get, k)` | 값을 목표치로 부드럽게 따라가게 한다(1차 지연) |
 | `poly(pts)` | `[[x,y],…]` → `points` 문자열 |
+| `svgEl(tag, attrs)` | SVG 요소 하나를 만든다. `init` 안에서 도형을 쌓을 때 쓴다 |
+| `abbrTable(el, sel, rows)` | 덱 끝의 약어 표. `rows` 는 `[약어, 원어, TX(뜻)]` 열다섯 줄까지 |
 | `decay(t)` | Way–Wigner 붕괴열 비율. `0.0622(t^-0.2 − (t+10^8)^-0.2)` |
 | `rhoW(T)` | 물 밀도 `1006.0 − 0.2646T − 0.002424T²` (kg/m³, T는 °C) |
 | `clamp` `lerp` `fmt` | 수치 유틸 |

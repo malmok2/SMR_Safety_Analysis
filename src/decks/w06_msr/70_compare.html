@@ -1,0 +1,313 @@
+<script>
+/* ================================================================
+   SECTION 17 — 세 노형을 같은 자로 잰다  (교재 17장)
+   ================================================================ */
+SECT('17 · [[세 노형 비교||All three compared]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;17 세 노형을 같은 자로 재면||&#167;17 All three on one ruler]]',
+html:`[[<div class="no">17</div><h2>세 노형을 같은 자로 재면</h2><div class="ln"></div>
+<p>VHTR · SFR · MSR 을 하나의 표로 접는다. &#8220;어느 노형이 더 좋은가&#8221;에는 답이 없다 —
+<b>용도와 기준</b>이 먼저 정해져야 답이 생긴다.</p>||<div class="no">17</div><h2>All three on one ruler</h2><div class="ln"></div>
+<p>VHTR, SFR and MSR folded into one table. &#8220;Which reactor is better?&#8221; has no answer -
+it gets one only once <b>the use and the yardstick</b> are fixed.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 여섯 축 */
+S({tag:'SIX AXES', ov:'[[노형 비교의 여섯 축||Six axes for comparing reactors]]',
+src:'[[<b>출처</b> 본 교재 17.1절||<b>Source</b> This textbook &#167;17.1]]',
+html:`<h2 class="t">[[노형 비교의 <em>여섯 축</em>||<em>Six axes</em> for comparing reactors]]</h2>
+<ul class="b">
+  <li>[[축을 먼저 정하고 나누어 보면 각 노형의 자리가 분명해짐 — 축마다 1등이 다름(뒤의 표 17.3)||Fix the axes first and each reactor&#8217;s place becomes clear - each axis has a different leader (Table 17.3 later)]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 400" role="img" aria-label="[[열역학, 안전 논리, 연료 사이클, 재료·화학, 성숙도, 해석의 여섯 축||Six axes - thermodynamics, safety logic, fuel cycle, materials and chemistry, maturity, analysis]]">
+  <g id="ax6"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#ax6'), gs=[];
+  [[TX('열역학','Thermodynamics'),TX('얼마나 뜨겁게, 얼마나 낮은 압력으로','how hot, and at how low a pressure'),'var(--hot)'],
+   [TX('안전 논리','Safety logic'),TX('무엇이 사고를 막는가','what stops an accident'),'var(--ok)'],
+   [TX('연료 사이클','Fuel cycle'),TX('무엇을 태우고 무엇을 남기는가','what it burns and what it leaves'),'var(--cool)'],
+   [TX('재료 · 화학','Materials · chemistry'),TX('무엇이 수명을 정하는가','what sets its lifetime'),'var(--amber)'],
+   [TX('성숙도','Maturity'),TX('실제로 돌아간 적이 있는가','has it ever actually run'),'var(--cool)'],
+   [TX('해석','Analysis'),TX('어떤 코드로, 어떤 데이터로 검증하는가','which code, validated on which data'),'var(--ok)']]
+  .forEach((c,i)=>{
+    const x=(i%3)*378, y=Math.floor(i/3)*204, g=mk('g',{transform:'translate('+x+','+y+')',opacity:0});
+    g.appendChild(mk('rect',{width:362,height:190,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:362,height:3,fill:c[2]}));
+    g.appendChild(mk('text',{x:22,y:58,'font-family':'var(--mono)','font-size':30,fill:c[2],'font-weight':600})).textContent=String(i+1);
+    g.appendChild(mk('text',{x:22,y:108,'font-family':'var(--sans)','font-size':23,fill:'var(--ink)','font-weight':600})).textContent=c[0];
+    wrapT(c[1],19).slice(0,2).forEach((ln,j)=>g.appendChild(mk('text',{x:22,y:146+j*25,'font-family':'var(--sans)','font-size':17,fill:'var(--ink-2)','font-weight':300})).textContent=ln);
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:340,delay:140*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 물성 총괄 */
+S({tag:'PROPERTIES ON ONE PAGE', ov:'[[냉각재 물성 총괄 — 튀는 칸 네 개||Coolant properties on one page - four cells that stand out]]',
+src:'[[<b>출처</b> 본 교재 표 17.1 · 물 15.5 MPa 310 °C · 헬륨 7 MPa 750 °C · 나트륨 0.1 MPa 500 °C · FLiBe 0.1 MPa 650 °C · 체적 열용량 = ρc<sub>p</sub>||<b>Source</b> This textbook, Table 17.1 · water 15.5 MPa 310 °C · helium 7 MPa 750 °C · sodium 0.1 MPa 500 °C · FLiBe 0.1 MPa 650 °C · volumetric heat capacity = ρc<sub>p</sub>]]',
+abbr:'[[<b>체적 열용량</b> 1 m³ 를 1 K 올리는 데 드는 열 · <b>프란틀수 Pr</b> 운동량 확산 ÷ 열 확산 · <b>비점 여유</b> 운전 온도에서 끓는점까지 남은 온도||<b>volumetric heat capacity</b> heat to raise 1 m³ by 1 K · <b>Prandtl number Pr</b> momentum diffusion ÷ heat diffusion · <b>boiling margin</b> temperature left between operation and boiling]]',
+html:`<h2 class="t">[[냉각재 물성 총괄 — <em>튀는 칸</em> 네 개||Coolant properties on one page - <em>four cells</em> that stand out]]</h2>
+<ul class="b">
+  <li>[[각 노형의 &#8220;고유 난제&#8221;는 이 표의 <b>어느 한 칸</b>에서 나옴 — 외울 것이 아니라 어느 칸이 튀는지를 보면 그 노형의 문제가 예측됨||Each reactor&#8217;s own hard problem comes from <b>one cell</b> of this table - not to memorise, but to read which cell stands out]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <table class="d sm" id="pt">
+    <tr><th>[[물성||Property]]</th><th>[[물||Water]]</th><th>[[헬륨||Helium]]</th><th>[[나트륨||Sodium]]</th><th>FLiBe</th></tr>
+    <tr><td>[[밀도 kg/m³||Density kg/m³]]</td><td class="n">727</td><td class="n">3.29</td><td class="n">835</td><td class="n">1,969</td></tr>
+    <tr><td>[[비열 J/(kg·K)||c<sub>p</sub> J/(kg·K)]]</td><td class="n">5,320</td><td class="n">5,195</td><td class="n">1,264</td><td class="n">2,390</td></tr>
+    <tr data-r="1"><td>[[체적 열용량 kJ/(m³·K)||ρc<sub>p</sub> kJ/(m³·K)]]</td><td class="n">3,870</td><td class="n" data-h="1">17</td><td class="n">1,055</td><td class="n">4,707</td></tr>
+    <tr><td>[[열전도도 W/(m·K)||Conductivity W/(m·K)]]</td><td class="n">0.54</td><td class="n">0.37</td><td class="n">64.2</td><td class="n">1.0</td></tr>
+    <tr><td>[[점성 mPa·s||Viscosity mPa·s]]</td><td class="n">0.086</td><td class="n">0.047</td><td class="n">0.236</td><td class="n">6.8</td></tr>
+    <tr data-r="2"><td>[[프란틀수||Prandtl number]]</td><td class="n">0.86</td><td class="n">0.66</td><td class="n" data-h="2">0.0046</td><td class="n">16</td></tr>
+    <tr data-r="4"><td>[[융점 °C||Melting point °C]]</td><td class="n">0</td><td class="n">—</td><td class="n" data-h="4">97.8</td><td class="n" data-h="4">459</td></tr>
+    <tr><td>[[비점 °C||Boiling point °C]]</td><td class="n">[[345 (포화)||345 (sat.)]]</td><td class="n">—</td><td class="n">883</td><td class="n">&gt;1400</td></tr>
+    <tr data-r="3"><td>[[운전–비점 여유 K||Margin to boiling K]]</td><td class="n" data-h="3">20</td><td class="n">—</td><td class="n">373</td><td class="n">&gt;750</td></tr>
+  </table>
+  </div>
+  <div class="side">
+    <div class="btnrow" id="pt-b">
+      <button class="btn act" data-k="1">&#9312; ρc<sub>p</sub></button><button class="btn" data-k="2">&#9313; Pr</button>
+      <button class="btn" data-k="3">&#9314; [[비점 여유||boiling margin]]</button><button class="btn" data-k="4">&#9315; [[융점||melting]]</button>
+    </div>
+    <div class="readout hi" style="margin-top:14px"><span class="k" id="pt-k"></span><span class="v" id="pt-v" style="font-size:17px;line-height:1.5"></span></div>
+  </div>
+</div>`,
+init(el){
+  const R={1:[TX('체적 열용량 — 헬륨만 두 자릿수 아래','heat per volume - only helium is two orders down'),TX('FLiBe > 물 > 나트륨 ≫ 헬륨. 그래서 HTGR 만 7 MPa 가압이 필요함','FLiBe > water > sodium ≫ helium. So only the HTGR needs 7 MPa')],
+           2:[TX('프란틀수 — 나트륨만 두 자릿수 아래','Prandtl - only sodium is two orders down'),TX('그래서 SFR 만 전열 상관식을 통째로 갈아야 함','so only the SFR must replace its heat-transfer correlations wholesale')],
+           3:[TX('비점 여유 — 물만 20 K','Boiling margin - only water has 20 K'),TX('그래서 경수로만 임계열유속과 싸움','so only the LWR fights critical heat flux')],
+           4:[TX('융점 — 나트륨 97.8 °C, FLiBe 459 °C','Melting - sodium 97.8 °C, FLiBe 459 °C'),TX('그래서 SFR 과 MSR 만 동결을 걱정함','so only the SFR and MSR worry about freezing')]};
+  const bs=el.querySelectorAll('#pt-b .btn');
+  const set=k=>{
+    bs.forEach(b=>b.classList.toggle('act',b.dataset.k==k));
+    el.querySelectorAll('#pt tr').forEach(tr=>{ const on=tr.dataset.r==k;
+      tr.querySelectorAll('td').forEach(td=>{ const h=on&&td.dataset.h==k;
+        td.style.background=h?'var(--act)':''; td.style.color=h?'var(--hot)':(on?'var(--ink)':'');
+        td.style.fontWeight=h?'600':''; }); });
+    el.querySelector('#pt-k').textContent=R[k][0]; el.querySelector('#pt-v').textContent=R[k][1];
+  };
+  bs.forEach(b=>b.onclick=e=>{ e.stopPropagation(); set(b.dataset.k); });
+  set(1);
+}});
+
+
+/* ---------------------------------------------------------------- 총괄 비교 1 */
+S({tag:'THE THREE COMPARED 1/2', ov:'[[세 노형 총괄 비교 (1/2) — 설계 변수||The three compared (1 of 2) - design parameters]]',
+src:'[[<b>출처</b> 본 교재 표 17.2 · MSR 출력밀도는 열중성자 3 ~ 고속 300 MW/m³ · 열효율은 대표값||<b>Source</b> This textbook, Table 17.2 · MSR power density 3 (thermal) to 300 (fast) MW/m³ · efficiencies are typical values]]',
+abbr:'[[<b>TRISO</b> 세 겹 피복 연료 입자 · <b>중간 루프</b> 1차 냉각재와 증기 계통 사이에 한 번 더 두는 루프 · <b>고속</b> 감속재 없이 빠른 중성자로 핵분열||<b>TRISO</b> tri-structural isotropic particle · <b>intermediate loop</b> one more loop between the primary and the steam side · <b>fast</b> fission by unmoderated neutrons]]',
+html:`<h2 class="t">[[세 노형 <em>총괄 비교</em> (1/2) — 설계 변수||The three <em>compared</em> (1 of 2) - design parameters]]</h2>
+<ul class="b">
+  <li>[[<b class="hot">출력밀도가 두 자릿수 차이</b> — 흑연을 쓰는 VHTR 은 3~6 MW/m³, 감속재가 없는 SFR 은 230~450 MW/m³. 같은 출력이면 VHTR 노심이 훨씬 큼||<b class="hot">Power density differs by two orders</b> - the graphite VHTR runs 3-6 MW/m³, the unmoderated SFR 230-450. Same power, a much bigger VHTR core]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d">
+  <tr><th>[[항목||Item]]</th><th>VHTR (HTGR)</th><th>SFR</th><th>[[MSR (액체연료)||MSR (liquid fuel)]]</th></tr>
+  <tr><td>[[냉각재||Coolant]]</td><td>[[헬륨||helium]]</td><td>[[나트륨||sodium]]</td><td>[[불화물 · 염화물 염||fluoride or chloride salt]]</td></tr>
+  <tr><td>[[감속재||Moderator]]</td><td>[[흑연||graphite]]</td><td>[[없음 (고속)||none (fast)]]</td><td>[[흑연 또는 없음||graphite or none]]</td></tr>
+  <tr><td>[[연료||Fuel]]</td><td>[[TRISO 입자||TRISO particles]]</td><td>[[금속 또는 산화물 봉||metal or oxide pins]]</td><td>[[염에 용해||dissolved in salt]]</td></tr>
+  <tr><td>[[1차 압력||Primary pressure]]</td><td class="n">6~7 MPa</td><td class="n">~0.1 MPa</td><td class="n">~0.1 MPa</td></tr>
+  <tr><td>[[출구 온도||Outlet temperature]]</td><td class="n">750~950 °C</td><td class="n">500~550 °C</td><td class="n">650~700 °C</td></tr>
+  <tr class="mark"><td>[[출력밀도 MW/m³||Power density MW/m³]]</td><td class="n">3~6</td><td class="n">230~450</td><td class="n">[[3 (열) ~ 300 (고속)||3 (thermal) - 300 (fast)]]</td></tr>
+  <tr><td>[[중간 루프||Intermediate loop]]</td><td>[[없음||none]]</td><td>[[있음||yes]]</td><td>[[있음 (2차 염)||yes (secondary salt)]]</td></tr>
+  <tr><td>[[열효율||Efficiency]]</td><td class="n">~40 %</td><td class="n">~40 %</td><td class="n">~45 %</td></tr>
+</table>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 총괄 비교 2 */
+S({tag:'THE THREE COMPARED 2/2', ov:'[[세 노형 총괄 비교 (2/2) — 안전과 성숙도||The three compared (2 of 2) - safety and maturity]]',
+src:'[[<b>출처</b> 본 교재 표 17.2 · 운전 실적은 <b>2026년 9월 기준</b>||<b>Source</b> This textbook, Table 17.2 · operating record <b>as of September 2026</b>]]',
+abbr:'[[<b>RCCS</b> 원자로 공동 냉각계통 · <b>RVACS · DRACS</b> 용기 외부 공기냉각 · 직접 잔열제거 계통 · <b>FCCI</b> 연료–피복재 화학 상호작용 · <b>BN-600 · 800</b> 러시아 나트륨 고속로 · <b>TMSR-LF1</b> 중국 2 MWt 액체연료 시험로||<b>RCCS</b> reactor cavity cooling system · <b>RVACS · DRACS</b> vessel air cooling and direct decay-heat removal · <b>FCCI</b> fuel-cladding chemical interaction · <b>BN-600 · 800</b> Russian sodium fast reactors · <b>TMSR-LF1</b> China&#8217;s 2 MWt liquid-fuel test reactor]]',
+html:`<h2 class="t">[[세 노형 <em>총괄 비교</em> (2/2) — 안전과 성숙도||The three <em>compared</em> (2 of 2) - safety and maturity]]</h2>
+<ul class="b">
+  <li>[[세 노형 모두 온도계수는 음이지만 <b>음이 되는 이유가 다름</b> — 도플러 · 구조 팽창 · 연료 팽창. <b class="hot">보이드는 대형 SFR 에서만 양</b>||All three have negative temperature feedback <b>for different reasons</b> - Doppler, structural expansion, fuel expansion. <b class="hot">Void is positive only in a large SFR</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d sm">
+  <tr><th>[[항목||Item]]</th><th>VHTR (HTGR)</th><th>SFR</th><th>MSR</th></tr>
+  <tr><td>[[보이드 반응도||Void reactivity]]</td><td>[[사실상 0||essentially zero]]</td><td>[[대형에서 양||positive in large cores]]</td><td>[[음 (염 팽창)||negative (salt expansion)]]</td></tr>
+  <tr><td>[[온도계수||Temperature coeff.]]</td><td>[[음 (도플러)||negative (Doppler)]]</td><td>[[음 (구조 팽창)||negative (structural expansion)]]</td><td>[[음 (연료 팽창 지배)||negative (fuel expansion)]]</td></tr>
+  <tr><td>[[피동 잔열제거||Passive decay heat]]</td><td>[[전도 + 복사 + RCCS||conduction + radiation + RCCS]]</td><td>RVACS / DRACS</td><td>[[드레인 탱크||drain tank]]</td></tr>
+  <tr><td>[[연료 한계||Fuel limit]]</td><td>[[TRISO 1600 °C||TRISO 1600 °C]]</td><td>[[FCCI 650~725 °C||FCCI 650-725 °C]]</td><td>[[없음 (액체)||none (liquid)]]</td></tr>
+  <tr><td>[[재장전||Refuelling]]</td><td>[[온라인(페블) / 정지(프리즘)||online (pebble) / shutdown (prism)]]</td><td>[[수년 주기 또는 30년 무재장전||every few years, or none for 30 years]]</td><td>[[온라인||online]]</td></tr>
+  <tr class="mark"><td>[[최대 난제||Hardest problem]]</td><td>[[공기 · 수분 유입, 흑연 수명||air and water ingress, graphite life]]</td><td>[[나트륨 화재 · 나트륨–물 반응, 양의 보이드||sodium fires, sodium-water reaction, positive void]]</td><td>[[재료(코드 미등재), 선원항, 동결||materials (not code-listed), source term, freezing]]</td></tr>
+  <tr><td>[[상용 운전 실적||Commercial record]]</td><td>[[HTR-PM (2023~)||HTR-PM (2023-)]]</td><td>[[BN-600 (1980~), BN-800 (2016~)||BN-600 (1980-), BN-800 (2016-)]]</td><td>[[없음 (TMSR-LF1 2 MWt 시험로)||none (TMSR-LF1, a 2 MWt test reactor)]]</td></tr>
+</table>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 열전달 경로 */
+S({tag:'HEAT PATH', ov:'[[노형별 열전달 경로 — 중간 루프의 개수||Heat path by reactor - how many loops]]',
+src:'[[<b>출처</b> 본 교재 그림 17.1 을 다시 그림 · 칸의 수는 열이 거치는 유체 · 기기의 수 · MSR 은 연료염 자체가 1차 유체임||<b>Source</b> Redrawn from textbook Fig. 17.1 · the number of boxes is the number of fluids and components heat passes through · in the MSR the fuel salt is itself the primary fluid]]',
+abbr:'[[<b>증기발생기(SG)</b> 1차 쪽 열로 물을 끓이는 열교환기 · <b>중간 Na</b> 방사화된 1차 나트륨과 물 사이에 두는 비방사성 나트륨 루프 · <b>2차 염</b> 연료염과 발전 계통 사이의 깨끗한 염 루프||<b>steam generator (SG)</b> boils water with primary-side heat · <b>intermediate Na</b> a non-radioactive sodium loop between activated primary sodium and water · <b>secondary salt</b> a clean salt loop between fuel salt and the power cycle]]',
+html:`<h2 class="t">[[노형별 <em>열전달 경로</em> — 중간 루프의 개수||<em>Heat path</em> by reactor - how many loops]]</h2>
+<ul class="b">
+  <li>[[<b class="hot">SFR 만 중간 루프를 하나 더 둠</b> — 방사화된 1차 나트륨과 물을 떼어 놓기 위함. 나트륨–물 반응이 일어나도 1차 계통까지 번지지 않게 하는 칸막이임||<b class="hot">Only the SFR adds an intermediate loop</b> - to keep activated primary sodium away from water. A sodium-water reaction then cannot reach the primary circuit]]</li>
+  <li>[[MSR 은 <b>노심이 곧 연료염</b> — 방사성 연료염을 발전 계통에서 떼어 놓으려고 깨끗한 2차 염을 둠||In the MSR <b>the core is the fuel salt</b> - a clean secondary salt keeps it away from the power cycle]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 330" role="img" aria-label="[[VHTR 노심-1차 헬륨-증기발생기-터빈, SFR 노심-1차 나트륨-중간 나트륨-증기발생기-터빈, MSR 연료염-2차 염-터빈의 열전달 경로||Heat paths - VHTR core, primary helium, SG, turbine; SFR core, primary Na, intermediate Na, SG, turbine; MSR fuel salt, secondary salt, turbine]]">
+  <g id="hp"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#hp'), X0=120, W=156, GAP=20, H=66, fl=[], gs=[];
+  const rows=[['VHTR','var(--amber)',[TX('노심','Core'),TX('1차 He','Primary He'),TX('증기발생기','Steam generator'),TX('증기터빈','Steam turbine')]],
+              ['SFR','var(--hot)',[TX('노심','Core'),TX('1차 Na','Primary Na'),TX('중간 Na','Intermediate Na'),TX('증기발생기','Steam generator'),TX('증기터빈','Steam turbine')]],
+              ['MSR','var(--ok)',[TX('노심 = 연료염','Core = fuel salt'),TX('2차 염','Secondary salt'),TX('증기 또는 가스터빈','Steam or gas turbine')]]];
+  rows.forEach((r,i)=>{
+    const y=20+i*108, g=mk('g',{opacity:0});
+    g.appendChild(mk('text',{x:0,y:y+H/2+8,'font-family':'var(--mono)','font-size':22,fill:r[1],'font-weight':600})).textContent=r[0];
+    r[2].forEach((s,j)=>{
+      const x=X0+j*(W+GAP), mid=(i===1&&j===2);
+      g.appendChild(mk('rect',{x:x,y:y,width:W,height:H,rx:4,fill:'var(--panel)',stroke:mid?'var(--hot)':r[1],'stroke-width':mid?2.4:1.4}));
+      wrapT(s,9).slice(0,2).forEach((ln,k,a)=>g.appendChild(mk('text',{x:x+W/2,y:y+H/2+6+(k-(a.length-1)/2)*20,'text-anchor':'middle','font-family':'var(--sans)','font-size':16.5,fill:'var(--ink)','font-weight':mid?600:400})).textContent=ln);
+      if(j){ const p=mk('path',{d:'M'+(x-GAP+3)+','+(y+H/2)+' L'+(x-4)+','+(y+H/2),stroke:r[1],'stroke-width':2,fill:'none'});
+        g.appendChild(p); g.appendChild(mk('path',{d:'M'+(x-10)+','+(y+H/2-5)+' L'+(x-3)+','+(y+H/2)+' L'+(x-10)+','+(y+H/2+5),stroke:r[1],'stroke-width':2,fill:'none'})); }
+    });
+    const xe=X0+(r[2].length-1)*(W+GAP)+W;
+    const line=mk('path',{d:'M'+(X0+10)+','+(y+H+10)+' L'+(xe-10)+','+(y+H+10),fill:'none',stroke:'none'});
+    g.appendChild(line); G.appendChild(g); gs.push(g); fl.push([line,r[1]]);
+    g.appendChild(mk('text',{x:xe+16,y:y+H/2+7,'font-family':'var(--mono)','font-size':15,fill:'var(--ink-3)'})).textContent=TX(r[2].length-1+'단 전달',(r[2].length-1)+' hand-offs');
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:380,delay:260*i,fill:'forwards'}));
+  fl.forEach(f=>flow(f[0],{n:10,color:f[1],r:2.6,speed:70}));
+}});
+
+
+/* ---------------------------------------------------------------- 축별 선두 */
+S({tag:'LEADER BY AXIS', ov:'[[축별 선두 — 1등이 축마다 다름||Leader by axis - a different winner on each]]',
+src:'[[<b>출처</b> 본 교재 표 17.3 · <b>2026년 9월 기준</b> — BN-600 누적 114 TWh · 해상 MSR 선급 승인 2건은 14장 참조||<b>Source</b> This textbook, Table 17.3 · <b>as of September 2026</b> - BN-600 cumulative 114 TWh · for the two class approvals of marine MSRs see ch. 14]]',
+abbr:'[[<b>선급</b> 선박의 설계 · 건조를 인증하는 기관(ABS · KR · BV 등) · <b>적분 검증 데이터</b> 계통 전체를 한 번에 돌려 얻은 시험 자료 · <b>TRISO-X</b> X-energy 의 미국 TRISO 연료 공장||<b>classification society</b> certifies ship design and build (ABS, KR, BV …) · <b>integral data</b> tests of the whole system at once · <b>TRISO-X</b> X-energy&#8217;s US TRISO fuel plant]]',
+html:`<h2 class="t">[[축별 선두 — <em>1등이 축마다</em> 다름||Leader by axis - <em>a different winner</em> on each]]</h2>
+<ul class="b">
+  <li>[[&#8220;어느 노형이 가장 앞섰는가&#8221;에는 하나의 답이 없음 — <b>운전 실적은 SFR, 4세대 상용과 공급망은 HTGR, 실증로와 해상은 MSR</b>||&#8220;Which reactor is furthest along?&#8221; has no single answer - <b>SFR for operating record, HTGR for Gen-IV commercial and supply chain, MSR for demonstration and sea</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d">
+  <tr><th>[[축||Axis]]</th><th>[[1등||Leader]]</th><th>[[근거||Basis]]</th></tr>
+  <tr><td>[[상업운전 실적||Commercial operation]]</td><td style="color:var(--hot)">SFR</td><td>[[BN-600 이 1980년부터 46년, 누적 114 TWh||BN-600 since 1980 - 46 years, 114 TWh]]</td></tr>
+  <tr><td>[[4세대 상용 1호||First Gen-IV commercial]]</td><td style="color:var(--amber)">HTGR</td><td>[[HTR-PM 이 2023년 12월 세계 최초 4세대 상업운전||HTR-PM, December 2023, the world&#8217;s first]]</td></tr>
+  <tr><td>[[미국 인허가 진척||US licensing]]</td><td style="color:var(--hot)">SFR</td><td>[[Natrium 이 2026년 3월 NRC 건설허가, 4월 착공||Natrium - NRC construction permit March 2026, nuclear construction April]]</td></tr>
+  <tr><td>[[연료 공급망||Fuel supply chain]]</td><td style="color:var(--amber)">HTGR</td><td>[[중국 바오터우 연산 30만 개, 미국 TRISO-X 건설 중||Baotou 300,000 pebbles a year; TRISO-X being built in the US]]</td></tr>
+  <tr><td>[[실증로 운전 중||Demonstrator running]]</td><td style="color:var(--ok)">MSR</td><td>[[중국 TMSR-LF1 이 유일하게 액체연료로 운전||China&#8217;s TMSR-LF1, the only liquid-fuel reactor running]]</td></tr>
+  <tr><td>[[해상 적용||At sea]]</td><td style="color:var(--ok)">MSR</td><td>[[2026년 한국 주도 설계 2건이 선급 승인||two Korean-led designs won class approval in 2026]]</td></tr>
+  <tr><td>[[적분 검증 데이터||Integral validation data]]</td><td style="color:var(--amber)">HTGR</td><td>[[HTR-PM 2023 시험이 유일한 상용 규모 냉각상실 데이터||the 2023 HTR-PM tests - the only commercial-scale loss-of-cooling data]]</td></tr>
+</table>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 프로젝트 현황 */
+S({tag:'PROJECT STATUS · 2026-09', ov:'[[주요 비경수로 프로젝트 현황 (2026년 9월)||Major non-LWR projects (September 2026)]]',
+src:'[[<b>출처</b> 본 교재 그림 17.2 · <b>2026년 9월 기준 — 이 교재에서 가장 빨리 낡는 쪽</b> · 확인 경로는 「SMR 자료를 찾는 법과 PWR형 SMR」 2장(3~4주차 덱)||<b>Source</b> Textbook Fig. 17.2 · <b>as of September 2026 - the page that ages fastest</b> · how to check: ch. 2 of <i>Finding SMR Data and PWR-type SMRs</i> (the weeks 3-4 deck)]]',
+abbr:'[[<b>ARIS</b> IAEA 첨단로 정보시스템 — 벤더 제출 설계 사양 · <b>NEA SMR 대시보드</b> 사업 성숙도 6축 평가 · <b>PFBR</b> 인도 500 MWe 원형 고속증식로 · <b>MCRE</b> 미국 용융염화물 임계실험로||<b>ARIS</b> IAEA Advanced Reactors Information System - vendor-submitted specifications · <b>NEA SMR Dashboard</b> six-axis maturity assessment · <b>PFBR</b> India&#8217;s 500 MWe prototype fast breeder · <b>MCRE</b> US Molten Chloride Reactor Experiment]]',
+html:`<h2 class="t">[[주요 비경수로 <em>프로젝트 현황</em> (2026년 9월)||Major non-LWR <em>projects</em> (September 2026)]]</h2>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f17_02', cap:'[[초록 = 운전 · 실증, 파랑 = 건설 · 승인, 주황 = 심사 · 준비 · 빨간 점선이 2026년 9월 · 교재 그림 17.2||Green = operating, blue = building or approved, orange = under review · the red line is September 2026 · textbook Fig. 17.2]]'})}
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">[[가장 빨리 낡는 쪽||Ages fastest]]</span><span class="v" style="font-size:16px;line-height:1.5">[[반년마다 다시 확인||recheck every six months]]</span></div>
+    <div class="readout"><span class="k">&#9312; IAEA ARIS</span><span class="v" style="font-size:15.5px;line-height:1.5">[[설계 사양의 1차 출처 — 벤더 제출 문서||primary source for specs - vendor documents]]</span></div>
+    <div class="readout"><span class="k">&#9313; [[NRC 신청 현황||NRC applications]]</span><span class="v" style="font-size:15.5px;line-height:1.5">[[미국 인허가 상태 — 문서별 날짜까지||US licensing, dated document by document]]</span></div>
+    <div class="readout"><span class="k">&#9314; [[NEA SMR 대시보드||NEA SMR Dashboard]]</span><span class="v" style="font-size:15.5px;line-height:1.5">[[2023 PDF 판이 아니라 온라인 최신판||the live online edition, not the 2023 PDF]]</span></div>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 계통코드 교체 지도 */
+S({tag:'WHAT TO SWAP IN THE CODE', ov:'[[계통코드에서 노형마다 갈아끼울 네 칸||Four slots to swap in a system code, per reactor]]',
+src:'[[<b>출처</b> 본 교재 그림 17.3 을 다시 그림 · 17.5절 · 헬륨 음속 1880 m/s 는 750 °C 값(물질 Courant 조건 기준 유속 30 m/s)||<b>Source</b> Redrawn from textbook Fig. 17.3 · &#167;17.5 · helium sound speed 1880 m/s at 750 °C (material Courant limit on 30 m/s flow)]]',
+abbr:'[[<b>물성 클래스</b> p · h 로 ρ · T 등을 돌려주는 코드 객체 · <b>음해법</b> 다음 시각 값을 연립해서 푸는 방법 — 큰 시간간격 가능 · <b>KTA 3102</b> 독일 페블베드 전열 · 압력손실 기준 · <b>성층화</b> 뜨거운 층이 위에 떠 섞이지 않는 것||<b>property class</b> code object returning ρ, T and more from p and h · <b>implicit scheme</b> solves next-step values together - large time steps · <b>KTA 3102</b> German pebble-bed heat-transfer and pressure-drop rules · <b>stratification</b> hot fluid floating on top, unmixed]]',
+html:`<h2 class="t">[[계통코드에서 노형마다 <em>갈아끼울 네 칸</em>||<em>Four slots</em> to swap in a system code, per reactor]]</h2>
+<ul class="b">
+  <li>[[노심 · 연결 구조는 그대로 두고 <b>이 네 칸만</b> 바꿈. 작업량은 <b class="hot">MSR &gt; VHTR &gt; SFR</b> — 나트륨은 물성과 상관식만, 헬륨은 공기유입에 다성분 모델이, 용융염은 <b>방정식계 자체</b>가 늘어남||Keep the core and junction structure; <b>swap only these four</b>. Effort runs <b class="hot">MSR &gt; VHTR &gt; SFR</b> - sodium needs properties and correlations, helium a multi-species model for air ingress, molten salt <b>more equations</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 350" role="img" aria-label="[[VHTR, SFR, MSR 별로 물성 클래스, 전열·마찰 상관식, 시간간격·수치, 추가 물리의 네 칸을 무엇으로 바꾸는지||For VHTR, SFR and MSR, what replaces the property class, correlations, time step and numerics, and extra physics]]">
+  <g id="sw"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#sw'), X0=170, W=225, GX=13, Y0=46, H=86, GY=14, cells=[];
+  [TX('물성 클래스','Property class'),TX('전열 · 마찰 상관식','Heat transfer · friction'),TX('시간간격 · 수치','Time step · numerics'),TX('추가 물리','Extra physics')]
+    .forEach((h,j)=>G.appendChild(mk('text',{x:X0+j*(W+GX)+W/2,y:24,'text-anchor':'middle','font-family':'var(--sans)','font-size':17,fill:'var(--cool)','font-weight':600})).textContent=h);
+  [['VHTR (He)','var(--amber)',[TX('이상기체 P = ρRT','ideal gas P = ρRT'),'KTA 3102.2 / .3',TX('음속 1880 m/s → 음해법 필수','sound 1880 m/s → implicit a must'),TX('고체 전도 · 복사, 다성분 확산','solid conduction, radiation, multi-species diffusion')]],
+   ['SFR (Na)','var(--hot)',[TX('비압축 액체, ρ(T) 선형','incompressible, linear ρ(T)'),'Mikityuk Nu(Pe)',TX('저압 · 큰 열관성 → 긴 적분시간','low pressure, big inertia → long runs'),TX('축방향 전도, 풀 성층화','axial conduction, pool stratification')]],
+   ['MSR','var(--ok)',[TX('염 물성표 (불확실 10~50 %)','salt tables (10-50 % uncertain)'),TX('물 기준 상관식 재평가','reassess water correlations'),TX('동결 판정 T < T_melt','freeze check T < T_melt'),TX('선구핵종 수송, 유체 내 발열','precursor transport, heat in the fluid')]]]
+  .forEach((r,i)=>{
+    const y=Y0+i*(H+GY);
+    G.appendChild(mk('rect',{x:0,y:y,width:152,height:H,rx:4,fill:'var(--panel)',stroke:r[1],'stroke-width':1.6}));
+    G.appendChild(mk('text',{x:76,y:y+H/2+6,'text-anchor':'middle','font-family':'var(--mono)','font-size':17,fill:r[1],'font-weight':600})).textContent=r[0];
+    r[2].forEach((s,j)=>{
+      const x=X0+j*(W+GX), g=mk('g',{opacity:0}), hard=(i===2&&j>=2);
+      g.appendChild(mk('rect',{x:x,y:y,width:W,height:H,rx:4,fill:'var(--panel)',stroke:hard?'var(--hot)':'var(--rule)','stroke-width':hard?2:1}));
+      wrapT(s,12.5).slice(0,3).forEach((ln,k,a)=>g.appendChild(mk('text',{x:x+W/2,y:y+H/2+6+(k-(a.length-1)/2)*21,'text-anchor':'middle','font-family':'var(--sans)','font-size':16,fill:'var(--ink)','font-weight':300})).textContent=ln);
+      G.appendChild(g); cells.push(g);
+    });
+  });
+  if(RM){ cells.forEach(g=>g.setAttribute('opacity',1)); return; }
+  cells.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:300,delay:90*((i%4)*3+Math.floor(i/4)),fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 해석 관점 표 */
+S({tag:'CODE COMPARISON', ov:'[[노형별 계통코드 해석 비교||System-code analysis compared by reactor]]',
+src:'[[<b>출처</b> 본 교재 표 17.4 · 흑연 열용량이 헬륨의 73배 — 5장||<b>Source</b> This textbook, Table 17.4 · graphite heat capacity 73 × that of helium - ch. 5]]',
+abbr:'[[<b>Courant 조건</b> 한 시간간격에 유체가 칸 하나를 넘지 않게 하는 제약 · <b>GAMMA+</b> KAERI HTGR 계통코드 · <b>SAS4A/SASSYS-1 · SAM</b> ANL SFR · 첨단로 계통코드 · <b>SHRT</b> EBR-II 정지 열제거 시험 · <b>LOFC</b> 강제냉각 상실||<b>Courant limit</b> fluid may not cross more than one cell per step · <b>GAMMA+</b> KAERI&#8217;s HTGR code · <b>SAS4A/SASSYS-1 · SAM</b> ANL&#8217;s SFR and advanced-reactor codes · <b>SHRT</b> EBR-II shutdown heat removal tests · <b>LOFC</b> loss of forced cooling]]',
+html:`<h2 class="t">[[노형별 <em>계통코드 해석</em> 비교||<em>System-code analysis</em> compared by reactor]]</h2>
+<div class="body"><div class="fig">
+<table class="d sm">
+  <tr><th></th><th>VHTR</th><th>SFR</th><th>MSR</th></tr>
+  <tr><td>[[물성 클래스||Property class]]</td><td>[[이상기체 (해석적 미분)||ideal gas (analytic derivatives)]]</td><td>[[비압축 액체 (선형 ρT)||incompressible (linear ρ-T)]]</td><td>[[염 물성표 (불확실도 큼)||salt tables (large uncertainty)]]</td></tr>
+  <tr><td>[[두상 모델||Two-phase model]]</td><td>[[불필요||not needed]]</td><td>[[불필요 (정상운전)||not needed (normal operation)]]</td><td>[[불필요||not needed]]</td></tr>
+  <tr><td>[[전열 상관식||Heat transfer]]</td><td>[[KTA 3102.2 (페블) / Taylor (프리즘)||KTA 3102.2 (pebble) / Taylor (prism)]]</td><td>[[Mikityuk Nu–Pe||Mikityuk Nu-Pe]]</td><td>[[물 기준 상관식 재평가 필요||water correlations need reassessment]]</td></tr>
+  <tr><td>[[마찰||Friction]]</td><td>KTA 3102.3</td><td>[[통상||standard]]</td><td>[[통상, 단 점성 온도의존||standard, but viscosity varies with T]]</td></tr>
+  <tr><td>[[시간간격 제약||Time-step limit]]</td><td>[[물질 Courant (유속 30 m/s)||material Courant (30 m/s flow)]]</td><td>[[긴 적분시간||long transients]]</td><td>[[통상||standard]]</td></tr>
+  <tr><td>[[고체 열구조||Solid heat structures]]</td><td>[[지배적 (흑연이 유체의 73배)||dominant (graphite 73 × the fluid)]]</td><td>[[중요 (풀 열관성)||important (pool inertia)]]</td><td>[[보조적||secondary]]</td></tr>
+  <tr class="mark"><td>[[추가 물리||Extra physics]]</td><td>[[다성분 확산 (공기유입)||multi-species diffusion (air ingress)]]</td><td>[[축방향 전도, 풀 성층화||axial conduction, pool stratification]]</td><td>[[선구핵종 수송, 유체 내 발열, 동결||precursors, heat in fluid, freezing]]</td></tr>
+  <tr><td>[[대표 전용 코드||Dedicated codes]]</td><td>[[GAMMA+ (KAERI), MELCOR||GAMMA+ (KAERI), MELCOR]]</td><td>SAS4A/SASSYS-1, SAM</td><td>SAM, MARS-MSR</td></tr>
+  <tr><td>[[적분 검증 데이터||Integral validation]]</td><td>[[HTR-PM 2023, HTTR LOFC||HTR-PM 2023, HTTR LOFC]]</td><td>[[EBR-II SHRT, Phénix||EBR-II SHRT, Phénix]]</td><td>[[MSRE 펌프 기동 실험||MSRE pump start-up]]</td></tr>
+</table>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 무엇을 고를 것인가 */
+S({tag:'WHICH ONE, FOR WHAT', ov:'[[용도별 노형 선택||Choosing a reactor by use]]',
+src:'[[<b>출처</b> 본 교재 17.6절 · 경수로형 SMR(NuScale · i-SMR)은 3~4주차 덱 참조||<b>Source</b> This textbook &#167;17.6 · for LWR SMRs (NuScale, i-SMR) see the weeks 3-4 deck]]',
+abbr:'[[<b>공정열</b> 전기가 아니라 열 자체를 공장에 공급하는 것 · <b>파이로프로세싱</b> 사용후핵연료를 고온 용융염 속에서 전기화학적으로 분리하는 건식 재처리 · <b>초도호기</b> 같은 설계로 처음 짓는 호기||<b>process heat</b> heat itself supplied to industry, not electricity · <b>pyroprocessing</b> dry electrochemical separation of spent fuel in molten salt · <b>first-of-a-kind</b> the first unit of a design]]',
+html:`<h2 class="t">[[용도별 <em>노형 선택</em>||Choosing a <em>reactor</em> by use]]</h2>
+<ul class="b">
+  <li>[[이 교재의 세 노형은 <b>전부 초도호기 단계이거나 그 이전</b> — 인허가 경로의 명확성에서 경수로형 SMR 과 차이가 큼||All three are <b>at first-of-a-kind or earlier</b> - far behind LWR SMRs in how clear the licensing path is]]</li>
+  <li>[[<b class="ok">THINK Lab 의 자리</b> — 세 노형 모두 열수력 해석 도구와 실험 데이터가 부족함. 특히 해상 MSR 은 선체 운동이라는 새 축이 붙음. 가장 덜 채워진 칸이 가장 좋은 연구 주제임||<b class="ok">Where THINK Lab fits</b> - all three lack TH tools and data, and the sea-going MSR adds hull motion. The emptiest cell is the best research topic]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 366" role="img" aria-label="[[고온 공정열은 HTGR, 사용후핵연료 소각은 SFR, 해상은 MSR, 지금 지을 것은 경수로형 SMR||Process heat - HTGR; burning spent fuel - SFR; at sea - MSR; build now - LWR SMR]]">
+  <g id="ch"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#ch'), gs=[];
+  [[TX('고온 공정열','High-temperature process heat'),'HTGR','var(--amber)',TX('제철 · 수소 · 석유화학. 750~950 °C 를 내는 유일한 실용 노형 — 포스코 · 롯데케미칼이 과제에 참여','steel, hydrogen, petrochemicals. The only practical reactor for 750-950 °C - POSCO and Lotte Chemical are in the project')],
+   [TX('사용후핵연료 소각','Burning spent fuel'),'SFR','var(--hot)',TX('고속 스펙트럼이 필요한 일에는 대안이 없음. 파이로프로세싱과 짝을 이룸','no alternative when a fast spectrum is needed. Pairs with pyroprocessing')],
+   [TX('해상 · 부유식','At sea, floating'),'MSR','var(--ok)',TX('상압 · 단상 · 중력 구동 정지 · 작은 노심. 대가는 동결과 정비','atmospheric, single phase, gravity-driven shutdown, small core. The price is freezing and maintenance')],
+   [TX('지금 지을 수 있는 것','What can be built now'),TX('경수로형 SMR','LWR SMR'),'var(--cool)',TX('NuScale · i-SMR. 인허가 경로가 가장 명확함','NuScale, i-SMR. The clearest licensing path')]]
+  .forEach((c,i)=>{
+    const x=i*283, g=mk('g',{transform:'translate('+x+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:270,height:360,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:270,height:3,fill:c[2]}));
+    wrapT(c[0],12.5).slice(0,2).forEach((ln,j)=>g.appendChild(mk('text',{x:20,y:40+j*23,'font-family':'var(--sans)','font-size':18,fill:'var(--ink-2)','font-weight':400})).textContent=ln);
+    g.appendChild(mk('text',{x:20,y:130,'font-family':'var(--mono)','font-size':c[1].length>6?25:32,fill:c[2],'font-weight':600})).textContent=c[1];
+    wrapT(c[3],14.5).slice(0,8).forEach((ln,j)=>g.appendChild(mk('text',{x:20,y:176+j*24,'font-family':'var(--sans)','font-size':15.5,fill:'var(--ink)','font-weight':300})).textContent=ln);
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:340,delay:160*i,fill:'forwards'}));
+}});
+</script>

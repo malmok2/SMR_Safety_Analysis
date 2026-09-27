@@ -1,0 +1,181 @@
+<script>
+/* ================================================================
+   SECTION 15 — 얼려 놓은 마개와 오프가스, MSR 안전  (교재 15장)
+   ================================================================ */
+SECT('15 · [[MSR 안전||MSR safety]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;15 얼려 놓은 마개와 오프가스 — MSR 안전||&#167;15 Freeze plugs and off-gas - MSR safety]]',
+html:`[[<div class="no">15</div><h2>얼려 놓은 마개와 오프가스</h2><div class="ln"></div>
+<p>MSR의 안전 논리는 강력하다. 그리고 <b>남은 난제도 크다</b>. 격납의 의미가 건물에서 오프가스 계통으로 옮겨 가고,
+화학 계측기 하나가 구조 건전성을 지키는 노형이다.</p>||<div class="no">15</div><h2>Freeze plugs and off-gas</h2><div class="ln"></div>
+<p>The MSR safety case is strong. <b>So are the open problems</b>. Containment moves from the building to the off-gas system,
+and a chemistry probe guards structural integrity.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 온도계수 */
+S({tag:'FOUR STRONG ARGUMENTS', ov:'[[강한 논거 넷과 MSRE 온도계수의 기여 분해||Strong arguments, and the MSRE temperature coefficient]]',
+src:'[[<b>출처</b> 본 교재 15.1절 표 15.1 · MSRE 실측 등온 온도계수 −13.14 ± 0.36 pcm/K · 기여 분해는 Serpent2 재계산 · 전출력 운전 중 제어봉을 의도적으로 인출했을 때 9 MWt 부근에서 운전원 조치 없이 출력이 억제됨||<b>Source</b> This textbook &#167;15.1, Table 15.1 · MSRE measured isothermal coefficient −13.14 ± 0.36 pcm/K · contributions recomputed with Serpent2 · with rods deliberately withdrawn at full power, output limited itself near 9 MWt with no operator action]]',
+abbr:'[[<b>등온 온도계수</b> 계통 전체 온도를 1 K 올릴 때의 반응도 변화 · <b>흑연 열중성자 산란</b> 흑연이 뜨거워지며 중성자 스펙트럼이 바뀌는 효과 · <b>Serpent2</b> 몬테카를로 중성자 수송 코드||<b>isothermal coefficient</b> reactivity change per kelvin of uniform heating · <b>graphite thermal scattering</b> the spectrum shift as graphite heats · <b>Serpent2</b> a Monte Carlo neutron transport code]]',
+html:`<h2 class="t">[[강한 논거 넷과 MSRE <em>온도계수</em>의 기여 분해||Strong arguments, and the MSRE <em>temperature coefficient</em>]]</h2>
+<ul class="b">
+  <li>[[가장 큰 기여가 <b class="ok">연료염 열팽창</b> — 연료가 뜨거워지면 팽창해 노심 밖으로 밀려남. <b>연료 자체가 안전계통</b>임||The biggest term is <b class="ok">fuel-salt expansion</b> - hot fuel expands out of the core. <b>The fuel itself is a safety system</b>]]</li>
+  <li>[[다만 <b class="amb">동결 플러그가 녹는 시간과 신뢰도의 공개 정량 데이터는 찾기 어려움</b> — 인용 시 Tiberga 외(Nucl. Eng. Des., 2020)와 ORNL-TM-0128 원문을 직접 볼 것||But <b class="amb">public quantitative data on freeze-plug melt time and reliability are scarce</b> - cite Tiberga et al. (Nucl. Eng. Des., 2020) and ORNL-TM-0128 directly]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 800 380" role="img" aria-label="[[MSRE 온도계수 기여 — 연료염 밀도, 흑연 산란, 도플러, 흑연 팽창은 음, 강재 팽창만 양||MSRE coefficient contributions - salt density, graphite scattering, Doppler and graphite expansion negative; only steel expansion positive]]">
+    <g id="tc-g"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout good"><span class="k">[[MSRE 실측 합계||MSRE measured total]]</span><span class="v">−13.14<small>pcm/K</small></span></div>
+    <div class="readout"><span class="k">[[나머지 셋||The other three]]</span><span class="v" style="font-size:15.5px;line-height:1.55">[[② 저압 — 비점까지 700 K 넘는 여유<br>③ 피복재 없음 — 파손 · 산화 · 수소 없음<br>④ 동결 플러그 + 드레인 탱크||&#9313; low pressure - over 700 K to boiling<br>&#9314; no cladding - no failure, oxidation or hydrogen<br>&#9315; freeze plug + drain tanks]]</span></div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#tc-g'), X0=280, k=56, x0=X0+7*k, bars=[];
+  /* 가로축 −7 ~ +2 pcm/K, 0 은 x0 */
+  const sx=v=>x0+v*k;
+  [-6,-4,-2,0,2].forEach(v=>{ G.appendChild(mk('line',{x1:sx(v),x2:sx(v),y1:10,y2:320,class:v===0?'':'grid',stroke:v===0?'var(--ink-3)':null}));
+    G.appendChild(mk('text',{x:sx(v),y:342,'text-anchor':'middle',class:'lbl'})).textContent=(v>0?'+':'')+v; });
+  G.appendChild(mk('text',{x:sx(2),y:366,'text-anchor':'end',class:'lbl'})).textContent='pcm/K';
+  const R=[[TX('연료염 밀도 (열팽창)','fuel-salt density'),-5.6,-6.0,'var(--ok)'],[TX('흑연 열중성자 산란','graphite scattering'),-4.6,-5.1,'var(--ok)'],
+           [TX('연료 도플러','fuel Doppler'),-2.6,-3.3,'var(--ok)'],[TX('흑연 열팽창','graphite expansion'),-0.8,-1.0,'var(--ok)'],[TX('강재 열팽창','steel expansion'),0.7,1.3,'var(--hot)']];
+  R.forEach((r,i)=>{
+    const y=26+i*60, lo=Math.min(r[1],r[2]), hi=Math.max(r[1],r[2]);
+    G.appendChild(mk('text',{x:X0-16,y:y+26,'text-anchor':'end','font-family':'var(--sans)','font-size':16.5,fill:'var(--ink)','font-weight':600})).textContent=r[0];
+    const a=lo<0?sx(hi):sx(0), w=lo<0?sx(0)-sx(hi):sx(lo)-sx(0);
+    const b=mk('rect',{x:lo<0?sx(0):sx(0),y:y+6,width:'0',height:30,fill:r[3],opacity:0.75}); G.appendChild(b); bars.push([b,a,w]);
+    G.appendChild(mk('rect',{x:sx(lo),y:y+2,width:sx(hi)-sx(lo),height:38,fill:'none',stroke:r[3],'stroke-width':1.6,'stroke-dasharray':'3 3'}));
+    G.appendChild(mk('text',{x:lo<0?sx(0)+10:sx(0)-10,y:y+27,'text-anchor':lo<0?'start':'end','font-family':'var(--mono)','font-size':14,fill:r[3],'font-weight':600})).textContent=r[1]+' ~ '+r[2];
+  });
+  G.appendChild(mk('text',{x:X0-16,y:320,'text-anchor':'end',class:'lbl'})).textContent=TX('점선 상자 = 범위','dashed box = range');
+  if(RM){ bars.forEach(b=>{ b[0].setAttribute('x',b[1]); b[0].setAttribute('width',b[2]); }); return; }
+  bars.forEach((b,i)=>b[0].animate([{x:sx(0)+'px',width:'0px'},{x:b[1]+'px',width:b[2]+'px'}],{duration:650,delay:150*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- 격납의 의미 */
+S({tag:'WHERE CONTAINMENT IS', ov:'[[MSR 의 격납 — 원자로 건물이 아니라 오프가스 계통||MSR containment - the off-gas system, not the building]]',
+src:'[[<b>출처</b> 본 교재 15.2절 그림 15.1 · MSBR(2250 MWt) 개념 기준 — 오프가스 붕괴열 21.3 MW(전체의 약 1 %), 그중 약 9 % 는 에어로졸·미스트, 기체 열부하의 80 % 가 배출 후 1 h 안, 2일 뒤 1 % 미만 · 2 h 지연탱크 + 47 h 붕괴 · 90일 격납이면 Xe-133 반감기 17회||<b>Source</b> This textbook &#167;15.2, Fig. 15.1 · for the MSBR (2250 MWt) concept - off-gas decay heat 21.3 MW (about 1 % of output), about 9 % of it as aerosol and mist, 80 % of the gas heat load within 1 h, under 1 % after 2 days · 2 h hold-up plus 47 h decay · 90 days of hold-up is 17 Xe-133 half-lives]]',
+abbr:'[[<b>선원항</b> 사고 시 환경으로 나갈 수 있는 방사성물질 · <b>지연탱크</b> 기체를 가둬 붕괴시키는 탱크 · <b>에어로졸 · 미스트</b> 기체에 섞인 미세 고체 · 액체 입자||<b>source term</b> radioactivity that could reach the environment · <b>hold-up tank</b> a tank that holds gas while it decays · <b>aerosol, mist</b> fine solid or liquid particles carried in gas]]',
+html:`<h2 class="t">[[MSR 의 격납 — 원자로 건물이 아니라 <em>오프가스 계통</em>||MSR containment - <em>the off-gas system</em>, not the building]]</h2>
+<ul class="b">
+  <li>[[경수로 선원항의 첫 항(연료 &#8594; 계통)이 MSR에서는 무의미 — 핵분열생성물은 처음부터 계통 안에 있고, 휘발성 핵종은 <b>정상운전 중에 이미 오프가스로</b> 뽑혀 나가 있음||The first factor of an LWR source term (fuel &#8594; system) means nothing here - fission products are in the system from the start, and volatiles are <b>already in the off-gas during normal operation</b>]]</li>
+  <li>[[<b class="amb">&#8220;MSR은 선원항이 작다&#8221;는 반만 맞음</b> — 오프가스라는 고농도 지점이 상시 존재하고, 그 계통은 원자로 건물만큼 튼튼하게 설계되지 않음. 인허가가 가장 집요하게 파고들 곳||<b class="amb">&#8220;MSRs have a small source term&#8221; is half true</b> - the off-gas is a standing high-concentration point, and it is not built like a reactor building. Licensing will dig here hardest]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f15_01', cap:'[[정상운전 중 방사성물질 재고의 위치 (개념) — 경수로는 연료 알갱이 속, MSR 은 1차 유체와 오프가스·정화 계통 · 교재 그림 15.1||Where the radioactive inventory sits in normal operation (concept) - inside the fuel for an LWR, in the fluid and off-gas for an MSR · textbook Fig. 15.1]]'})}
+  </div>
+  <div class="side" style="width:320px">
+    <div class="formula" style="font-size:14px;text-align:left;line-height:1.8">[[환경 방출||release]] <span class="op">=</span> I₀ × f<sub>[[연료→계통||fuel→sys]]</sub><br>&nbsp;&nbsp;× f<sub>[[계통→격납||sys→cont]]</sub> × f<sub>[[격납→환경||cont→env]]</sub></div>
+    <div class="readout warn"><span class="k">[[MSBR 오프가스 붕괴열||MSBR off-gas decay heat]]</span><span class="v">21.3<small>MW · [[전체의 1 %||1 % of output]]</small></span></div>
+    <div class="readout"><span class="k">[[기체 열부하 — 1 h 안 · 2일 뒤||Gas heat load - within 1 h · after 2 d]]</span><span class="v">80 %<small>· &lt; 1 %</small></span></div>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 정량화 안 된 것 */
+S({tag:'NOT YET QUANTIFIED', ov:'[[정량화되지 않은 것들 — ORNL MSR PIRT 의 고중요 · 저지식 현상||Unquantified - high-importance, low-knowledge items in the ORNL PIRT]]',
+src:'[[<b>출처</b> 본 교재 15.3절 · MSRE 에서 염의 1 % 미만이 에어로졸화 — 귀금속과 Kr · Xe 붕괴 딸핵종(Cs · Ce · Ba · Rb · Sr · Y) 포함 · 염 입자 농도 추정치는 10⁻⁸ ~ 10⁻⁴ g/cm³||<b>Source</b> This textbook &#167;15.3 · under 1 % of MSRE salt became aerosol, carrying noble metals and Kr/Xe daughters (Cs, Ce, Ba, Rb, Sr, Y) · salt-particle concentration estimates span 10⁻⁸ to 10⁻⁴ g/cm³]]',
+abbr:'[[<b>PIRT</b> 현상 식별 · 중요도 순위표 · <b>화학종 분화(speciation)</b> 원소가 어떤 화합물 형태로 존재하는지 · <b>휘발</b> 액체에서 기체로 날아가는 것 · <b>딸핵종</b> 붕괴로 생긴 핵종||<b>PIRT</b> Phenomena Identification and Ranking Table · <b>speciation</b> which chemical form an element takes · <b>volatilisation</b> passing from liquid to gas · <b>daughter</b> a nuclide produced by decay]]',
+html:`<h2 class="t">[[정량화되지 않은 것들 — <em>ORNL MSR PIRT</em> 의 고중요 · 저지식 현상||Unquantified - high-importance, low-knowledge items in the <em>ORNL PIRT</em>]]</h2>
+<ul class="b">
+  <li>[[정직하게 말하면 MSR 안전의 정량적 기반은 <b>아직 얇음</b> — 염 입자 농도 추정치가 <b class="hot">네 자릿수(10⁻⁸ ~ 10⁻⁴ g/cm³)</b>에 걸쳐 흩어져 있어 인허가에 쓸 정밀도가 아님||Honestly, the quantitative basis of MSR safety is <b>still thin</b> - salt-particle estimates spread over <b class="hot">four orders of magnitude (10⁻⁸ to 10⁻⁴ g/cm³)</b>, not licensing precision]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 380" role="img" aria-label="[[PIRT 가 중요도 높음·지식수준 낮음으로 꼽은 다섯 현상||Five phenomena the PIRT ranks high importance, low knowledge]]">
+  <g id="pi-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#pi-g'), gs=[];
+  [[TX('염 유출 시 액적 에어로졸화와 비산','Droplet aerosolisation on a salt spill'),TX('염이 새면 어디까지 날아가는가','how far spilled salt travels')],
+   [TX('염–기재 상호작용과 부식','Salt-substrate interaction and corrosion'),TX('구조재가 얼마나 빨리 삭는가','how fast structures corrode')],
+   [TX('염으로부터 방사성핵종 휘발','Radionuclide volatilisation from salt'),TX('온도에 따라 무엇이 얼마나 날아가는가','what leaves, and how much, with temperature')],
+   [TX('화학종 분화와 유동염–산소 반응','Speciation and flowing salt with oxygen'),TX('어떤 형태로 존재하고 공기와 어떻게 반응하는가','in what form, and how it reacts with air')],
+   [TX('염–커버가스 방사성물질 분배','Salt / cover-gas partitioning'),TX('열화학 물성 자체가 부족 — PIRT 최우선','the thermochemical data are missing - PIRT top priority')]]
+  .forEach((c,i)=>{
+    const g=mk('g',{transform:'translate(0,'+(i*75)+')',opacity:0});
+    g.appendChild(mk('rect',{width:1120,height:64,fill:'var(--panel)',stroke:i===4?'var(--hot)':'var(--rule)','stroke-width':i===4?1.8:1}));
+    g.appendChild(mk('rect',{width:4,height:64,fill:'var(--hot)'}));
+    g.appendChild(mk('text',{x:24,y:41,'font-family':'var(--mono)','font-size':20,fill:'var(--hot)','font-weight':600})).textContent=String(i+1);
+    g.appendChild(mk('text',{x:64,y:40,'font-family':'var(--sans)','font-size':18.5,fill:'var(--ink)','font-weight':600})).textContent=c[0];
+    g.appendChild(mk('text',{x:640,y:40,'font-family':'var(--sans)','font-size':16.5,fill:'var(--ink-2)','font-weight':300})).textContent=c[1];
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:300,delay:160*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 삼중수소 */
+S({tag:'TRITIUM', ov:'[[삼중수소 — MSR 의 만성 질환||Tritium - the MSR&#8217;s chronic condition]]',
+src:'[[<b>출처</b> 본 교재 15.4절 표 15.2 · FLiBe 는 Li-6(n,α)T · Li-7(n,n′α)T · Be 연쇄반응 · F-19 반응으로 삼중수소를 만듦 · Hastelloy-N 투과 계수(500~700 °C 측정) Φ<sub>D</sub> = (2.40 ± 0.70)×10⁻⁷ mol m⁻¹s⁻¹Pa⁻¹ᐟ², E<sub>a</sub> = −62.2 ± 1.8 kJ/mol||<b>Source</b> This textbook &#167;15.4, Table 15.2 · FLiBe makes tritium via Li-6(n,α)T, Li-7(n,n′α)T, beryllium chains and F-19 reactions · Hastelloy-N permeability (measured 500-700 °C) Φ<sub>D</sub> = (2.40 ± 0.70)×10⁻⁷ mol m⁻¹s⁻¹Pa⁻¹ᐟ², E<sub>a</sub> = −62.2 ± 1.8 kJ/mol]]',
+abbr:'[[<b>투과</b> 수소 동위원소가 뜨거운 금속 벽을 그대로 통과하는 현상 · <b>게터</b> 기체를 붙잡는 흡착재 · <b>TBq · Ci</b> 방사능 단위 — 1 Ci = 37 GBq||<b>permeation</b> hydrogen isotopes passing straight through hot metal · <b>getter</b> a material that traps gas · <b>TBq, Ci</b> activity units - 1 Ci = 37 GBq]]',
+html:`<h2 class="t">[[<em>삼중수소</em> — MSR 의 만성 질환||<em>Tritium</em> - the MSR&#8217;s chronic condition]]</h2>
+<ul class="b">
+  <li>[[삼중수소는 <b>뜨거운 금속을 그냥 통과함</b>. MSRE에서 계산 생성량의 6~10 %가 격납 분위기로, 또 6~10 %가 열제거 계통으로 — <b class="hot">실측을 맞추려면 투과율을 1000배 낮춰야 했음</b>(모델 불확실성)||Tritium <b>walks straight through hot metal</b>. At MSRE 6-10 % reached the containment atmosphere and another 6-10 % the heat-removal loop - <b class="hot">matching it needed permeability cut 1000-fold</b> (model uncertainty)]]</li>
+  <li>[[해상에서 특히 중요함 — 육상이면 굴뚝으로 관리 방출하지만, 선박은 <b class="amb">방출 지점이 계속 움직이고 항만국마다 기준이 다름</b>||It matters more at sea - on land it goes up a stack, but a ship&#8217;s <b class="amb">release point keeps moving and every port has its own rules</b>]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <table class="d">
+    <tr><th>[[대상||Plant]]</th><th>[[삼중수소 생성 · 방출||Tritium produced or released]]</th></tr>
+    <tr><td>[[410 MWe 페블베드 FHR (평형)||410 MWe pebble-bed FHR (equilibrium)]]</td><td class="n">[[93 TBq/일 (2,500 Ci/일) · 초기 666 TBq/일||93 TBq/d (2,500 Ci/d) · 666 TBq/d at first]]</td></tr>
+    <tr><td>[[FHR 일반 범위||FHR in general]]</td><td class="n">[[500~5,000 Ci/일||500-5,000 Ci/d]]</td></tr>
+    <tr class="mark"><td>2250 MWt MSR</td><td class="n">[[약 89.5 TBq/일 ≈ 250 mg/일||about 89.5 TBq/d ≈ 250 mg/d]]</td></tr>
+  </table>
+  </div>
+  <div class="side">
+    <div class="readout hi"><span class="k">[[저감 방법 넷||Four mitigations]]</span><span class="v" style="font-size:15.5px;line-height:1.6">[[세라믹 투과 장벽 · 스윕가스 · 막 스트리핑 · 흑연 등 게터 포집 · 수소 역확산||ceramic permeation barriers · sweep gas and membrane stripping · graphite and other getters · hydrogen counter-diffusion]]</span></div>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 재료 · 화학 */
+S({tag:'CHEMISTRY IS A SAFETY SYSTEM', ov:'[[안전계통으로서의 재료와 화학 — 산화환원 비와 Hastelloy-N||Materials and chemistry as safety systems - redox, Hastelloy-N]]',
+src:'[[<b>출처</b> 본 교재 15.5절 · 부식 속도는 800 °C/비 85 가 760 °C/비 42 의 2배 이상 · 표면 크롬은 낮은 산화환원에서 3.5 wt%, 높은 비에서 1.7 wt% · Hastelloy-N 은 ASME Sec. VIII Div.1 에서 최대 704 °C 까지만 인정||<b>Source</b> This textbook &#167;15.5 · corrosion at 800 °C / ratio 85 is more than twice that at 760 °C / ratio 42 · surface chromium 3.5 wt% at low redox, 1.7 wt% at high · Hastelloy-N is allowed only to 704 °C under ASME Sec. VIII Div.1]]',
+abbr:'[[<b>U(IV)/U(III) 비</b> 염 속 4가 · 3가 우라늄의 비 — 산화환원 상태의 지표 · <b>입계균열</b> 결정립 경계를 따라 난 균열 · <b>헬륨 취화</b> 조사로 생긴 헬륨이 결정립계에 공동을 만들어 약해지는 것||<b>U(IV)/U(III) ratio</b> tetravalent to trivalent uranium in the salt - the redox indicator · <b>intergranular cracking</b> cracks along grain boundaries · <b>helium embrittlement</b> irradiation helium forming cavities at grain boundaries]]',
+html:`<h2 class="t">[[<em>안전계통</em>으로서의 재료와 화학 — 산화환원 비와 Hastelloy-N||Materials and chemistry as <em>safety systems</em> - redox, Hastelloy-N]]</h2>
+<ul class="b">
+  <li>[[<b>화학 계측기 하나가 구조 건전성을 지킴</b> — 경수로의 붕산 관리와는 차원이 다른 결합. 계통코드에 이 결합은 없고, 별도 화학 모델은 아직 아무도 제대로 만들지 않았음||<b>One chemistry probe guards structural integrity</b> - a coupling far beyond boron control in an LWR. System codes lack it, and no one has built the chemistry model properly]]</li>
+  <li>[[Hastelloy-N은 ASME Sec. III Div.5에 <b class="hot">미등재</b> — MSR 상용화의 실질적 병목은 <b>기술이 아니라 코드 등재</b>||Hastelloy-N is <b class="hot">not listed</b> in ASME Sec. III Div.5 - the real bottleneck is <b>code listing, not technology</b>]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <table class="d sm">
+    <tr><th>[[U(IV)/U(III) 비||U(IV)/U(III) ratio]]</th><th>[[온도||Temperature]]</th><th>[[결과||Result]]</th></tr>
+    <tr><td>[[30~40 미만||below 30-40]]</td><td class="n">[[760 °C 까지||up to 760 °C]]</td><td>[[크롬 부식 허용 수준||chromium corrosion acceptable]]</td></tr>
+    <tr><td>42</td><td class="n">760 °C</td><td>[[텔루륨 입계균열 없음||no tellurium cracking]]</td></tr>
+    <tr class="mark"><td>60</td><td class="n">760 °C</td><td>[[강한 입계균열||severe intergranular cracking]]</td></tr>
+    <tr class="mark"><td>85</td><td class="n">800 °C</td><td>[[최대 균열 깊이 148 μm||cracks up to 148 μm deep]]</td></tr>
+  </table>
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">[[Hastelloy-N 열화 기구||Hastelloy-N degradation]]</span><span class="v" style="font-size:15.5px;line-height:1.6">[[① 헬륨 취화 — Ni-58 전환 헬륨이 결정립계에 공동<br>② 텔루륨 입계균열 — 산화환원 의존<br>③ 650~700 °C 이상 장기 강도 부족||&#9312; helium embrittlement - Ni-58 helium cavities at grain boundaries<br>&#9313; tellurium cracking - redox-dependent<br>&#9314; weak long-term strength above 650-700 °C]]</span></div>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 심층방어 */
+S({tag:'DEFENCE IN DEPTH REDRAWN', ov:'[[심층방어를 다시 그린다 — 경수로와 MSR||Defence in depth redrawn - LWR against MSR]]',
+src:'[[<b>출처</b> 본 교재 15.6절 표 15.3 · 5단계 틀은 「SMR 설계요건과 공학적안전설비」 · 사건수목 · 고장수목은 「PSA 입문」||<b>Source</b> This textbook &#167;15.6, Table 15.3 · the five-level frame is from <i>SMR Design Requirements and ESF</i> · event and fault trees from <i>Introduction to PSA</i>]]',
+abbr:'[[<b>PSA</b> 확률론적안전성평가 · <b>사건수목 · 고장수목</b> 사고 경로 · 기기 고장 조합을 나무 모양으로 그린 분석 · <b>만성 열화</b> 수년에 걸쳐 서서히 진행되는 손상||<b>PSA</b> probabilistic safety assessment · <b>event tree, fault tree</b> accident paths and failure combinations drawn as trees · <b>chronic degradation</b> damage building slowly over years]]',
+html:`<h2 class="t">[[심층방어를 <em>다시 그린다</em> — 경수로와 MSR||Defence in depth <em>redrawn</em> - LWR against MSR]]</h2>
+<ul class="b">
+  <li>[[<b class="ok">4단계가 사라지는 것</b>이 가장 극적 — 노심 용융 · 용융물-콘크리트 반응 · 수소 폭발 · 노내 유지 연구의 절반이 무의미. 연료가 이미 액체이기 때문||The most dramatic change - <b class="ok">level 4 disappears</b>. Half of severe-accident research (core melt, MCCI, hydrogen, in-vessel retention) no longer applies; the fuel is already liquid]]</li>
+  <li>[[대신 <b class="hot">1단계가 안전 등급으로</b> 올라옴 — 화학 관리 실패는 급성 사고가 아니라 수년에 걸친 만성 열화이고 기존 PSA 틀로는 다루기 어려움. &#8220;산화환원 제어 실패&#8221;를 사건수목에 어떻게 넣을 것인가 — 좋은 연구 주제||Instead <b class="hot">level 1 becomes safety-grade</b> - chemistry failure is chronic, over years, and fits PSA badly. How to put &#8220;loss of redox control&#8221; into an event tree is a good research topic]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d">
+  <tr><th>[[단계||Level]]</th><th>[[경수로||LWR]]</th><th>MSR</th></tr>
+  <tr class="mark"><td>[[1 정상운전||1 Normal operation]]</td><td>[[재료 · 화학은 부차적||materials and chemistry secondary]]</td><td>[[화학(산화환원) · 동결 방지가 안전 기능||chemistry (redox) and freeze protection are safety functions]]</td></tr>
+  <tr><td>[[2 이상상태 감지||2 Anomaly detection]]</td><td>[[압력 · 수위 계측||pressure and level]]</td><td>[[온도 · 유량 · 화학 계측||temperature, flow, chemistry]]</td></tr>
+  <tr><td>[[3 사고 완화||3 Accident mitigation]]</td><td>[[ECCS · 격납 살수||ECCS, containment spray]]</td><td>[[동결 플러그 + 드레인 탱크 (피동)||freeze plug + drain tanks (passive)]]</td></tr>
+  <tr class="mark"><td>[[4 중대사고||4 Severe accidents]]</td><td>[[노심용융 관리||core-melt management]]</td><td>[[연료가 이미 액체 — 용융 개념이 없음||fuel already liquid - no &#8220;melt&#8221;]]</td></tr>
+  <tr><td>[[5 비상대응||5 Emergency response]]</td><td>[[소개계획||evacuation planning]]</td><td>[[오프가스 · 삼중수소 방출 관리||off-gas and tritium release]]</td></tr>
+</table>
+</div></div>`});
+</script>

@@ -1,0 +1,213 @@
+<script>
+/* ================================================================
+   SECTION 13 — 선구핵종이 흘러 나간다, 순환연료의 핵특성  (교재 13장)
+   ================================================================ */
+SECT('13 · [[순환연료 핵특성||Circulating-fuel kinetics]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;13 선구핵종이 흘러 나간다||&#167;13 The precursors drift out]]',
+html:`[[<div class="no">13</div><h2>선구핵종이 흘러 나간다</h2><div class="ln"></div>
+<p>원자로를 사람이 제어할 수 있는 이유는 지발중성자다. 그 중성자를 내는 선구핵종이 <b>연료와 함께 노심 밖으로</b> 흘러 나가면
+반응도의 척도 자체가 바뀐다. MSR 해석에서 가장 먼저 배워야 할 물리다.</p>||<div class="no">13</div><h2>The precursors drift out</h2><div class="ln"></div>
+<p>Reactors are controllable because of delayed neutrons. When the precursors that emit them <b>flow out of the core with the fuel</b>,
+the very scale of reactivity changes. It is the first physics to learn in MSR analysis.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 지발중성자 */
+S({tag:'DELAYED NEUTRONS IN MOTION', ov:'[[지발중성자는 어디서 나오는가 — 흐르는 연료의 βeff||Where delayed neutrons come from - βeff in flowing fuel]]',
+src:'[[<b>출처</b> 본 교재 13.1절 · 즉발중성자는 10⁻⁴ s 안에, 약 0.65 % 는 선구핵종이 수 초~수십 초 뒤 베타붕괴하며 냄 · β : U-235 약 0.65 %, Pu-239 약 0.21 %, U-233 약 0.27 % · 그림은 개념도 — 수치는 다음 장의 표||<b>Source</b> This textbook &#167;13.1 · prompt neutrons within 10⁻⁴ s; about 0.65 % come seconds to tens of seconds later from precursor beta decay · β: U-235 about 0.65 %, Pu-239 about 0.21 %, U-233 about 0.27 % · the drawing is a concept - numbers on the following slides]]',
+abbr:'[[<b>선구핵종(precursor)</b> 베타붕괴하며 지발중성자를 내는 핵분열생성물 · <b>βeff</b> 유효 지발중성자분율 · <b>$(달러)</b> βeff 만큼의 반응도 · <b>중성자 생성시간</b> 중성자 한 세대의 평균 시간||<b>precursor</b> a fission product that emits a delayed neutron on beta decay · <b>βeff</b> effective delayed-neutron fraction · <b>$ (dollar)</b> a reactivity equal to βeff · <b>generation time</b> the mean time of one neutron generation]]',
+html:`<h2 class="t">[[지발중성자는 어디서 나오는가 — <em>흐르는 연료의 βeff</em>||Where delayed neutrons come from - <em>βeff in flowing fuel</em>]]</h2>
+<ul class="b">
+  <li>[[선구핵종이 노심을 빠져나가 펌프와 열교환기를 도는 동안 붕괴하면 <b>그 중성자는 노심에 기여하지 못함</b> — βeff,순환 &lt; βeff,정지||A precursor that decays while out in the pump and exchanger <b>contributes nothing to the core</b> - βeff,circulating &lt; βeff,static]]</li>
+  <li>[[MSRE에서 이 감소는 <b class="hot">34 %</b> — 작은 보정이 아니라 <b>반응도 척도 자체가 바뀌는</b> 문제임. βeff가 작아지면 같은 반응도가 더 위험해짐||At MSRE the loss is <b class="hot">34 %</b> - not a small correction but <b>a change in the reactivity scale itself</b>. A smaller βeff makes the same reactivity more dangerous]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 800 360" role="img" aria-label="[[연료염을 따라 도는 선구핵종이 노심 안에서 붕괴하면 중성자가 노심에 기여하고, 노심 밖에서 붕괴하면 기여하지 못함||Precursors riding the fuel salt - decays inside the core count, decays outside do not]]">
+    <g id="pc-g"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout good"><span class="k">[[노심 안에서 붕괴||Decays in the core]]</span><span class="v" style="font-size:18px">[[중성자가 노심에 기여||neutron counts]]</span></div>
+    <div class="readout"><span class="k">[[노심 밖에서 붕괴||Decays outside]]</span><span class="v" style="font-size:18px;color:var(--ink-2)">[[기여 못 함||lost]]</span></div>
+    <div class="readout warn"><span class="k">[[MSRE · U-235||MSRE · U-235]]</span><span class="v">654 &#8594; 431<small>pcm</small></span></div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#pc-g');
+  G.appendChild(mk('rect',{x:40,y:60,width:220,height:240,rx:14,fill:'var(--hot)',opacity:0.14,stroke:'var(--hot)','stroke-width':1.6}));
+  G.appendChild(mk('text',{x:150,y:48,'text-anchor':'middle',class:'val',fill:'var(--hot)'})).textContent=TX('노심 — 17 s','core - 17 s');
+  G.appendChild(mk('rect',{x:540,y:60,width:220,height:240,rx:14,fill:'var(--panel)',stroke:'var(--cool)','stroke-width':1.6}));
+  G.appendChild(mk('text',{x:650,y:48,'text-anchor':'middle',class:'val',fill:'var(--cool)'})).textContent=TX('펌프 · 열교환기 — 8.2 s','pump and HX - 8.2 s');
+  const path=mk('path',{d:'M150,280 V90 H650 V280 H150',fill:'none',stroke:'var(--rule)','stroke-width':3}); G.appendChild(path);
+  const L=path.getTotalLength(), N=26, P=[];
+  for(let i=0;i<N;i++){ const c=mk('circle',{r:5,fill:'var(--amber)'}); G.appendChild(c);
+    const ring=mk('circle',{r:5,fill:'none',stroke:'var(--ok)','stroke-width':2,opacity:0}); G.appendChild(ring);
+    P.push({c:c,ring:ring,off:i/N,life:0.4+((i*37)%23)/23*1.6,flash:-1}); }
+  G.appendChild(mk('text',{x:400,y:338,'text-anchor':'middle',class:'lbl'})).textContent=TX('노란 점 = 선구핵종 · 초록 고리 = 노심 안 붕괴(기여) · 회색 = 노심 밖 붕괴(손실)','yellow = precursor · green ring = decays in core (counts) · grey = decays outside (lost)');
+  const inCore=pt=>pt.x<=262;
+  raf(t=>{
+    P.forEach(p=>{
+      const u=((t*0.045)+p.off)%1, pt=path.getPointAtLength(u*L);
+      p.c.setAttribute('cx',pt.x); p.c.setAttribute('cy',pt.y);
+      const ph=(t+p.off*7)%p.life*1.0, age=ph/p.life;
+      if(age>0.92){ p.c.setAttribute('fill',inCore(pt)?'var(--ok)':'var(--ink-3)');
+        if(inCore(pt)){ p.ring.setAttribute('cx',pt.x); p.ring.setAttribute('cy',pt.y); p.ring.setAttribute('r',(5+(age-0.92)*160).toFixed(1)); p.ring.setAttribute('opacity',(1-(age-0.92)/0.08).toFixed(2)); } }
+      else { p.c.setAttribute('fill','var(--amber)'); p.ring.setAttribute('opacity',0); }
+    });
+  });
+}});
+
+
+/* ---------------------------------------------------------------- 이동 방정식 */
+S({tag:'PRECURSOR TRANSPORT', ov:'[[선구핵종 이동 방정식 — 이류항이 붙는다||The precursor transport equation - an advection term appears]]',
+src:'[[<b>출처</b> 본 교재 13.2절 · MSRE 총 순환주기 25.2 s, 노심 체류 17 s, τ<sub>out</sub> = 8.2 s · 그룹 상수 λ ≈ 3.0 s⁻¹(반감기 0.23 s) ~ 0.0124 s⁻¹(56 s)||<b>Source</b> This textbook &#167;13.2 · MSRE loop transit 25.2 s, 17 s in the core, τ<sub>out</sub> = 8.2 s · group constants from λ ≈ 3.0 s⁻¹ (0.23 s half-life) to 0.0124 s⁻¹ (56 s)]]',
+abbr:'[[<b>이류(advection)</b> 흐름에 실려 옮겨 가는 것 · <b>점동특성</b> 노심 출력을 한 값으로 다루는 동특성 · <b>λ<sub>i</sub></b> 그룹 i 의 붕괴상수 · <b>Λ</b> 중성자 생성시간 · <b>v<sub>f</sub></b> 연료염 속도장||<b>advection</b> being carried along by the flow · <b>point kinetics</b> kinetics with one power value · <b>λ<sub>i</sub></b> decay constant of group i · <b>Λ</b> neutron generation time · <b>v<sub>f</sub></b> fuel-salt velocity field]]',
+html:`<h2 class="t">[[선구핵종 이동 방정식 — <em>이류항</em>이 붙는다||The precursor transport equation - <em>an advection term</em> appears]]</h2>
+<ul class="b">
+  <li>[[이 한 줄 때문에 선구핵종 방정식을 <b>노심이 아니라 계통 전체에 대해</b> 풀어야 함 — 노심에서 생기고, 배관을 따라 이동하며, 어디서든 붕괴하고, 일부는 돌아옴||Because of this one term the precursor equation must be solved <b>over the whole loop, not just the core</b> - born in the core, carried along, decaying anywhere, some returning]]</li>
+  <li>[[그룹마다 잃는 비율이 달라 <b class="hot">지발중성자 스펙트럼의 모양 자체가 바뀜</b> — βeff 하나만 고치는 근사는 정확하지 않음||Each group loses a different share, so <b class="hot">the shape of the delayed-neutron spectrum changes</b> - correcting a single βeff is not accurate]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <div class="formula" style="font-size:19px;text-align:left;line-height:2.3;padding-left:40px">
+    <small>[[고체 연료||solid fuel]]</small> &nbsp; ∂c<sub>i</sub>/∂t <span class="op">=</span> (β<sub>i</sub>/Λ) n <span class="op">−</span> λ<sub>i</sub>c<sub>i</sub><br>
+    <small>[[액체 연료||liquid fuel]]</small> &nbsp; ∂c<sub>i</sub>/∂t <span class="op">+</span> <b style="color:var(--hot)">∇·(c<sub>i</sub>v<sub>f</sub>)</b> <span class="op">=</span> (β<sub>i</sub>/Λ) n <span class="op">−</span> λ<sub>i</sub>c<sub>i</sub><br>
+    <small>[[노심 밖으로 나간 것 중 살아 돌아오는 비율||share of those leaving that return alive]]</small> &nbsp; f<sub>i</sub> <span class="op">=</span> e<sup>−λ<sub>i</sub>τ<sub>out</sub></sup></div>
+  </div>
+  <div class="side">
+    <div class="readout"><span class="k">[[MSRE 체류시간||MSRE residence]]</span><span class="v" style="font-size:22px">17 + 8.2 <small>= 25.2 s</small></span></div>
+    <div class="readout hi"><span class="k">[[가장 긴 그룹 · λ ≈ 0.0124||Longest group · λ ≈ 0.0124]]</span><span class="v">f ≈ 0.90</div>
+    <div class="readout warn"><span class="k">[[가장 짧은 그룹 · λ ≈ 3.0||Shortest group · λ ≈ 3.0]]</span><span class="v">f ≈ 0</div>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 실제 숫자 */
+S({tag:'THE NUMBERS', ov:'[[순환연료의 유효 지발중성자분율 — 계산과 실측||βeff in circulating fuel - calculated and measured]]',
+src:'[[<b>출처</b> 본 교재 13.3절 표 13.1 · 그림 13.1 · MSRE 연료펌프 기동/정지로 측정 — 212 ± 6 pcm(실측) vs 222 ± 10 pcm(계산) · MSFR 순환주기 4 s, 노심 내 연료 비율 50 %||<b>Source</b> This textbook &#167;13.3, Table 13.1, Fig. 13.1 · measured by starting and stopping the MSRE fuel pump - 212 ± 6 pcm measured against 222 ± 10 pcm calculated · MSFR loop time 4 s, half the fuel in the core]]',
+abbr:'[[<b>MSFR</b> 유럽 고속 용융염로 개념(3000 MWt) · <b>pcm</b> 10만분의 1 반응도 · <b>포화</b> 유량이 변해도 값이 거의 안 바뀌는 상태||<b>MSFR</b> the European molten-salt fast reactor concept (3000 MWt) · <b>pcm</b> 10⁻⁵ in reactivity · <b>saturation</b> the value barely moving as flow changes]]',
+html:`<h2 class="t">[[순환연료의 <em>유효 지발중성자분율</em> — 계산과 실측||<em>βeff</em> in circulating fuel - calculated and measured]]</h2>
+<ul class="b">
+  <li>[[<b>실측이 있다는 점</b>이 중요함 — 펌프를 끄면 선구핵종이 노심에 머물러 반응도가 오름. 이 기동/정지 실험이 <b class="ok">선구핵종 이동 모델의 사실상 유일한 실측 검증 데이터</b>||<b>That it was measured</b> matters - stop the pump and precursors stay in the core, so reactivity rises. This start/stop test is <b class="ok">essentially the only measured validation for precursor-drift models</b>]]</li>
+  <li>[[<b class="amb">속도를 균일하다고 단순화하면 순환 βeff를 최대 20~30 % 과대평가</b>할 수 있음 — 단순화 수준을 밝히지 않은 βeff 값은 신뢰하지 말 것||<b class="amb">Assuming uniform velocity can overstate circulating βeff by up to 20-30 %</b> - do not trust a βeff that does not state its simplification]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f13_01', cap:'[[선구핵종 이동에 의한 βeff 감소(왼쪽)와 MSRE 1차 루프 체류시간(오른쪽) · 교재 그림 13.1||βeff reduction from precursor drift (left) and MSRE loop residence times (right) · textbook Fig. 13.1]]'})}
+  </div>
+  <div class="side" style="width:400px">
+    <table class="d sm">
+      <tr><th>[[노형||Reactor]]</th><th>[[정지||Static]]</th><th>[[순환||Moving]]</th><th>[[감소||Loss]]</th></tr>
+      <tr class="mark"><td>MSRE U-235</td><td class="n">654</td><td class="n">431</td><td class="n">−34 %</td></tr>
+      <tr><td>MSRE U-233</td><td class="n">298</td><td class="n">188</td><td class="n">−37 %</td></tr>
+      <tr><td>[[MSFR (고속)||MSFR (fast)]]</td><td class="n">325~407</td><td class="n">285~299</td><td class="n">−8~−26 %</td></tr>
+    </table>
+    <div class="readout good"><span class="k">[[MSRE 순환 손실 · U-235||MSRE circulation loss · U-235]]</span><span class="v" style="font-size:22px">212 ± 6<small>[[pcm 실측 · 계산 223||pcm measured · 223 calc.]]</small></span></div>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 점동특성 */
+S({tag:'IS POINT KINETICS ENOUGH', ov:'[[점동특성으로 충분한가 — 부족한 다섯 경우||Is point kinetics enough - five cases where it is not]]',
+src:'[[<b>출처</b> 본 교재 13.4절 · 2025년 Griffin/Squirrel 비교 연구 — 펌프 기동 과도에서 공간 동특성과 점동특성의 차이 최대 3.5 pcm||<b>Source</b> This textbook &#167;13.4 · a 2025 Griffin/Squirrel comparison - at most 3.5 pcm between spatial and point kinetics for pump start-up]]',
+abbr:'[[<b>공간 동특성</b> 노심의 중성자속 분포 변화까지 푸는 동특성 · <b>Griffin · Squirrel</b> INL 의 중성자 해석 코드 · <b>과잉장전</b> 연료를 한꺼번에 많이 넣어 조성이 급변하는 것||<b>spatial kinetics</b> kinetics that also resolves the flux shape · <b>Griffin, Squirrel</b> INL neutronics codes · <b>overfuelling</b> adding a lot of fuel at once so composition jumps]]',
+html:`<h2 class="t">[[<em>점동특성</em>으로 충분한가 — 부족한 다섯 경우||Is <em>point kinetics</em> enough - five cases where it is not]]</h2>
+<ul class="b">
+  <li>[[대부분 <b class="ok">점동특성으로 충분함</b> — 펌프 기동 과도에서 두 방법의 차이는 최대 3.5 pcm. 균일한 과도(유량·출력 변화)는 점동특성으로 됨||Mostly <b class="ok">point kinetics will do</b> - at most 3.5 pcm apart for pump start-up. Uniform transients (flow, power) are fine with it]]</li>
+  <li>[[부족한 다섯 경우의 공통점 — <b class="hot">공간적으로 불균일한 사건</b>||What the five exceptions share - <b class="hot">spatially non-uniform events</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 360" role="img" aria-label="[[점동특성이 부족한 다섯 경우 — 채널 폐색, 연료 드레인, 기포 유입, 과냉각 연료 유입, 과잉장전||Five cases where point kinetics falls short - channel blockage, fuel drain, gas entrainment, cold-slug injection, overfuelling]]">
+  <g id="pk-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#pk-g'), gs=[];
+  [[TX('채널 폐색','Channel blockage'),TX('국부적으로 유동이 막힘','flow blocked locally')],
+   [TX('연료 드레인','Fuel drain'),TX('연료가 빠지며 기하가 변함','geometry changes as fuel drains')],
+   [TX('기포 유입','Gas entrainment'),TX('커버가스가 딸려 들어옴','cover gas drawn in')],
+   [TX('과냉각 연료 유입','Cold-slug injection'),TX('찬 연료가 국부적으로 들어옴','a cold slug enters locally')],
+   [TX('과잉장전','Overfuelling'),TX('연료 조성이 급변함','composition jumps')]]
+  .forEach((c,i)=>{
+    const g=mk('g',{transform:'translate('+(i*226)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:212,height:350,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:212,height:4,fill:'var(--hot)'}));
+    g.appendChild(mk('text',{x:20,y:74,'font-family':'var(--mono)','font-size':44,fill:'var(--hot)','font-weight':600})).textContent=String(i+1);
+    wrapT(c[0],10).slice(0,2).forEach((ln,j)=>g.appendChild(mk('text',{x:20,y:132+j*28,'font-family':'var(--sans)','font-size':21,fill:'var(--ink)','font-weight':600})).textContent=ln);
+    wrapT(c[1],11).slice(0,3).forEach((ln,j)=>g.appendChild(mk('text',{x:20,y:220+j*26,'font-family':'var(--sans)','font-size':16.5,fill:'var(--ink-2)','font-weight':300})).textContent=ln);
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:320,delay:160*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 붕괴열도 흐른다 */
+S({tag:'DECAY HEAT FLOWS TOO', ov:'[[붕괴열도 흐른다 — 노심 채널 밖 핵분열 12 %||Decay heat flows too - 12 % of fission outside the core channels]]',
+src:'[[<b>출처</b> 본 교재 13.5절 · MSRE 모델 기준 핵분열 분포 — 연료채널 88 %, 상부 플레넘 6 %, 다운커머 3 %, 하부 플레넘 3 %||<b>Source</b> This textbook &#167;13.5 · fission distribution in the MSRE model - fuel channels 88 %, upper plenum 6 %, downcomer 3 %, lower plenum 3 %]]',
+abbr:'[[<b>다운커머</b> 노심 바깥으로 내려가는 유로 · <b>플레넘</b> 노심 위 · 아래의 넓은 공간 · <b>드레인 탱크 냉각</b> 빠져나온 연료염의 붕괴열을 빼는 설비||<b>downcomer</b> the down-flow path outside the core · <b>plenum</b> the open volume above or below the core · <b>drain-tank cooling</b> removing decay heat from drained salt]]',
+html:`<h2 class="t">[[<em>붕괴열도 흐른다</em> — 노심 채널 밖 핵분열 12 %||<em>Decay heat flows too</em> - 12 % of fission outside the core channels]]</h2>
+<ul class="b">
+  <li>[[핵분열생성물이 전부 흐르므로 붕괴열이 <b>배관 · 열교환기 · 드레인 탱크</b>에 분포함 — 연료를 드레인 탱크로 빼면 붕괴열도 같이 감 &#8594; <b class="amb">드레인 탱크에 자체 냉각이 필요</b>||All the fission products flow, so decay heat sits in <b>pipes, exchangers and drain tanks</b> - drain the fuel and the heat goes with it &#8594; <b class="amb">the drain tanks need their own cooling</b>]]</li>
+  <li>[[핵분열 자체도 노심 밖에서 조금 일어남 — <b class="hot">&#8220;노심에서만 발열한다&#8221;는 가정은 12 %가 통째로 어긋남</b>||Some fission happens outside the core too - <b class="hot">assuming heat only in the core misplaces 12 % of it</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 330" role="img" aria-label="[[MSRE 핵분열 위치 분포 — 연료채널 88 %, 상부 플레넘 6 %, 다운커머 3 %, 하부 플레넘 3 %||Where fission happens in MSRE - fuel channels 88 %, upper plenum 6 %, downcomer 3 %, lower plenum 3 %]]">
+  <g id="fs-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#fs-g'), X0=40, W=1040, segs=[];
+  const D=[[TX('연료채널','fuel channels'),88,'var(--hot)'],[TX('상부 플레넘','upper plenum'),6,'var(--amber)'],[TX('다운커머','downcomer'),3,'var(--cool)'],[TX('하부 플레넘','lower plenum'),3,'var(--ok)']];
+  let x=X0;
+  D.forEach((d,i)=>{
+    const w=d[1]/100*W, r=mk('rect',{x:x,y:60,width:w,height:90,fill:d[2],opacity:0}); G.appendChild(r); segs.push(r);
+    if(i===0) G.appendChild(mk('text',{x:x+w/2,y:116,'text-anchor':'middle','font-family':'var(--mono)','font-size':30,fill:'var(--on-accent)','font-weight':600})).textContent='88 %';
+    const ly=i===0?186:186+(i-1)*44, lx=i===0?x+w/2:x+w/2;
+    if(i>0){ G.appendChild(mk('line',{x1:x+w/2,x2:x+w/2,y1:152,y2:ly-18,stroke:d[2]}));
+      G.appendChild(mk('text',{x:1080,y:ly,'text-anchor':'end','font-family':'var(--sans)','font-size':17,fill:d[2],'font-weight':600})).textContent=d[0]+' '+d[1]+' %'; }
+    else G.appendChild(mk('text',{x:lx,y:ly,'text-anchor':'middle','font-family':'var(--sans)','font-size':17,fill:d[2],'font-weight':600})).textContent=d[0];
+    x+=w;
+  });
+  G.appendChild(mk('line',{x1:X0+0.88*W,x2:X0+W,y1:40,y2:40,stroke:'var(--hot)','stroke-width':2}));
+  G.appendChild(mk('text',{x:X0+W,y:30,'text-anchor':'end','font-family':'var(--mono)','font-size':16,fill:'var(--hot)','font-weight':600})).textContent=TX('노심 채널 밖 12 %','12 % outside the channels');
+  G.appendChild(mk('text',{x:X0,y:320,class:'lbl'})).textContent=TX('MSRE 모델의 핵분열 위치 분포','where fission occurs in the MSRE model');
+  if(RM){ segs.forEach(s=>s.setAttribute('opacity',0.85)); return; }
+  segs.forEach((s,i)=>s.animate([{opacity:0},{opacity:0.85}],{duration:400,delay:200*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 온라인 정제 */
+S({tag:'ONLINE CLEANUP', ov:'[[온라인 정제 — 기체 · 귀금속 · 희토류와 Pa||Online cleanup - gases, noble metals, rare earths and Pa]]',
+src:'[[<b>출처</b> 본 교재 13.6절 · MSRE 는 펌프 볼 스프레이 링에서 헬륨 분당 1.5~5 L(공칭 2.4 L) 살포, 펌프 토출의 약 4 % 재순환 · MSBR 개념은 흑연 4년마다 교체 + 화학처리 루프 상시 운전||<b>Source</b> This textbook &#167;13.6 · MSRE sprayed 1.5-5 L of helium a minute (2.4 nominal) in the pump bowl, recirculating about 4 % of pump flow · the MSBR concept replaced graphite every four years and ran a chemistry loop continuously]]',
+abbr:'[[<b>xenon dead time</b> 정지 뒤 Xe-135 가 쌓여 한동안 재기동할 수 없는 시간 · <b>귀금속</b> Mo · Ru · Tc 처럼 염에 안 녹고 금속 표면에 붙는 핵종 · <b>MSBR</b> ORNL 의 용융염 증식로 개념||<b>xenon dead time</b> the post-shutdown period when Xe-135 prevents restart · <b>noble metals</b> Mo, Ru, Tc and others that plate out on metal · <b>MSBR</b> ORNL&#8217;s Molten Salt Breeder Reactor concept]]',
+html:`<h2 class="t">[[<em>온라인 정제</em> — 기체 · 귀금속 · 희토류와 Pa||<em>Online cleanup</em> - gases, noble metals, rare earths and Pa]]</h2>
+<ul class="b">
+  <li>[[연료가 액체라는 사실은 <b>운전 중에 화학 처리를 할 수 있다</b>는 뜻 — Xe-135 독작용을 약 1/6로 줄여 경수로의 재기동 제약(xenon dead time)이 훨씬 약함||Liquid fuel means <b>chemistry can be done while running</b> - Xe-135 poisoning down to about 1/6, so the LWR restart limit (xenon dead time) is much weaker]]</li>
+  <li>[[<b class="hot">③은 아직 어느 프로젝트도 실증하지 못함</b>(MSRE도 안 함) — MSR의 가장 큰 잠재력이자 가장 검증되지 않은 부분. 연구 주제를 찾는다면 여기가 넓음||<b class="hot">&#9314; has never been demonstrated</b> (not even at MSRE) - the MSR&#8217;s biggest promise and least-tested part. A wide field for research]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 330" role="img" aria-label="[[기체 제거, 귀금속 제거, 희토류·Pa 제거의 세 가지 온라인 정제와 실증 여부||Three kinds of online cleanup - gas removal, noble metals, rare earths and Pa - and whether each has been demonstrated]]">
+  <g id="oc-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#oc-g'), gs=[];
+  [['1',TX('기체 제거','Gas removal'),TX('Xe · Kr 은 염에 안 녹음 — 헬륨을 살포해 쓸어냄. Xe-135 독작용 약 1/6','Xe and Kr are insoluble - sweep them out with helium. Xe-135 poisoning to about 1/6'),TX('MSRE 에서 실증','shown at MSRE'),'var(--ok)'],
+   ['2',TX('귀금속 제거','Noble metals'),TX('Mo · Ru · Tc 등은 금속 표면에 붙음 — 의도적으로 모으는 설비를 둘 수 있음','Mo, Ru, Tc plate out on metal - a collector can be built for them'),TX('설비 개념','concept'),'var(--amber)'],
+   ['3',TX('희토류 · Pa 제거','Rare earths and Pa'),TX('증식로는 중성자를 먹는 희토류를 빼고 Pa-233 을 따로 붕괴시켜야 함','a breeder must strip neutron-eating rare earths and let Pa-233 decay apart'),TX('실증 없음','never demonstrated'),'var(--hot)']]
+  .forEach((c,i)=>{
+    const g=mk('g',{transform:'translate('+(i*378)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:362,height:320,fill:'var(--panel)',stroke:i===2?c[4]:'var(--rule)','stroke-width':i===2?2:1}));
+    g.appendChild(mk('rect',{width:362,height:4,fill:c[4]}));
+    g.appendChild(mk('text',{x:22,y:62,'font-family':'var(--mono)','font-size':40,fill:c[4],'font-weight':600})).textContent=c[0];
+    g.appendChild(mk('text',{x:22,y:112,'font-family':'var(--sans)','font-size':22,fill:'var(--ink)','font-weight':600})).textContent=c[1];
+    wrapT(c[2],19).slice(0,4).forEach((ln,j)=>g.appendChild(mk('text',{x:22,y:158+j*27,'font-family':'var(--sans)','font-size':16.5,fill:'var(--ink-2)','font-weight':300})).textContent=ln);
+    g.appendChild(mk('text',{x:22,y:296,'font-family':'var(--mono)','font-size':16,fill:c[4],'font-weight':600})).textContent=c[3];
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:360,delay:220*i,fill:'forwards'}));
+}});
+</script>
