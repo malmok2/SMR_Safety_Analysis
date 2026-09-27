@@ -1,0 +1,226 @@
+<script>
+/* ================================================================
+   SECTION 11 — 나트륨으로 계통코드를 돌린다  (교재 11장)
+   ================================================================ */
+SECT('11 · [[나트륨 계통코드||Sodium in a system code]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;11 나트륨으로 계통코드를 돌린다||&#167;11 Running a system code on sodium]]',
+html:`[[<div class="no">11</div><h2>나트륨으로 계통코드를 돌린다</h2><div class="ln"></div>
+<p>나트륨은 상변화도 압축성도 거의 없는 액체라 물성 클래스만 보면 세 노형 중 가장 간단하다.
+어려움은 다른 데서 온다 — <b>상관식, 축방향 전도, 풀의 성층화, 긴 적분 시간</b>.</p>||<div class="no">11</div><h2>Running a system code on sodium</h2><div class="ln"></div>
+<p>Sodium is a liquid with no phase change and almost no compressibility - the simplest property class of the three.
+The difficulty comes from elsewhere: <b>correlations, axial conduction, pool stratification, long integration times</b>.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 네 어려움 */
+S({tag:'FOUR DIFFICULTIES', ov:'[[나트륨 계통코드의 네 가지 어려움||Four difficulties of a sodium system code]]',
+src:'[[<b>출처</b> 본 교재 11.1절 · 물의 증기표 · 유동양식 판정 · 임계유량 모델이 필요 없음||<b>Source</b> This textbook &#167;11.1 · no steam tables, flow-regime maps or critical-flow models needed]]',
+abbr:'[[<b>축방향 전도</b> 유로 방향으로의 열전도 — 경수로 코드는 대개 버림 · <b>열성층화</b> 뜨거운 유체가 위, 찬 유체가 아래로 층을 이루는 현상 · <b>적분 시간</b> 계산하려는 사건의 전체 길이||<b>axial conduction</b> conduction along the flow - usually dropped in LWR codes · <b>thermal stratification</b> hot fluid layering over cold · <b>integration time</b> the total length of the event simulated]]',
+html:`<h2 class="t">[[나트륨 계통코드의 <em>네 가지 어려움</em>||<em>Four difficulties</em> of a sodium system code]]</h2>
+<ul class="b">
+  <li>[[헬륨보다 쉽고, 어떤 면에서는 더 어려움 — 물성은 가장 단순하지만 <b>구성모델 · 수치 · 공간 차원</b>에서 새 문제가 나옴||Easier than helium, harder in places - the properties are simplest, but new problems appear in <b>closures, numerics and spatial dimension</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 380" role="img" aria-label="[[전열 상관식 교체, 축방향 전도, 풀 열성층화, 긴 적분 시간의 네 가지 어려움||Four difficulties - replacing correlations, axial conduction, pool stratification, long integration time]]">
+  <g id="fd-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#fd-g'), gs=[];
+  [['1',TX('전열 상관식을 반드시 바꿈','Correlations must change'),TX('안 바꾸면 2.6배 틀림 (7.3절)','2.6 × wrong otherwise (§7.3)'),'var(--hot)'],
+   ['2',TX('축방향 전도를 무시 못 함','Axial conduction matters'),TX('경수로 코드가 버리는 항 — 자연순환에서 살아남','the term LWR codes drop - alive in natural circulation'),'var(--amber)'],
+   ['3',TX('풀의 열성층화가 지배함','Pool stratification dominates'),TX('1차원 배관망으로는 못 풂','a 1-D network cannot solve it'),'var(--cool)'],
+   ['4',TX('적분 시간이 김','Long integration times'),TX('사고는 수 시간, Δt 는 ms~s — 비 10⁷','hours of accident, ms-s steps - ratio 10⁷'),'var(--ok)']]
+  .forEach((c,i)=>{
+    const x=(i%2)*570, y=Math.floor(i/2)*190, g=mk('g',{transform:'translate('+x+','+y+')',opacity:0});
+    g.appendChild(mk('rect',{width:550,height:176,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:4,height:176,fill:c[3]}));
+    g.appendChild(mk('text',{x:28,y:62,'font-family':'var(--mono)','font-size':40,fill:c[3],'font-weight':600})).textContent=c[0];
+    g.appendChild(mk('text',{x:88,y:58,'font-family':'var(--sans)','font-size':21,fill:'var(--ink)','font-weight':600})).textContent=c[1];
+    wrapT(c[2],26).slice(0,2).forEach((ln,j)=>g.appendChild(mk('text',{x:88,y:104+j*28,'font-family':'var(--sans)','font-size':17,fill:'var(--ink-2)','font-weight':300})).textContent=ln);
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:340,delay:180*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 축방향 전도 */
+S({tag:'AXIAL CONDUCTION', ov:'[[축방향 전도와 수치 확산 — 자연순환에서 살아나는 항||Axial conduction and numerical diffusion]]',
+src:'[[<b>계산</b> 본 교재 11.2절 · 500 °C 나트륨 ρ 835 · c<sub>p</sub> 1264 · k 64.2 &#8594; α = 6.1×10⁻⁵ m²/s · Pe<sub>L</sub> = ρuc<sub>p</sub>L/k (L = 1 m) · 수치 확산 ≈ uΔx/2 · (1 − Co), 그림은 Co &#8594; 0 의 최댓값 · 경수로(5 m/s) Pe<sub>L</sub> ≈ 3×10⁷||<b>Calculation</b> This textbook &#167;11.2 · sodium at 500 °C ρ 835, c<sub>p</sub> 1264, k 64.2 &#8594; α = 6.1×10⁻⁵ m²/s · Pe<sub>L</sub> = ρuc<sub>p</sub>L/k (L = 1 m) · numerical diffusion ≈ uΔx/2 · (1 − Co), shown at its Co &#8594; 0 maximum · an LWR at 5 m/s has Pe<sub>L</sub> ≈ 3×10⁷]]',
+abbr:'[[<b>도너셀</b> 1차 정확도 상류 차분 — 흐름이 오는 쪽 값을 씀 · <b>수치 확산</b> 차분 오차가 확산처럼 작용해 전선을 뭉개는 것 · <b>Co</b> Courant 수 uΔt/Δx · <b>온도 전선</b> 온도가 급변하는 경계||<b>donor cell</b> first-order upwind differencing · <b>numerical diffusion</b> discretisation error acting like diffusion and smearing fronts · <b>Co</b> Courant number uΔt/Δx · <b>thermal front</b> a sharp temperature change]]',
+html:`<h2 class="t">[[<em>축방향 전도</em>와 수치 확산 — 자연순환에서 살아나는 항||<em>Axial conduction</em> and numerical diffusion]]</h2>
+<ul class="b">
+  <li>[[자연순환으로 유속이 0.05 m/s로 떨어지면 Pe<sub>L</sub> ≈ 800, Δx = 0.1 m에서 Pe<sub>Δx</sub> ≈ 80 — 여기에 도너셀의 수치 확산이 <b class="hot">물리 전도의 약 40배</b>로 얹힘||When natural circulation drops the velocity to 0.05 m/s, Pe<sub>L</sub> ≈ 800 and Pe<sub>Δx</sub> ≈ 80 at Δx = 0.1 m - and donor-cell numerical diffusion sits on top at <b class="hot">about 40 times physical conduction</b>]]</li>
+  <li>[[온도 전선이 뭉개져 보이면 <b>물리 전도가 아니라 수치 확산부터</b> 확인할 것 — 노드를 잘게(비쌈) 쪼개거나 2차 상류화로 바꿈(코드 수정). III권은 1차 도너셀||If a thermal front looks smeared, check <b>numerical diffusion before physics</b> - finer nodes (costly) or second-order upwinding (a code change). Volume III is first-order donor cell]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <div class="formula" style="font-size:19px;padding:6px 0 14px">[[대류/전도||convection/conduction]] <span class="op">∼</span> ρuc<sub>p</sub>L/k <span class="op">=</span> Pe<sub>L</sub> &nbsp;&nbsp;&nbsp; D<sub>num</sub> <span class="op">≈</span> (uΔx/2)(1 − Co)</div>
+  <svg viewBox="0 0 800 370" role="img" aria-label="[[유속과 노드 크기에 따른 수치 확산계수와 나트륨 실제 열확산계수의 비교 막대||Numerical diffusivity against sodium&#8217;s real thermal diffusivity as velocity and node size change]]">
+    <g id="ax-g"></g>
+    <rect id="ax-b1" x="200" y="50" height="70" width="10" fill="var(--hot)" opacity="0.85"/>
+    <rect id="ax-b2" x="200" y="190" height="70" width="10" fill="var(--cool)" opacity="0.85"/>
+    <text id="ax-t1" x="210" y="92" class="lbl" fill="var(--hot)"></text>
+    <text id="ax-t2" x="210" y="232" class="lbl" fill="var(--cool)"></text>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">[[수치 확산 / 물리 전도||Numerical / physical]]</span><span class="v" id="ax-r">×41</div>
+    <div class="readout"><span class="k">Pe<sub>L</sub> · Pe<sub>Δx</sub></span><span class="v" id="ax-pe" style="font-size:22px">822 · 82</div>
+    <div class="ctl"><label>[[유속 u||Velocity u]] <span id="ax-us">0.05 m/s</span></label>
+      <input type="range" id="ax-u" min="-2" max="0.778" step="0.01" value="-1.301"></div>
+    <div class="ctl"><label>[[노드 크기 Δx||Node size Δx]] <span id="ax-xs">0.10 m</span></label>
+      <input type="range" id="ax-x" min="0.02" max="1" step="0.01" value="0.1"></div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#ax-g'), a=6.1e-5, K=835*1264/64.2;
+  const X0=200, W=560, lx=v=>X0+clamp((Math.log10(v)+6)/6,0,1)*W;
+  [1e-6,1e-5,1e-4,1e-3,1e-2,1e-1,1].forEach(v=>{ G.appendChild(mk('line',{x1:lx(v),x2:lx(v),y1:36,y2:280,class:'grid'}));
+    G.appendChild(mk('text',{x:lx(v),y:304,'text-anchor':'middle',class:'lbl'})).textContent='1e'+Math.round(Math.log10(v)); });
+  G.appendChild(mk('text',{x:X0+W,y:334,'text-anchor':'end',class:'lbl'})).textContent=TX('확산계수 m²/s (로그)','diffusivity m²/s (log)');
+  G.appendChild(mk('text',{x:X0-14,y:92,'text-anchor':'end','font-family':'var(--sans)','font-size':16,fill:'var(--ink)','font-weight':600})).textContent=TX('수치 확산','numerical');
+  G.appendChild(mk('text',{x:X0-14,y:232,'text-anchor':'end','font-family':'var(--sans)','font-size':16,fill:'var(--ink)','font-weight':600})).textContent=TX('물리 전도 α','physical α');
+  const su=el.querySelector('#ax-u'), sxr=el.querySelector('#ax-x');
+  function upd(){
+    const u=Math.pow(10,+su.value), dx=+sxr.value, Dn=u*dx/2;
+    el.querySelector('#ax-b1').setAttribute('width',Math.max(4,lx(Dn)-X0));
+    el.querySelector('#ax-b2').setAttribute('width',Math.max(4,lx(a)-X0));
+    const t1=el.querySelector('#ax-t1'); t1.setAttribute('x',Math.min(lx(Dn)+8,640)); t1.textContent=Dn.toExponential(1);
+    const t2=el.querySelector('#ax-t2'); t2.setAttribute('x',lx(a)+8); t2.textContent='6.1e-5';
+    el.querySelector('#ax-r').textContent='×'+fmt(Dn/a,Dn/a<10?1:0);
+    el.querySelector('#ax-pe').textContent=fmt(K*u)+' · '+fmt(K*u*dx);
+    el.querySelector('#ax-us').textContent=u.toFixed(u<0.1?3:2)+' m/s';
+    el.querySelector('#ax-xs').textContent=dx.toFixed(2)+' m';
+  }
+  su.oninput=upd; sxr.oninput=upd; upd();
+}});
+
+
+/* ---------------------------------------------------------------- 풀 루프 */
+S({tag:'SODIUM POOL LOOP', ov:'[[4S 5 제어체적 축약 모델과 풀의 열용량||A five-volume model of 4S, and the heat capacity of the pool]]',
+src:'[[<b>계산</b> 본 교재 11.3절 sfr_loop.py · DenseLiquid(1014, 0.235 — T 는 켈빈) · 풀 약 40 m³ × 856 kg/m³ × 1270 J/(kg·K) = 43.5 MJ/K · 정지 1시간 뒤 붕괴열 약 300 kW(30 MWt 의 1 %) &#8594; 0.007 K/s = 약 25 K/h · 압력파 Δt ≈ 0.4 ms||<b>Calculation</b> This textbook &#167;11.3, sfr_loop.py · DenseLiquid(1014, 0.235 - T in kelvin) · pool about 40 m³ × 856 kg/m³ × 1270 J/(kg·K) = 43.5 MJ/K · decay heat an hour after shutdown about 300 kW (1 % of 30 MWt) &#8594; 0.007 K/s, about 25 K/h · pressure-wave Δt ≈ 0.4 ms]]',
+abbr:'[[<b>DenseLiquid</b> III권 코드의 비압축에 가까운 액체 물성 클래스 · <b>적응형 시간간격</b> 계의 상태에 맞춰 Δt 를 자동으로 늘리고 줄이는 기법 · <b>정상상태 해법기</b> 시간 전진 없이 정상 해를 바로 구하는 계산||<b>DenseLiquid</b> Volume III&#8217;s near-incompressible liquid class · <b>adaptive time step</b> Δt grown and shrunk automatically with the state · <b>steady-state solver</b> finds the steady solution without marching in time]]',
+html:`<h2 class="t">[[4S <em>5 제어체적</em> 축약 모델과 풀의 열용량||A <em>five-volume</em> model of 4S, and the heat capacity of the pool]]</h2>
+<ul class="b">
+  <li>[[노심은 1.2 m³인데 풀 전체는 40 m³ 넘음 — 제열이 전혀 없어도 풀 온도가 <b class="ok">1시간에 약 25 K</b>. &#8220;유예시간이 몇 시간&#8221;이라는 말의 계산 근거임||The core is 1.2 m³, the pool over 40 m³ - with no heat removal at all it warms <b class="ok">about 25 K an hour</b>. That is the arithmetic behind &#8220;hours of grace&#8221;]]</li>
+  <li>[[압력파 Δt ≈ 0.4 ms 대 수 시간짜리 현상 — 비 <b>10⁷</b>. ① 반음해법(6 m/s면 Δt ≤ 167 ms) ② 자연순환 구간은 20 s까지(적응형 Δt) ③ 정상상태는 따로 풂||Pressure waves want 0.4 ms, the event lasts hours - a ratio of <b>10⁷</b>. &#9312; semi-implicit (Δt ≤ 167 ms at 6 m/s) &#9313; up to 20 s in natural circulation (adaptive) &#9314; solve the steady state separately]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 340" role="img" aria-label="[[하부 플레넘·노심·상부 플레넘·IHX·풀 하강부의 5개 제어체적과 부피, 그리고 풀 온도 상승률||Five control volumes - lower plenum, core, upper plenum, IHX, pool downcomer - and the pool heat-up rate]]">
+  <g id="pl-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#pl-g'), gs=[];
+  const V=[['lp',6.0,'355 °C','var(--cool)',TX('하부 플레넘','lower plenum')],['core',1.2,'433 °C','var(--hot)',TX('노심','core')],
+           ['up',9.0,'510 °C','var(--hot)',TX('상부 플레넘','upper plenum')],['ihx',3.0,'433 °C','var(--amber)','IHX'],['dc',25.0,'355 °C','var(--cool)',TX('풀 하강부','downcomer')]];
+  V.forEach((v,i)=>{
+    const x=i*224, g=mk('g',{transform:'translate('+x+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:200,height:100,fill:'var(--panel)',stroke:v[3],'stroke-width':1.6}));
+    g.appendChild(mk('text',{x:14,y:28,'font-family':'var(--mono)','font-size':16,fill:v[3],'font-weight':600})).textContent=v[0];
+    g.appendChild(mk('text',{x:14,y:64,'font-family':'var(--mono)','font-size':24,fill:'var(--ink)','font-weight':600})).textContent=v[1].toFixed(1)+' m³';
+    g.appendChild(mk('text',{x:14,y:88,class:'lbl'})).textContent=v[4]+' · '+v[2];
+    if(i<4) g.appendChild(mk('path',{d:'M202,50 H220 M214,44 L220,50 L214,56',stroke:'var(--ink-3)','stroke-width':1.6,fill:'none'}));
+    G.appendChild(g); gs.push(g);
+  });
+  const X0=260, bars=[];
+  G.appendChild(mk('text',{x:0,y:150,class:'lbl'})).textContent=TX('제열 없이 1시간 동안 풀 온도가 오르는 양 · 붕괴열 1 % 가정','pool temperature rise in an hour with no heat removal · 1 % decay heat');
+  [[TX('나트륨 풀 (43.5 MJ/K)','sodium pool (43.5 MJ/K)'),25,'var(--ok)','≈ 25 K']].forEach((b,i)=>{
+    const y=170;
+    G.appendChild(mk('text',{x:X0-14,y:y+30,'text-anchor':'end','font-family':'var(--sans)','font-size':17,fill:'var(--ink)','font-weight':600})).textContent=b[0];
+    const r=mk('rect',{x:X0,y:y,width:'0',height:46,fill:b[2],opacity:0.85}); G.appendChild(r); bars.push([r,b[1]*12]);
+    G.appendChild(mk('text',{x:X0+b[1]*12+12,y:y+31,'font-family':'var(--mono)','font-size':19,fill:b[2],'font-weight':600})).textContent=b[3];
+  });
+  G.appendChild(mk('text',{x:0,y:268,'font-family':'var(--sans)','font-size':17,fill:'var(--ink-2)','font-weight':300})).textContent=TX('합 44.2 m³ · 노심은 그중 1.2 m³ — 부피 비율이 곧 열관성이다','44.2 m³ in all, of which the core is 1.2 m³ - the volume ratio is the thermal inertia');
+  G.appendChild(mk('text',{x:0,y:304,'font-family':'var(--mono)','font-size':16,fill:'var(--amber)','font-weight':600})).textContent=TX('주의 — DenseLiquid(1014, 0.235) 의 T 는 켈빈이다','note - T in DenseLiquid(1014, 0.235) is in kelvin');
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); bars.forEach(b=>b[0].setAttribute('width',b[1])); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:280,delay:120*i,fill:'forwards'}));
+  bars.forEach(b=>b[0].animate([{width:'0px'},{width:b[1]+'px'}],{duration:900,delay:800,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- 성층화 */
+S({tag:'UPPER-PLENUM STRATIFICATION', ov:'[[III권 코드로 못 푸는 것 — 상부 플레넘 열성층화||What the Volume III code cannot solve - upper-plenum stratification]]',
+src:'[[<b>출처</b> 본 교재 11.4절 · 1차원 제어체적은 완전혼합을 가정 · ANL 의 SAM 은 &#8220;대형 공간 내 열혼합·성층화를 위한 계산 효율적 다차원 유동 모델&#8221;을 핵심 기능으로 내세움 · 그림은 개념도||<b>Source</b> This textbook &#167;11.4 · 1-D control volumes assume perfect mixing · ANL&#8217;s SAM advertises &#8220;computationally efficient multi-dimensional flow models for mixing and stratification in large enclosures&#8221; · the drawing is a concept sketch]]',
+abbr:'[[<b>완전혼합</b> 제어체적 안의 온도가 한 값이라는 가정 · <b>열응력</b> 온도 차로 재료가 늘고 줄며 생기는 응력 · <b>SAM</b> ANL 의 MOOSE 기반 계통해석 코드||<b>perfect mixing</b> one temperature per control volume · <b>thermal stress</b> stress from uneven expansion · <b>SAM</b> ANL&#8217;s MOOSE-based system code]]',
+html:`<h2 class="t">[[III권 코드로 못 푸는 것 — <em>상부 플레넘 열성층화</em>||What the Volume III code cannot solve - <em>upper-plenum stratification</em>]]</h2>
+<ul class="b">
+  <li>[[유량이 떨어지면 뜨거운 나트륨이 위, 찬 나트륨이 아래로 층을 이루고 섞이지 않음 &#8594; <b>IHX 입구 온도</b>가 예측과 완전히 달라지고, <b>용기 벽 열응력</b>이 생기며, <b>자연순환 구동력</b>이 달라짐||When flow falls, hot sodium layers over cold and does not mix &#8594; <b>IHX inlet temperature</b> is nothing like predicted, <b>the vessel wall sees thermal stress</b>, and <b>the natural-circulation drive</b> changes]]</li>
+  <li>[[체적을 잘게 쪼개면 흉내는 내지만 층간 혼합 계수를 <b class="hot">실험 없이는 정할 수 없음</b> — 우리 코드로는 여기까지가 한계임을 알고 쓸 것||Finer volumes can mimic it, but the inter-layer mixing coefficient <b class="hot">cannot be set without experiments</b> - know that this is where our code stops]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 800 330" role="img" aria-label="[[강제순환에서는 상부 플레넘이 섞이고, 유량상실에서는 뜨거운 층과 찬 층으로 나뉘는 모습||With forced flow the upper plenum mixes; after loss of flow it splits into hot and cold layers]]">
+    <g id="st-g"></g>
+  </svg>
+  <div class="btnrow"><button class="btn act" id="st-a">[[강제순환 — 완전혼합||Forced flow - mixed]]</button><button class="btn" id="st-b">[[유량상실 — 성층화||Loss of flow - stratified]]</button></div>
+  </div>
+  <div class="side">
+    <div class="readout hi" id="st-box"><span class="k">[[1차원 제어체적의 가정||What a 1-D volume assumes]]</span><span class="v" id="st-v" style="font-size:18px">[[맞음 — 한 온도||holds - one temperature]]</span></div>
+    <blockquote class="q" style="font-size:15px">[[<b>THINK Lab 연결</b> — 투명 유체로 같은 Re · Ri 를 맞춘 RIM-PIV 실험이 바로 이 층간 혼합 계수를 정하는 데이터가 됨.||<b>THINK Lab link</b> - RIM-PIV in a transparent fluid at matched Re and Ri gives exactly the data to set this mixing coefficient.]]</blockquote>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#st-g');
+  G.appendChild(mk('rect',{x:120,y:20,width:560,height:290,rx:20,fill:'var(--panel)',stroke:'var(--ink-3)','stroke-width':2}));
+  const layers=[];
+  for(let i=0;i<8;i++){ const r=mk('rect',{x:126,y:26+i*20,width:548,height:20,fill:'var(--hot)',opacity:0.3}); G.appendChild(r); layers.push(r); }
+  G.appendChild(mk('rect',{x:330,y:200,width:140,height:100,fill:'var(--hot)',opacity:0.55}));
+  G.appendChild(mk('text',{x:400,y:258,'text-anchor':'middle',class:'lbl',fill:'var(--ink)'})).textContent=TX('노심','core');
+  G.appendChild(mk('rect',{x:560,y:40,width:60,height:200,fill:'var(--panel)',stroke:'var(--cool)','stroke-width':1.6}));
+  G.appendChild(mk('text',{x:590,y:262,'text-anchor':'middle',class:'lbl',fill:'var(--cool)'})).textContent='IHX';
+  G.appendChild(mk('text',{x:140,y:196,class:'lbl'})).textContent=TX('상부 플레넘','upper plenum');
+  const jet=mk('path',{d:'M400,200 C400,120 330,90 250,110 C200,125 220,170 300,150',fill:'none',stroke:'none'});
+  G.appendChild(jet); const f=flow(jet,{n:10,color:'var(--hot)',r:3.6,speed:0.3});
+  let strat=false, s=0;
+  const a=el.querySelector('#st-a'), b=el.querySelector('#st-b');
+  function mode(v){ strat=v; a.classList.toggle('act',!v); b.classList.toggle('act',v);
+    el.querySelector('#st-box').className='readout '+(v?'warn':'hi');
+    el.querySelector('#st-v').textContent=v?TX('깨짐 — 층마다 다른 온도','broken - a temperature per layer'):TX('맞음 — 한 온도','holds - one temperature'); }
+  a.onclick=()=>mode(false); b.onclick=()=>mode(true); mode(false);
+  raf(()=>{ s=lerp(s,strat?1:0,0.05); f.speed=0.3*(1-s)+0.02; f.on=s<0.9;
+    layers.forEach((r,i)=>{ const hot=1-i/7; r.setAttribute('opacity',(0.3*(1-s)+s*(0.08+0.55*hot*hot)).toFixed(3));
+      r.setAttribute('fill', (s>0.5 && i>4)?'var(--cool)':'var(--hot)'); }); });
+}});
+
+
+/* ---------------------------------------------------------------- 코드 지형도 */
+S({tag:'CODE LANDSCAPE', ov:'[[SFR 계통해석 코드 지형도 — 비등을 다뤄야 하는가||SFR system codes - does it need to handle boiling?]]',
+src:'[[<b>출처</b> 본 교재 11.5절 · SAS4A/SASSYS-1 은 2012년 v3.1 로 통합, 인허가용 소프트웨어 품질보증 체계 · RELAP5 액체금속 확장은 2026년 피사대 — 나트륨 오차 1 % 이내||<b>Source</b> This textbook &#167;11.5 · SAS4A/SASSYS-1 merged as v3.1 in 2012 with licensing-grade software QA · the RELAP5 liquid-metal extension is from Pisa in 2026, within 1 % for sodium]]',
+abbr:'[[<b>ANL</b> 아르곤국립연구소 · <b>MOOSE</b> INL 의 다중물리 해석 프레임워크 · <b>점동특성</b> 노심 전체 출력을 하나의 값으로 다루는 동특성 모델 · <b>슬러그 · 기포 비등</b> 나트륨이 기체 덩어리로 끓는 양상||<b>ANL</b> Argonne National Laboratory · <b>MOOSE</b> INL&#8217;s multiphysics framework · <b>point kinetics</b> kinetics with one power value for the core · <b>slug and bubble boiling</b> sodium boiling in vapour slugs and bubbles]]',
+html:`<h2 class="t">[[SFR 계통해석 <em>코드 지형도</em> — 비등을 다뤄야 하는가||SFR system <em>codes</em> - does it need to handle boiling?]]</h2>
+<ul class="b">
+  <li>[[어느 코드를 쓸지는 <b>비등을 다뤄야 하는가</b>로 갈림 — 단상 계통 과도는 RELAP5 확장판도 가능, <b class="hot">비등 · 중대사고는 SAS4A/SASSYS-1</b>||The choice turns on <b>whether boiling must be handled</b> - single-phase system transients can use the RELAP5 extension; <b class="hot">boiling and severe accidents need SAS4A/SASSYS-1</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d sm">
+  <tr><th>[[코드||Code]]</th><th>[[무엇을 담나||What it contains]]</th><th>[[쓰는 곳||Use]]</th></tr>
+  <tr class="mark"><td>SAS4A/SASSYS-1 (ANL)</td><td>[[다중 슬러그·기포 나트륨 비등 · 연료·피복재 열팽창과 변형 · 용융연료 거동 · 점동특성과 반응도 피드백. SAS4A 는 노심 내부·노심손상, SASSYS-1 은 노심 밖 계통·열제거원 상실||multi-slug and bubble sodium boiling · fuel and cladding expansion and deformation · molten fuel · point kinetics with feedback. SAS4A inside the core and damage; SASSYS-1 the plant outside and loss of heat sink]]</td><td>[[SFR 안전해석의 기준 코드 · 1960년대 계보||the reference SFR safety code · 1960s lineage]]</td></tr>
+  <tr><td>SAM (ANL, MOOSE)</td><td>[[1차원 유한요소 배관망 + 대형 공간 다차원 혼합 + 다채널 집합체 + 점동특성. MAMMOTH · Proteus · Nek5000 · BISON · TRACE 와 결합||1-D finite-element network + multi-D mixing in large spaces + multi-channel assemblies + point kinetics. Couples to MAMMOTH, Proteus, Nek5000, BISON, TRACE]]</td><td>[[NRC 가 SFR 도구로 채택 · LFR · MSR · 가스로 · 히트파이프로까지||adopted by NRC for SFRs · also LFR, MSR, gas, heat-pipe]]</td></tr>
+  <tr><td>RELAP5 / RELAP5-3D</td><td>[[나트륨은 기본 작동유체가 아님. 2026년 피사대 액체금속 상태방정식(비체적 선형화, 나트륨 오차 1 % 이내)||sodium is not a native fluid. 2026 Pisa liquid-metal equation of state (linearised specific volume, within 1 % for sodium)]]</td><td>[[단상 계통 과도만 — &#8220;비등 지배 과도에는 쓰면 안 된다&#8221;(저자 경고)||single-phase transients only - &#8220;not for boiling-dominated transients&#8221; (authors&#8217; warning)]]</td></tr>
+</table>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 검증 데이터 */
+S({tag:'VALIDATION DATA', ov:'[[SFR 계통코드 검증용 적분 데이터||Integral data for validating SFR system codes]]',
+src:'[[<b>출처</b> 본 교재 11.6절 표 11.1 · EBR-II SHRT 벤치마크는 IAEA CRP 를 통해 공개||<b>Source</b> This textbook &#167;11.6, Table 11.1 · the EBR-II SHRT benchmark is public through an IAEA CRP]]',
+abbr:'[[<b>SHRT</b> Shutdown Heat Removal Tests — EBR-II 의 1980년대 시험 · <b>CRP</b> IAEA 공동연구과제 · <b>벤치마크</b> 여러 코드가 같은 문제를 풀어 결과를 비교하는 것||<b>SHRT</b> Shutdown Heat Removal Tests at EBR-II in the 1980s · <b>CRP</b> IAEA Coordinated Research Project · <b>benchmark</b> several codes solving one problem for comparison]]',
+html:`<h2 class="t">[[SFR 계통코드 검증용 <em>적분 데이터</em>||<em>Integral data</em> for validating SFR system codes]]</h2>
+<ul class="b">
+  <li>[[<b class="ok">EBR-II SHRT 벤치마크는 대학원 과제로 매우 좋음</b> — 유량 코스트다운을 넣고 구조 열팽창 반응도를 온도의 선형 함수로 넣은 뒤 출력이 스스로 내려가는지 볼 것. 10장의 물리가 코드 안에서 살아나는 것을 보는 것이 이 교재의 목표||<b class="ok">The EBR-II SHRT benchmark makes an excellent graduate project</b> - put in the coast-down and a linear structural-feedback term and watch power fall by itself. Seeing ch. 10 come alive in code is this book&#8217;s goal]]</li>
+  <li>[[양의 보이드가 실제로 발동하는 사고에는 <b class="hot">적분 데이터가 없음</b> — SFR 인허가가 여기서 막힌다는 걸 알고 주제를 고르면 기여할 자리가 보임||There are <b class="hot">no integral data</b> for accidents where positive void worth acts - choose a topic knowing licensing stalls here and the gap is visible]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d">
+  <tr><th>[[데이터||Data]]</th><th>[[무엇을 검증하나||What it validates]]</th></tr>
+  <tr class="mark"><td>EBR-II SHRT-45R (1986)</td><td>[[제어봉 없는 유량상실 · 구조 열팽창 피드백 · 자연순환 전환||loss of flow without scram · structural feedback · transition to natural circulation]]</td></tr>
+  <tr><td>[[EBR-II SHRT-17 등||EBR-II SHRT-17 and others]]</td><td>[[자연순환 유량 · 상부 플레넘 온도||natural-circulation flow · upper-plenum temperature]]</td></tr>
+  <tr><td>[[Phénix 자연순환 시험 (1990년대)||Phénix natural circulation (1990s)]]</td><td>[[대형 풀형 자연순환||large-pool natural circulation]]</td></tr>
+  <tr><td>[[Phénix 종료 시험 (2009)||Phénix end-of-life tests (2009)]]</td><td>[[노심 거동 · 계통 과도||core behaviour · plant transients]]</td></tr>
+  <tr><td>[[FFTF 과도 시험||FFTF transient tests]]</td><td>[[루프형 거동||loop-type behaviour]]</td></tr>
+</table>
+</div></div>`});
+</script>

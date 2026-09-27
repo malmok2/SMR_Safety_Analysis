@@ -1,0 +1,272 @@
+<script>
+/* ================================================================
+   SECTION 08 — 금속연료, 녹는점이 낮은데 더 안전하다  (교재 8장)
+   ================================================================ */
+SECT('08 · [[금속연료||Metal fuel]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;08 금속연료 — 녹는점이 낮은데 더 안전하다||&#167;08 Metal fuel - a lower melting point, yet safer]]',
+html:`[[<div class="no">08</div><h2>금속연료</h2><div class="ln"></div>
+<p>U-Pu-Zr의 고상선은 1077 °C, MOX는 약 2700 °C다. 그런데 1986년 제어봉 없이 유량상실을 견딘 것은 금속연료 노심이었고,
+오늘날 소형 SFR은 전부 금속연료를 쓴다. 그 역설을 <b>열전도도</b> 하나로 푼다.</p>||<div class="no">08</div><h2>Metal fuel</h2><div class="ln"></div>
+<p>U-Pu-Zr becomes solidus at 1077 °C; MOX at about 2700 °C. Yet the core that rode out a loss of flow without rods in 1986 was metal,
+and every small SFR today uses metal fuel. <b>Thermal conductivity</b> resolves the paradox.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 역설 */
+S({tag:'THE PARADOX', ov:'[[같은 선출력에서의 금속 · 산화물 연료 온도||Metal and oxide fuel temperatures at the same linear power]]',
+src:'[[<b>계산</b> 본 교재 8.1절 그림 8.1 · ΔT = q′/(4πk) · k<sub>금속</sub> ≈ 16, k<sub>산화물</sub> ≈ 2.5 W/(m·K) · 연료 표면 500 °C, 반경 4 mm(그림 8.1 과 같은 조건)||<b>Calculation</b> This textbook &#167;8.1, Fig. 8.1 · ΔT = q′/(4πk) · k<sub>metal</sub> ≈ 16, k<sub>oxide</sub> ≈ 2.5 W/(m·K) · fuel surface 500 °C, radius 4 mm (as in Fig. 8.1)]]',
+abbr:'[[<b>고상선</b> 녹기 시작하는 온도 · <b>MOX</b> 우라늄·플루토늄 혼합산화물 연료 · <b>선출력 q′</b> 연료봉 1 m 당 열출력(kW/m)||<b>solidus</b> the temperature where melting begins · <b>MOX</b> mixed uranium-plutonium oxide fuel · <b>linear power q′</b> heat per metre of fuel rod (kW/m)]]',
+html:`<h2 class="t">[[같은 선출력에서의 <em>금속 · 산화물</em> 연료 온도||<em>Metal and oxide</em> fuel temperatures at the same linear power]]</h2>
+<ul class="b">
+  <li>[[열전도도가 약 6배 차이 — 25 kW/m에서 중심–표면 온도차가 금속 <b class="ok">124 K</b>, 산화물 <b class="hot">796 K</b>||Conductivity differs about six-fold - at 25 kW/m the centre-to-surface rise is <b class="ok">124 K</b> for metal, <b class="hot">796 K</b> for oxide]]</li>
+  <li>[[금속연료는 냉각재보다 <b>겨우 124 K</b> 뜨거움 — 녹는점까지의 거리가 아니라 <b>연료가 냉각재에 붙어 있다는 사실</b>이 안전을 만듦(다음 장)||Metal fuel runs <b>only 124 K</b> above the coolant - what makes it safe is not distance to melting but <b>the fuel staying tied to the coolant</b> (next slide)]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <div class="formula" style="font-size:20px;padding:0 0 6px">ΔT <span class="op">=</span> q′ / (4πk)</div>
+  <svg viewBox="0 0 800 360" role="img" aria-label="[[선출력에 따른 금속·산화물 연료의 반경방향 온도 분포와 금속연료 고상선 1077 °C||Radial temperature in metal and oxide fuel against linear power, with the 1077 °C metal solidus]]">
+    <g id="mf-ax"></g>
+    <path id="mf-o" d="" fill="none" stroke="var(--hot)" stroke-width="3"/>
+    <path id="mf-m" d="" fill="none" stroke="var(--cool)" stroke-width="3"/>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout hi"><span class="k">[[금속 U-10Zr 중심||Metal U-10Zr centre]]</span><span class="v" id="mf-tm">624<small>°C</small></span></div>
+    <div class="readout warn"><span class="k">[[산화물 MOX 중심||Oxide MOX centre]]</span><span class="v" id="mf-to">1296<small>°C</small></span></div>
+    <div class="ctl"><label>[[선출력 q′||Linear power q′]] <span id="mf-qs">25 kW/m</span></label>
+      <input type="range" id="mf-sl" min="10" max="40" step="0.5" value="25"></div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, ax=el.querySelector('#mf-ax'), Ts=500, R=4;
+  const X0=70, X1=760, Y0=310, Y1=14, sx=r=>X0+r/R*(X1-X0), sy=T=>Y0-(T-400)/(1800-400)*(Y0-Y1);
+  for(let T=400;T<=1800;T+=200){ ax.appendChild(mk('line',{x1:X0,x2:X1,y1:sy(T),y2:sy(T),class:'grid'}));
+    ax.appendChild(mk('text',{x:X0-10,y:sy(T)+4,'text-anchor':'end',class:'lbl'})).textContent=T+' °C'; }
+  for(let r=0;r<=4;r++) ax.appendChild(mk('text',{x:sx(r),y:Y0+20,'text-anchor':'middle',class:'lbl'})).textContent=r+' mm';
+  ax.appendChild(mk('text',{x:X1,y:Y0+44,'text-anchor':'end',class:'lbl'})).textContent=TX('연료 반경','fuel radius');
+  ax.appendChild(mk('line',{x1:X0,x2:X1,y1:sy(1077),y2:sy(1077),stroke:'var(--cool)','stroke-dasharray':'7 5'}));
+  ax.appendChild(mk('text',{x:X1,y:sy(1077)-8,'text-anchor':'end',class:'lbl',fill:'var(--cool)'})).textContent=TX('금속연료 고상선 1077 °C','metal solidus 1077 °C');
+  ax.appendChild(mk('text',{x:X1,y:sy(500)-8,'text-anchor':'end',class:'lbl'})).textContent=TX('냉각재 쪽 표면 500 °C','surface 500 °C');
+  const prof=(q,k)=>{ let d=''; for(let i=0;i<=40;i++){ const r=R*i/40, T=Ts+q/(4*Math.PI*k)*(1-(r/R)*(r/R));
+    d+=(d?'L':'M')+sx(r).toFixed(1)+','+sy(T).toFixed(1); } return d; };
+  const sl=el.querySelector('#mf-sl');
+  function upd(){
+    const q=+sl.value*1000;
+    el.querySelector('#mf-m').setAttribute('d',prof(q,16)); el.querySelector('#mf-o').setAttribute('d',prof(q,2.5));
+    el.querySelector('#mf-tm').innerHTML=fmt(Ts+q/(4*Math.PI*16))+'<small>°C</small>';
+    el.querySelector('#mf-to').innerHTML=fmt(Ts+q/(4*Math.PI*2.5))+'<small>°C</small>';
+    el.querySelector('#mf-qs').textContent=(+sl.value).toFixed(1)+' kW/m';
+  }
+  sl.oninput=upd; upd();
+  if(RM) return;
+  raf(t=>{ if(t>2.4) return; sl.value=lerp(10,25,clamp(t/2.2,0,1)).toFixed(1); upd(); });
+}});
+
+
+/* ---------------------------------------------------------------- 세 결론 */
+S({tag:'THREE CONSEQUENCES', ov:'[[연료가 냉각재에 붙어 있다는 것 — 세 가지 결론||Fuel tied to the coolant - three consequences]]',
+src:'[[<b>출처</b> 본 교재 8.1절 · 금속연료의 도플러 계수는 산화물의 약 1/3 · 실험적 근거는 10장 EBR-II 시험||<b>Source</b> This textbook &#167;8.1 · metal-fuel Doppler coefficient is about one third of oxide&#8217;s · the experimental proof is the EBR-II tests in ch. 10]]',
+abbr:'[[<b>저장 에너지</b> 연료가 품고 있는 열 — 정지 뒤에도 빼내야 함 · <b>도플러 피드백</b> 연료 온도가 오르면 반응도가 줄어드는 효과 · <b>구조 열팽창 피드백</b> 노심 구조물·나트륨·제어봉 구동축이 팽창하며 넣는 음의 반응도||<b>stored energy</b> heat held in the fuel that must still be removed after shutdown · <b>Doppler feedback</b> reactivity falling as fuel heats · <b>structural expansion feedback</b> negative reactivity from expanding core structures, sodium and rod drivelines]]',
+html:`<h2 class="t">[[연료가 냉각재에 붙어 있다는 것 — <em>세 가지 결론</em>||Fuel tied to the coolant - <em>three consequences</em>]]</h2>
+<ul class="b">
+  <li>[[금속연료는 <b>노심 전체를 하나의 온도계</b>로 만듦 — 도플러라는 국소 피드백 대신 <b class="ok">구조 열팽창이라는 전역 피드백</b>에 안전을 검||Metal fuel turns <b>the whole core into one thermometer</b> - safety rests on <b class="ok">global structural-expansion feedback</b> rather than local Doppler]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 380" role="img" aria-label="[[저장 에너지가 적음, 도플러가 약함, 그래서 구조 열팽창이 지배함이라는 세 결론의 사슬||A chain of three conclusions - little stored energy, weak Doppler, so structural expansion dominates]]">
+  <g id="c3-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#c3-g'), gs=[];
+  [['1',TX('저장 에너지가 거의 없음','Almost no stored energy'),TX('산화물은 정지 순간 796 K 분의 열을 품고 그걸 마저 빼야 함. 금속은 124 K 분뿐 — 사고 초기 거동이 완전히 다름.','Oxide holds 796 K worth of heat at shutdown that must still come out; metal holds 124 K. Early accident behaviour is entirely different.'),'var(--cool)'],
+   ['2',TX('도플러 피드백이 약함','Weak Doppler feedback'),TX('출력이 변해도 연료 온도가 크게 안 움직임. 금속연료의 도플러 계수는 산화물의 약 1/3.','Fuel temperature barely moves with power. Metal-fuel Doppler is about a third of oxide’s.'),'var(--amber)'],
+   ['3',TX('그래서 구조 열팽창이 지배함','So structural expansion dominates'),TX('연료가 냉각재 온도를 따라감. 유량이 줄면 노심 구조물 · 나트륨 · 제어봉 구동축이 같이 팽창해 도플러보다 큰 음의 반응도를 넣음.','Fuel follows the coolant. When flow falls, structures, sodium and rod drivelines expand together and insert more negative reactivity than Doppler.'),'var(--ok)']]
+  .forEach((c,i)=>{
+    const g=mk('g',{transform:'translate('+(i*378)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:362,height:370,fill:'var(--panel)',stroke:i===2?c[3]:'var(--rule)','stroke-width':i===2?2:1}));
+    g.appendChild(mk('rect',{width:362,height:4,fill:c[3]}));
+    g.appendChild(mk('text',{x:22,y:66,'font-family':'var(--mono)','font-size':44,fill:c[3],'font-weight':600})).textContent=c[0];
+    wrapT(c[1],17).slice(0,2).forEach((ln,j)=>g.appendChild(mk('text',{x:22,y:118+j*28,'font-family':'var(--sans)','font-size':21,fill:c[3],'font-weight':600})).textContent=ln);
+    wrapT(c[2],19).slice(0,7).forEach((ln,j)=>g.appendChild(mk('text',{x:22,y:190+j*27,'font-family':'var(--sans)','font-size':16.5,fill:'var(--ink-2)','font-weight':300})).textContent=ln);
+    if(i<2) g.appendChild(mk('path',{d:'M364,185 L376,185 M370,179 L376,185 L370,191',stroke:'var(--ink-3)','stroke-width':1.8,fill:'none'}));
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:380,delay:260*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 스미어 밀도 */
+S({tag:'SMEAR DENSITY 75 %', ov:'[[스미어 밀도 75 % 의 근거 — 팽윤 30 % 에서 기포가 이어짐||Why the smear density is 75 %]]',
+src:'[[<b>출처</b> 본 교재 8.2절 · 초기 설계 연소도 1~3 at.% &#8594; EBR-II Mark-II 8~8.9 at.%, Mark-III 10 at.% · 기체 플레넘 부피는 연료의 1.4~1.5배||<b>Source</b> This textbook &#167;8.2 · early designs 1-3 at.% &#8594; EBR-II Mark-II 8-8.9 at.%, Mark-III 10 at.% · gas plenum 1.4-1.5 times the fuel volume]]',
+abbr:'[[<b>스미어 밀도</b> 연료를 피복재 안지름까지 펴 발랐을 때의 밀도/이론밀도 · <b>팽윤</b> 핵분열 기체 기포로 연료 부피가 부푸는 현상 · <b>at.%</b> 원자 백분율 연소도 · <b>나트륨 본드</b> 연료와 피복재 틈을 채운 액체 나트륨||<b>smear density</b> fuel density if spread to the cladding bore, over theoretical density · <b>swelling</b> fuel growth from fission-gas bubbles · <b>at.%</b> burnup in atom percent · <b>sodium bond</b> liquid sodium filling the fuel-cladding gap]]',
+html:`<h2 class="t">[[<em>스미어 밀도 75 %</em> 의 근거 — 팽윤 30 % 에서 기포가 이어짐||Why the <em>smear density</em> is 75 %]]</h2>
+<ul class="b">
+  <li>[[처음부터 <b>25 %를 빈 공간</b>으로 둠 — 팽윤이 30 %에 이르러 기체가 빠져나가기 전에 연료가 피복재를 세게 밀지 않게 하려는 것||<b>A quarter of the space is left empty</b> from the start - so the fuel does not press hard on the cladding before swelling reaches 30 % and the gas escapes]]</li>
+  <li>[[빈틈은 <b>액체 나트륨(본드)</b>으로 채움 — 열전도가 높은 열교이자, 연소도 1 at.% 무렵 연료가 피복재에 닿을 때까지의 완충||The gap is filled with <b>liquid sodium (the bond)</b> - a high-conductivity bridge and a cushion until the fuel touches the cladding around 1 at.%]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 360" role="img" aria-label="[[핵분열 기체 기포 성장부터 스미어 밀도 75 % 까지의 다섯 단계 사슬과 연소도 향상||Five steps from fission-gas bubbles to a 75 % smear density, and the burnup it bought]]">
+  <g id="sd-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#sd-g'), gs=[];
+  const S5=[TX('핵분열 기체가 기포로 자람 — 산화물보다 빨리 부풂','fission gas grows as bubbles - faster than in oxide'),
+            TX('체적 팽윤 약 30 % 에서 기포가 서로 연결됨','at about 30 % swelling the bubbles link up'),
+            TX('기체가 상부 플레넘으로 빠짐 — 발생량의 70~80 %','gas escapes to the plenum - 70-80 % of it'),
+            TX('그 전까지 피복재를 세게 밀지 않게 여유를 줌','leave room so the fuel does not push the cladding before then'),
+            TX('= 스미어 밀도 75 %','= a 75 % smear density')];
+  S5.forEach((t,i)=>{
+    const y=i*52, g=mk('g',{transform:'translate(0,'+y+')',opacity:0});
+    g.appendChild(mk('rect',{width:640,height:44,fill:'var(--panel)',stroke:i===4?'var(--ok)':'var(--rule)','stroke-width':i===4?2:1}));
+    g.appendChild(mk('text',{x:18,y:29,'font-family':'var(--mono)','font-size':16,fill:i===4?'var(--ok)':'var(--cool)','font-weight':600})).textContent=String(i+1);
+    g.appendChild(mk('text',{x:50,y:29,'font-family':'var(--sans)','font-size':17,fill:i===4?'var(--ok)':'var(--ink)','font-weight':i===4?600:300})).textContent=t;
+    G.appendChild(g); gs.push(g);
+  });
+  const X0=720, k=300/10, bars=[];
+  G.appendChild(mk('text',{x:X0,y:14,class:'lbl'})).textContent=TX('달성 연소도 (at.%)','burnup reached (at.%)');
+  [[TX('초기 설계','early'),3,'var(--ink-3)','1~3'],['Mark-II',8.9,'var(--cool)','8~8.9'],['Mark-III',10,'var(--ok)','10']].forEach((b,i)=>{
+    const y=34+i*70;
+    G.appendChild(mk('text',{x:X0,y:y+18,'font-family':'var(--sans)','font-size':16,fill:'var(--ink)','font-weight':600})).textContent=b[0];
+    const r=mk('rect',{x:X0,y:y+26,width:'0',height:28,fill:b[2],opacity:0.85}); G.appendChild(r); bars.push([r,b[1]*k]);
+    G.appendChild(mk('text',{x:X0+b[1]*k+8,y:y+46,'font-family':'var(--mono)','font-size':15,fill:b[2],'font-weight':600})).textContent=b[3];
+  });
+  G.appendChild(mk('text',{x:X0,y:268,'font-family':'var(--sans)','font-size':15.5,fill:'var(--ink-2)','font-weight':300})).textContent=TX('기체 플레넘 = 연료 부피의 1.4~1.5배','gas plenum = 1.4-1.5 × fuel volume');
+  G.appendChild(mk('text',{x:0,y:300,class:'lbl'})).textContent=TX('75 % 를 도입하기 전의 설계는 1~3 at.% 에서 한계에 걸렸다','designs before 75 % hit their limit at 1-3 at.%');
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); bars.forEach(b=>b[0].setAttribute('width',b[1])); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:300,delay:220*i,fill:'forwards'}));
+  bars.forEach((b,i)=>b[0].animate([{width:'0px'},{width:b[1]+'px'}],{duration:700,delay:1300+200*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- FCCI */
+S({tag:'FCCI LIMIT', ov:'[[온도 상한을 정하는 것 — 녹는점이 아니라 FCCI 공정반응||What sets the temperature limit - the FCCI eutectic, not melting]]',
+src:'[[<b>출처</b> 본 교재 8.3절 · 란탄족(Ce, Pr, Nd, La, Sm)과 Pd 가 계면에 모여 피복재를 침식 — 실측 최대 170 μm(HT-9, U-23Zr, 660 °C) · U-Fe · Pu-Fe 공정 650~725 °C||<b>Source</b> This textbook &#167;8.3 · lanthanides (Ce, Pr, Nd, La, Sm) and Pd collect at the interface and erode the cladding - up to 170 μm measured (HT-9, U-23Zr, 660 °C) · U-Fe and Pu-Fe eutectics at 650-725 °C]]',
+abbr:'[[<b>FCCI</b> 연료–피복재 화학 상호작용 · <b>공정(eutectic)</b> 두 성분이 섞여 각각보다 낮은 온도에서 녹는 조성 · <b>란탄족</b> 원자번호 57~71 희토류 핵분열생성물 · <b>HT-9</b> 페라이트-마르텐사이트계 피복재||<b>FCCI</b> fuel-cladding chemical interaction · <b>eutectic</b> a mixture melting below either component · <b>lanthanides</b> the rare-earth fission products, Z = 57-71 · <b>HT-9</b> a ferritic-martensitic cladding steel]]',
+html:`<h2 class="t">[[온도 상한을 정하는 것 — 녹는점이 아니라 <em>FCCI 공정반응</em>||What sets the temperature limit - <em>the FCCI eutectic</em>, not melting]]</h2>
+<ul class="b">
+  <li>[[냉각재는 883 °C까지 액체, 연료는 1077 °C까지 고체인데도 <b>실제 상한은 금속학적 공정반응(650~725 °C)</b>이 정함 — 그래서 출구가 510 °C||Coolant is liquid to 883 °C and fuel solid to 1077 °C, yet <b>the real limit is a metallurgical eutectic at 650-725 °C</b> - hence a 510 °C outlet]]</li>
+  <li>[[<b class="amb">&#8220;비점이 883 °C니까 여유가 크다&#8221;만 외우면 절반만 아는 것</b> — 설계 온도를 정하는 것은 650 °C임. 발표에서 이 구분을 못 하면 바로 지적당함||<b class="amb">Knowing only &#8220;it boils at 883 °C, so lots of margin&#8221; is half the story</b> - the design is set by 650 °C. Miss that in a talk and you will be corrected]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 360" role="img" aria-label="[[온도축 위의 노심 출구 510 °C, FCCI 공정 650~725 °C, 나트륨 비점 883 °C, 금속연료 고상선 1077 °C||A temperature axis with the 510 °C outlet, the 650-725 °C FCCI eutectic, 883 °C sodium boiling and the 1077 °C metal solidus]]">
+  <g id="fc-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#fc-g'), X0=40, X1=1080, sx=T=>X0+(T-300)/(1200-300)*(X1-X0), gs=[];
+  G.appendChild(mk('line',{x1:X0,x2:X1,y1:190,y2:190,stroke:'var(--ink-3)','stroke-width':2}));
+  [300,500,700,900,1100].forEach(T=>{ G.appendChild(mk('line',{x1:sx(T),x2:sx(T),y1:184,y2:196,stroke:'var(--ink-3)'}));
+    G.appendChild(mk('text',{x:sx(T),y:216,'text-anchor':'middle',class:'lbl'})).textContent=T+' °C'; });
+  const band=mk('rect',{x:sx(650),y:60,width:sx(725)-sx(650),height:130,fill:'var(--hot)',opacity:0});
+  G.appendChild(band);
+  const M=[[510,TX('노심 출구 510 °C','core outlet 510 °C'),TX('4S 설계값','4S design value'),'var(--cool)',96],
+           [687,TX('FCCI 공정 650~725 °C','FCCI eutectic 650-725 °C'),TX('실제 상한 — UFe₂ · U₆Fe','the real limit - UFe₂, U₆Fe'),'var(--hot)',44],
+           [883,TX('나트륨 비점 883 °C','sodium boils 883 °C'),TX('냉각재 한계 — 멀다','coolant limit - far away'),'var(--ink-3)',96],
+           [1077,TX('고상선 1077 °C','solidus 1077 °C'),TX('연료 녹는점 — 더 멀다','fuel melting - further still'),'var(--ink-3)',44]];
+  M.forEach(m=>{
+    const g=mk('g',{opacity:0});
+    g.appendChild(mk('circle',{cx:sx(m[0]),cy:190,r:8,fill:m[3]}));
+    g.appendChild(mk('line',{x1:sx(m[0]),x2:sx(m[0]),y1:182,y2:m[4]+28,stroke:m[3],'stroke-dasharray':'3 4'}));
+    const a=m[0]>1000?'end':'middle';
+    g.appendChild(mk('text',{x:sx(m[0]),y:m[4],'text-anchor':a,'font-family':'var(--sans)','font-size':18,fill:m[3],'font-weight':600})).textContent=m[1];
+    g.appendChild(mk('text',{x:sx(m[0]),y:m[4]+20,'text-anchor':a,class:'lbl'})).textContent=m[2];
+    G.appendChild(g); gs.push(g);
+  });
+  const note=mk('g',{opacity:0});
+  note.appendChild(mk('rect',{x:X0,y:250,width:X1-X0,height:96,fill:'var(--panel)',stroke:'var(--rule)'}));
+  note.appendChild(mk('text',{x:X0+22,y:286,'font-family':'var(--sans)','font-size':17,fill:'var(--ink)','font-weight':600})).textContent=TX('FCCI 에서 일어나는 두 가지','Two things happen in FCCI');
+  note.appendChild(mk('text',{x:X0+22,y:318,'font-family':'var(--sans)','font-size':15.5,fill:'var(--ink-2)','font-weight':300})).textContent=
+    TX('① 란탄족·Pd 가 계면에 모여 피복재 안쪽을 침식(최대 170 μm)   ② U-Fe · Pu-Fe 저융점 공정 형성 — 더 위험함',
+       '① lanthanides and Pd erode the cladding bore (up to 170 μm)   ② low-melting U-Fe and Pu-Fe eutectics - the worse of the two');
+  G.appendChild(note); gs.push(note);
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); band.setAttribute('opacity',0.18); return; }
+  band.animate([{opacity:0},{opacity:0.18}],{duration:600,delay:500,fill:'forwards'});
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:340,delay:200+260*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 피복재 */
+S({tag:'CLADDING · BURNUP', ov:'[[금속연료 피복재와 실증 연소도, 그리고 4S 연료봉||Metal-fuel cladding and demonstrated burnup, and the 4S fuel pin]]',
+src:'[[<b>출처</b> 본 교재 8.4절 표 8.1 · 그림 8.2 · FFTF 에서 91.4 cm 전장 연료봉이 처짐 없이 19.9 at.% 까지 버팀 · 4S 집합체 6500 mm, 연료봉 5000 mm 중 연료 슬러그 2500 mm||<b>Source</b> This textbook &#167;8.4, Table 8.1, Fig. 8.2 · full-length 91.4 cm pins reached 19.9 at.% in FFTF without slumping · 4S assembly 6500 mm; of the 5000 mm pin, 2500 mm is fuel slug]]',
+abbr:'[[<b>보이드 팽윤</b> 고속중성자 조사로 금속 안에 빈 공간이 생겨 부피가 늘어나는 현상 · <b>ODS</b> 산화물 분산강화강 · <b>FFTF</b> 미국 고속 시험로 · <b>처짐(slumping)</b> 무른 연료가 자중으로 주저앉는 현상||<b>void swelling</b> growth of metal under fast-neutron irradiation as voids form · <b>ODS</b> oxide-dispersion-strengthened steel · <b>FFTF</b> the US Fast Flux Test Facility · <b>slumping</b> soft fuel sagging under its own weight]]',
+html:`<h2 class="t">[[금속연료 <em>피복재</em>와 실증 연소도, 그리고 4S 연료봉||Metal-fuel <em>cladding</em> and demonstrated burnup, and the 4S fuel pin]]</h2>
+<ul class="b">
+  <li>[[HT-9이 표준이 된 이유 — 페라이트-마르텐사이트계는 고속중성자 조사의 <b>보이드 팽윤에 강함</b>. 4S · Natrium · PRISM이 모두 HT-9||HT-9 became standard because ferritic-martensitic steel <b>resists void swelling</b> under fast neutrons. 4S, Natrium and PRISM all use it]]</li>
+  <li>[[4S 연료봉의 <b>절반이 빈 공간(기체 플레넘)</b> — 30년 무재장전이면 그만큼의 핵분열 기체를 담아둘 곳이 필요함||<b>Half of the 4S pin is empty gas plenum</b> - thirty years without refuelling means that much fission gas to hold]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f8_02', cap:'[[4S 연료집합체(약 6500 mm)와 연료봉(약 5000 mm) — 연료 슬러그 2500 mm, 나머지 절반이 기체 플레넘 · 교재 그림 8.2||4S assembly (about 6500 mm) and pin (about 5000 mm) - 2500 mm of fuel slug, the other half gas plenum · textbook Fig. 8.2]]'})}
+  </div>
+  <div class="side" style="width:420px">
+    <table class="d sm">
+      <tr><th>[[피복재||Cladding]]</th><th>[[종류||Type]]</th><th>[[연소도||Burnup]]</th><th>[[비고||Note]]</th></tr>
+      <tr><td>316 SS</td><td>[[오스테나이트||austenitic]]</td><td class="n">8~8.9 at.%</td><td>EBR-II Mark-II</td></tr>
+      <tr><td>D9</td><td>[[개량 오스테나이트||mod. austenitic]]</td><td class="n">19.8 at.%</td><td>FFTF</td></tr>
+      <tr class="mark"><td>HT-9</td><td>[[페라이트-마르텐사이트||ferritic-martensitic]]</td><td class="n">19.9 at.%</td><td>[[FFTF · 최고 643 °C||FFTF · 643 °C peak]]</td></tr>
+      <tr><td>ODS</td><td>[[산화물 분산강화||oxide-dispersion]]</td><td class="n">—</td><td>[[자격시험 미완||not qualified]]</td></tr>
+    </table>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 금속 vs 산화물 */
+S({tag:'METAL VS OXIDE', ov:'[[금속연료와 산화물연료 정리표||Metal against oxide fuel - a summary table]]',
+src:'[[<b>출처</b> 본 교재 8.5절 표 8.2 · TOP = 과출력 과도 여유 · BN-600 · BN-800 · CFR-600 · PFBR 은 모두 산화물||<b>Source</b> This textbook &#167;8.5, Table 8.2 · TOP = transient-overpower margin · BN-600, BN-800, CFR-600 and PFBR all use oxide]]',
+abbr:'[[<b>TOP</b> 과출력 과도 · <b>스펙트럼 경화</b> 중성자 에너지 분포가 높은 쪽으로 옮겨 가는 것 — 증식·소각에 유리 · <b>중금속 밀도</b> 연료 부피당 우라늄·플루토늄 질량||<b>TOP</b> transient overpower · <b>spectral hardening</b> neutrons shifting to higher energy - good for breeding and burning · <b>heavy-metal density</b> U and Pu mass per fuel volume]]',
+html:`<h2 class="t">[[금속연료와 산화물연료 <em>정리표</em>||Metal against oxide fuel - <em>a summary table</em>]]</h2>
+<ul class="b">
+  <li>[[산화물을 열등하다고 읽으면 안 됨 — <b>제조·재처리 경험이 압도적으로 많고</b>, 고온에서 안정적이며, 기존 경수로 연료 인프라를 씀. 금속은 <b class="ok">소형·피동안전 설계</b>에서 유리함||Do not read oxide as inferior - it has <b>far more fabrication and reprocessing experience</b>, is stable hot, and uses LWR fuel infrastructure. Metal wins in <b class="ok">small, passive-safety designs</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d sm">
+  <tr><th>[[항목||Item]]</th><th>[[금속 (U-Zr, U-Pu-Zr)||Metal (U-Zr, U-Pu-Zr)]]</th><th>[[산화물 (MOX)||Oxide (MOX)]]</th></tr>
+  <tr><td>[[열전도도||Conductivity]]</td><td class="n">[[약 16 W/(m·K)||about 16 W/(m·K)]]</td><td class="n">2~3 W/(m·K)</td></tr>
+  <tr><td>[[고상선||Solidus]]</td><td class="n">1077 °C</td><td class="n">[[약 2700 °C||about 2700 °C]]</td></tr>
+  <tr><td>[[스미어 밀도||Smear density]]</td><td class="n">[[75 % (설계값)||75 % (design)]]</td><td class="n">85~95 %</td></tr>
+  <tr><td>[[연료–냉각재 온도차||Fuel-coolant ΔT]]</td><td>[[작다||small]]</td><td>[[크다||large]]</td></tr>
+  <tr><td>[[도플러 피드백||Doppler feedback]]</td><td>[[약하다||weak]]</td><td>[[강하다||strong]]</td></tr>
+  <tr><td>[[저장 에너지||Stored energy]]</td><td>[[적다||little]]</td><td>[[많다||much]]</td></tr>
+  <tr class="mark"><td>[[과출력 여유 (TOP)||Overpower margin (TOP)]]</td><td class="n">[[정격의 4~4.5배||4-4.5 × rated]]</td><td class="n">[[2.5~3배||2.5-3 ×]]</td></tr>
+  <tr><td>[[중금속 밀도||Heavy-metal density]]</td><td>[[높다 &#8594; 스펙트럼 경화, 증식·소각 유리||high &#8594; harder spectrum, better breeding and burning]]</td><td>[[낮다||lower]]</td></tr>
+  <tr class="mark"><td>[[실제 온도 한계||Real temperature limit]]</td><td>[[FCCI 공정 650~725 °C||FCCI eutectic 650-725 °C]]</td><td>[[용융||melting]]</td></tr>
+</table>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 파이로 · PGSFR */
+S({tag:'PYROPROCESSING · PGSFR', ov:'[[파이로프로세싱과 한국 PGSFR 의 경과||Pyroprocessing, and what became of Korea&#8217;s PGSFR]]',
+src:'[[<b>출처</b> 본 교재 8.6절 · 파이로프로세싱·고속로 R&amp;D 는 23년간 약 7,930억 원 투입 후 2020년 종료 · <b>2026년 9월 기준</b> 공식 재개 결정 없음||<b>Source</b> This textbook &#167;8.6 · about ₩793 bn over 23 years before pyroprocessing and fast-reactor R&amp;D ended in 2020 · <b>as of September 2026</b> no decision to restart]]',
+abbr:'[[<b>파이로프로세싱</b> 사용후연료를 용융염 속에서 전기화학적으로 처리하는 건식 공정 · <b>전해환원 · 전해정련</b> 산화물을 금속으로 바꾸고 · 금속을 분리하는 단계 · <b>PGSFR</b> 한국 원형 소듐냉각고속로(150 MWe)||<b>pyroprocessing</b> dry electrochemical treatment of spent fuel in molten salt · <b>electroreduction, electrorefining</b> turning oxide into metal, then separating metals · <b>PGSFR</b> Korea&#8217;s Prototype Gen-IV SFR (150 MWe)]]',
+html:`<h2 class="t">[[<em>파이로프로세싱</em>과 한국 PGSFR 의 경과||<em>Pyroprocessing</em>, and what became of Korea&#8217;s PGSFR]]</h2>
+<ul class="b">
+  <li>[[금속연료는 파이로프로세싱과 한 몸 — 우라늄과 초우라늄이 <b>금속 상태로 함께</b> 나와 그대로 주조함. 순수 플루토늄 분리 단계가 없다는 것이 <b>핵확산 저항성 논거</b>임||Metal fuel and pyroprocessing go together - U and the transuranics come out <b>together as metal</b> and are cast directly. No pure-plutonium step is the <b>proliferation-resistance argument</b>]]</li>
+  <li>[[<b class="amb">&#8220;연구는 살아 있고 실증 프로젝트는 없다&#8221;</b>가 2026년 한국 SFR의 정확한 상태임||<b class="amb">&#8220;The research is alive; there is no demonstration project&#8221;</b> is exactly where Korean SFR stands in 2026]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 330" role="img" aria-label="[[PGSFR 협약부터 R&amp;D 종료, 현대건설–KAERI 협약까지의 연표||A timeline from the PGSFR agreement through the end of R&amp;D to the Hyundai E&amp;C-KAERI agreement]]">
+  <g id="pg-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#pg-g'), X0=60, X1=1060, sx=y=>X0+(y-2013)/(2029-2013)*(X1-X0), gs=[];
+  G.appendChild(mk('line',{x1:X0,x2:X1,y1:150,y2:150,stroke:'var(--ink-3)','stroke-width':2}));
+  [2014,2018,2022,2026].forEach(y=>G.appendChild(mk('text',{x:sx(y),y:176,'text-anchor':'middle',class:'lbl'})).textContent=String(y));
+  const E=[[2014.6,TX('KAERI–Argonne 협약','KAERI-Argonne agreement'),TX('PGSFR 150 MWe · 풀형 · 소각로','PGSFR 150 MWe · pool · burner'),'var(--cool)',60,'start'],
+           [2020,TX('설계승인 목표였던 해','the year design approval was due'),TX('파이로·고속로 R&D 종료 — 23년 7,930억 원','pyro and fast-reactor R&D ends - ₩793 bn over 23 years'),'var(--hot)',230,'middle'],
+           [2024.45,TX('2024-06-11 현대건설–KAERI','11 Jun 2024 Hyundai E&C-KAERI'),TX('SFR 상용화 협력 — 사양·일정 비공개','SFR commercialisation - no specs or dates'),'var(--amber)',60,'middle'],
+           [2028.9,TX('당초 준공 목표 2028년 말','original completion, end of 2028'),TX('공식 재개 결정 없음 (2026-09)','no restart decision (Sept 2026)'),'var(--ink-3)',230,'end']];
+  E.forEach(e=>{
+    const x=sx(e[0]), up=e[4]<150, g=mk('g',{opacity:0});
+    g.appendChild(mk('circle',{cx:x,cy:150,r:9,fill:e[3],opacity:e[3]==='var(--ink-3)'?0.5:1}));
+    g.appendChild(mk('line',{x1:x,x2:x,y1:up?142:158,y2:up?e[4]+30:e[4]-24,stroke:e[3],'stroke-dasharray':'3 4'}));
+    g.appendChild(mk('text',{x:x,y:e[4],'text-anchor':e[5],'font-family':'var(--sans)','font-size':18,fill:e[3],'font-weight':600})).textContent=e[1];
+    g.appendChild(mk('text',{x:x,y:e[4]+24,'text-anchor':e[5],class:'lbl'})).textContent=e[2];
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:360,delay:250*i,fill:'forwards'}));
+}});
+</script>

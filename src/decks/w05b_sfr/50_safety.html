@@ -1,0 +1,315 @@
+<script>
+/* ================================================================
+   SECTION 10 — 스스로 멈추는 원자로, SFR 안전  (교재 10장)
+   ================================================================ */
+SECT('10 · [[SFR 안전||SFR safety]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;10 SFR 안전 — 스스로 멈추는 원자로||&#167;10 SFR safety - the reactor that stops itself]]',
+html:`[[<div class="no">10</div><h2>스스로 멈추는 원자로</h2><div class="ln"></div>
+<p>1986년 4월 3일 하루, EBR-II는 전출력에서 두 번 냉각을 잃었고 두 번 모두 <b>제어봉도 운전원도 없이</b> 스스로 멈췄다.
+오늘날 모든 소형 SFR의 &#8220;피동안전&#8221;은 이날 실측된 거동을 재현하겠다는 주장이다.</p>||<div class="no">10</div><h2>The reactor that stops itself</h2><div class="ln"></div>
+<p>On 3 April 1986 EBR-II lost cooling twice at full power and both times shut itself down <b>with no rods and no operator</b>.
+Every small SFR&#8217;s claim to &#8220;passive safety&#8221; is a claim to reproduce what was measured that day.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 두 얼굴 */
+S({tag:'TWO FACES', ov:'[[SFR 안전의 두 얼굴 — 좋은 소식 다섯, 나쁜 소식 셋||Two faces of SFR safety - five good, three bad]]',
+src:'[[<b>출처</b> 본 교재 10.1절 · 경수로는 보이드가 생기면 감속이 사라져 반응도가 내려감 — 경수로 안전의 근간||<b>Source</b> This textbook &#167;10.1 · in an LWR voids remove moderation and reactivity falls - the foundation of LWR safety]]',
+abbr:'[[<b>보이드 반응도</b> 냉각재가 빠져 빈 자리가 생길 때의 반응도 변화 · <b>급속 감압</b> 고압 계통이 터지며 순식간에 압력이 빠지는 것||<b>void reactivity</b> the reactivity change as coolant leaves · <b>rapid depressurisation</b> a high-pressure system losing pressure at once through a break]]',
+html:`<h2 class="t">[[SFR 안전의 <em>두 얼굴</em> — 좋은 소식 다섯, 나쁜 소식 셋||<em>Two faces</em> of SFR safety - five good, three bad]]</h2>
+<ul class="b">
+  <li>[[좋은 소식 다섯이 합쳐져 <b class="ok">제어봉 없이도 사고를 견디는 설계</b>가 가능해짐||The five good points together make <b class="ok">a design that survives accidents without rods</b>]]</li>
+  <li>[[나쁜 소식 중 마지막이 가장 심각함 — 경수로는 냉각재가 빠지면 반응도가 내려가지만 <b class="hot">SFR은 부호가 반대일 수 있음</b>. 이걸 다루는 것이 노심 설계의 절반||The last bad point is the worst - an LWR loses reactivity when coolant leaves, but <b class="hot">an SFR can go the other way</b>. Handling it is half of core design]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 360" role="img" aria-label="[[SFR 안전의 좋은 소식 다섯 가지와 나쁜 소식 세 가지||Five good and three bad points of SFR safety]]">
+  <g id="tf-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#tf-g'), gs=[];
+  const A=[[TX('좋은 소식','Good news'),'var(--ok)',[TX('저압 — 급속 감압 경로 없음','low pressure - no rapid depressurisation'),TX('비등 여유 330 K','330 K boiling margin'),TX('풀의 거대한 열관성','a huge pool thermal inertia'),TX('자연순환이 잘 됨','strong natural circulation'),TX('금속연료면 구조 열팽창 음의 피드백','metal fuel: structural-expansion feedback')]],
+           [TX('나쁜 소식','Bad news'),'var(--hot)',[TX('나트륨이 물과 폭발함','sodium explodes with water'),TX('나트륨이 공기 중에서 탐','sodium burns in air'),TX('큰 노심은 보이드 반응도가 양','a large core has positive void reactivity')]]];
+  A.forEach((a,i)=>{
+    const g=mk('g',{transform:'translate('+(i*570)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:550,height:350,fill:'var(--panel)',stroke:a[1]}));
+    g.appendChild(mk('rect',{width:550,height:4,fill:a[1]}));
+    g.appendChild(mk('text',{x:24,y:48,'font-family':'var(--sans)','font-size':22,fill:a[1],'font-weight':600})).textContent=a[0];
+    a[2].forEach((t,j)=>{
+      const last=(i===1&&j===2);
+      g.appendChild(mk('text',{x:24,y:104+j*52,'font-family':'var(--mono)','font-size':16,fill:a[1],'font-weight':600})).textContent=String(j+1);
+      g.appendChild(mk('text',{x:54,y:104+j*52,'font-family':'var(--sans)','font-size':18,fill:last?'var(--hot)':'var(--ink)','font-weight':last?600:300})).textContent=t;
+    });
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:380,delay:400*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 보이드 반응도 */
+S({tag:'SODIUM VOID', ov:'[[나트륨 보이드 반응도의 두 성분과 ASTRID 노심 값||The two components of sodium void reactivity, and ASTRID core values]]',
+src:'[[<b>출처</b> 본 교재 10.2절 표 10.1 · 그림 10.1 · ASTRID 계열 노심(프랑스) · BOL 수명초 · EOEC3 3주기 말 · MA 마이너 액티나이드||<b>Source</b> This textbook &#167;10.2, Table 10.1, Fig. 10.1 · the French ASTRID family of cores · BOL beginning of life · EOEC3 end of equilibrium cycle 3 · MA minor actinides]]',
+abbr:'[[<b>스펙트럼 경화</b> 중성자 에너지가 높아지는 것 — Pu-239 의 η 가 올라감 · <b>누설</b> 중성자가 노심 밖으로 빠져나가는 것 · <b>βeff</b> 유효 지발중성자 비율 · <b>$</b> 반응도/βeff||<b>spectral hardening</b> neutron energy rising - Pu-239&#8217;s η goes up · <b>leakage</b> neutrons escaping the core · <b>βeff</b> effective delayed-neutron fraction · <b>$</b> reactivity divided by βeff]]',
+html:`<h2 class="t">[[나트륨 <em>보이드 반응도</em>의 두 성분과 ASTRID 노심 값||The two components of <em>sodium void reactivity</em>, and ASTRID core values]]</h2>
+<ul class="b">
+  <li>[[<b class="hot">① 스펙트럼 경화(양)</b>는 노심 부피에, <b class="cool">② 누설 증가(음)</b>는 표면적/부피 비에 비례 — 대형은 양, 작고 납작하면 음이 될 수 있음||<b class="hot">&#9312; Spectral hardening (positive)</b> scales with volume, <b class="cool">&#9313; extra leakage (negative)</b> with surface-to-volume - large cores go positive, small flat ones can go negative]]</li>
+  <li>[[노심만 비우면 양이지만 <b>상부 나트륨 플레넘까지</b> 비우면 음으로 뒤집힘||Void the core alone and it is positive; void <b>the upper sodium plenum too</b> and it flips negative]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f10_01', cap:'[[상부 나트륨 플레넘이 부호를 뒤집음 — 빨강 노심만, 파랑 노심 + 상부 플레넘 · 교재 그림 10.1||The upper sodium plenum flips the sign - red core only, blue core plus upper plenum · textbook Fig. 10.1]]'})}
+  </div>
+  <div class="side" style="width:430px">
+    <div class="formula" style="font-size:17px">Δρ<sub>void</sub> <span class="op">=</span> Δρ<sub>spectrum</sub> <span class="op">+</span> Δρ<sub>leakage</sub></div>
+    <table class="d sm">
+      <tr><th>[[노심||Core]]</th><th>[[노심만||Core]]</th><th>[[+ 플레넘||+ plenum]]</th><th>[[도플러||Doppler]]</th><th>βeff</th></tr>
+      <tr><td>[[ASTRID 기준||ASTRID ref.]]</td><td class="n">+2.2 $</td><td class="n">−2.9 $</td><td class="n">−870</td><td class="n">—</td></tr>
+      <tr><td>[[Pu 소각 BOL||Pu burner BOL]]</td><td class="n">+3.1 $</td><td class="n">−3.4 $</td><td class="n">−571</td><td class="n">331</td></tr>
+      <tr><td>[[Pu 소각 EOEC3||Pu burner EOEC3]]</td><td class="n">+4.0 $</td><td class="n">−2.6 $</td><td class="n">−540</td><td class="n">328</td></tr>
+      <tr class="mark"><td>[[MA 소각 BOL||MA burner BOL]]</td><td class="n">+5.9 $</td><td class="n">−0.3 $</td><td class="n">−275</td><td class="n">275</td></tr>
+    </table>
+    <div class="src" style="font-size:12.5px">[[도플러 상수 · βeff 단위 pcm||Doppler constant and βeff in pcm]]</div>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- CFV · MA */
+S({tag:'LOW-VOID CORE', ov:'[[저보이드(CFV) 노심의 세 장치와 MA 소각의 대가||Three features of the low-void (CFV) core, and the price of burning MA]]',
+src:'[[<b>출처</b> 본 교재 10.2절 · 상부 나트륨 플레넘 안쪽 95 cm / 바깥 76 cm · 유효 높이 약 20 % 감소(50/70 cm) · 표 10.1 마지막 행||<b>Source</b> This textbook &#167;10.2 · upper sodium plenum 95 cm inner / 76 cm outer · effective height cut about 20 % (50/70 cm) · last row of Table 10.1]]',
+abbr:'[[<b>CFV</b> Cœur à Faible effet de Vide — 저보이드 노심 · <b>MA</b> 마이너 액티나이드(넵투늄·아메리슘·퀴륨) · <b>증식 블랭킷</b> 노심을 둘러싼 U-238 영역 · <b>비균질</b> 연료와 비연료 층을 번갈아 둔 배치||<b>CFV</b> Cœur à Faible effet de Vide - the low-void core · <b>MA</b> minor actinides (Np, Am, Cm) · <b>breeding blanket</b> U-238 round the core · <b>heterogeneous</b> alternating fuel and non-fuel layers]]',
+html:`<h2 class="t">[[저보이드(CFV) 노심의 세 장치와 <em>MA 소각의 대가</em>||Three features of the low-void (CFV) core, and <em>the price of burning MA</em>]]</h2>
+<ul class="b">
+  <li>[[마이너 액티나이드를 태우려고 장전하면 <b class="hot">세 지표가 동시에 나빠짐</b> — 폐기물 소각과 안전 여유는 정면으로 충돌함. <b>설계에서 공짜는 없음</b>||Loading minor actinides to burn them <b class="hot">worsens all three indicators at once</b> - waste burning and safety margin collide head-on. <b>Nothing in design is free</b>]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 800 380" role="img" aria-label="[[저보이드 노심이 부호를 뒤집는 세 가지 장치||The three features that let a low-void core flip the sign]]">
+    <g id="cf-g"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">[[노심만 보이드 반응도||Core-only void worth]]</span><span class="v">+2.2 &#8594; +5.9<small>$</small></span></div>
+    <div class="readout warn"><span class="k">[[도플러 상수||Doppler constant]]</span><span class="v">−870 &#8594; −275<small>pcm</small></span></div>
+    <div class="readout warn"><span class="k">βeff</span><span class="v">331 &#8594; 275<small>pcm</small></span></div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#cf-g'), gs=[];
+  [['1',TX('큰 상부 나트륨 플레넘 + 위에 흡수체','A large upper sodium plenum, absorber above'),TX('안쪽 95 cm / 바깥 76 cm. 여기가 비면 중성자가 위로 대량 탈출함','95 cm inner / 76 cm outer. When it voids, neutrons pour out upward'),'var(--cool)'],
+   ['2',TX('축방향 비균질 · 짧은 노심','An axially heterogeneous, short core'),TX('유효 높이 약 20 % 감소(50/70 cm) — 누설 성분을 키움','effective height cut about 20 % (50/70 cm) - more leakage'),'var(--cool)'],
+   ['3',TX('증식 블랭킷 제거','No breeding blanket'),TX('오히려 불리하게 작용함 — 1 · 2 로 보상해야 함','this works against you - 1 and 2 must compensate'),'var(--amber)']]
+  .forEach((c,i)=>{
+    const g=mk('g',{transform:'translate(0,'+(i*126)+')',opacity:0});
+    g.appendChild(mk('rect',{width:800,height:112,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:3,height:112,fill:c[3]}));
+    g.appendChild(mk('text',{x:24,y:50,'font-family':'var(--mono)','font-size':30,fill:c[3],'font-weight':600})).textContent=c[0];
+    g.appendChild(mk('text',{x:70,y:44,'font-family':'var(--sans)','font-size':20,fill:'var(--ink)','font-weight':600})).textContent=c[1];
+    g.appendChild(mk('text',{x:70,y:80,'font-family':'var(--sans)','font-size':16.5,fill:'var(--ink-2)','font-weight':300})).textContent=c[2];
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:340,delay:220*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- EBR-II LOFWS */
+S({tag:'EBR-II · LOFWS', ov:'[[EBR-II 1986-04-03 시험 1 — 제어봉 없는 유량상실(LOFWS)||EBR-II, 3 April 1986, test 1 - loss of flow without scram]]',
+src:'[[<b>출처</b> 본 교재 10.3절 그림 10.2 · EBR-II 62.5 MWt / 20 MWe 풀형 · 1차 나트륨 약 333 m³ · 풀 371 °C · 혼합출구 473 °C · U 합금(66 %) · 316 SS · 집합체당 91봉 · 유효노심 34 cm · 100 % 출력 · 참관인 60명 이상(외국 13명)||<b>Source</b> This textbook &#167;10.3, Fig. 10.2 · EBR-II 62.5 MWt / 20 MWe pool · about 333 m³ of primary sodium · pool 371 °C · mixed outlet 473 °C · U alloy (66 %) · 316 SS · 91 pins per assembly · 34 cm active core · full power · over 60 observers (13 foreign)]]',
+abbr:'[[<b>LOFWS</b> Loss of Flow Without Scram · <b>SBO</b> 소외전원상실 · <b>코스트다운</b> 펌프 전원이 끊긴 뒤 유량이 줄어드는 과정 · <b>ULOF</b> 비보호 유량상실||<b>LOFWS</b> Loss of Flow Without Scram · <b>SBO</b> station blackout · <b>coast-down</b> flow decaying after pump power is lost · <b>ULOF</b> unprotected loss of flow]]',
+html:`<h2 class="t">[[EBR-II 1986-04-03 시험 1 — <em>제어봉 없는 유량상실</em>||EBR-II, 3 April 1986, test 1 - <em>loss of flow without scram</em>]]</h2>
+<ul class="b">
+  <li>[[소외전원상실을 모사 — 유량저하 정지신호를 무효화하고 주냉각재펌프 전원을 끊음. <b>약 100초에 펌프가 멈추고</b> 자연대류와 배터리 보조펌프만 남음||Station blackout simulated - the low-flow trip defeated and the main pumps cut. <b>They stopped in about 100 s</b>, leaving natural convection and a battery-powered auxiliary pump]]</li>
+  <li>[[냉각재 온도가 오르자 음의 반응도가 들어와 <b class="ok">출력이 사실상 0으로</b> — 제어봉 조작도 운전원 개입도 없었음||As the coolant heated, negative reactivity came in and <b class="ok">power fell to practically zero</b> - no rods, no operator]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f10_02', cap:'[[EBR-II ULOF 시험의 개념적 거동 — 유량이 떨어지고, 온도가 오르고, 그에 비례해 음의 반응도가 들어와 출력이 내려감 · 교재 그림 10.2||Conceptual behaviour in the EBR-II ULOF test - flow falls, temperature rises, negative reactivity follows in proportion and power drops · textbook Fig. 10.2]]'})}
+  </div>
+  <div class="side">
+    <div class="readout good"><span class="k">[[음의 반응도의 출처 — 지배적||Where the negative reactivity came from]]</span><span class="v" style="font-size:16px;line-height:1.5">[[노심 구조물 · 나트륨 · 제어봉 구동축의 열팽창||thermal expansion of core structure, sodium and rod drivelines]]</span></div>
+    <div class="readout"><span class="k">[[연료 쪽 (도플러 + 연료 팽창)||Fuel side (Doppler + expansion)]]</span><span class="v" style="font-size:16px;line-height:1.5;color:var(--ink-2)">[[오히려 작은 항||the smaller term]]</span></div>
+    <div class="readout hi"><span class="k">[[크기||Magnitude]]</span><span class="v" style="font-size:16px;line-height:1.5">[[대체로 노심 온도차 ΔT 에 비례||roughly proportional to core ΔT]]</span></div>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 코스트다운 */
+S({tag:'COAST-DOWN AS A DESIGN PARAMETER', ov:'[[펌프 코스트다운 시간은 설계 변수다||Pump coast-down time is a design parameter]]',
+src:'[[<b>출처</b> 본 교재 10.3절 · 100 · 300 · 600 s 코스트다운 반복 시험 · 예상사건 연료–피복재 계면 한계 1319 °F(715 °C) · 44 · 45번 시험만 일부 집합체에서 잠깐 넘을 것으로 예측 · 연료 파손 0 — 그 연료를 정상 연소도까지 계속 태움 · 유량 곡선은 모양만 보이는 개념도(교재에 곡선 수치 없음)||<b>Source</b> This textbook &#167;10.3 · repeated with 100, 300 and 600 s coast-downs · fuel-cladding interface limit for anticipated events 1319 °F (715 °C) · only tests 44 and 45 were predicted to exceed it briefly in some assemblies · zero fuel failures - the fuel went on to normal burnup · the flow curves are concept shapes only (the book gives no curve data)]]',
+abbr:'[[<b>지발중성자</b> 핵분열 뒤 몇 초~수십 초 늦게 나오는 중성자 — 원자로를 제어 가능하게 만듦 · <b>시정수</b> 계가 변화에 반응하는 특성 시간 · <b>CRBRP · FFTF</b> 미국 고속로 계획 · 시험로||<b>delayed neutrons</b> neutrons emitted seconds after fission that make a reactor controllable · <b>time constant</b> the characteristic response time · <b>CRBRP, FFTF</b> US fast-reactor project and test facility]]',
+html:`<h2 class="t">[[펌프 <em>코스트다운 시간</em>은 설계 변수다||Pump <em>coast-down time</em> is a design parameter]]</h2>
+<ul class="b">
+  <li>[[코스트다운이 길수록 최고온도가 낮았음 — 유량 감소가 <b>중성자 시정수와 열 시정수보다 충분히 느려야</b> 피드백이 따라올 시간이 생김||The longer the coast-down, the lower the peak - flow must fall <b>slower than the neutron and thermal time constants</b> so feedback can keep up]]</li>
+  <li>[[설계자는 펌프 · 전동기의 <b>회전 관성</b>을 조절해 원하는 코스트다운을 만듦 — 9장에서 <b class="hot">전자기펌프에 관성이 없다</b>는 점을 짚은 이유||Designers tune pump and motor <b>inertia</b> to get the coast-down they want - which is why ch. 9 flagged that <b class="hot">EM pumps have none</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 360" role="img" aria-label="[[100·300·600초 코스트다운과 최고온도의 관계, 그리고 β가 우라늄과 플루토늄에서 다르다는 주의||Coast-downs of 100, 300 and 600 s against peak temperature, and a caution that β differs for uranium and plutonium]]">
+  <g id="cd-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#cd-g'), gs=[];
+  /* 개념 곡선 — 교재에 수치가 없으므로 모양만 보인다: 코스트다운 시간이 길수록 유량이 천천히 줄어든다 */
+  const X0=60, X1=640, Y0=250, Y1=30, sx=t=>X0+t/600*(X1-X0), sy=f=>Y0-f*(Y0-Y1);
+  G.appendChild(mk('line',{x1:X0,x2:X1,y1:Y0,y2:Y0,stroke:'var(--rule)'}));
+  G.appendChild(mk('line',{x1:X0,x2:X0,y1:Y1,y2:Y0,stroke:'var(--rule)'}));
+  [0,100,300,600].forEach(t=>G.appendChild(mk('text',{x:sx(t),y:Y0+20,'text-anchor':'middle',class:'lbl'})).textContent=t+' s');
+  G.appendChild(mk('text',{x:X0,y:18,class:'lbl'})).textContent=TX('펌프 유량 (개념)','pump flow (concept)');
+  [[100,'var(--hot)'],[300,'var(--amber)'],[600,'var(--ok)']].forEach((c,i)=>{
+    let d=''; for(let k=0;k<=60;k++){ const t=600*k/60, f=Math.max(0,1-t/c[0]); d+=(d?'L':'M')+sx(t).toFixed(1)+','+sy(Math.pow(f,1.6)*0.92+0.08).toFixed(1); }
+    const p=mk('path',{d:d,fill:'none',stroke:c[1],'stroke-width':3,opacity:0}); G.appendChild(p); gs.push(p);
+    G.appendChild(mk('text',{x:sx(c[0])+6,y:sy(0.08)-10-18*i,class:'lbl',fill:c[1]})).textContent=c[0]+' s';
+  });
+  G.appendChild(mk('text',{x:X0,y:300,class:'lbl'})).textContent=TX('길수록 최고온도가 낮다 — 피드백이 따라올 시간','longer means a lower peak - time for feedback to catch up');
+  const tip=mk('g',{transform:'translate(690,20)',opacity:0});
+  tip.appendChild(mk('rect',{width:430,height:300,fill:'var(--panel)',stroke:'var(--amber)'}));
+  tip.appendChild(mk('text',{x:22,y:40,'font-family':'var(--sans)','font-size':19,fill:'var(--amber)','font-weight':600})).textContent=TX('β 는 U-235 와 Pu-239 에서 약 2배 다름','β differs about 2 × between U-235 and Pu-239');
+  wrapT(TX('노심이 우라늄에서 플루토늄 평형으로 옮겨가면 반응도 척도($)가 통째로 바뀜. 코스트다운 사양은 플루토늄 평형 노심 기준으로 정해야 함 — 초기 노심 기준이면 수명 후반에 여유가 사라짐.',
+            'As the core moves from uranium to plutonium equilibrium the dollar scale changes wholesale. Set the coast-down for the plutonium equilibrium core - set it for the first core and the margin vanishes late in life.'),22)
+    .slice(0,8).forEach((ln,j)=>tip.appendChild(mk('text',{x:22,y:84+j*26,'font-family':'var(--sans)','font-size':16,fill:'var(--ink-2)','font-weight':300})).textContent=ln);
+  G.appendChild(tip); gs.push(tip);
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:420,delay:250*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- LOHSWS */
+S({tag:'EBR-II · LOHSWS', ov:'[[EBR-II 시험 2 — 제어봉 없는 열제거원 상실(LOHSWS)||EBR-II test 2 - loss of heat sink without scram]]',
+src:'[[<b>계산</b> 본 교재 10.3절 · 이겨야 할 제어봉 가치 약 30 ¢ ÷ 입구온도계수 약 0.4 ¢/°F = 75 °F(42 °C) · 하부 반사체, 이어서 노심 지지구조의 열팽창이 음의 반응도를 넣음 · 그림은 이 산술을 시간축에 펼친 것(시간 눈금은 임의)||<b>Calculation</b> This textbook &#167;10.3 · rod worth to overcome about 30 ¢ ÷ inlet coefficient about 0.4 ¢/°F = 75 °F (42 °C) · expansion of the lower reflector, then the core support, inserts the negative reactivity · the drawing unfolds this arithmetic in time (time scale arbitrary)]]',
+abbr:'[[<b>LOHSWS</b> Loss of Heat Sink Without Scram · <b>¢(센트)</b> 1/100 $ — 지발중성자 비율 기준 반응도 · <b>입구온도계수</b> 노심 입구 온도 1 도당 반응도 변화||<b>LOHSWS</b> Loss of Heat Sink Without Scram · <b>¢ (cent)</b> 1/100 of a dollar of reactivity · <b>inlet temperature coefficient</b> reactivity per degree of core-inlet temperature]]',
+html:`<h2 class="t">[[EBR-II 시험 2 — <em>제어봉 없는 열제거원 상실</em>||EBR-II test 2 - <em>loss of heat sink without scram</em>]]</h2>
+<ul class="b">
+  <li>[[다시 전출력으로 올린 뒤 <b>2차(중간) 펌프를 끔</b> — 열이 발전 계통으로 전혀 못 나감. 노심 입구 온도가 오르자 하부 반사체 · 노심 지지구조가 팽창해 음의 반응도를 넣음||Back at full power, <b>the secondary pumps were tripped</b> - no heat could leave. As the core inlet warmed, the lower reflector and core support expanded and inserted negative reactivity]]</li>
+  <li>[[입구가 <b class="ok">약 75 °F(42 °C)</b> 오르자 원자로가 정지 — 30 ¢ ÷ 0.4 ¢/°F. 이 두 시험이 오늘날 <b>모든 소형 SFR 안전 논리의 원형</b>임||The reactor shut down after the inlet rose <b class="ok">about 75 °F (42 °C)</b> - 30 ¢ ÷ 0.4 ¢/°F. These two tests are <b>the template for every small-SFR safety case</b> today]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 800 360" role="img" aria-label="[[입구 온도가 오르며 음의 반응도가 쌓여 제어봉 가치 30센트와 같아지는 순간 출력이 0으로 가는 과정||As inlet temperature rises, negative reactivity builds until it matches the 30-cent rod worth and power goes to zero]]">
+    <g id="lh-g"></g>
+    <rect id="lh-bar" x="120" y="0" width="120" height="0" fill="var(--ok)" opacity="0.75"/>
+    <rect id="lh-pw" x="440" y="0" width="120" height="0" fill="var(--hot)" opacity="0.75"/>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">[[노심 입구 온도 상승||Core inlet rise]]</span><span class="v" id="lh-t">0<small>°F</small></span></div>
+    <div class="readout good"><span class="k">[[들어온 음의 반응도||Negative reactivity in]]</span><span class="v" id="lh-r">0<small>¢</small></span></div>
+    <div class="formula" style="font-size:18px">30 ¢ / 0.4 ¢/°F <span class="op">=</span> 75 °F</div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#lh-g'), Y0=300, H=250, bar=el.querySelector('#lh-bar'), pw=el.querySelector('#lh-pw');
+  G.appendChild(mk('line',{x1:60,x2:780,y1:Y0,y2:Y0,stroke:'var(--rule)'}));
+  G.appendChild(mk('line',{x1:100,x2:260,y1:Y0-H,y2:Y0-H,stroke:'var(--amber)','stroke-width':2,'stroke-dasharray':'7 5'}));
+  G.appendChild(mk('text',{x:270,y:Y0-H+5,class:'lbl',fill:'var(--amber)'})).textContent=TX('이겨야 할 제어봉 가치 30 ¢','rod worth to overcome 30 ¢');
+  G.appendChild(mk('text',{x:180,y:Y0+26,'text-anchor':'middle','font-family':'var(--sans)','font-size':16,fill:'var(--ok)','font-weight':600})).textContent=TX('구조 팽창 반응도','structural feedback');
+  G.appendChild(mk('text',{x:500,y:Y0+26,'text-anchor':'middle','font-family':'var(--sans)','font-size':16,fill:'var(--hot)','font-weight':600})).textContent=TX('출력','power');
+  G.appendChild(mk('text',{x:500,y:Y0-H-12,'text-anchor':'middle',class:'lbl'})).textContent=TX('100 % (시작)','100 % (start)');
+  G.appendChild(mk('text',{x:780,y:354,'text-anchor':'end',class:'lbl'})).textContent=TX('시간 눈금은 임의 — 산술만 보인다','time scale arbitrary - the arithmetic only');
+  function set(dT){
+    const r=Math.min(30,0.4*dT), p=Math.max(0,1-r/30);
+    bar.setAttribute('y',Y0-H*r/30); bar.setAttribute('height',H*r/30);
+    pw.setAttribute('y',Y0-H*p); pw.setAttribute('height',H*p);
+    el.querySelector('#lh-t').innerHTML=Math.round(dT)+'<small>°F</small>';
+    el.querySelector('#lh-r').innerHTML=Math.round(r)+'<small>¢</small>';
+  }
+  if(RM){ set(75); return; }
+  set(0);
+  raf(t=>{ set(75*clamp((t-0.4)/2.6,0,1)); });
+}});
+
+
+/* ---------------------------------------------------------------- RVACS */
+S({tag:'RVACS', ov:'[[RVACS — 펌프 없는 최후의 제열||RVACS - the last heat removal, with no pumps]]',
+src:'[[<b>출처</b> 본 교재 10.4절 표 10.2 · 그림 10.3 · 붕괴열은 정지 후 약 하루면 정격의 0.5~0.7 % · Natrium 은 용기 외부 공기냉각, 용량 비공개||<b>Source</b> This textbook &#167;10.4, Table 10.2, Fig. 10.3 · decay heat falls to 0.5-0.7 % of rated about a day after shutdown · Natrium uses external air cooling, capacity undisclosed]]',
+abbr:'[[<b>RVACS</b> 원자로용기 보조냉각계통 — 원자로용기와 보호용기 사이 환형부로 공기가 스스로 흐름 · <b>PRISM</b> GE-Hitachi 소형 SFR · <b>SAFR</b> Rockwell 의 SFR 설계||<b>RVACS</b> Reactor Vessel Auxiliary Cooling System - air rising by itself in the gap between reactor and guard vessel · <b>PRISM</b> GE-Hitachi&#8217;s small SFR · <b>SAFR</b> Rockwell&#8217;s SFR design]]',
+html:`<h2 class="t">[[<em>RVACS</em> — 펌프 없는 최후의 제열||<em>RVACS</em> - the last heat removal, with no pumps]]</h2>
+<ul class="b">
+  <li>[[RVACS 용량을 <b>하루 뒤 붕괴열(0.5~0.7 %)</b>에 맞추고, 그 이전은 333 m³ 나트륨 풀이 흡수함 — <b>큰 재고 + 330 K 여유 + RVACS</b>, 셋 중 하나만 빠져도 성립 안 함||RVACS is sized to <b>decay heat after a day (0.5-0.7 %)</b>; before that the 333 m³ pool soaks it up - <b>big inventory + 330 K margin + RVACS</b>, lose one and it fails]]</li>
+  <li>[[RVACS 용량이 용기 표면적에 비례 &#8594; <b class="hot">모듈 출력의 상한</b>이 여기서 정해짐 — HTGR에서 노심 지름이 상한을 정했던 것과 같은 구조||RVACS capacity scales with vessel area &#8594; <b class="hot">it caps module power</b> - the same structure as core diameter capping the HTGR]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f10_03', cap:'[[RVACS 개념과 제열 능력 — 풀의 열관성이 첫 몇 시간을 벌고 RVACS 가 그 뒤를 받음 · 교재 그림 10.3||RVACS concept and capacity - pool inertia buys the first hours, RVACS takes over after · textbook Fig. 10.3]]'})}
+  </div>
+  <div class="side" style="width:360px">
+    <table class="d sm">
+      <tr><th>[[설계||Design]]</th><th>[[정격||Rated]]</th><th>[[RVACS 용량||RVACS]]</th></tr>
+      <tr><td>GE-Hitachi PRISM</td><td class="n">840 MWt</td><td class="n">[[0.7 % ≈ 5.9 MW||0.7 % ≈ 5.9 MW]]</td></tr>
+      <tr><td>Rockwell SAFR</td><td class="n">900 MWt</td><td class="n">[[0.6 % ≈ 5.4 MW||0.6 % ≈ 5.4 MW]]</td></tr>
+      <tr><td>TerraPower Natrium</td><td class="n">840 MWt</td><td>[[외부 공기냉각, 비공개||external air, undisclosed]]</td></tr>
+    </table>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- DRACS · IRACS */
+S({tag:'DRACS · IRACS', ov:'[[DRACS · IRACS 와 4S 잔열제거계통||DRACS, IRACS and the 4S decay-heat removal system]]',
+src:'[[<b>출처</b> 본 교재 10.4절 그림 10.4 · 4S 는 IRACS + RVACS 조합||<b>Source</b> This textbook &#167;10.4, Fig. 10.4 · 4S combines IRACS and RVACS]]',
+abbr:'[[<b>DRACS</b> 직접 원자로 보조냉각 — 풀에 담근 열교환기 · <b>IRACS</b> 중간 루프 보조냉각 — 보통 비안전등급 1차 방어선 · <b>NaK</b> 나트륨–칼륨 합금 — 상온에서 액체||<b>DRACS</b> Direct Reactor Auxiliary Cooling - an exchanger dipped in the pool · <b>IRACS</b> Intermediate RACS - usually a non-safety first line · <b>NaK</b> sodium-potassium alloy, liquid at room temperature]]',
+html:`<h2 class="t">[[<em>DRACS · IRACS</em> 와 4S 잔열제거계통||<em>DRACS, IRACS</em> and the 4S decay-heat removal system]]</h2>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f10_04', cap:'[[4S 잔열제거계통 — 중간 루프의 IRACS 공기냉각기와 용기 바깥 RVACS 의 이중 구성 · 교재 그림 10.4||The 4S decay-heat removal system - an IRACS air cooler on the intermediate loop plus RVACS outside the vessel · textbook Fig. 10.4]]'})}
+  </div>
+  <div class="side" style="width:380px">
+    <div class="readout hi"><span class="k">RVACS</span><span class="v" style="font-size:15.5px;line-height:1.5">[[용기 벽을 건너는 복사 · 자연대류. 무동력 · 무제한 — 대신 용기 면적에 묶임||radiation and convection across the vessel wall. Unpowered, unlimited - but tied to vessel area]]</span></div>
+    <div class="readout good"><span class="k">DRACS</span><span class="v" style="font-size:15.5px;line-height:1.5">[[열교환기를 풀에 직접 담그고 중간 Na · NaK 자연순환으로 공기냉각기까지 뺌. 용기 면적에 구애받지 않음||an exchanger in the pool, with a Na or NaK natural-circulation loop to an air cooler. Not limited by vessel area]]</span></div>
+    <div class="readout"><span class="k">IRACS</span><span class="v" style="font-size:15.5px;line-height:1.5">[[중간 루프에 붙인 공기냉각기. 보통 비안전등급 1차 방어선||an air cooler on the intermediate loop. Usually a non-safety first line]]</span></div>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 나트륨 화재 */
+S({tag:'SODIUM FIRES', ov:'[[나트륨 화재의 실제 숫자||Sodium fires - the actual numbers]]',
+src:'[[<b>출처</b> 본 교재 10.5절 · 물은 절대 쓰지 않음 · 소화 후에도 24시간 이상 냉각 유지||<b>Source</b> This textbook &#167;10.5 · never water · keep cooling for 24 h or more after extinguishing]]',
+abbr:'[[<b>분무 화재(spray fire)</b> 새어 나온 나트륨 방울이 공중에서 타는 화재 · <b>에어로졸</b> 공기 중에 떠다니는 미세 입자 · <b>허니콤 트레이</b> 떨어진 나트륨을 받아 산소를 차단하는 벌집 모양 받침||<b>spray fire</b> leaked sodium droplets burning in the air · <b>aerosol</b> fine particles suspended in air · <b>honeycomb tray</b> a catch tray that starves fallen sodium of oxygen]]',
+html:`<h2 class="t">[[<em>나트륨 화재</em>의 실제 숫자||<em>Sodium fires</em> - the actual numbers]]</h2>
+<ul class="b">
+  <li>[[연소열 11.3 MJ/kg은 목재(18.6)나 휘발유(47.8)보다 낮음 — 나트륨 화재는 에너지보다 <b>화학·에어로졸의 문제</b>임. NaOH 연무는 부식성이고 <b>200 mg/m³면 시야가 완전히 막힘</b>||At 11.3 MJ/kg sodium releases less heat than wood (18.6) or petrol (47.8) - it is <b>a chemistry and aerosol problem</b>. NaOH fumes corrode, and <b>200 mg/m³ blocks vision completely</b>]]</li>
+  <li>[[설계를 지배하는 것은 <b class="hot">분무 화재</b> — 방울이 닿는 즉시 점화되고 풀 화재보다 훨씬 빠름. 나트륨 배관을 이중관 · 가드배관으로 감싸는 이유||Design is driven by <b class="hot">spray fires</b> - droplets ignite on contact and burn far faster than a pool. Why sodium pipes are double-walled or guarded]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d">
+  <tr><th>[[항목||Quantity]]</th><th>[[값||Value]]</th></tr>
+  <tr><td>[[발화 온도||Ignition]]</td><td>[[고정값 없음 — 풀 200~400 °C · 산화막 온전 275~425 °C · 교란 시 200 °C · 잘게 분산되면 상온 자연발화||no fixed value - pool 200-400 °C · intact oxide 275-425 °C · disturbed 200 °C · finely dispersed, spontaneous at room temperature]]</td></tr>
+  <tr><td>[[풀 연소율 · 열유속||Pool burn rate · heat flux]]</td><td class="n">2~45 g/(s·m²) · 2.3×10⁴ ~ 5.1×10⁵ W/m²</td></tr>
+  <tr class="mark"><td>[[연소열||Heat of combustion]]</td><td class="n">[[11.3 MJ/kg (목재 18.6 · 휘발유 47.8)||11.3 MJ/kg (wood 18.6 · petrol 47.8)]]</td></tr>
+  <tr><td>[[시야 차단||Vision blocked]]</td><td class="n">NaOH 200 mg/m³</td></tr>
+  <tr><td>[[대응||Response]]</td><td>[[불활성 셀(Ar · N₂) · 받침 팬과 허니콤 트레이(개구율 30 % 이하) · 제한 면적 · 질소 주입. 물 금지||inert cells (Ar, N₂) · catch pans and honeycomb trays (≤ 30 % open) · limited area · nitrogen injection. No water]]</td></tr>
+</table>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 심층방어 */
+S({tag:'DEFENCE IN DEPTH', ov:'[[심층방어로 본 SFR — 무게중심의 이동과 남은 난관||SFR in defence in depth - where the weight moves, and what remains]]',
+src:'[[<b>출처</b> 본 교재 10.6절 · 5단계 틀은 「SMR 설계요건과 공학적안전설비」 · 양의 보이드 반응도가 발동하는 사고의 적분 실험 데이터는 1980년대 것이 전부||<b>Source</b> This textbook &#167;10.6 · the five-level frame is from <i>SMR Design Requirements and ESF</i> · integral data for accidents where positive void worth comes into play date from the 1980s only]]',
+abbr:'[[<b>심층방어</b> 독립된 여러 겹의 방호로 사고를 막는 설계 원칙 · <b>유로 폐색</b> 집합체 유로가 막히는 사고 · <b>SAS4A/SASSYS-1</b> ANL 의 SFR 안전해석 코드||<b>defence in depth</b> independent layered protection · <b>flow blockage</b> an assembly channel becoming blocked · <b>SAS4A/SASSYS-1</b> ANL&#8217;s SFR safety codes]]',
+html:`<h2 class="t">[[심층방어로 본 SFR — <em>무게중심의 이동</em>과 남은 난관||SFR in defence in depth - <em>where the weight moves</em>, and what remains]]</h2>
+<ul class="b">
+  <li>[[나트륨 화재와 나트륨–물 반응은 심층방어 어느 단계에도 깔끔하게 안 들어감 — 원자로 사고가 아니라 산업 화재·화학 사고의 성격. <b>NRC가 &#8220;화재방호&#8221;를 별도 축으로 다루는 이유</b>||Sodium fires and sodium-water reactions fit no level cleanly - they behave like industrial fire and chemistry. <b>Why NRC treats fire protection as a separate axis</b>]]</li>
+  <li>[[<b class="hot">대형 노심의 양의 보이드가 실제로 발동하는 사고(유로 폐색 후 국부 비등)를 상용로에서 검증한 사례는 없음</b> — SFR 인허가의 최대 난관||<b class="hot">No commercial reactor has ever validated an accident where large-core positive void worth actually acts (local boiling after a blockage)</b> - the biggest hurdle in SFR licensing]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 330" role="img" aria-label="[[심층방어 1단계는 무거워지고 2·3단계는 가벼워지며 화재·화학이라는 새 축이 생기는 모습||Level 1 gets heavier, levels 2-3 lighter, and fire and chemistry appear as a new axis]]">
+  <g id="dd-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#dd-g'), gs=[];
+  [[TX('1단계 · 정상운전','Level 1 · normal operation'),TX('무거워짐','heavier'),'var(--hot)',TX('나트륨 순도(산소 3 ppm 이하) · 동결 방지 가열 · 커버가스 관리 · 누설 감시가 상시 업무','sodium purity (O under 3 ppm), anti-freeze heating, cover gas and leak monitoring every day')],
+   [TX('2~3단계 · 이상상태 · 사고','Levels 2-3 · anomalies, accidents'),TX('가벼워짐','lighter'),'var(--ok)',TX('압력 관련 시나리오 상당 부분이 사라짐. 반응도 사고는 구조 열팽창 피드백이 받아냄','many pressure scenarios vanish; reactivity events are caught by structural feedback')],
+   [TX('새 축 · 화재 · 화학','A new axis · fire and chemistry'),TX('생김','appears'),'var(--amber)',TX('나트륨 화재 · 나트륨–물 반응 — 원자로 사고가 아니라 산업 화재·화학 사고','sodium fires and sodium-water reactions - industrial fire and chemistry, not reactor accidents')]]
+  .forEach((c,i)=>{
+    const g=mk('g',{transform:'translate(0,'+(i*108)+')',opacity:0});
+    g.appendChild(mk('rect',{width:1120,height:96,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:4,height:96,fill:c[2]}));
+    g.appendChild(mk('text',{x:26,y:40,'font-family':'var(--sans)','font-size':19,fill:'var(--ink)','font-weight':600})).textContent=c[0];
+    g.appendChild(mk('text',{x:26,y:72,'font-family':'var(--mono)','font-size':16,fill:c[2],'font-weight':600})).textContent=c[1];
+    wrapT(c[3],42).slice(0,2).forEach((ln,j)=>g.appendChild(mk('text',{x:400,y:44+j*26,'font-family':'var(--sans)','font-size':16.5,fill:'var(--ink-2)','font-weight':300})).textContent=ln);
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:340,delay:220*i,fill:'forwards'}));
+}});
+</script>

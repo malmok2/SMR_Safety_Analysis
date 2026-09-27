@@ -1,0 +1,278 @@
+<script>
+/* ================================================================
+   SECTION 07 — 물과 폭발하는 금속을 왜 쓰는가  (교재 7장)
+   ================================================================ */
+SECT('07 · [[나트륨||Sodium]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;07 물과 폭발하는 금속을 왜 쓰는가||&#167;07 Why use a metal that explodes with water]]',
+html:`[[<div class="no">07</div><h2>물과 폭발하는 금속을 왜 쓰는가</h2><div class="ln"></div>
+<p>SFR의 출발점은 냉각재가 아니라 <b>중성자</b>다. 빠른 중성자를 지키려면 냉각재가 감속을 하면 안 된다.
+그 조건 하나가 후보를 나트륨 하나로 좁히고, 나트륨의 물성 하나하나가 설계의 한 부분씩을 정한다.</p>||<div class="no">07</div><h2>Why use a metal that explodes with water</h2><div class="ln"></div>
+<p>The SFR starts from the <b>neutron</b>, not the coolant. Keeping neutrons fast means the coolant must not moderate.
+That one condition narrows the field to sodium, and each property of sodium then fixes one part of the design.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 후보 */
+S({tag:'WHY FAST, WHY SODIUM', ov:'[[고속 스펙트럼이 필요한 이유와 냉각재 후보||Why a fast spectrum, and the coolant candidates]]',
+src:'[[<b>출처</b> 본 교재 7.1절 · U-238 은 천연우라늄의 99.3 % · 초우라늄(넵투늄·아메리슘·퀴륨)은 느린 중성자로 잘 쪼개지지 않아 10만 년을 남음||<b>Source</b> This textbook &#167;7.1 · U-238 is 99.3 % of natural uranium · the transuranics (Np, Am, Cm) barely fission with slow neutrons and last 100,000 years]]',
+abbr:'[[<b>고속중성자</b> 감속되지 않은 높은 에너지의 중성자 · <b>초우라늄</b> 우라늄보다 무거운 원소 · <b>산란단면적</b> 중성자가 부딪혀 튕겨 나갈 확률의 척도 · <b>납·납비스무트</b> 다른 액체금속 냉각재||<b>fast neutron</b> an unmoderated, high-energy neutron · <b>transuranics</b> elements heavier than uranium · <b>scattering cross-section</b> the likelihood of a neutron bouncing off · <b>lead, lead-bismuth</b> other liquid-metal coolants]]',
+html:`<h2 class="t">[[고속 스펙트럼이 필요한 이유와 <em>냉각재 후보</em>||Why a fast spectrum, and the <em>coolant candidates</em>]]</h2>
+<ul class="b">
+  <li>[[빠른 중성자를 쓰면 <b>U-238을 플루토늄으로 바꿔 태우고</b>, <b>초우라늄을 쪼개 없앨 수 있음</b> — 대신 냉각재가 감속하면 안 됨||Fast neutrons can <b>breed and burn U-238 as plutonium</b> and <b>fission the transuranics away</b> - but only if the coolant does not moderate]]</li>
+  <li>[[물과 폭발한다는 사실은 이 장점을 포기할 이유가 되지 못했음 — 대신 <b class="amb">계통 설계로 우회</b>했고, 그 우회로가 <b>중간 루프</b>임(9장)||Exploding with water was not reason enough to give that up - it was <b class="amb">designed around</b>, and the detour is <b>the intermediate loop</b> (ch. 9)]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 350" role="img" aria-label="[[물·헬륨·납·나트륨 네 후보가 고속로 냉각재 조건에서 어떻게 걸러지는지||How water, helium, lead and sodium fare against the fast-reactor coolant conditions]]">
+  <g id="cd-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#cd-g'), gs=[];
+  const C=[[TX('물','Water'),TX('실격','Out'),TX('감속이 본업임','moderating is its job'),'var(--ink-3)',false],
+           [TX('헬륨','Helium'),TX('실격','Out'),TX('감속은 안 하지만 열을 못 나름 — 수백 MW/m³ 를 감당 못 함','no moderation, but cannot carry hundreds of MW/m³'),'var(--ink-3)',false],
+           [TX('납 · 납비스무트','Lead · Pb-Bi'),TX('가능','Possible'),TX('무거워 감속 거의 없음. 융점 327 °C, 강재 부식','heavy, barely moderates; melts at 327 °C, corrodes steel'),'var(--amber)',false],
+           [TX('나트륨','Sodium'),TX('선택','Chosen'),TX('산란단면적이 작아 감속 약함. 열전도도 70 W/(m·K)','weak moderation; conductivity 70 W/(m·K)'),'var(--ok)',true]];
+  C.forEach((c,i)=>{
+    const x=i*283, g=mk('g',{transform:'translate('+x+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:268,height:340,fill:'var(--panel)',stroke:c[4]?c[3]:'var(--rule)','stroke-width':c[4]?2:1}));
+    g.appendChild(mk('rect',{width:268,height:4,fill:c[3]}));
+    g.appendChild(mk('text',{x:20,y:56,'font-family':'var(--sans)','font-size':26,fill:c[4]?c[3]:'var(--ink)','font-weight':600})).textContent=c[0];
+    g.appendChild(mk('text',{x:20,y:104,'font-family':'var(--mono)','font-size':19,fill:c[3],'font-weight':600,'letter-spacing':'.08em'})).textContent=c[1];
+    wrapT(c[2],14).slice(0,5).forEach((ln,j)=>g.appendChild(mk('text',{x:20,y:160+j*30,'font-family':'var(--sans)','font-size':17,fill:'var(--ink-2)','font-weight':300})).textContent=ln);
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:340,delay:200*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 풀형 개념 */
+S({tag:'POOL-TYPE SFR', ov:'[[풀형 SFR 개념 — 1차 · 중간 · 증기 세 계통||The pool-type SFR - primary, intermediate and steam circuits]]',
+src:'[[<b>출처</b> 본 교재 7.1절 그림 7.1 · 9.6절 · 1차 나트륨(풀) · 중간 나트륨 · 증기-물의 3계통||<b>Source</b> This textbook &#167;7.1, Fig. 7.1; &#167;9.6 · primary sodium (pool), intermediate sodium, steam-water]]',
+abbr:'[[<b>풀형</b> 노심·펌프·중간열교환기가 한 나트륨 탱크에 잠긴 배치 · <b>IHX</b> 중간열교환기 · <b>중간 루프</b> 1차 나트륨과 물 사이에 둔 비방사성 나트륨 계통||<b>pool type</b> core, pumps and IHX all in one sodium tank · <b>IHX</b> intermediate heat exchanger · <b>intermediate loop</b> a non-radioactive sodium circuit between primary sodium and water]]',
+html:`<h2 class="t">[[풀형 SFR 개념 — <em>1차 · 중간 · 증기</em> 세 계통||The pool-type SFR - <em>primary, intermediate and steam</em> circuits]]</h2>
+<ul class="b">
+  <li>[[1차 나트륨은 탱크(풀) 밖으로 나가지 않음. <b class="cool">중간 나트륨</b>이 열을 받아 증기발생기로 가져감 — 물과 만나는 것은 중간 나트륨뿐임||Primary sodium never leaves the pool. <b class="cool">Intermediate sodium</b> takes the heat to the steam generator - only it ever meets water]]</li>
+  <li>[[계통이 셋인 노형은 SFR뿐임. 열교환기·펌프·배관 한 벌과 온도 손실 수십 K를 더하는데도 모든 실용 SFR이 이렇게 함(9장 끝)||Only the SFR has three circuits. Every practical SFR accepts an extra exchanger, pump, piping and tens of kelvin lost (end of ch. 9)]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 800 400" role="img" aria-label="[[1차 나트륨 풀에서 중간 나트륨 루프를 거쳐 증기발생기와 터빈으로 가는 세 계통의 열 흐름||Heat moving from the primary sodium pool through the intermediate loop to the steam generator and turbine]]">
+    <g id="pl-g"></g>
+  </svg>
+  </div>
+  <div class="side">
+    ${PH({src:'f7_01', cap:'[[풀형 SFR 개념도 · 교재 그림 7.1||Pool-type SFR concept · textbook Fig. 7.1]]'})}
+    <div class="readout warn"><span class="k">[[1차 · 방사화 나트륨||Primary · activated Na]]</span><span class="v" style="font-size:16px">[[Na-24 · 반감기 15 h||Na-24 · 15 h half-life]]</span></div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#pl-g');
+  /* 1차 풀 */
+  G.appendChild(mk('rect',{x:20,y:60,width:300,height:320,rx:18,fill:'var(--hot)',opacity:0.10,stroke:'var(--hot)','stroke-opacity':0.6,'stroke-width':1.6}));
+  G.appendChild(mk('rect',{x:120,y:250,width:80,height:90,fill:'var(--hot)',opacity:0.55}));
+  G.appendChild(mk('rect',{x:230,y:120,width:50,height:140,fill:'var(--panel)',stroke:'var(--cool)','stroke-width':1.6}));
+  /* 중간 루프 */
+  G.appendChild(mk('rect',{x:470,y:100,width:90,height:220,rx:14,fill:'var(--panel)',stroke:'var(--amber)','stroke-width':1.8}));
+  /* 증기 · 터빈 */
+  G.appendChild(mk('path',{d:'M690,140 L760,110 L760,210 L690,180 Z',fill:'var(--panel)',stroke:'var(--ok)','stroke-width':1.8}));
+  const p1=mk('path',{d:'M160,250 V110 H255 V250 H160',fill:'none',stroke:'var(--hot)','stroke-width':1.2,'stroke-dasharray':'3 5',opacity:0.5});
+  const p2=mk('path',{d:'M270,140 H500 V300 H270',fill:'none',stroke:'var(--cool)','stroke-width':1.2,'stroke-dasharray':'3 5',opacity:0.5});
+  const p3=mk('path',{d:'M540,130 H620 V160 H690 M725,200 V300 H540',fill:'none',stroke:'var(--ok)','stroke-width':1.2,'stroke-dasharray':'3 5',opacity:0.5});
+  const p3a=mk('path',{d:'M540,130 H620 V160 H700',fill:'none',stroke:'none'});
+  [p1,p2,p3,p3a].forEach(p=>G.appendChild(p));
+  flow(p1,{n:10,color:'var(--hot)',r:3.8,speed:0.10});
+  flow(p2,{n:12,color:'var(--cool)',r:3.8,speed:0.09});
+  flow(p3a,{n:5,color:'var(--ok)',r:3.6,speed:0.18});
+  const L=(x,y,t,c,a,f)=>{ const e=mk('text',{x:x,y:y,class:f||'lbl',fill:c||'var(--ink-2)','text-anchor':a||'start'}); e.textContent=t; G.appendChild(e); };
+  L(170,48,TX('① 1차 나트륨 풀','① primary sodium pool'),'var(--hot)','middle','val');
+  L(160,366,TX('노심','core'),'var(--hot)','middle');
+  L(255,112,'IHX','var(--cool)','middle');
+  L(385,48,TX('② 중간 나트륨','② intermediate Na'),'var(--cool)','middle','val');
+  L(515,340,TX('증기발생기','steam generator'),'var(--amber)','middle');
+  L(725,48,TX('③ 증기','③ steam'),'var(--ok)','middle','val');
+  L(725,240,TX('터빈','turbine'),'var(--ok)','middle');
+  L(515,372,TX('물과 만나는 곳은 여기뿐','the only place water meets sodium'),'var(--amber)','middle');
+}});
+
+
+/* ---------------------------------------------------------------- 물성 */
+S({tag:'SODIUM PROPERTIES', ov:'[[나트륨 물성 — 표준식과 단위 함정||Sodium properties - the standard fits and the unit trap]]',
+src:'[[<b>출처</b> 본 교재 7.2절 표 7.1 · 그림 7.2 · ANL/RE-95/2 (Fink &amp; Leibowitz, 1995) · 음영은 4S 운전영역 355~510 °C||<b>Source</b> This textbook &#167;7.2, Table 7.1, Fig. 7.2 · ANL/RE-95/2 (Fink &amp; Leibowitz, 1995) · shading is the 4S range, 355-510 °C]]',
+abbr:'[[<b>ANL</b> 미국 아르곤국립연구소 · <b>켈빈(K)</b> 절대온도 = °C + 273.15 · <b>Pr</b> 프란틀수 — 운동량 확산/열 확산||<b>ANL</b> Argonne National Laboratory · <b>kelvin (K)</b> absolute temperature = °C + 273.15 · <b>Pr</b> Prandtl number - momentum over thermal diffusivity]]',
+html:`<h2 class="t">[[나트륨 물성 — 표준식과 <em>단위 함정</em>||Sodium properties - the standard fits and the <em>unit trap</em>]]</h2>
+<ul class="b">
+  <li>[[100~600 °C 선형 근사 <b>ρ = 948.6 − 0.228 T(°C)</b>, 최대 오차 0.1 %||Linear fit for 100-600 °C: <b>ρ = 948.6 − 0.228 T(°C)</b>, within 0.1 %]]</li>
+  <li>[[자주 보이는 <b>ρ = 1014 − 0.235 T</b>는 <b class="hot">T가 켈빈일 때</b> 맞음(400 °C &#8594; 856 kg/m³). 섭씨로 넣으면 7 % 높게 나옴 — III권 Sodium() 도 켈빈 기준||The common <b>ρ = 1014 − 0.235 T</b> holds <b class="hot">with T in kelvin</b> (400 °C &#8594; 856 kg/m³). Put in Celsius and it is 7 % high - Volume III&#8217;s Sodium() is in kelvin too]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f7_02', cap:'[[나트륨의 밀도 · 열전도도 · 프란틀수 — 음영은 4S 운전영역 · 교재 그림 7.2||Density, conductivity and Prandtl number of sodium - shading is the 4S range · textbook Fig. 7.2]]'})}
+  </div>
+  <div class="side" style="width:400px">
+    <table class="d sm">
+      <tr><th>T °C</th><th>ρ</th><th>c<sub>p</sub></th><th>k</th><th>Pr</th></tr>
+      <tr><td>100</td><td class="n">925.2</td><td class="n">1382</td><td class="n">89.3</td><td class="n">0.0105</td></tr>
+      <tr class="mark"><td>[[355 (4S 입구)||355 (4S in)]]</td><td class="n">868.0</td><td class="n">1294</td><td class="n">72.0</td><td class="n">0.0054</td></tr>
+      <tr><td>400</td><td class="n">857.7</td><td class="n">1283</td><td class="n">69.5</td><td class="n">0.0051</td></tr>
+      <tr class="mark"><td>[[510 (4S 출구)||510 (4S out)]]</td><td class="n">832.3</td><td class="n">1263</td><td class="n">63.7</td><td class="n">0.0046</td></tr>
+      <tr><td>[[883 (비점)||883 (boils)]]</td><td class="n">742.5</td><td class="n">1271</td><td class="n">48.6</td><td class="n">0.0041</td></tr>
+    </table>
+    <div class="src" style="font-size:12.5px">[[ρ kg/m³ · c<sub>p</sub> J/(kg·K) · k W/(m·K)||ρ kg/m³ · c<sub>p</sub> J/(kg·K) · k W/(m·K)]]</div>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- Pr 과 Mikityuk */
+S({tag:'LIQUID-METAL HEAT TRANSFER', ov:'[[Pr ≈ 0.005 — 액체금속 전열과 Mikityuk 상관식||Pr ≈ 0.005 - liquid-metal heat transfer and the Mikityuk correlation]]',
+src:'[[<b>출처</b> 본 교재 7.2절 그림 7.3 · Mikityuk (2009) · 적용범위 30 ≤ Pe ≤ 5000, 1.1 ≤ P/D ≤ 1.95 · 평가된 액체금속 데이터 전체에 평균오차 −0.1 %, RMS 1.9 %||<b>Source</b> This textbook &#167;7.2, Fig. 7.3 · Mikityuk (2009) · valid for 30 ≤ Pe ≤ 5000, 1.1 ≤ P/D ≤ 1.95 · mean error −0.1 %, RMS 1.9 % over the evaluated liquid-metal data]]',
+abbr:'[[<b>페클레수 Pe</b> Re × Pr — 대류로 나르는 열과 전도로 나르는 열의 비 · <b>레이놀즈 상사</b> 운동량과 열이 같은 방식으로 전달된다는 가정 · <b>P/D</b> 봉 간격/봉 지름||<b>Péclet number Pe</b> Re × Pr - heat carried by the flow over heat conducted · <b>Reynolds analogy</b> the assumption that heat and momentum travel alike · <b>P/D</b> rod pitch over diameter]]',
+html:`<h2 class="t">[[<em>Pr ≈ 0.005</em> — 액체금속 전열과 Mikityuk 상관식||<em>Pr ≈ 0.005</em> - liquid-metal heat transfer and the Mikityuk correlation]]</h2>
+<ul class="b">
+  <li>[[열이 운동량보다 <b>200배 빨리</b> 퍼짐 — 난류 중심부에서도 분자 전도가 열을 상당 부분 나르므로 <b class="hot">Dittus–Boelter의 근거(레이놀즈 상사)가 무너짐</b>||Heat spreads <b>200 times faster</b> than momentum - molecular conduction carries much of it even in the turbulent core, so <b class="hot">the basis of Dittus–Boelter collapses</b>]]</li>
+  <li>[[Re와 Pr 대신 <b>Pe = Re·Pr</b> 하나로 정리함. Pe &#8594; 0에서도 Nu가 <b class="ok">유한한 값에 수렴</b> — 유동이 멈춰도 전도로 열이 간다는 물리가 식에 들어 있음||Everything collapses onto <b>Pe = Re·Pr</b>. As Pe &#8594; 0, Nu <b class="ok">stays finite</b> - the physics of conduction without flow is built in]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f7_03', cap:'[[액체금속 전열 상관식과 Dittus–Boelter 비교 — 나트륨에 물 상관식을 쓰면 전열을 2배 이상 부풀림 · 교재 그림 7.3||Liquid-metal correlations against Dittus–Boelter - a water correlation inflates sodium heat transfer more than twofold · textbook Fig. 7.3]]'})}
+  </div>
+  <div class="side" style="width:320px">
+    <div class="formula" style="font-size:17px;text-align:left;line-height:2">Nu <span class="op">=</span> 0.047 [1 − e<sup>−3.8(P/D−1)</sup>]<br>&nbsp;&nbsp;&nbsp;× (Pe<sup>0.77</sup> + 250)</div>
+    <div class="readout hi"><span class="k">[[나트륨 Pr (400 °C)||Sodium Pr (400 °C)]]</span><span class="v">0.0051</div>
+    <div class="readout warn"><span class="k">[[Borishanskii 의 경고||Borishanskii&#8217;s warning]]</span><span class="v" style="font-size:15px;line-height:1.5">[[산소가 많으면 젖음이 나빠 h 가 급락 — 콜드트랩으로 3 ppm 이하 유지||excess oxygen spoils wetting and h drops - cold traps hold it under 3 ppm]]</span></div>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 7.3 예제 */
+S({tag:'WATER CORRELATION ERROR', ov:'[[나트륨 봉다발에 물 상관식을 쓰면 틀리는 정도||How wrong a water correlation is in a sodium rod bundle]]',
+src:'[[<b>계산</b> 본 교재 7.3절 · 450 °C · D<sub>h</sub> 4 mm · 6 m/s · P/D 1.2 &#8594; Re = 8.0×10⁴, Pr = 0.0049, Pe = 387 · Dittus–Boelter 는 Pr 을 0.0049 로 고정하고 Re = Pe/Pr 로 계산||<b>Calculation</b> This textbook &#167;7.3 · 450 °C, D<sub>h</sub> 4 mm, 6 m/s, P/D 1.2 &#8594; Re = 8.0×10⁴, Pr = 0.0049, Pe = 387 · Dittus–Boelter evaluated with Pr fixed at 0.0049 and Re = Pe/Pr]]',
+abbr:'[[<b>수력직경 D<sub>h</sub></b> 유로 단면적×4/젖은 둘레 · <b>h</b> 열전달계수 = Nu·k/D<sub>h</sub> · <b>봉다발</b> 연료봉이 격자로 모인 묶음||<b>hydraulic diameter D<sub>h</sub></b> 4 × flow area / wetted perimeter · <b>h</b> heat-transfer coefficient = Nu·k/D<sub>h</sub> · <b>rod bundle</b> fuel rods in a lattice]]',
+html:`<h2 class="t">[[나트륨 봉다발에 <em>물 상관식</em>을 쓰면 틀리는 정도||How wrong a <em>water correlation</em> is in a sodium rod bundle]]</h2>
+<ul class="b">
+  <li>[[대표 조건(Pe = 387)에서 Mikityuk <b>Nu = 8.7</b>(h = 146 kW/(m²·K)), Dittus–Boelter <b class="hot">Nu = 22.8 — 2.6배 과대평가</b>||At a typical Pe of 387, Mikityuk gives <b>Nu = 8.7</b> (h = 146 kW/(m²·K)); Dittus–Boelter gives <b class="hot">22.8 - 2.6 times too high</b>]]</li>
+  <li>[[전열을 2.6배 부풀리면 연료 온도가 낮게 나와 <b>존재하지 않는 여유</b>를 찾게 됨 — 계통코드에 나트륨 물성만 넣고 상관식을 안 바꾸면 딱 이 일이 벌어짐||Inflate h 2.6-fold and the fuel reads cool, <b>finding margin that is not there</b> - exactly what happens if a code gets sodium properties but keeps its correlations]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 800 400" role="img" aria-label="[[페클레수에 따른 Mikityuk 상관식과 Dittus–Boelter 의 누셀트수, 그리고 둘의 비||Nusselt number from Mikityuk and from Dittus–Boelter against Péclet number, and their ratio]]">
+    <g id="lm-ax"></g>
+    <path id="lm-m" d="" fill="none" stroke="var(--cool)" stroke-width="3"/>
+    <path id="lm-d" d="" fill="none" stroke="var(--hot)" stroke-width="2.4" stroke-dasharray="7 5"/>
+    <line id="lm-v" y1="16" y2="340" stroke="var(--amber)" stroke-width="1.4" stroke-dasharray="4 4"/>
+    <circle id="lm-pm" r="6" fill="var(--cool)"/><circle id="lm-pd" r="6" fill="var(--hot)"/>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout hi"><span class="k">Mikityuk (P/D 1.2)</span><span class="v" id="lm-nm">8.7</div>
+    <div class="readout warn"><span class="k">Dittus–Boelter</span><span class="v" id="lm-nd">22.8</div>
+    <div class="readout"><span class="k">[[과대평가 배율||Overprediction]]</span><span class="v" id="lm-r">×2.6</div>
+    <div class="ctl"><label>[[페클레수 Pe||Péclet number Pe]] <span id="lm-ps">387</span></label>
+      <input type="range" id="lm-sl" min="1.477" max="3.699" step="0.005" value="2.588"></div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, ax=el.querySelector('#lm-ax'), PD=1.2, Pr=0.0049;
+  const X0=70, X1=760, Y0=340, Y1=16, sx=pe=>X0+(Math.log10(pe)-Math.log10(30))/(Math.log10(5000)-Math.log10(30))*(X1-X0);
+  const sy=nu=>Y0-(Math.log10(nu)-0)/(3)*(Y0-Y1);
+  const Nm=pe=>0.047*(1-Math.exp(-3.8*(PD-1)))*(Math.pow(pe,0.77)+250), Nd=pe=>0.023*Math.pow(pe/Pr,0.8)*Math.pow(Pr,0.4);
+  [1,10,100,1000].forEach(v=>{ ax.appendChild(mk('line',{x1:X0,x2:X1,y1:sy(v),y2:sy(v),class:'grid'}));
+    ax.appendChild(mk('text',{x:X0-10,y:sy(v)+4,'text-anchor':'end',class:'lbl'})).textContent=String(v); });
+  [30,100,300,1000,3000].forEach(v=>ax.appendChild(mk('text',{x:sx(v),y:Y0+20,'text-anchor':'middle',class:'lbl'})).textContent=fmt(v));
+  ax.appendChild(mk('text',{x:X1,y:Y0+44,'text-anchor':'end',class:'lbl'})).textContent='Pe = Re·Pr';
+  ax.appendChild(mk('text',{x:X0+8,y:Y1+16,class:'lbl'})).textContent='Nu';
+  let a='',b=''; for(let i=0;i<=80;i++){ const pe=30*Math.pow(5000/30,i/80);
+    a+=(a?'L':'M')+sx(pe).toFixed(1)+','+sy(Nm(pe)).toFixed(1); b+=(b?'L':'M')+sx(pe).toFixed(1)+','+sy(Nd(pe)).toFixed(1); }
+  el.querySelector('#lm-m').setAttribute('d',a); el.querySelector('#lm-d').setAttribute('d',b);
+  ax.appendChild(mk('text',{x:X1-4,y:sy(Nm(5000))+22,'text-anchor':'end',class:'lbl',fill:'var(--cool)'})).textContent='Mikityuk';
+  ax.appendChild(mk('text',{x:sx(1500),y:sy(Nd(1500))-10,'text-anchor':'end',class:'lbl',fill:'var(--hot)'})).textContent='Dittus–Boelter';
+  const sl=el.querySelector('#lm-sl');
+  function upd(){
+    const pe=Math.pow(10,+sl.value), m=Nm(pe), d=Nd(pe);
+    const v=el.querySelector('#lm-v'); v.setAttribute('x1',sx(pe)); v.setAttribute('x2',sx(pe));
+    el.querySelector('#lm-pm').setAttribute('cx',sx(pe)); el.querySelector('#lm-pm').setAttribute('cy',sy(m));
+    el.querySelector('#lm-pd').setAttribute('cx',sx(pe)); el.querySelector('#lm-pd').setAttribute('cy',sy(d));
+    el.querySelector('#lm-nm').textContent=m.toFixed(1); el.querySelector('#lm-nd').textContent=d.toFixed(1);
+    el.querySelector('#lm-r').textContent='×'+(d/m).toFixed(1);
+    el.querySelector('#lm-ps').textContent=fmt(pe);
+  }
+  sl.oninput=upd; upd();
+}});
+
+
+/* ---------------------------------------------------------------- 비등 여유 */
+S({tag:'BOILING MARGIN', ov:'[[비등 여유 — 경수로 20 K 와 SFR 330~380 K||Boiling margin - 20 K in a PWR, 330-380 K in an SFR]]',
+src:'[[<b>출처</b> 본 교재 7.4절 · 나트륨 상압 비점 883 °C, 운전 출구 500~550 °C · 경수로 15.5 MPa 포화 345 °C, 노심 출구 325 °C · SFR 여유는 4S 출구 510 °C 기준 · 4S 용기 높이 24 m · 안지름 3.5 m · 두께 25 mm||<b>Source</b> This textbook &#167;7.4 · sodium boils at 883 °C at 1 atm; outlet 500-550 °C · PWR saturation 345 °C at 15.5 MPa, outlet 325 °C · SFR margin from the 4S 510 °C outlet · 4S vessel 24 m tall, 3.5 m bore, 25 mm wall]]',
+abbr:'[[<b>DNBR</b> 핵비등이탈률 — 임계열유속까지의 여유 · <b>서브채널 해석</b> 봉 사이 유로 단위의 열수력 해석 · <b>커버가스</b> 나트륨 자유표면 위의 아르곤 · <b>FCCI</b> 연료–피복재 화학 상호작용(8장)||<b>DNBR</b> departure-from-nucleate-boiling ratio · <b>subchannel analysis</b> thermal hydraulics channel by channel between rods · <b>cover gas</b> argon above the free sodium surface · <b>FCCI</b> fuel-cladding chemical interaction (ch. 8)]]',
+html:`<h2 class="t">[[<em>비등 여유</em> — 경수로 20 K 와 SFR 330~380 K||<em>Boiling margin</em> - 20 K in a PWR, 330-380 K in an SFR]]</h2>
+<ul class="b">
+  <li>[[경수로 열수력 전체(DNBR · 임계열유속 · 서브채널)가 이 <b>20 K를 지키는 싸움</b>임. SFR은 이 싸움을 아예 하지 않음 — 가압 불필요(아르곤 0.1 MPa), 얇은 용기, 두상 모델 불필요, 긴 유예시간||All of LWR thermal hydraulics - DNBR, CHF, subchannels - is <b>a fight to keep those 20 K</b>. The SFR skips it: no pressurising (0.1 MPa argon), a thin vessel, no two-phase model, long grace time]]</li>
+  <li>[[대신 온도 상한은 냉각재가 아니라 <b class="amb">금속연료의 FCCI 공정반응(650~725 °C)</b>이 정함 — 그래서 출구가 510 °C에 묶임(8장)||The ceiling is set not by the coolant but by <b class="amb">the metal-fuel FCCI eutectic at 650-725 °C</b> - hence a 510 °C outlet (ch. 8)]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 380" role="img" aria-label="[[경수로와 SFR의 운전 온도와 비등점 사이의 여유를 한 온도축에 비교||PWR and SFR operating temperature against their boiling points on one scale]]">
+  <g id="bm-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#bm-g'), X0=200, X1=1090, sx=T=>X0+T/1000*(X1-X0), bars=[];
+  [0,200,400,600,800,1000].forEach(T=>{ G.appendChild(mk('line',{x1:sx(T),x2:sx(T),y1:0,y2:320,class:'grid'}));
+    G.appendChild(mk('text',{x:sx(T),y:344,'text-anchor':'middle',class:'lbl'})).textContent=T+' °C'; });
+  const R=[['PWR · 15.5 MPa',325,345,'var(--ink-3)',TX('20 K','20 K')],[TX('SFR · 0.1 MPa','SFR · 0.1 MPa'),510,883,'var(--hot)','373 K']];
+  R.forEach((r,i)=>{
+    const y=40+i*150;
+    G.appendChild(mk('text',{x:X0-16,y:y+34,'text-anchor':'end','font-family':'var(--sans)','font-size':19,fill:'var(--ink)','font-weight':600})).textContent=r[0];
+    G.appendChild(mk('rect',{x:sx(0),y:y,width:sx(r[1])-sx(0),height:56,fill:r[3],opacity:0.55}));
+    const m=mk('rect',{x:sx(r[1]),y:y,width:'0',height:56,fill:'var(--ok)',opacity:0.35}); G.appendChild(m); bars.push([m,sx(r[2])-sx(r[1])]);
+    G.appendChild(mk('line',{x1:sx(r[2]),x2:sx(r[2]),y1:y-12,y2:y+68,stroke:'var(--cool)','stroke-width':3}));
+    G.appendChild(mk('text',{x:sx(r[1]),y:y-8,'text-anchor':'middle',class:'lbl'})).textContent=TX('출구 ','outlet ')+r[1]+' °C';
+    G.appendChild(mk('text',{x:sx(r[2]),y:y+90,'text-anchor':'middle',class:'lbl',fill:'var(--cool)'})).textContent=TX('비점 ','boils ')+r[2]+' °C';
+    G.appendChild(mk('text',{x:i?sx(800):sx(r[2])+14,y:y+36,'text-anchor':i?'middle':'start','font-family':'var(--mono)','font-size':18,fill:'var(--ok)','font-weight':600})).textContent=r[4];
+  });
+  G.appendChild(mk('rect',{x:sx(650),y:176,width:sx(725)-sx(650),height:130,fill:'var(--amber)',opacity:0.22}));
+  G.appendChild(mk('text',{x:sx(687),y:296,'text-anchor':'middle',class:'lbl',fill:'var(--amber)'})).textContent=TX('FCCI 650~725 °C','FCCI 650-725 °C');
+  if(RM){ bars.forEach(b=>b[0].setAttribute('width',b[1])); return; }
+  bars.forEach((b,i)=>b[0].animate([{width:'0px'},{width:b[1]+'px'}],{duration:800,delay:300+300*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- 동결 · 상사 */
+S({tag:'FREEZING · SIMILARITY', ov:'[[나트륨 동결과 상사 실험 — 맞출 수 없는 Re 와 Pe||Sodium freezing, and similarity tests - Re and Pe cannot both match]]',
+src:'[[<b>출처</b> 본 교재 7.5 · 7.6절 · 나트륨 융점 97.8 °C · 정지 중에도 150 °C 이상 유지 · MSR 의 동결 문제(459 °C)와 같은 종류 · 「스케일링 방법론」의 왜곡 평가 절차 적용||<b>Source</b> This textbook &#167;&#167;7.5-7.6 · sodium melts at 97.8 °C · kept above 150 °C even when shut down · the same kind of problem as MSR freezing (459 °C) · apply the distortion assessment of <i>Scaling Methodology</i>]]',
+abbr:'[[<b>trace heating</b> 배관에 감아 둔 전기 히터 · <b>Ri</b> 리처드슨수 — 부력/관성 · <b>RIM-PIV</b> 굴절률을 맞춘 유체로 벽 뒤 유동까지 보는 입자영상유속계 · <b>왜곡(distortion)</b> 축소 실험에서 맞추지 못한 무차원수가 만드는 오차||<b>trace heating</b> electric heaters wound on pipes · <b>Ri</b> Richardson number - buoyancy over inertia · <b>RIM-PIV</b> particle image velocimetry with refractive-index-matched fluids · <b>distortion</b> the error from dimensionless groups a scaled test cannot match]]',
+html:`<h2 class="t">[[나트륨 동결과 <em>상사 실험</em> — 맞출 수 없는 Re 와 Pe||Sodium freezing, and <em>similarity tests</em> - Re and Pe cannot both match]]</h2>
+<ul class="b">
+  <li>[[융점 <b>97.8 °C</b> — 물이 끓는 온도임. 모든 나트륨 배관에 전기 히터와 보온이 붙고, <b class="amb">&#8220;저압이라 안전하다&#8221; 옆에는 늘 &#8220;얼지 않게 계속 데워야 한다&#8221;가 붙음</b>||It melts at <b>97.8 °C</b> - where water boils. Every sodium pipe carries heaters and insulation; <b class="amb">&#8220;safe because low pressure&#8221; always comes with &#8220;must be kept warm&#8221;</b>]]</li>
+  <li>[[물의 Pr은 나트륨의 200배라 <b>Re와 Pe를 동시에 맞출 수 없음</b> — 유동장은 Re·Ri 상사로, 전열은 액체금속 실험이나 CFD로 나눠 얻음||Water&#8217;s Pr is 200 times sodium&#8217;s, so <b>Re and Pe cannot both be matched</b> - flow fields come from Re·Ri similarity, heat transfer from liquid-metal tests or CFD]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 360" role="img" aria-label="[[물로 나트륨을 모사할 때 맞출 수 있는 무차원수와 포기해야 하는 무차원수||Which dimensionless groups a water test can match for sodium, and which it must give up]]">
+  <g id="sm-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#sm-g'), gs=[];
+  [['Re',TX('관성/점성','inertia / viscosity'),TX('맞춤','match'),'var(--ok)',TX('유동장 · 혼합','flow field, mixing')],
+   ['Ri',TX('부력/관성','buoyancy / inertia'),TX('맞춤','match'),'var(--ok)',TX('성층화 · 자연순환','stratification, natural circulation')],
+   ['Pe = Re·Pr',TX('대류/전도','convection / conduction'),TX('포기','give up'),'var(--hot)',TX('Pr 이 200배 달라 Re 와 동시에 불가','Pr differs 200 ×, cannot match with Re')]]
+  .forEach((c,i)=>{
+    const g=mk('g',{transform:'translate('+(i*378)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:362,height:230,fill:'var(--panel)',stroke:c[3],'stroke-width':1.6}));
+    g.appendChild(mk('text',{x:22,y:56,'font-family':'var(--mono)','font-size':32,fill:c[3],'font-weight':600})).textContent=c[0];
+    g.appendChild(mk('text',{x:340,y:52,'text-anchor':'end','font-family':'var(--sans)','font-size':20,fill:c[3],'font-weight':600})).textContent=c[2];
+    g.appendChild(mk('text',{x:22,y:100,class:'lbl'})).textContent=c[1];
+    wrapT(c[4],19).slice(0,2).forEach((ln,j)=>g.appendChild(mk('text',{x:22,y:150+j*28,'font-family':'var(--sans)','font-size':17,fill:'var(--ink-2)','font-weight':300})).textContent=ln);
+    G.appendChild(g); gs.push(g);
+  });
+  const q=mk('g',{transform:'translate(0,256)',opacity:0});
+  q.appendChild(mk('rect',{width:1118,height:96,fill:'var(--panel)',stroke:'var(--rule)'}));
+  q.appendChild(mk('rect',{width:3,height:96,fill:'var(--cool)'}));
+  q.appendChild(mk('text',{x:24,y:40,'font-family':'var(--sans)','font-size':18,fill:'var(--cool)','font-weight':600})).textContent=TX('THINK Lab 의 RIM-PIV 가 쓰이는 자리','Where THINK Lab’s RIM-PIV comes in');
+  q.appendChild(mk('text',{x:24,y:72,'font-family':'var(--sans)','font-size':16.5,fill:'var(--ink-2)','font-weight':300})).textContent=
+    TX('나트륨을 볼 수는 없지만, 같은 Re·Ri 의 투명 유체로 상부 플레넘 성층화를 눈으로 볼 수는 있다',
+       'Sodium cannot be seen, but a transparent fluid at the same Re and Ri shows upper-plenum stratification');
+  G.appendChild(q); gs.push(q);
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:360,delay:200*i,fill:'forwards'}));
+}});
+</script>

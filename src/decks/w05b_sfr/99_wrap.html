@@ -1,0 +1,114 @@
+<script>
+/* ================================================================
+   정리 · 약어 · 닫는 장
+   ================================================================ */
+SECT('[[정리와 약어||Wrap-up and abbreviations]]');
+
+S({tag:'SIX NUMBERS', ov:'[[제2부에서 기억할 여섯 개의 숫자||Six numbers to keep from Part 2]]',
+src:'[[<b>출처</b> 본 교재 7~11장 · 각 숫자의 근거는 해당 장의 출처 줄 참조||<b>Source</b> This textbook, chs. 7-11 · see each chapter&#8217;s source line for the basis of each number]]',
+html:`<h2 class="t">[[제2부에서 기억할 <em>여섯 개의 숫자</em>||<em>Six numbers</em> to keep from Part 2]]</h2>
+<ul class="b">
+  <li>[[나트륨은 감속하지 않고 열을 잘 나르며, 금속연료는 노심을 하나의 온도계로 만들고, 풀은 시간을 벌어 줌 — <b>여섯 숫자가 그 근거</b>임||Sodium carries heat without moderating, metal fuel makes the core one thermometer, and the pool buys time - <b>these six numbers are the evidence</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 400" role="img" aria-label="[[Pr 0.005, 650 °C, 124 K, 75 %, 75 °F, 0.5~0.7 %의 여섯 숫자와 각각의 뜻||Six numbers and what each means - Pr 0.005, 650 °C, 124 K, 75 %, 75 °F, 0.5-0.7 %]]">
+  <g id="sx-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#sx-g'), gs=[];
+  const N=[['Pr 0.005','var(--cool)',TX('물 상관식은 2.6배 틀림','a water correlation is 2.6 × off'),TX('Pe 하나로 정리 — Mikityuk','collapse onto Pe - Mikityuk')],
+           ['650 °C','var(--hot)',TX('설계 온도를 정하는 것','what sets the design temperature'),TX('883 °C 비점이 아니라 FCCI 공정','the FCCI eutectic, not 883 °C boiling')],
+           ['124 K','var(--ok)',TX('금속연료는 냉각재에 붙어 있음','metal fuel stays tied to the coolant'),TX('산화물은 796 K (25 kW/m)','oxide 796 K (25 kW/m)')],
+           ['75 %','var(--amber)',TX('스미어 밀도','smear density'),TX('팽윤 30 % 에서 기포가 이어짐','bubbles link at 30 % swelling')],
+           ['75 °F','var(--ok)',TX('1986 LOHSWS 가 멈춘 곳','where the 1986 LOHSWS stopped'),TX('30 ¢ ÷ 0.4 ¢/°F','30 ¢ ÷ 0.4 ¢/°F')],
+           ['0.5~0.7 %','var(--cool)',TX('RVACS 용량 = 하루 뒤 붕괴열','RVACS = decay heat after a day'),TX('그 전은 나트륨 풀이 흡수','before that, the pool absorbs it')]];
+  N.forEach((n,i)=>{
+    const x=(i%3)*378, y=Math.floor(i/3)*204, g=mk('g',{transform:'translate('+x+','+y+')',opacity:0});
+    g.appendChild(mk('rect',{width:362,height:190,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:362,height:3,fill:n[1]}));
+    g.appendChild(mk('text',{x:22,y:66,'font-family':'var(--mono)','font-size':34,fill:n[1],'font-weight':600})).textContent=n[0];
+    g.appendChild(mk('text',{x:22,y:118,'font-family':'var(--sans)','font-size':18,fill:'var(--ink)','font-weight':600})).textContent=n[2];
+    g.appendChild(mk('text',{x:22,y:152,'font-family':'var(--sans)','font-size':15.5,fill:'var(--ink-2)','font-weight':300})).textContent=n[3];
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:340,delay:150*i,fill:'forwards'}));
+}});
+
+
+S({tag:'ABBREVIATIONS 1/2', ov:'[[약어 (1/2) — 노형 · 연료 · 노심||Abbreviations (1 of 2) - reactors, fuel, core]]',
+src:'[[<b>출처</b> 본 교재 7~10장 · 각 장 하단의 약어 줄과 같은 내용임||<b>Source</b> This textbook, chs. 7-10 · the same entries as the abbreviation line under each slide]]',
+html:`<h2 class="t">[[약어 (1/2) — 노형 · 연료 · 노심||Abbreviations (1 of 2) - reactors, fuel, core]]</h2>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 470" role="img" aria-label="[[노형·연료·노심 관련 약어의 원어와 뜻||Reactor, fuel and core abbreviations with expansions and meanings]]">
+  <g id="ab1"></g>
+</svg>
+</div></div>`,
+init(el){ abbrTable(el,'#ab1',[
+  ['SFR · LFR','Sodium- / Lead-cooled Fast Reactor',TX('소듐 · 납 냉각 고속로','sodium- and lead-cooled fast reactors')],
+  ['4S','Super Safe, Small and Simple',TX('도시바 30 MWt 풀형 SFR — 30년 무재장전','Toshiba’s 30 MWt pool SFR, 30 years unrefuelled')],
+  ['EBR-II','Experimental Breeder Reactor II',TX('미국 62.5 MWt 풀형 — 1986 시험','US 62.5 MWt pool - the 1986 tests')],
+  ['FFTF','Fast Flux Test Facility',TX('미국 루프형 고속 시험로','US loop-type fast test reactor')],
+  ['PRISM','Power Reactor Innovative Small Module',TX('GE-Hitachi 소형 SFR','GE-Hitachi’s small SFR')],
+  ['PGSFR','Prototype Gen-IV SFR',TX('한국 150 MWe 원형로 — 2020 R&D 종료','Korea’s 150 MWe prototype - R&D ended 2020')],
+  ['MOX','Mixed Oxide fuel',TX('우라늄·플루토늄 혼합산화물 연료','mixed U-Pu oxide fuel')],
+  ['U-Pu-Zr','—',TX('금속연료 합금 — 고상선 1077 °C','metal fuel alloy - solidus 1077 °C')],
+  ['HT-9 · ODS','—',TX('페라이트-마르텐사이트 · 산화물 분산강화 피복재','ferritic-martensitic and ODS cladding')],
+  ['FCCI','Fuel-Cladding Chemical Interaction',TX('연료–피복재 화학 상호작용 — 공정 650~725 °C','eutectic at 650-725 °C')],
+  ['CFV','Cœur à Faible effet de Vide',TX('저보이드 노심 (ASTRID)','low-void core (ASTRID)')],
+  ['MA','Minor Actinides',TX('마이너 액티나이드 — Np · Am · Cm','Np, Am, Cm')],
+  ['βeff','Effective delayed-neutron fraction',TX('유효 지발중성자 비율 — $ 의 기준','the reference for the dollar')],
+  ['TOP','Transient Overpower',TX('과출력 과도 — 금속 4~4.5배 여유','metal fuel has 4-4.5 × margin')],
+  ['at.%','Atom percent burnup',TX('원자 백분율 연소도','burnup in atom percent')]
+]);}});
+
+
+S({tag:'ABBREVIATIONS 2/2', ov:'[[약어 (2/2) — 계통 · 안전 · 코드||Abbreviations (2 of 2) - systems, safety, codes]]',
+src:'[[<b>출처</b> 본 교재 9~11장 · 인허가·건설 현황은 <b>2026년 9월 기준</b>||<b>Source</b> This textbook, chs. 9-11 · licensing and construction status <b>as of September 2026</b>]]',
+html:`<h2 class="t">[[약어 (2/2) — 계통 · 안전 · 코드||Abbreviations (2 of 2) - systems, safety, codes]]</h2>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 470" role="img" aria-label="[[계통·안전·코드 약어의 원어와 뜻||System, safety and code abbreviations with expansions and meanings]]">
+  <g id="ab2"></g>
+</svg>
+</div></div>`,
+init(el){ abbrTable(el,'#ab2',[
+  ['IHX','Intermediate Heat Exchanger',TX('중간열교환기 — 1차와 중간 나트륨 사이','between primary and intermediate sodium')],
+  ['EMP','Electromagnetic Pump',TX('전자기펌프 — F = J × B, 관성 없음','F = J × B, no inertia')],
+  ['RVACS','Reactor Vessel Auxiliary Cooling System',TX('용기 바깥 공기 자연순환 — 무동력 · 무제한','air outside the vessel - unpowered, unlimited')],
+  ['DRACS','Direct Reactor Auxiliary Cooling System',TX('풀에 담근 열교환기 + 자연순환 루프','an exchanger in the pool + natural-circulation loop')],
+  ['IRACS','Intermediate RACS',TX('중간 루프 공기냉각기 — 보통 비안전등급','air cooler on the intermediate loop - usually non-safety')],
+  ['LOFWS · ULOF','Loss of Flow Without Scram',TX('제어봉 없는 유량상실 — 1986 시험 1','the first 1986 test')],
+  ['LOHSWS','Loss of Heat Sink Without Scram',TX('제어봉 없는 열제거원 상실 — 시험 2','the second 1986 test')],
+  ['SBO','Station Blackout',TX('소외전원상실','loss of all AC power')],
+  ['SHRT','Shutdown Heat Removal Tests',TX('EBR-II 1980년대 시험 — 검증 벤치마크','EBR-II tests - the validation benchmark')],
+  ['SAS4A/SASSYS-1','—',TX('ANL SFR 안전해석 기준 코드 — 비등 · 노심손상','ANL’s reference SFR safety code')],
+  ['SAM','System Analysis Module',TX('ANL MOOSE 기반 계통코드 — NRC 채택','ANL’s MOOSE-based system code')],
+  ['Na-24','—',TX('방사화 나트륨 — 반감기 15 h, 강한 감마','activated sodium - 15 h, strong gamma')],
+  ['CNSC · VDR','Canadian Nuclear Safety Commission',TX('캐나다 규제기관 · 공급자설계검토','Canada’s regulator and vendor design review')],
+  ['RIM-PIV','Refractive-Index-Matched PIV',TX('굴절률 일치 입자영상유속계 — THINK Lab','THINK Lab’s index-matched PIV')],
+  ['Pe · Ri','Péclet · Richardson number',TX('대류/전도 · 부력/관성','convection/conduction, buoyancy/inertia')]
+]);}});
+
+
+S({bare:true, cls:'cover', ov:'[[닫는 장||Closing]]',
+html:`<div class="kick">[[NUE4067 · 비경수로 편 ② · 5~6주차||NUE4067 · Non-LWR part 2 · Weeks 5-6]]</div>
+<h1>[[1986년 4월 3일,<br><span>제어봉 없이</span> 멈춘 원자로||3 April 1986 -<br>a reactor that stopped <span>without rods</span>]]</h1>
+<div class="ln"></div>
+<div class="meta">
+  [[모든 소형 SFR 의 &#8220;피동안전&#8221;은 이날 실측된 거동을 재현하겠다는 주장이다.<br>
+  그리고 대형 노심의 양의 보이드가 실제로 발동하는 사고는 아직 아무도 실증하지 못했다.<br><br>
+  다음 덱은 <b>MSR</b> — 이번에는 연료가 흐른다. 60년 동안 원자력공학이 가정해 온 것이 하나 무너진다.||Every small SFR&#8217;s &#8220;passive safety&#8221; is a claim to reproduce what was measured that day.<br>
+  And no one has yet demonstrated an accident where large-core positive void worth actually acts.<br><br>
+  Next is the <b>MSR</b> - where the fuel flows, and one assumption nuclear engineering has made for sixty years falls away.]]
+</div>
+<div class="hint">[[<kbd>O</kbd> 목차 &nbsp; <kbd>L</kbd> 한/영 &nbsp; <kbd>T</kbd> 배경 &nbsp; <kbd>P</kbd> 인쇄·PDF &nbsp; &nbsp; THINK Lab · 한양대학교 원자력공학과||<kbd>O</kbd> Index &nbsp; <kbd>L</kbd> KO/EN &nbsp; <kbd>T</kbd> Theme &nbsp; <kbd>P</kbd> Print·PDF &nbsp; &nbsp; THINK Lab · Hanyang University]]</div>`,
+init(el){
+  if(RM) return;
+  const h1=el.querySelector('h1'), ln=el.querySelector('.ln');
+  h1.style.opacity=0; ln.style.width='0px';
+  h1.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],
+    {duration:700,easing:'cubic-bezier(.2,.7,.3,1)',fill:'forwards'});
+  ln.animate([{width:'0px'},{width:'120px'}],{duration:600,delay:500,fill:'forwards'});
+}});
+</script>

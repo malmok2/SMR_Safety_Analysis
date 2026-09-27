@@ -1,0 +1,384 @@
+<script>
+/* ================================================================
+   SECTION 09 — 4S 를 뜯어본다, 풀형 SFR 의 계통  (교재 9장)
+   ================================================================ */
+SECT('09 · [[4S와 풀형 계통||4S and the pool layout]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;09 4S — 풀형 SFR 의 계통||&#167;09 4S - the systems of a pool-type SFR]]',
+html:`[[<div class="no">09</div><h2>4S를 뜯어본다</h2><div class="ln"></div>
+<p>30년 동안 연료를 갈지 않는 원자로는 어떻게 생겼는가. 4S는 상업성보다 <b>설계가 극단적으로 단순해서</b> 교육에 좋다.
+목표 하나(30년 무재장전)가 기기 전체를 어떻게 바꾸는지가 선명하게 보인다.</p>||<div class="no">09</div><h2>Taking 4S apart</h2><div class="ln"></div>
+<p>What does a reactor that is not refuelled for thirty years look like? 4S is useful for teaching because <b>its design is radically simple</b>.
+You can see clearly how one goal - thirty years without refuelling - reshapes every component.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 풀형 · 루프형 */
+S({tag:'POOL VS LOOP', ov:'[[풀형과 루프형 — 현대 소형 SFR 이 전부 풀형인 이유||Pool and loop - why every modern small SFR is a pool]]',
+src:'[[<b>출처</b> 본 교재 9.1절 표 9.1 · 풀형 — PFR · Phénix · SuperPhénix · BN-600/800 · EBR-II · PRISM · Natrium · CEFR · CFR-600 · PFBR · ARC-100 · 4S · Aurora / 루프형 — Monju · 조요 · FFTF||<b>Source</b> This textbook &#167;9.1, Table 9.1 · pool: PFR, Phénix, SuperPhénix, BN-600/800, EBR-II, PRISM, Natrium, CEFR, CFR-600, PFBR, ARC-100, 4S, Aurora / loop: Monju, Joyo, FFTF]]',
+abbr:'[[<b>보호용기</b> 원자로용기를 한 겹 더 둘러싼 용기 — 누설 나트륨을 받음 · <b>가동중검사</b> 운전 중 정기적으로 기기를 검사하는 것 · <b>RVACS</b> 원자로용기 보조냉각계통(10장)||<b>guard vessel</b> a second vessel round the reactor vessel that catches leaked sodium · <b>in-service inspection</b> periodic inspection of components during plant life · <b>RVACS</b> Reactor Vessel Auxiliary Cooling System (ch. 10)]]',
+html:`<h2 class="t">[[풀형과 루프형 — 현대 소형 SFR 이 전부 <em>풀형</em>인 이유||Pool and loop - why every modern small SFR is a <em>pool</em>]]</h2>
+<ul class="b">
+  <li>[[피동 잔열제거(RVACS)가 <b>용기 표면적</b>을 통해 일어나므로 노심이 용기 안에 있어야 하고, <b>큰 나트륨 재고</b>가 첫 몇 시간을 벌어 줌||Passive decay-heat removal (RVACS) works through <b>the vessel surface</b>, so the core must be inside it, and <b>a large sodium inventory</b> buys the first hours]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d">
+  <tr><th></th><th>[[풀형||Pool]]</th><th>[[루프형||Loop]]</th></tr>
+  <tr><td>[[1차 나트륨 재고||Primary sodium]]</td><td>[[많다 (EBR-II 약 333 m³)||large (EBR-II about 333 m³)]]</td><td>[[적다||small]]</td></tr>
+  <tr class="mark"><td>[[열관성||Thermal inertia]]</td><td>[[매우 크다 &#8594; 과도가 느리다||very large &#8594; slow transients]]</td><td>[[작다||small]]</td></tr>
+  <tr><td>[[1차 경계 누설||Primary leaks]]</td><td>[[보호용기가 받음 — 나트륨 상실 경로 없음||caught by the guard vessel - no loss-of-sodium path]]</td><td>[[배관이 누설 경로 · 이중관 필요||pipes are a leak path · double wall]]</td></tr>
+  <tr><td>[[자연순환||Natural circulation]]</td><td>[[쉽다 (높이차 확보)||easy (height available)]]</td><td>[[어렵다||harder]]</td></tr>
+  <tr><td>[[단점||Drawback]]</td><td>[[용기가 크고 가동중검사·재장전이 까다로움||large vessel, awkward inspection and refuelling]]</td><td>[[나트륨 배관이 길어 화재 노출면이 넓음||long sodium piping, more fire exposure]]</td></tr>
+</table>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 자연순환 */
+S({tag:'NATURAL CIRCULATION', ov:'[[SFR 에서 자연순환이 잘 되는 이유||Why natural circulation works so well in an SFR]]',
+src:'[[<b>출처</b> 본 교재 9.2절 · 부력 ρgβΔTΔH 와 마찰 ½Kṁ²/(ρA²) 의 균형 · 400 °C 나트륨 동점성 3.2×10⁻⁷ m²/s · EBR-II · Phénix 자연순환 시험이 오늘날 계통코드 검증의 기준||<b>Source</b> This textbook &#167;9.2 · buoyancy ρgβΔTΔH balancing friction ½Kṁ²/(ρA²) · sodium kinematic viscosity at 400 °C 3.2×10⁻⁷ m²/s · the EBR-II and Phénix natural-circulation tests are today&#8217;s validation standard]]',
+abbr:'[[<b>β</b> 열팽창계수 · <b>ΔH</b> 열원(노심)과 열침원(IHX)의 높이차 · <b>K</b> 루프 전체의 형상·마찰 손실계수 · <b>동점성계수</b> 점성계수/밀도||<b>β</b> thermal expansion coefficient · <b>ΔH</b> height between heat source (core) and sink (IHX) · <b>K</b> total loop loss coefficient · <b>kinematic viscosity</b> viscosity over density]]',
+html:`<h2 class="t">[[SFR 에서 <em>자연순환</em>이 잘 되는 이유||Why <em>natural circulation</em> works so well in an SFR]]</h2>
+<ul class="b">
+  <li>[[식 하나에 이유가 다 들어 있음 — <b>ΔH가 크고, ΔT를 크게 가져갈 수 있고, ρ가 크고, 점성이 낮음</b>||One formula holds every reason - <b>ΔH is large, ΔT can be large, ρ is large, and viscosity is low</b>]]</li>
+  <li>[[그래서 SFR은 강제순환이 완전히 멎어도 <b class="ok">자연순환만으로 붕괴열을 뺄 수 있음</b> — EBR-II와 Phénix가 실측으로 남김||So an SFR can <b class="ok">remove decay heat by natural circulation alone</b> once forced flow stops - measured at EBR-II and Phénix]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <div class="formula" style="font-size:24px;padding:4px 0 12px">ṁ <span class="op">∝</span> √( 2ρ²A² g β ΔT ΔH / K )</div>
+  <svg viewBox="0 0 800 380" role="img" aria-label="[[자연순환 유량 식의 네 인자가 SFR에서 각각 유리한 이유||Why each of the four factors in the natural-circulation formula favours the SFR]]">
+    <g id="nc-g"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout good"><span class="k">ρ · [[헬륨 대비||against helium]]</span><span class="v">×260</div>
+    <div class="readout hi"><span class="k">[[동점성 · 물 20 °C 대비||viscosity · vs water at 20 °C]]</span><span class="v">1/3</div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#nc-g'), gs=[];
+  [['ΔH',TX('높이차','height'),TX('풀형 용기 20 m급 · 노심–IHX 수 m','20 m-class pool vessel, core-IHX a few m')],
+   ['ΔT',TX('온도차','temperature rise'),TX('비등 여유 330 K — 사고 때 100 K 도 문제없음','330 K to boiling - 100 K in an accident is fine')],
+   ['ρ',TX('밀도','density'),TX('850 kg/m³ — 물과 비슷, 헬륨의 260배','850 kg/m³ - near water, 260 × helium')],
+   ['ν',TX('동점성','kinematic viscosity'),TX('3.2×10⁻⁷ m²/s — 같은 유속에서 Re 가 크고 마찰이 작음','3.2×10⁻⁷ m²/s - higher Re, less friction')]]
+  .forEach((c,i)=>{
+    const x=(i%2)*404, y=Math.floor(i/2)*190, g=mk('g',{transform:'translate('+x+','+y+')',opacity:0});
+    g.appendChild(mk('rect',{width:392,height:176,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('text',{x:22,y:62,'font-family':'var(--mono)','font-size':38,fill:'var(--ok)','font-weight':600})).textContent=c[0];
+    g.appendChild(mk('text',{x:110,y:56,'font-family':'var(--sans)','font-size':19,fill:'var(--ink)','font-weight':600})).textContent=c[1];
+    wrapT(c[2],19).slice(0,3).forEach((ln,j)=>g.appendChild(mk('text',{x:22,y:108+j*26,'font-family':'var(--sans)','font-size':16.5,fill:'var(--ink-2)','font-weight':300})).textContent=ln);
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:320,delay:180*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 4S 설계값 */
+S({tag:'TOSHIBA 4S', ov:'[[도시바 4S — 주요 설계값||Toshiba 4S - principal design data]]',
+src:'[[<b>출처</b> 본 교재 9.3절 표 9.2 · 그림 9.1 · 알래스카 게일레나 NRC 사전심사 2013년 중단 · 2026-04 Zap Energy 가 4S 개념 부활 발표(04-29 CEO 선임) · 인허가·배치 일정 없음||<b>Source</b> This textbook &#167;9.3, Table 9.2, Fig. 9.1 · NRC pre-application for Galena, Alaska stopped in 2013 · Zap Energy announced a 4S revival in April 2026 (CEO named 29 April) · no licensing or deployment schedule]]',
+abbr:'[[<b>4S</b> Super Safe, Small and Simple · <b>U-10Zr</b> 지르코늄 10 % 우라늄 합금 연료 · <b>MWd/t</b> 연료 톤당 열에너지(연소도) · <b>304 SS</b> 오스테나이트계 스테인리스강||<b>4S</b> Super Safe, Small and Simple · <b>U-10Zr</b> uranium alloy with 10 % zirconium · <b>MWd/t</b> energy per tonne of fuel (burnup) · <b>304 SS</b> an austenitic stainless steel]]',
+html:`<h2 class="t">[[도시바 <em>4S</em> — 주요 설계값||Toshiba <em>4S</em> - principal design data]]</h2>
+<div class="body">
+  <div class="fig" style="flex:0 0 330px">
+  ${PH({src:'f9_01', cap:'[[4S 원자로 조립체 단면 · 그림 9.1||4S reactor assembly section · Fig. 9.1]]'})}
+  </div>
+  <div class="fig">
+  <table class="d sm">
+    <tr><th>[[항목||Item]]</th><th>[[값||Value]]</th></tr>
+    <tr><td>[[출력 · 형식||Output · type]]</td><td class="n">[[30 MWt / 10 MWe · 풀형||30 MWt / 10 MWe · pool]]</td></tr>
+    <tr class="mark"><td>[[노심 수명||Core life]]</td><td class="n">[[30년, 무재장전||30 years, no refuelling]]</td></tr>
+    <tr><td>[[1차 나트륨||Primary sodium]]</td><td class="n">355 &#8594; 510 °C</td></tr>
+    <tr><td>[[반응도 제어||Reactivity control]]</td><td>[[환형 가동 반사체 — 주당 1~1.5 mm 인출||movable annular reflector - 1-1.5 mm a week]]</td></tr>
+    <tr><td>[[정지 수단||Shutdown]]</td><td>[[정지봉 중력 낙하||shutdown rod dropped by gravity]]</td></tr>
+    <tr><td>[[펌프||Pumps]]</td><td>[[환형 선형유도 전자기펌프 2대 직렬 · 10.6 m³/min · 각 0.05 MPa||two annular linear-induction EM pumps in series · 10.6 m³/min · 0.05 MPa each]]</td></tr>
+    <tr><td>[[연료||Fuel]]</td><td>[[나트륨 본드 U-10Zr · 내 17 % / 외 19 % · HT-9 · 34,000 MWd/t||sodium-bonded U-10Zr · 17 % / 19 % · HT-9 · 34,000 MWd/t]]</td></tr>
+    <tr><td>[[원자로용기||Reactor vessel]]</td><td class="n">[[높이 24 m · 안지름 3.5 m · 두께 25 mm · 304 SS||24 m tall · 3.5 m bore · 25 mm wall · 304 SS]]</td></tr>
+    <tr><td>[[중간 루프||Intermediate loop]]</td><td>[[482 t/h · 310 &#8594; 485 °C · 이중관 헬리컬 증기발생기||482 t/h · 310 &#8594; 485 °C · double-wall helical SG]]</td></tr>
+    <tr><td>[[증기||Steam]]</td><td class="n">10.5 MPa / 453 °C · 44.2 t/h</td></tr>
+  </table>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 내부 */
+S({tag:'4S INTERNALS', ov:'[[4S 내부구조물과 전체 절개도||4S internals and the full cutaway]]',
+src:'[[<b>출처</b> 본 교재 9.3절 그림 9.2 · 9.5 · 상·하부 수직 슈라우드가 유로를 나누고 노심 지지구조와 예비 노심 지지가 이중으로 들어감||<b>Source</b> This textbook &#167;9.3, Figs. 9.2 and 9.5 · upper and lower vertical shrouds split the flow paths; core support and backup core support are doubled]]',
+abbr:'[[<b>슈라우드</b> 유로를 나누는 원통 칸막이 · <b>면진장치</b> 지진 흔들림이 건물·기기로 전달되지 않게 하는 받침 · <b>RVACS</b> 원자로용기 보조냉각계통||<b>shroud</b> a cylindrical partition dividing flow paths · <b>seismic isolator</b> bearings that keep ground motion out of the plant · <b>RVACS</b> Reactor Vessel Auxiliary Cooling System]]',
+html:`<h2 class="t">[[4S <em>내부구조물</em>과 전체 절개도||4S <em>internals</em> and the full cutaway]]</h2>
+<ul class="b">
+  <li>[[위에서부터 반사체 구동장치 · 차폐 플러그 · 중간 나트륨 입·출구 · IHX · 전자기펌프 · 노심 · 보호용기 — <b>모든 것이 한 용기 안에 세로로</b> 쌓임||Top to bottom: reflector drive, shield plug, intermediate sodium nozzles, IHX, EM pumps, core, guard vessel - <b>everything stacked in one vessel</b>]]</li>
+  <li>[[노심 지지가 <b>이중</b>(노심 지지구조 + 예비 지지)이고, 원자로는 면진장치 위에 놓임||Core support is <b>doubled</b> (support structure plus backup), and the reactor sits on seismic isolators]]</li>
+</ul>
+<div class="body"><div class="fig">
+${PH({src:'f9_02', cap:'[[4S 원자로 내부구조물 · 그림 9.2||4S reactor internals · Fig. 9.2]]'},
+     {src:'f9_05', w:1.3, cap:'[[4S 전체 절개도와 반사체 제어 원리 · 그림 9.5||4S cutaway and the reflector-control principle · Fig. 9.5]]'})}
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 반사체 제어 */
+S({tag:'REFLECTOR CONTROL', ov:'[[제어봉 대신 반사체 — 4S 의 반응도 제어||A reflector instead of rods - reactivity control in 4S]]',
+src:'[[<b>출처</b> 본 교재 9.3절 그림 9.3 · 9.4 · 연료집합체 18개 · 중앙 고정 흡수체 · 정지봉(정상 시 노심 위 대기) · 6분할 반사체||<b>Source</b> This textbook &#167;9.3, Figs. 9.3-9.4 · 18 fuel assemblies, a fixed central absorber, a shutdown rod waiting above the core, a six-segment reflector]]',
+abbr:'[[<b>반사체</b> 노심 밖으로 나가는 중성자를 되돌려 보내는 구조물 · <b>연소보상</b> 연료가 타며 줄어드는 반응도를 채워 주는 조작 · <b>반응도 삽입 사고</b> 반응도가 갑자기 들어와 출력이 치솟는 사고 · <b>스크램</b> 비상 정지||<b>reflector</b> a structure that returns escaping neutrons · <b>burnup compensation</b> making up reactivity lost as fuel burns · <b>reactivity-insertion accident</b> a sudden reactivity jump and power surge · <b>scram</b> emergency shutdown]]',
+html:`<h2 class="t">[[제어봉 대신 <em>반사체</em> — 4S 의 반응도 제어||A <em>reflector</em> instead of rods - reactivity control in 4S]]</h2>
+<ul class="b">
+  <li>[[반사체가 덮은 높이만큼만 노심이 임계를 유지함 — 연료가 타면 반사체를 조금 더 올림. <b>주당 1~1.5 mm씩 30년이면 노심 전 높이를 훑음</b>||The core stays critical only as high as the reflector covers - as fuel burns, the reflector rises. <b>1-1.5 mm a week for thirty years sweeps the whole core height</b>]]</li>
+  <li>[[제어봉 인출은 초당 수십 cm 규모지만 반사체 구동은 <b>기계적으로 주당 mm</b> — <b class="ok">최대 반응도 삽입률이 물리적으로 작음</b>||Rod withdrawal runs at tens of cm a second; the reflector drive is <b>mechanically millimetres a week</b> - <b class="ok">the maximum insertion rate is physically small</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+${PH({src:'f9_03', w:1.6, cap:'[[반사체 구동 순서 — 하한 &#8594; 기동 &#8594; 임계·정격 &#8594; 연소보상 &#8594; 정지 &#8594; 스크램 · 그림 9.3||Reflector sequence - lower limit &#8594; start-up &#8594; critical and rated &#8594; burnup swing &#8594; shutdown &#8594; scram · Fig. 9.3]]'},
+     {src:'f9_04', cap:'[[노심 단면과 반사체 구성 · 그림 9.4||Core section and reflector layout · Fig. 9.4]]'})}
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 전자기펌프 */
+S({tag:'EM PUMP', ov:'[[전자기펌프 — F = J × B 와 관성이 없다는 약점||The electromagnetic pump - F = J × B, and no inertia]]',
+src:'[[<b>출처</b> 본 교재 9.3절 · 4S 는 환형 선형유도형 2대 직렬, 합계 10.6 m³/min · 각 0.05 MPa · 효율 보통 40 % 이하 · 그림은 원리 개념도||<b>Source</b> This textbook &#167;9.3 · 4S uses two annular linear-induction pumps in series, 10.6 m³/min in all, 0.05 MPa each · efficiency usually under 40 % · the drawing is a principle sketch]]',
+abbr:'[[<b>로렌츠 힘</b> 전류가 자기장 속에서 받는 힘 · <b>선형유도</b> 코일이 만든 이동 자기장이 유체에 전류를 유도해 미는 방식 · <b>코스트다운</b> 펌프 전원이 끊긴 뒤 유량이 줄어드는 과정 · <b>플라이휠</b> 회전 관성을 늘리는 무거운 바퀴||<b>Lorentz force</b> the force on a current in a magnetic field · <b>linear induction</b> a travelling field from coils induces current in the fluid and pushes it · <b>coast-down</b> flow decaying after pump power is lost · <b>flywheel</b> a heavy wheel adding rotational inertia]]',
+html:`<h2 class="t">[[<em>전자기펌프</em> — F = J × B 와 관성이 없다는 약점||The <em>electromagnetic pump</em> - F = J × B, and no inertia]]</h2>
+<ul class="b">
+  <li>[[나트륨은 전기가 통하는 액체 — 회전 부품 · 축밀봉 · 베어링이 없음. 압력상승이 작아도 되는 것은 <b>풀형이라 배관 저항이 거의 없기 때문</b>||Sodium conducts electricity - no rotating parts, shaft seals or bearings. Low head suffices <b>because a pool has almost no piping resistance</b>]]</li>
+  <li>[[약점 — <b>효율 40 % 이하</b>, 그리고 <b class="hot">관성이 없음</b>: 전원이 끊기면 유량이 즉시 떨어짐. 회전 펌프는 플라이휠로 수십 초를 버팀 — 10장에서 이것이 왜 중요한지 봄||Weaknesses - <b>under 40 % efficient</b>, and <b class="hot">no inertia</b>: flow drops the instant power goes. A rotating pump coasts for tens of seconds on a flywheel - ch. 10 shows why that matters]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 800 330" role="img" aria-label="[[코일이 만든 이동 자기장이 나트륨에 전류를 유도하고 로렌츠 힘으로 나트륨을 미는 선형유도 전자기펌프의 원리||A linear-induction EM pump - a travelling field from the coils induces current in the sodium and the Lorentz force pushes it]]">
+    <g id="em-g"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="formula" style="font-size:30px">F <span class="op">=</span> J × B</div>
+    <div class="readout hi"><span class="k">[[4S · 2대 직렬||4S · two in series]]</span><span class="v">10.6<small>m³/min</small></span></div>
+    <div class="readout"><span class="k">[[압력상승 (대당)||Head (each)]]</span><span class="v">0.05<small>MPa</small></span></div>
+    <div class="readout warn"><span class="k">[[관성 대책||Inertia fix]]</span><span class="v" style="font-size:15px;line-height:1.5">[[동기 발전기나 배터리로 관성을 흉내 내는 회로를 따로 둠||a synchronous generator or battery circuit mimics inertia]]</span></div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#em-g'), coils=[];
+  G.appendChild(mk('rect',{x:30,y:110,width:740,height:110,fill:'var(--cool)',opacity:0.10}));
+  G.appendChild(mk('rect',{x:30,y:150,width:740,height:30,fill:'var(--panel)',stroke:'var(--rule)'}));
+  for(let i=0;i<10;i++){
+    const x=70+i*68;
+    [72,228].forEach(y=>{ const c=mk('rect',{x:x,y:y,width:44,height:30,rx:4,fill:'var(--amber)',opacity:0.25}); G.appendChild(c); coils.push([c,i]); });
+  }
+  const p1=mk('path',{d:'M30,130 H770',fill:'none',stroke:'none'}), p2=mk('path',{d:'M30,200 H770',fill:'none',stroke:'none'});
+  G.appendChild(p1); G.appendChild(p2);
+  flow(p1,{n:12,color:'var(--cool)',r:4,speed:0.16}); flow(p2,{n:12,color:'var(--cool)',r:4,speed:0.16});
+  const L=(x,y,t,c,a)=>{ const e=mk('text',{x:x,y:y,class:'lbl',fill:c||'var(--ink-2)','text-anchor':a||'start'}); e.textContent=t; G.appendChild(e); };
+  L(30,60,TX('코일 — 이동 자기장 B','coils - travelling field B'),'var(--amber)');
+  L(30,290,TX('나트륨 환형 유로 — 유도 전류 J, 힘 F','annular sodium channel - induced J, force F'),'var(--cool)');
+  L(400,170,TX('내부 철심','inner core'),null,'middle');
+  G.appendChild(mk('path',{d:'M640,316 H760 M750,310 L760,316 L750,322',stroke:'var(--cool)','stroke-width':2,fill:'none'}));
+  L(630,320,TX('흐름','flow'),'var(--cool)','end');
+  if(RM) return;
+  raf(t=>{ coils.forEach(c=>{ const ph=(t*2.2 - c[1]*0.45); c[0].setAttribute('opacity',(0.2+0.6*Math.max(0,Math.sin(ph))).toFixed(2)); }); });
+}});
+
+
+/* ---------------------------------------------------------------- 열수송 */
+S({tag:'HEAT TRANSPORT', ov:'[[4S 열수송 계통 — 1차 · 중간 · 증기||4S heat transport - primary, intermediate, steam]]',
+src:'[[<b>출처</b> 본 교재 9.3절 그림 9.6 · 9.7 · 1차 355/510 °C &#8594; 중간 310/485 °C &#8594; 증기 453 °C · 10 MWe · RVACS 는 보호용기 바깥의 자연통풍||<b>Source</b> This textbook &#167;9.3, Figs. 9.6-9.7 · primary 355/510 °C &#8594; intermediate 310/485 °C &#8594; steam at 453 °C · 10 MWe · RVACS is natural draught outside the guard vessel]]',
+abbr:'[[<b>IRACS</b> 중간 루프에 붙인 공기냉각기 · <b>EMP · EMF</b> 전자기펌프 · 전자기 유량계 · <b>FWP</b> 급수펌프||<b>IRACS</b> an air cooler on the intermediate loop · <b>EMP, EMF</b> electromagnetic pump and flowmeter · <b>FWP</b> feedwater pump]]',
+html:`<h2 class="t">[[4S <em>열수송 계통</em> — 1차 · 중간 · 증기||4S <em>heat transport</em> - primary, intermediate, steam]]</h2>
+<ul class="b">
+  <li>[[1차 <b>355/510 °C</b> &#8594; 중간 <b>310/485 °C</b> &#8594; 증기 <b>453 °C</b>. 단계마다 온도를 잃는 것이 중간 루프의 값임(9장 끝)||Primary <b>355/510 °C</b> &#8594; intermediate <b>310/485 °C</b> &#8594; steam <b>453 °C</b>. The temperature lost at each step is the price of the intermediate loop (end of ch. 9)]]</li>
+</ul>
+<div class="body"><div class="fig">
+${PH({src:'f9_06', w:1.6, cap:'[[4S 열수송 계통 — 1차 · 중간 · 증기-물 · 그림 9.6||4S heat transport - primary, intermediate, steam-water · Fig. 9.6]]'},
+     {src:'f9_07', cap:'[[4S 계통 개념도 · 그림 9.7||4S system concept · Fig. 9.7]]'})}
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 배치 · 연료취급 */
+S({tag:'LAYOUT · FUEL HANDLING', ov:'[[4S 발전소 배치와 연료취급계통||4S plant layout and fuel handling]]',
+src:'[[<b>출처</b> 본 교재 9.3절 그림 9.8 · 9.9 · 원자로는 지하, 면진장치 위 · RVACS 배기 굴뚝이 지상으로 나옴 · 30년에 한 번 노심 전체를 통째로 교체||<b>Source</b> This textbook &#167;9.3, Figs. 9.8-9.9 · reactor below grade on seismic isolators · the RVACS stack rises above ground · the whole core is swapped once every thirty years]]',
+html:`<h2 class="t">[[4S <em>발전소 배치</em>와 연료취급계통||4S <em>plant layout</em> and fuel handling]]</h2>
+<ul class="b">
+  <li>[[원자로는 <b>지하 · 면진장치 위</b>, RVACS 배기 굴뚝만 지상으로 나옴||The reactor sits <b>below grade on seismic isolators</b>; only the RVACS stack comes up]]</li>
+  <li>[[연료는 <b>30년에 한 번 노심 전체를 통째로</b> 교체 — 연료취급계통이 상설 설비가 아니라 교체용 장비가 됨||The core is <b>replaced whole once every thirty years</b> - fuel handling becomes swap-out equipment rather than a standing system]]</li>
+</ul>
+<div class="body"><div class="fig">
+${PH({src:'f9_08', cap:'[[4S 발전소 배치 · 그림 9.8||4S plant layout · Fig. 9.8]]'},
+     {src:'f9_09', cap:'[[연료취급계통 · 그림 9.9||Fuel handling system · Fig. 9.9]]'})}
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 러시아 BN */
+S({tag:'RUSSIA · BN SERIES', ov:'[[러시아 BN 계열 — 유일한 장기 운전 실적||Russia&#8217;s BN series - the only long operating record]]',
+src:'[[<b>출처</b> 본 교재 9.4절 그림 9.10 · 9.11 · <b>2026년 9월 기준</b> · 벨로야르스크 3 · 4호기||<b>Source</b> This textbook &#167;9.4, Figs. 9.10-9.11 · <b>as of September 2026</b> · Beloyarsk units 3 and 4]]',
+abbr:'[[<b>BN</b> 러시아어 &#8220;빠른 중성자&#8221;의 약자 · <b>이용률</b> 실제 발전량/정격 연속 발전량 · <b>TWh</b> 10억 kWh · <b>전노심 MOX</b> 노심 연료 전부를 MOX 로 채우는 것||<b>BN</b> Russian for &#8220;fast neutron&#8221; · <b>capacity factor</b> actual output over output at rated power all the time · <b>TWh</b> a billion kWh · <b>full-MOX core</b> a core fuelled entirely with MOX]]',
+html:`<h2 class="t">[[러시아 <em>BN 계열</em> — 유일한 장기 운전 실적||Russia&#8217;s <em>BN series</em> - the only long operating record]]</h2>
+<ul class="b">
+  <li>[[BN-600은 <b>1980-04-08부터 운전</b> — 세계에서 가장 오래 돈 발전용 고속로이자 <b class="ok">SFR이 실제로 돈다는 가장 강한 경험적 근거</b>임||BN-600 has run <b>since 8 April 1980</b> - the longest-running power fast reactor, and <b class="ok">the strongest evidence that SFRs actually work</b>]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f9_10', cap:'[[BN-600 노심 단면 모형 · 그림 9.10||BN-600 core section model · Fig. 9.10]]'},
+       {src:'f9_11', cap:'[[BN-800 원자로 상부와 나트륨 배관 · 그림 9.11||BN-800 reactor top and sodium piping · Fig. 9.11]]'})}
+  </div>
+  <div class="side" style="width:300px">
+    <div class="readout good"><span class="k">BN-600 · 1470 MWt / 600 MWe</span><span class="v" style="font-size:15px;line-height:1.5">[[30년 이용률 76 % · 누적 114 TWh · 연소도 7 &#8594; 11.4 % · 2040년까지 인가||76 % over 30 years · 114 TWh · burnup 7 &#8594; 11.4 % · licensed to 2040]]</span></div>
+    <div class="readout hi"><span class="k">BN-800 · 2100 MWt / 864 MWe</span><span class="v" style="font-size:15px;line-height:1.5">[[2016-10 상업운전 · MOX 60 % 이상, 전노심 MOX 로||commercial Oct 2016 · over 60 % MOX, heading for a full-MOX core]]</span></div>
+    <div class="readout"><span class="k">BN-1200M · 1220 MWe</span><span class="v" style="font-size:15px;line-height:1.5">[[5호기로 계획 · 2035년경 목표||planned as unit 5 · around 2035]]</span></div>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 세계 현황 */
+S({tag:'OTHER SFRS', ov:'[[미국 · 캐나다 · 인도 · 중국의 SFR 현황||SFR status in the US, Canada, India and China]]',
+src:'[[<b>출처</b> 본 교재 9.4절 · <b>2026년 9월 기준</b> — 반년이면 낡음 · CFR-600 열출력은 자료마다 1500 · 1882 MWt 로 엇갈리므로 인용 시 출처를 밝힐 것||<b>Source</b> This textbook &#167;9.4 · <b>as of September 2026</b> - stale within six months · CFR-600 thermal power is given as 1500 or 1882 MWt, so cite the source]]',
+abbr:'[[<b>CNSC</b> 캐나다 원자력안전위원회 · <b>VDR</b> 공급자설계검토 · <b>DOE</b> 미국 에너지부 · <b>HALEU</b> 농축도 5~20 % 우라늄 · <b>히트파이프</b> 작동유체 증발·응축으로 열을 나르는 밀폐관||<b>CNSC</b> Canadian Nuclear Safety Commission · <b>VDR</b> vendor design review · <b>DOE</b> US Department of Energy · <b>HALEU</b> uranium enriched to 5-20 % · <b>heat pipe</b> a sealed tube moving heat by evaporation and condensation]]',
+html:`<h2 class="t">[[미국 · 캐나다 · 인도 · 중국의 <em>SFR 현황</em>||<em>SFR status</em> in the US, Canada, India and China]]</h2>
+<ul class="b">
+  <li>[[<b>Natrium 건설허가(2026-03)</b>는 약 10년 만의 첫 상업로 허가이자 40년 만의 첫 비경수 상업로 허가임||<b>The Natrium construction permit (March 2026)</b> is the first commercial-reactor permit in about ten years and the first non-LWR one in forty]]</li>
+  <li>[[<b class="amb">Oklo Aurora의 2020년 히트파이프 설계는 폐기됨</b> — 현재는 풀형 나트륨 75 MWe. 옛 자료를 그대로 인용하지 말 것||<b class="amb">Oklo&#8217;s 2020 heat-pipe Aurora was dropped</b> - today it is a 75 MWe sodium pool. Do not quote the old material]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d sm">
+  <tr><th>[[설계||Design]]</th><th>[[규모 · 형식||Size · type]]</th><th>[[현황 (2026-09)||Status (Sept 2026)]]</th></tr>
+  <tr class="mark"><td>[[TerraPower Natrium (미국)||TerraPower Natrium (US)]]</td><td class="n">[[840 MWt / 345 MWe (최대 500)||840 MWt / 345 MWe (500 max)]]</td><td>[[2024-06 비원자력 착공 &#8594; 2026-03 NRC 건설허가 &#8594; 2026-04-24 원자력 공사 착수(와이오밍 케머러). 2030 완공 목표, Meta 와 최대 8기 계약||non-nuclear works June 2024 &#8594; NRC permit March 2026 &#8594; nuclear construction 24 April 2026 (Kemmerer, WY). Completion target 2030; up to eight units for Meta]]</td></tr>
+  <tr><td>[[ARC-100 (캐나다)||ARC-100 (Canada)]]</td><td class="n">[[286 MWt / 100 MWe · 풀형 · 금속||286 MWt / 100 MWe · pool · metal]]</td><td>[[EBR-II 혈통. 2023-06 부지준비허가 신청, 2025-03 CNSC VDR 완료. 건설허가 없음||EBR-II lineage. Site-preparation application June 2023, CNSC VDR done March 2025. No construction licence]]</td></tr>
+  <tr><td>[[Oklo Aurora (미국)||Oklo Aurora (US)]]</td><td class="n">[[75 MWe · 풀형 · 금속 HALEU||75 MWe · pool · metal HALEU]]</td><td>[[NRC 2022-01 반려 &#8594; DOE 시범사업으로. 2025-09-22 착공, 2026-06-11 예비 안전성분석 승인(4단계 중 3번째), 목표 운전 2028||NRC rejected in Jan 2022 &#8594; DOE pilot route. Ground broken 22 Sept 2025; preliminary safety analysis approved 11 June 2026 (3rd of 4 steps); operation target 2028]]</td></tr>
+  <tr><td>[[PFBR (인도)||PFBR (India)]]</td><td class="n">[[1250 MWt / 500 MWe · MOX||1250 MWt / 500 MWe · MOX]]</td><td>[[2004-10 착공, 2026-04-08 최초임계 — 원래 일정보다 15년 이상 늦음. 계통연결 일정 없음||construction Oct 2004, first criticality 8 April 2026 - 15+ years late. No grid date]]</td></tr>
+  <tr><td>[[CFR-600 (중국)||CFR-600 (China)]]</td><td class="n">[[600 MWe 총출력||600 MWe gross]]</td><td>[[1호기 2017-12 착공, 2023년부터 운전. 2호기 2020-12 착공. 열출력 1500 / 1882 MWt 로 엇갈림||unit 1 started Dec 2017, running since 2023. Unit 2 started Dec 2020. Thermal power quoted as 1500 or 1882 MWt]]</td></tr>
+</table>
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- Natrium 축열 */
+S({tag:'NATRIUM STORAGE', ov:'[[Natrium — 원자로와 터빈 사이의 용융염 축열||Natrium - molten-salt storage between reactor and turbine]]',
+src:'[[<b>출처</b> 본 교재 9.4절 · 840 MWt / 345 MWe 정격, 최대 500 MWe · 최대 출력에서 5.5시간 이상 · 출력 변화율 분당 10 % · 그림은 개념도||<b>Source</b> This textbook &#167;9.4 · 840 MWt / 345 MWe rated, 500 MWe max · over 5.5 h at maximum · 10 % a minute ramp · the drawing is a concept sketch]]',
+abbr:'[[<b>질산염 용융염</b> 태양열 발전에서 쓰던 축열 매체(NaNO₃–KNO₃) · <b>부하추종</b> 수요에 맞춰 출력을 오르내리는 운전 · <b>축열조</b> 뜨거운 염과 찬 염을 따로 담는 탱크||<b>nitrate salt</b> the storage medium from solar thermal plants (NaNO₃–KNO₃) · <b>load following</b> raising and lowering output with demand · <b>storage tanks</b> separate hot and cold salt tanks]]',
+html:`<h2 class="t">[[Natrium — 원자로와 터빈 사이의 <em>용융염 축열</em>||Natrium - <em>molten-salt storage</em> between reactor and turbine]]</h2>
+<ul class="b">
+  <li>[[원자로는 <b>항상 일정 출력</b>으로 돌고, 축열조가 수요에 맞춰 터빈을 밀었다 당겼다 함 — 원자력의 오랜 약점(부하추종)을 <b class="ok">열저장으로 우회</b>한 설계||The reactor runs <b>at constant power</b> and the storage pushes the turbine up and down with demand - the old nuclear weakness, load following, <b class="ok">sidestepped with heat storage</b>]]</li>
+  <li>[[재생에너지가 많은 계통에서 값을 가짐 — 정격 345 MWe, <b>최대 500 MWe로 5.5시간 이상</b>, 분당 10 % 변화||Valuable on grids heavy with renewables - 345 MWe rated, <b>500 MWe for over 5.5 hours</b>, 10 % a minute]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 800 400" role="img" aria-label="[[일정 출력의 원자로가 뜨거운 염 탱크를 채우고, 수요에 따라 터빈이 그 열을 꺼내 쓰는 Natrium의 구조||Natrium - a constant-power reactor fills a hot-salt tank; the turbine draws from it with demand]]">
+    <g id="na-g"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout hi"><span class="k">[[원자로 — 항상||Reactor - always]]</span><span class="v">840<small>MWt</small></span></div>
+    <div class="readout good"><span class="k">[[터빈 — 수요에 따라||Turbine - on demand]]</span><span class="v" id="na-p">345<small>MWe</small></span></div>
+    <div class="readout"><span class="k">[[최대 출력 유지||At maximum]]</span><span class="v">≥ 5.5<small>h</small></span></div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#na-g');
+  G.appendChild(mk('rect',{x:20,y:100,width:150,height:230,rx:16,fill:'var(--panel)',stroke:'var(--hot)','stroke-width':1.8}));
+  G.appendChild(mk('rect',{x:60,y:230,width:70,height:70,fill:'var(--hot)',opacity:0.5}));
+  const tk=(x,c,t)=>{ G.appendChild(mk('rect',{x:x,y:90,width:120,height:250,rx:8,fill:'var(--panel)',stroke:c,'stroke-width':1.8}));
+    const lv=mk('rect',{x:x+4,y:210,width:112,height:126,fill:c,opacity:0.35}); G.appendChild(lv);
+    G.appendChild(mk('text',{x:x+60,y:364,'text-anchor':'middle',class:'lbl',fill:c})).textContent=t; return lv; };
+  const hot=tk(280,'var(--hot)',TX('뜨거운 염 탱크','hot salt tank')), cold=tk(430,'var(--cool)',TX('찬 염 탱크','cold salt tank'));
+  G.appendChild(mk('path',{d:'M640,130 L720,100 L720,250 L640,220 Z',fill:'var(--panel)',stroke:'var(--ok)','stroke-width':1.8}));
+  const p1=mk('path',{d:'M170,150 H280',fill:'none',stroke:'var(--hot)','stroke-width':1.2,'stroke-dasharray':'3 5',opacity:0.5});
+  const p2=mk('path',{d:'M400,120 H640',fill:'none',stroke:'var(--hot)','stroke-width':1.2,'stroke-dasharray':'3 5',opacity:0.5});
+  const p3=mk('path',{d:'M680,240 V384 H490 V340',fill:'none',stroke:'var(--cool)','stroke-width':1.2,'stroke-dasharray':'3 5',opacity:0.5});
+  const p4=mk('path',{d:'M430,310 H96 V330',fill:'none',stroke:'var(--cool)','stroke-width':1.2,'stroke-dasharray':'3 5',opacity:0.5});
+  [p1,p2,p3,p4].forEach(p=>G.appendChild(p));
+  flow(p1,{n:5,color:'var(--hot)',r:3.8,speed:0.25});
+  const f2=flow(p2,{n:8,color:'var(--hot)',r:3.8,speed:0.2});
+  flow(p3,{n:8,color:'var(--cool)',r:3.4,speed:0.12}); flow(p4,{n:10,color:'var(--cool)',r:3.4,speed:0.12});
+  const L=(x,y,t,c,a)=>{ const e=mk('text',{x:x,y:y,class:'lbl',fill:c||'var(--ink-2)','text-anchor':a||'start'}); e.textContent=t; G.appendChild(e); };
+  L(95,84,TX('원자로 · 일정 출력','reactor · constant power'),'var(--hot)','middle');
+  L(680,84,TX('터빈 · 수요 추종','turbine · follows demand'),'var(--ok)','middle');
+  L(225,140,TX('나트륨 → 염','sodium → salt'),null,'middle');
+  if(RM) return;
+  raf(t=>{ const d=0.5+0.5*Math.sin(t*0.9), P=345+155*d;
+    f2.speed=0.1+0.25*d; hot.setAttribute('y',(130+110*d).toFixed(1)); hot.setAttribute('height',(206-110*d).toFixed(1));
+    cold.setAttribute('y',(240-110*d).toFixed(1)); cold.setAttribute('height',(96+110*d).toFixed(1));
+    el.querySelector('#na-p').innerHTML=Math.round(P)+'<small>MWe</small>'; });
+}});
+
+
+/* ---------------------------------------------------------------- 납냉각로 */
+S({tag:'LEAD-COOLED, FOR REFERENCE', ov:'[[참고 — 납냉각로와 나트륨의 맞바꿈||For reference - lead-cooled reactors and the trade against sodium]]',
+src:'[[<b>출처</b> 본 교재 9.4절 · <b>2026년 9월 기준</b> · SEALER-D 80 MWt, 상용 계획 예블레 노르순데트 6기 330 MWe, 2026-05-18 건설 신청 · BREST-OD-300 은 질화물 연료, 2026 물리기동 · 2027 상반기 계통연결 예정||<b>Source</b> This textbook &#167;9.4 · <b>as of September 2026</b> · SEALER-D 80 MWt; commercial plan six units, 330 MWe at Gävle-Norrsundet; construction application 18 May 2026 · BREST-OD-300 uses nitride fuel; physics start-up 2026, grid in first half of 2027]]',
+abbr:'[[<b>LFR</b> 납냉각고속로 · <b>침식</b> 흐르는 유체가 표면을 깎아내는 것 · <b>질화물 연료</b> 우라늄·플루토늄 질화물 — 밀도와 열전도가 높음||<b>LFR</b> lead-cooled fast reactor · <b>erosion</b> a flowing fluid wearing a surface away · <b>nitride fuel</b> uranium-plutonium nitride - dense and conductive]]',
+html:`<h2 class="t">[[참고 — <em>납냉각로</em>와 나트륨의 맞바꿈||For reference - <em>lead-cooled reactors</em> and the trade against sodium]]</h2>
+<ul class="b">
+  <li>[[나트륨은 <b>화학적 반응성을 내주고 유동·재료 적합성을 얻는</b> 거래임 — 납은 그 반대||Sodium <b>trades chemical reactivity for good flow and materials compatibility</b> - lead makes the opposite trade]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 380" role="img" aria-label="[[납과 나트륨의 장단점 대비, 그리고 SEALER 와 BREST-OD-300 현황||Lead against sodium, and the status of SEALER and BREST-OD-300]]">
+  <g id="pb-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#pb-g'), gs=[];
+  [[TX('납이 얻는 것','What lead gains'),'var(--ok)',[TX('물과 반응하지 않음 → 중간 루프 불필요','no reaction with water → no intermediate loop'),TX('불에 타지 않음','does not burn'),TX('무거워 감속이 거의 없음','heavy, barely moderates')]],
+   [TX('납이 내주는 것','What lead gives up'),'var(--hot)',[TX('융점 327 °C → 동결 위험이 큼','melts at 327 °C → a real freezing risk'),TX('강재를 부식 · 침식시킴','corrodes and erodes steel'),TX('밀도가 커 구조 · 내진 하중 증가','dense → heavier structural and seismic loads')]]]
+  .forEach((c,i)=>{
+    const g=mk('g',{transform:'translate('+(i*570)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:550,height:190,fill:'var(--panel)',stroke:c[1]}));
+    g.appendChild(mk('text',{x:22,y:40,'font-family':'var(--sans)','font-size':20,fill:c[1],'font-weight':600})).textContent=c[0];
+    c[2].forEach((t,j)=>g.appendChild(mk('text',{x:22,y:86+j*36,'font-family':'var(--sans)','font-size':17,fill:'var(--ink-2)','font-weight':300})).textContent='· '+t);
+    G.appendChild(g); gs.push(g);
+  });
+  [['SEALER / Blykalla',TX('스웨덴 · 실증로 80 MWt · 상용 6기 330 MWe · 2026-05-18 건설 신청 · 2030년대 전반 목표','Sweden · 80 MWt demonstrator · six commercial units, 330 MWe · construction application 18 May 2026 · early 2030s')],
+   ['BREST-OD-300',TX('러시아 · 300 MWe · 질화물 연료 · 2026 물리기동, 2027 상반기 계통연결 예정','Russia · 300 MWe · nitride fuel · physics start-up 2026, grid early 2027')]]
+  .forEach((c,i)=>{
+    const g=mk('g',{transform:'translate(0,'+(214+i*82)+')',opacity:0});
+    g.appendChild(mk('rect',{width:1120,height:70,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:3,height:70,fill:'var(--amber)'}));
+    g.appendChild(mk('text',{x:22,y:42,'font-family':'var(--mono)','font-size':17,fill:'var(--amber)','font-weight':600})).textContent=c[0];
+    g.appendChild(mk('text',{x:260,y:42,'font-family':'var(--sans)','font-size':16,fill:'var(--ink-2)','font-weight':300})).textContent=c[1];
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:340,delay:200*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 대시보드 카드 */
+S({tag:'DASHBOARD CARD', ov:'[[NEA SMR 대시보드 설계 카드 읽는 법||Reading an NEA SMR Dashboard design card]]',
+src:'[[<b>출처</b> 본 교재 9.5절 그림 9.12 · NEA SMR Dashboard <b>2023년판</b> — 지금은 디지털 대시보드로 바뀌어 항목과 값이 다름 · 「SMR 자료를 찾는 법」 2.4절||<b>Source</b> This textbook &#167;9.5, Fig. 9.12 · NEA SMR Dashboard, <b>2023 edition</b> - now a digital dashboard with different fields and values · see <i>Finding SMR Data</i> &#167;2.4]]',
+abbr:'[[<b>NEA</b> OECD 원자력기구 · <b>사업 성숙도</b> 인허가·부지·재원·공급망·참여·연료의 여섯 축으로 본 진척도||<b>NEA</b> the OECD Nuclear Energy Agency · <b>project maturity</b> progress on six axes - licensing, siting, financing, supply chain, engagement, fuel]]',
+html:`<h2 class="t">[[NEA SMR 대시보드 <em>설계 카드</em> 읽는 법||Reading an NEA SMR Dashboard <em>design card</em>]]</h2>
+<ul class="b">
+  <li>[[여섯 축 게이지는 설계 사양이 아니라 <b>사업 성숙도</b>를 보는 도구임||The six gauges measure <b>project maturity</b>, not design specifications]]</li>
+  <li>[[<b class="amb">이 판은 낡았음</b> — Natrium 840 MWth / 500 °C 같은 숫자는 지금도 유효하지만, 진척도 게이지는 이미 여러 칸 움직였음. 반드시 온라인 최신판을 볼 것||<b class="amb">This edition is out of date</b> - numbers like Natrium&#8217;s 840 MWth / 500 °C still hold, but the gauges have moved several notches. Always check the live version]]</li>
+</ul>
+<div class="body"><div class="fig">
+${PH({src:'f9_12', cap:'[[NEA SMR Dashboard(2023년판) 설계 카드 — Natrium · 그림 9.12||NEA SMR Dashboard (2023) design card - Natrium · Fig. 9.12]]'})}
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 중간 루프 */
+S({tag:'THE INTERMEDIATE LOOP', ov:'[[노형별 열전달 경로와 SFR 중간 루프의 값||Heat paths by reactor type, and what the SFR intermediate loop is worth]]',
+src:'[[<b>출처</b> 본 교재 9.6절 그림 9.13 · Na-23 이 중성자를 흡수하면 반감기 15 h 의 Na-24 — 강한 감마선 · 나트륨–물 반응의 전파 기구는 마모(wastage)와 과열(overheating)||<b>Source</b> This textbook &#167;9.6, Fig. 9.13 · Na-23 absorbing a neutron becomes Na-24 (15 h half-life), a strong gamma emitter · sodium-water reactions propagate by wastage and overheating]]',
+abbr:'[[<b>마모(wastage)</b> 반응 제트가 이웃 관을 갉아먹는 현상 · <b>과열(overheating)</b> 넓은 면적의 관 강도가 떨어지는 현상 · <b>파열판</b> 과압 시 터져 압력을 빼는 얇은 판 · <b>이중관</b> 관 두 겹 사이로 누설을 감지하는 전열관||<b>wastage</b> a reaction jet eating into neighbouring tubes · <b>overheating</b> loss of tube strength over a wide area · <b>rupture disc</b> a thin plate that bursts to relieve pressure · <b>double-wall tube</b> two walls with leak detection between]]',
+html:`<h2 class="t">[[노형별 열전달 경로와 SFR <em>중간 루프</em>의 값||Heat paths by reactor type, and what the SFR <em>intermediate loop</em> is worth]]</h2>
+<ul class="b">
+  <li>[[이유 둘 — <b>① 1차 나트륨이 방사화</b>(Na-24, 15 h)되어 터빈실로 못 끌고 감 · <b>② 증기발생기 관이 터져도 물이 노심에 닿지 않음</b>||Two reasons - <b>&#9312; primary sodium is activated</b> (Na-24, 15 h) and cannot go to the turbine hall · <b>&#9313; a failed SG tube never brings water to the core</b>]]</li>
+  <li>[[나트륨–물 반응의 진짜 위험은 폭발이 아니라 <b>전파</b>임. 가장 어려운 것은 <b class="hot">중간 크기 누설</b> — 파열판을 터뜨리기엔 작고 미세누설로 잡기엔 빠름. 4S가 이중관을 쓰는 이유||The real sodium-water danger is <b>propagation</b>, not explosion. Hardest is the <b class="hot">intermediate leak</b> - too small for the rupture disc, too fast for micro-leak detection. Why 4S uses double-wall tubes]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 330" role="img" aria-label="[[VHTR·SFR·MSR의 열전달 경로 비교 — SFR만 중간 나트륨 루프가 하나 더 있음||Heat paths for VHTR, SFR and MSR - only the SFR has the extra intermediate sodium loop]]">
+  <g id="il-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#il-g'), gs=[];
+  const R=[['VHTR','var(--cool)',[TX('노심','core'),TX('1차 He','primary He'),TX('증기발생기','steam gen.'),TX('증기터빈','steam turbine')]],
+           ['SFR','var(--hot)',[TX('노심','core'),TX('1차 Na','primary Na'),TX('중간 Na','intermediate Na'),TX('증기발생기','steam gen.'),TX('증기터빈','steam turbine')]],
+           ['MSR','var(--amber)',[TX('노심 = 연료염','core = fuel salt'),TX('2차 염','secondary salt'),TX('증기 또는 가스터빈','steam or gas turbine')]]];
+  R.forEach((r,i)=>{
+    const y=16+i*100, g=mk('g',{opacity:0});
+    g.appendChild(mk('text',{x:0,y:y+38,'font-family':'var(--mono)','font-size':20,fill:r[1],'font-weight':600})).textContent=r[0];
+    r[2].forEach((b,j)=>{
+      const x=110+j*198, hl=(r[0]==='SFR'&&j===2);
+      g.appendChild(mk('rect',{x:x,y:y,width:176,height:60,rx:6,fill:hl?'var(--hot)':'var(--panel)',opacity:hl?0.30:1,stroke:hl?'var(--hot)':'var(--rule)','stroke-width':hl?2:1}));
+      if(hl) g.appendChild(mk('rect',{x:x,y:y,width:176,height:60,rx:6,fill:'none',stroke:'var(--hot)','stroke-width':2}));
+      g.appendChild(mk('text',{x:x+88,y:y+37,'text-anchor':'middle','font-family':'var(--sans)','font-size':16,fill:'var(--ink)','font-weight':hl?600:300})).textContent=b;
+      if(j<r[2].length-1) g.appendChild(mk('path',{d:'M'+(x+178)+','+(y+30)+' h16 M'+(x+188)+','+(y+24)+' l6,6 l-6,6',stroke:'var(--ink-3)','stroke-width':1.6,fill:'none'}));
+    });
+    G.appendChild(g); gs.push(g);
+  });
+  G.appendChild(mk('text',{x:110,y:322,class:'lbl',fill:'var(--hot)'})).textContent=TX('SFR 만 중간 루프를 하나 더 둔다 — 나트륨과 물을 떼어 놓기 위해서','only the SFR adds a loop - to keep sodium and water apart');
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:360,delay:250*i,fill:'forwards'}));
+}});
+</script>

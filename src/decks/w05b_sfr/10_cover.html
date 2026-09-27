@@ -1,0 +1,59 @@
+<script>
+/* ================================================================
+   표지 · 이 덱의 구성
+   교재 「물을 쓰지 않는 SMR — VHTR · SFR · MSR」(Rev1.0, 2026-09) 7~11장.
+   섹션 번호는 교재 장 번호를 그대로 쓴다 — 07 ~ 11.
+   ================================================================ */
+S({bare:true, cls:'cover', ov:'[[표지||Cover]]',
+html:`<div class="kick">[[한양대학교 원자력공학과 · THINK Lab · NUE4067 · 비경수로 편 ②||Hanyang University · Dept. of Nuclear Engineering · THINK Lab · NUE4067 · Non-LWR part 2]]</div>
+<h1>[[물을 쓰지 않는 SMR<br><span>소듐냉각고속로(SFR)</span>||SMRs without water<br><span>the sodium-cooled fast reactor</span>]]</h1>
+<div class="ln"></div>
+<div class="meta">
+  [[나트륨 물성 · 금속연료 · 도시바 4S · 1986년 EBR-II 시험 · 나트륨 계통코드<br>
+  5~6주차 강의 · 지도교수 <b>송민섭</b> · Rev1.0 · 2026년 9월||Sodium properties · metal fuel · Toshiba 4S · the 1986 EBR-II tests · a sodium system code<br>
+  Weeks 5-6 · Instructor <b>Minseop Song</b> · Rev1.0 · September 2026]]
+</div>
+<div class="hint">[[<kbd>&#8594;</kbd> 다음 &nbsp; <kbd>&#8592;</kbd> 이전 &nbsp; <kbd>O</kbd> 목차 &nbsp; <kbd>L</kbd> 한/영 &nbsp; <kbd>T</kbd> 배경 &nbsp; <kbd>P</kbd> 인쇄·PDF &nbsp; <kbd>F</kbd> 전체화면||<kbd>&#8594;</kbd> Next &nbsp; <kbd>&#8592;</kbd> Prev &nbsp; <kbd>O</kbd> Index &nbsp; <kbd>L</kbd> KO/EN &nbsp; <kbd>T</kbd> Theme &nbsp; <kbd>P</kbd> Print·PDF &nbsp; <kbd>F</kbd> Fullscreen]]</div>`,
+init(el){
+  if(RM) return;
+  const h1=el.querySelector('h1'), ln=el.querySelector('.ln');
+  h1.style.opacity=0; ln.style.width='0px';
+  h1.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],
+    {duration:700,easing:'cubic-bezier(.2,.7,.3,1)',fill:'forwards'});
+  ln.animate([{width:'0px'},{width:'120px'}],{duration:600,delay:500,fill:'forwards'});
+}});
+
+
+/* ---------------------------------------------------------------- 이 덱의 구성 */
+S({tag:'ROADMAP', ov:'[[제2부의 구성 — 원리 · 연료 · 계통 · 안전 · 계통코드||How Part 2 is built - principle, fuel, systems, safety, system code]]',
+src:'[[<b>출처</b> 본 교재 1.3절 · 섹션 번호는 교재 장 번호와 같음(07~11) · 인허가·건설 현황은 <b>2026년 9월 기준</b>||<b>Source</b> This textbook &#167;1.3 · section numbers match the chapters (07-11) · licensing and construction status <b>as of September 2026</b>]]',
+html:`<h2 class="t">[[제2부의 구성 — <em>원리 · 연료 · 계통 · 안전 · 계통코드</em>||How Part 2 is built - <em>principle, fuel, systems, safety, system code</em>]]</h2>
+<ul class="b">
+  <li>[[제1부(HTGR)는 출력밀도를 <b>낮춰</b> 피동안전을 샀음. SFR은 반대로 출력밀도를 <b>높이면서</b>(수백 MW/m³) 피동안전을 노림||Part 1&#8217;s HTGR bought passive safety by <b>lowering</b> power density. The SFR aims for it while <b>raising</b> power density to hundreds of MW/m³]]</li>
+  <li>[[그 근거가 1986년 4월 3일 EBR-II의 두 시험임 — 10장이 이 덱의 중심||The evidence is two tests at EBR-II on 3 April 1986 - chapter 10 is the centre of this deck]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 380" role="img" aria-label="[[교재 7장부터 11장까지의 주제와 핵심 질문||Chapters 7 to 11 - topic and key question]]">
+  <g id="rm-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#rm-g'), gs=[];
+  const C=[['07',TX('나트륨','Sodium'),TX('감속하지 않으면서 열을 잘 나르는 유일한 실용 후보','the only practical coolant that carries heat without moderating'),'var(--cool)'],
+           ['08',TX('금속연료','Metal fuel'),TX('녹는점이 낮은데 왜 더 안전한가','lower melting point - so why safer?'),'var(--amber)'],
+           ['09',TX('4S와 풀형 계통','4S and the pool layout'),TX('30년 무재장전 원자로는 어떻게 생겼나','what a 30-year no-refuelling reactor looks like'),'var(--ok)'],
+           ['10',TX('SFR 안전','SFR safety'),TX('제어봉 없이 스스로 멈춘 1986년의 원자로','the reactor that shut itself down in 1986'),'var(--hot)'],
+           ['11',TX('나트륨 계통코드','Sodium system code'),TX('헬륨보다 쉽고, 어떤 면에서는 더 어렵다','easier than helium, and harder in places'),'var(--cool)']];
+  C.forEach((c,i)=>{
+    const y=4+i*75, g=mk('g',{transform:'translate(0,'+y+')',opacity:0});
+    g.appendChild(mk('rect',{width:1120,height:64,fill:'var(--panel)',stroke:i===3?c[3]:'var(--rule)','stroke-width':i===3?1.8:1}));
+    g.appendChild(mk('rect',{width:4,height:64,fill:c[3]}));
+    g.appendChild(mk('text',{x:24,y:42,'font-family':'var(--mono)','font-size':24,fill:c[3],'font-weight':600})).textContent=c[0];
+    g.appendChild(mk('text',{x:90,y:40,'font-family':'var(--sans)','font-size':20,fill:c[3],'font-weight':600})).textContent=c[1];
+    g.appendChild(mk('text',{x:360,y:40,'font-family':'var(--sans)','font-size':18,fill:'var(--ink)','font-weight':300})).textContent=c[2];
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:340,delay:140*i,fill:'forwards'}));
+}});
+</script>
