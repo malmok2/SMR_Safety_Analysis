@@ -80,7 +80,7 @@ src:'[[<b>계산</b> 본 교재 16.3절 · III권 FLiBe() = DenseLiquid(2413, 0.
 abbr:'[[<b>DenseLiquid</b> III권의 선형 밀도 액체 클래스 · <b>MoltenSalt</b> 여기서 새로 만드는 하위 클래스 — 온도 의존 점성과 동결 판정을 더함||<b>DenseLiquid</b> Volume III&#8217;s linear-density liquid class · <b>MoltenSalt</b> the subclass built here - adding temperature-dependent viscosity and a freeze check]]',
 html:`<h2 class="t">[[염 물성 클래스 — 밀도는 맞고 <em>점성은 온도 함수로</em>||The salt property class - density fits, <em>viscosity must follow temperature</em>]]</h2>
 <ul class="b">
-  <li>[[밀도는 실측식과 <b class="ok">0.3 % 차이</b>로 잘 맞음. 문제는 점성 — 상수 5.6 mPa·s로 박혀 있는데 실제로는 650 °C 6.8, 500 °C <b class="hot">15.0 mPa·s</b>. 150 K 내려가면 2배가 넘음||Density agrees with measurement to <b class="ok">0.3 %</b>. Viscosity is the problem - fixed at 5.6 mPa·s, really 6.8 at 650 °C and <b class="hot">15.0 at 500 °C</b>. More than double over 150 K]]</li>
+  <li>[[밀도는 실측식과 <b class="ok">0.3 % 차이</b>로 잘 맞음. 문제는 점성 — 상수 5.6 mPa·s로 박혀 있는데 실제로는 650 °C 6.8, 500 °C <b class="hot">14.9 mPa·s</b>. 150 K 내려가면 2배가 넘음||Density agrees with measurement to <b class="ok">0.3 %</b>. Viscosity is the problem - fixed at 5.6 mPa·s, really 6.8 at 650 °C and <b class="hot">15.0 at 500 °C</b>. More than double over 150 K]]</li>
   <li>[[동결 근처를 보려면 <b>반드시 온도 함수로</b> — MSRE 연료염은 물성이 또 다르므로 ANL SAM 값을 인용할 것||Near freezing it <b>must be a function of temperature</b> - and MSRE fuel salt differs again; cite ANL&#8217;s SAM values]]</li>
 </ul>
 <div class="body">
@@ -97,7 +97,7 @@ flibe = MoltenSalt(2413.0, 0.488, cp=2390.0, k=1.1,<br>
   <div class="side">
     <div class="readout good"><span class="k">[[ρ(650 °C) · III권 대 실측||ρ(650 °C) · Vol. III vs measured]]</span><span class="v">1963 / 1969</div>
     <div class="readout hi"><span class="k">μ(650 °C)</span><span class="v">6.8<small>mPa·s</small></span></div>
-    <div class="readout warn"><span class="k">μ(500 °C)</span><span class="v">15.0<small>mPa·s</small></span></div>
+    <div class="readout warn"><span class="k">μ(500 °C)</span><span class="v">14.9<small>mPa·s</small></span></div>
   </div>
 </div>`});
 

@@ -1096,12 +1096,13 @@ init(el){
 
 /* ---------------------------------------------------------------- 이동 방정식 */
 S({tag:'PRECURSOR TRANSPORT', ov:'[[선구핵종 이동 방정식 — 이류항이 붙는다||The precursor transport equation - an advection term appears]]',
-src:'[[<b>출처</b> 본 교재 13.2절 · MSRE 총 순환주기 25.2 s, 노심 체류 17 s, τ<sub>out</sub> = 8.2 s · 그룹 상수 λ ≈ 3.0 s⁻¹(반감기 0.23 s) ~ 0.0124 s⁻¹(56 s)||<b>Source</b> This textbook &#167;13.2 · MSRE loop transit 25.2 s, 17 s in the core, τ<sub>out</sub> = 8.2 s · group constants from λ ≈ 3.0 s⁻¹ (0.23 s half-life) to 0.0124 s⁻¹ (56 s)]]',
+src:'[[<b>출처</b> 본 교재 13.2절 · MSRE 총 순환주기 25.2 s, 노심 체류 17 s, τ<sub>out</sub> = 8.2 s · 그룹 상수 λ ≈ 3.0 s⁻¹(반감기 0.23 s) ~ 0.0124 s⁻¹(56 s) · 손실 비율은 노심 안 발생이 고르고 플러그 흐름이라고 단순화한 값(교재 13.2절 개정분)||<b>Source</b> This textbook &#167;13.2 · MSRE loop transit 25.2 s, 17 s in the core, τ<sub>out</sub> = 8.2 s · group constants from λ ≈ 3.0 s⁻¹ (0.23 s half-life) to 0.0124 s⁻¹ (56 s) · losses assume uniform production in the core and plug flow (revised &#167;13.2)]]',
 abbr:'[[<b>이류(advection)</b> 흐름에 실려 옮겨 가는 것 · <b>점동특성</b> 노심 출력을 한 값으로 다루는 동특성 · <b>λ<sub>i</sub></b> 그룹 i 의 붕괴상수 · <b>Λ</b> 중성자 생성시간 · <b>v<sub>f</sub></b> 연료염 속도장||<b>advection</b> being carried along by the flow · <b>point kinetics</b> kinetics with one power value · <b>λ<sub>i</sub></b> decay constant of group i · <b>Λ</b> neutron generation time · <b>v<sub>f</sub></b> fuel-salt velocity field]]',
 html:`<h2 class="t">[[선구핵종 이동 방정식 — <em>이류항</em>이 붙는다||The precursor transport equation - <em>an advection term</em> appears]]</h2>
 <ul class="b">
   <li>[[이 한 줄 때문에 선구핵종 방정식을 <b>노심이 아니라 계통 전체에 대해</b> 풀어야 함 — 노심에서 생기고, 배관을 따라 이동하며, 어디서든 붕괴하고, 일부는 돌아옴||Because of this one term the precursor equation must be solved <b>over the whole loop, not just the core</b> - born in the core, carried along, decaying anywhere, some returning]]</li>
-  <li>[[그룹마다 잃는 비율이 달라 <b class="hot">지발중성자 스펙트럼의 모양 자체가 바뀜</b> — βeff 하나만 고치는 근사는 정확하지 않음||Each group loses a different share, so <b class="hot">the shape of the delayed-neutron spectrum changes</b> - correcting a single βeff is not accurate]]</li>
+  <li>[[짧은 그룹은 f ≈ 0 이지만 거의 다 <b>노심 안에서 붕괴</b>해 잃는 몫이 약 2 %. 긴 그룹은 루프 전체로 퍼져 <b class="hot">노심 밖 체류 비율(8.2/25.2 ≈ 33 %)만큼 잃음</b> — 반감기가 긴 그룹일수록 많이 잃음||Short groups have f ≈ 0 but mostly <b>decay inside the core</b>, losing about 2 %. Long groups spread round the loop and <b class="hot">lose the out-of-core share, 8.2/25.2 ≈ 33 %</b> - the longer the half-life, the bigger the loss]]</li>
+  <li>[[그룹마다 잃는 비율이 달라 <b>지발중성자 스펙트럼의 모양 자체가 바뀜</b> — βeff 하나만 고치는 근사는 정확하지 않음||Each group loses a different share, so <b>the shape of the delayed-neutron spectrum changes</b> - correcting a single βeff is not accurate]]</li>
 </ul>
 <div class="body">
   <div class="fig">
@@ -1112,8 +1113,8 @@ html:`<h2 class="t">[[선구핵종 이동 방정식 — <em>이류항</em>이 �
   </div>
   <div class="side">
     <div class="readout"><span class="k">[[MSRE 체류시간||MSRE residence]]</span><span class="v" style="font-size:22px">17 + 8.2 <small>= 25.2 s</small></span></div>
-    <div class="readout hi"><span class="k">[[가장 긴 그룹 · λ ≈ 0.0124||Longest group · λ ≈ 0.0124]]</span><span class="v">f ≈ 0.90</div>
-    <div class="readout warn"><span class="k">[[가장 짧은 그룹 · λ ≈ 3.0||Shortest group · λ ≈ 3.0]]</span><span class="v">f ≈ 0</div>
+    <div class="readout warn"><span class="k">[[가장 긴 그룹 (56 s) · 손실||Longest group (56 s) · lost]]</span><span class="v">≈ 33<small>% · f ≈ 0.90</small></span></div>
+    <div class="readout good"><span class="k">[[가장 짧은 그룹 (0.23 s) · 손실||Shortest group (0.23 s) · lost]]</span><span class="v">≈ 2<small>% · f ≈ 0</small></span></div>
   </div>
 </div>`});
 
@@ -1836,7 +1837,7 @@ src:'[[<b>계산</b> 본 교재 16.3절 · III권 FLiBe() = DenseLiquid(2413, 0.
 abbr:'[[<b>DenseLiquid</b> III권의 선형 밀도 액체 클래스 · <b>MoltenSalt</b> 여기서 새로 만드는 하위 클래스 — 온도 의존 점성과 동결 판정을 더함||<b>DenseLiquid</b> Volume III&#8217;s linear-density liquid class · <b>MoltenSalt</b> the subclass built here - adding temperature-dependent viscosity and a freeze check]]',
 html:`<h2 class="t">[[염 물성 클래스 — 밀도는 맞고 <em>점성은 온도 함수로</em>||The salt property class - density fits, <em>viscosity must follow temperature</em>]]</h2>
 <ul class="b">
-  <li>[[밀도는 실측식과 <b class="ok">0.3 % 차이</b>로 잘 맞음. 문제는 점성 — 상수 5.6 mPa·s로 박혀 있는데 실제로는 650 °C 6.8, 500 °C <b class="hot">15.0 mPa·s</b>. 150 K 내려가면 2배가 넘음||Density agrees with measurement to <b class="ok">0.3 %</b>. Viscosity is the problem - fixed at 5.6 mPa·s, really 6.8 at 650 °C and <b class="hot">15.0 at 500 °C</b>. More than double over 150 K]]</li>
+  <li>[[밀도는 실측식과 <b class="ok">0.3 % 차이</b>로 잘 맞음. 문제는 점성 — 상수 5.6 mPa·s로 박혀 있는데 실제로는 650 °C 6.8, 500 °C <b class="hot">14.9 mPa·s</b>. 150 K 내려가면 2배가 넘음||Density agrees with measurement to <b class="ok">0.3 %</b>. Viscosity is the problem - fixed at 5.6 mPa·s, really 6.8 at 650 °C and <b class="hot">15.0 at 500 °C</b>. More than double over 150 K]]</li>
   <li>[[동결 근처를 보려면 <b>반드시 온도 함수로</b> — MSRE 연료염은 물성이 또 다르므로 ANL SAM 값을 인용할 것||Near freezing it <b>must be a function of temperature</b> - and MSRE fuel salt differs again; cite ANL&#8217;s SAM values]]</li>
 </ul>
 <div class="body">
@@ -1853,7 +1854,7 @@ flibe = MoltenSalt(2413.0, 0.488, cp=2390.0, k=1.1,<br>
   <div class="side">
     <div class="readout good"><span class="k">[[ρ(650 °C) · III권 대 실측||ρ(650 °C) · Vol. III vs measured]]</span><span class="v">1963 / 1969</div>
     <div class="readout hi"><span class="k">μ(650 °C)</span><span class="v">6.8<small>mPa·s</small></span></div>
-    <div class="readout warn"><span class="k">μ(500 °C)</span><span class="v">15.0<small>mPa·s</small></span></div>
+    <div class="readout warn"><span class="k">μ(500 °C)</span><span class="v">14.9<small>mPa·s</small></span></div>
   </div>
 </div>`});
 
