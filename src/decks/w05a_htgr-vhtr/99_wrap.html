@@ -1,0 +1,118 @@
+<script>
+/* ================================================================
+   정리 · 약어 · 닫는 장
+   ================================================================ */
+SECT('[[정리와 약어||Wrap-up and abbreviations]]');
+
+/* ---------------------------------------------------------------- 정리 */
+S({tag:'SIX NUMBERS', ov:'[[제1부에서 기억할 여섯 개의 숫자||Six numbers to keep from Part 1]]',
+src:'[[<b>출처</b> 본 교재 1~6장 · 각 숫자의 근거는 해당 장의 출처 줄 참조||<b>Source</b> This textbook, chs. 1-6 · see each chapter&#8217;s source line for the basis of each number]]',
+html:`<h2 class="t">[[제1부에서 기억할 <em>여섯 개의 숫자</em>||<em>Six numbers</em> to keep from Part 1]]</h2>
+<ul class="b">
+  <li>[[헬륨이 못 나르는 만큼 흑연이 담아 두고, 흑연이 담아 두는 동안 TRISO가 핵분열생성물을 붙잡음 — <b>여섯 숫자가 이 한 문장의 근거</b>임||What helium cannot carry, graphite stores; while it stores it, TRISO holds the fission products - <b>these six numbers are the evidence</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 400" role="img" aria-label="[[7 MPa, 3.3 MW/m³, 1600 °C, R², 20초와 35시간, 73배의 여섯 숫자와 각각의 뜻||Six numbers and what each means - 7 MPa, 3.3 MW/m³, 1600 °C, R², 20 s and 35 h, 73×]]">
+  <g id="sx-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#sx-g'), gs=[];
+  const N=[['7 MPa','var(--cool)',TX('송풍 동력을 감당하려는 가압','pressure to make blower power affordable'),TX('대기압이면 동력 약 4900배','≈ 4900 × the power at 1 atm')],
+           ['3.3 MW/m³','var(--ok)',TX('피동안전은 부피로 산다','passive safety is bought with volume'),TX('78 m³ 노심 vs 경수로 2.5 m³','a 78 m³ core vs 2.5 m³ for an LWR')],
+           ['1600 °C','var(--amber)',TX('TRISO 곡선이 꺾이기 직전','just before the TRISO curve bends'),TX('200 K 올리면 파손 15배','+200 K, 15 × the failures')],
+           ['ΔT ∝ R²','var(--hot)',TX('모듈 출력 상한은 노심 지름','module power is capped by diameter'),TX('키우려면 환형 노심','grow it with an annular core')],
+           ['20 s · 35 h','var(--cool)',TX('2023 HTR-PM 실증시험','the 2023 HTR-PM demonstration'),TX('도플러 미임계 · 하루 단위 최고온도','Doppler shutdown · peaks a day later')],
+           ['73 ×','var(--ok)',TX('흑연이 주인공, 헬륨은 심부름꾼','graphite leads, helium runs errands'),TX('고체 열용량 240 vs 유체 3.3 MJ/K','240 vs 3.3 MJ/K, solid vs gas')]];
+  N.forEach((n,i)=>{
+    const x=(i%3)*378, y=Math.floor(i/3)*204, g=mk('g',{transform:'translate('+x+','+y+')',opacity:0});
+    g.appendChild(mk('rect',{width:362,height:190,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:362,height:3,fill:n[1]}));
+    g.appendChild(mk('text',{x:22,y:66,'font-family':'var(--mono)','font-size':34,fill:n[1],'font-weight':600})).textContent=n[0];
+    g.appendChild(mk('text',{x:22,y:118,'font-family':'var(--sans)','font-size':18,fill:'var(--ink)','font-weight':600})).textContent=n[2];
+    g.appendChild(mk('text',{x:22,y:152,'font-family':'var(--sans)','font-size':15.5,fill:'var(--ink-2)','font-weight':300})).textContent=n[3];
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:340,delay:150*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 약어 1/2 */
+S({tag:'ABBREVIATIONS 1/2', ov:'[[약어 (1/2) — 노형 · 연료 · 재료||Abbreviations (1 of 2) - reactors, fuel, materials]]',
+src:'[[<b>출처</b> 본 교재 1.5절 용어 정리 · 각 장 하단의 약어 줄과 같은 내용임||<b>Source</b> This textbook &#167;1.5 · the same entries as the abbreviation line under each slide]]',
+html:`<h2 class="t">[[약어 (1/2) — 노형 · 연료 · 재료||Abbreviations (1 of 2) - reactors, fuel, materials]]</h2>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 470" role="img" aria-label="[[노형·연료·재료 관련 약어의 원어와 뜻||Reactor, fuel and material abbreviations with expansions and meanings]]">
+  <g id="ab1"></g>
+</svg>
+</div></div>`,
+init(el){ abbrTable(el,'#ab1',[
+  ['HTGR','High Temperature Gas-cooled Reactor',TX('헬륨 냉각 · 흑연 감속로 전체','all helium-cooled, graphite-moderated reactors')],
+  ['VHTR','Very High Temperature Reactor',TX('출구 900 °C 이상을 노리는 4세대 분류명','Gen IV class aiming at 900 °C and up')],
+  ['FHR','Fluoride-salt-cooled High-temp. Reactor',TX('TRISO 고체 연료 + 불화염 냉각 (Kairos)','solid TRISO fuel, fluoride-salt coolant')],
+  ['MSR · SFR','Molten Salt / Sodium-cooled Fast Reactor',TX('용융염로 · 소듐냉각고속로 (다음 두 덱)','the next two decks')],
+  ['HTR-PM','High Temperature Reactor – Pebble-bed Module',TX('중국 스다오완 상용 HTGR','the commercial HTGR at Shidaowan')],
+  ['HTTR','High Temperature engineering Test Reactor',TX('일본 30 MWt 프리즘형 시험로','Japan’s 30 MWt prismatic test reactor')],
+  ['TRISO','Tri-structural Isotropic particle',TX('세 겹 피복 연료입자 — 입자 하나가 격납','coated particle - each one a containment')],
+  ['UCO','Uranium Oxycarbide',TX('산화물+탄화물 커널 — CO 생성을 막음','oxide-carbide kernel that suppresses CO')],
+  ['SiC · PyC','Silicon Carbide · Pyrolytic Carbon',TX('TRISO 의 압력경계 · 탄소층','the pressure boundary and carbon layers')],
+  ['HALEU','High-Assay Low-Enriched Uranium',TX('농축도 5~20 % 우라늄','uranium enriched to 5-20 %')],
+  ['FCM','Fully Ceramic Microencapsulated fuel',TX('TRISO 를 세라믹에 박은 연료 (MMR)','TRISO in a ceramic matrix (MMR)')],
+  ['FIMA','Fissions per Initial Metal Atom',TX('초기 중금속 중 핵분열한 비율 — 연소도','burnup as a fraction of initial metal')],
+  ['dpa','Displacements per Atom',TX('원자당 변위수 — 흑연 조사량의 척도','radiation dose to graphite')],
+  ['GWd/tU','Gigawatt-days per tonne of U',TX('우라늄 톤당 열에너지 — 연소도','burnup per tonne of uranium')],
+  ['IG-110 · NBG-18','—',TX('HTGR 용 핵흑연 등급','nuclear graphite grades for HTGRs')]
+]);}});
+
+
+/* ---------------------------------------------------------------- 약어 2/2 */
+S({tag:'ABBREVIATIONS 2/2', ov:'[[약어 (2/2) — 계통 · 시험 · 안전 · 기관||Abbreviations (2 of 2) - systems, tests, safety, organisations]]',
+src:'[[<b>출처</b> 본 교재 3~6장 · 인허가·시험 현황은 <b>2026년 9월 기준</b>||<b>Source</b> This textbook, chs. 3-6 · licensing and test status <b>as of September 2026</b>]]',
+html:`<h2 class="t">[[약어 (2/2) — 계통 · 시험 · 안전 · 기관||Abbreviations (2 of 2) - systems, tests, safety, organisations]]</h2>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 470" role="img" aria-label="[[계통·시험·안전·기관 약어의 원어와 뜻||System, test, safety and organisation abbreviations with expansions and meanings]]">
+  <g id="ab2"></g>
+</svg>
+</div></div>`,
+init(el){ abbrTable(el,'#ab2',[
+  ['RCCS','Reactor Cavity Cooling System',TX('원자로공동냉각계통 — 굴뚝 효과, 무동력','cavity cooling by the chimney effect, unpowered')],
+  ['AMB','Active Magnetic Bearing',TX('능동자기베어링 — 송풍기에 기름이 없음','no oil in the circulator')],
+  ['SAS','Small Absorber Sphere system',TX('소형흡수구 정지계통 — 반사체 구멍에 투입','absorber balls dropped into reflector holes')],
+  ['LOCA · LOFC','Loss of Coolant · of Forced Cooling',TX('냉각재상실 · 강제냉각상실','loss of coolant, loss of forced cooling')],
+  ['ATWS','Anticipated Transient Without Scram',TX('정지 실패 예상 과도 — 제어봉이 안 들어감','a transient with rods not inserted')],
+  ['AGR','Advanced Gas Reactor fuel programme',TX('미국 TRISO 연료 시험 프로그램','the US TRISO fuel test programme')],
+  ['ATR · FACS','Advanced Test Reactor · furnace',TX('INL 시험로 · 조사 후 가열시험 노','INL test reactor, post-irradiation furnace')],
+  ['EFPD','Effective Full-Power Days',TX('전출력 환산 운전 일수','effective full-power days')],
+  ['KTA','Kerntechnischer Ausschuss',TX('독일 원자력기술위원회 표준 — 페블베드 상관식','German standards - pebble-bed correlations')],
+  ['GAMMA+','—',TX('KAERI 다성분 가스 해석 코드 — 공기유입','KAERI’s multi-component gas code')],
+  ['NACOK','—',TX('독일 공기유입 자연순환 시험설비','German air-ingress test facility')],
+  ['INET','Institute of Nuclear and New Energy Tech.',TX('칭화대 핵능신기술연구원 — HTR-PM 설계','Tsinghua institute that designed HTR-PM')],
+  ['JAEA','Japan Atomic Energy Agency',TX('일본원자력연구개발기구 — HTTR 운영','Japan’s agency that runs HTTR')],
+  ['FONSI','Finding of No Significant Impact',TX('미국 환경평가의 유의영향없음 결정','US environmental finding')],
+  ['MMR · BANR','Micro Modular / BWXT Adv. Nuclear Reactor',TX('초소형 HTGR 두 설계','two micro-HTGR designs')]
+]);}});
+
+
+/* ---------------------------------------------------------------- 닫는 장 */
+S({bare:true, cls:'cover', ov:'[[닫는 장||Closing]]',
+html:`<div class="kick">[[NUE4067 · 비경수로 편 ① · 5주차||NUE4067 · Non-LWR part 1 · Week 5]]</div>
+<h1>[[피동안전은 공짜가 아니라<br><span>부피로 산다</span>||Passive safety is not free -<br><span>it is bought with volume</span>]]</h1>
+<div class="ln"></div>
+<div class="meta">
+  [[헬륨은 아무것도 하지 않고, 흑연은 담아 두고, TRISO 는 붙잡는다.<br>
+  그 대가가 3.3 MW/m³ 의 노심과 7 MPa 의 송풍기다.<br><br>
+  다음 덱은 <b>SFR</b> — 이번에는 출력밀도를 오히려 <b>높이는</b> 노형이다. 냉각재가 물과 폭발하는데도 왜 쓰는가.||Helium does nothing, graphite stores, TRISO holds.<br>
+  The price is a 3.3 MW/m³ core and a 7 MPa circulator.<br><br>
+  Next is the <b>SFR</b> - a reactor that <b>raises</b> power density instead. Why use a coolant that explodes with water?]]
+</div>
+<div class="hint">[[<kbd>O</kbd> 목차 &nbsp; <kbd>L</kbd> 한/영 &nbsp; <kbd>T</kbd> 배경 &nbsp; <kbd>P</kbd> 인쇄·PDF &nbsp; &nbsp; THINK Lab · 한양대학교 원자력공학과||<kbd>O</kbd> Index &nbsp; <kbd>L</kbd> KO/EN &nbsp; <kbd>T</kbd> Theme &nbsp; <kbd>P</kbd> Print·PDF &nbsp; &nbsp; THINK Lab · Hanyang University]]</div>`,
+init(el){
+  if(RM) return;
+  const h1=el.querySelector('h1'), ln=el.querySelector('.ln');
+  h1.style.opacity=0; ln.style.width='0px';
+  h1.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],
+    {duration:700,easing:'cubic-bezier(.2,.7,.3,1)',fill:'forwards'});
+  ln.animate([{width:'0px'},{width:'120px'}],{duration:600,delay:500,fill:'forwards'});
+}});
+</script>

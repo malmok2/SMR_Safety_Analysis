@@ -58,7 +58,7 @@ function applyStatic(){
                   q('theme').title = TX('배경 밝기 전환 (T)','Switch background (T)'); }
   if(q('pt-theme')) q('pt-theme').textContent = THEME==='dark'
       ? TX('밝은 배경으로','Light background') : TX('어두운 배경으로','Dark background');
-  if(q('pt-msg'))  q('pt-msg').innerHTML = tr(PT_MSG);
+  if(q('pt-msg'))  q('pt-msg').innerHTML = tr(PT_MSG).replace(/#N#/g, D.length);
   if(q('pt-print'))q('pt-print').textContent = TX('Ctrl+P · PDF로 저장','Ctrl+P · Save as PDF');
   if(q('pt-dl'))   q('pt-dl').textContent = TX('미리 만든 PDF 내려받기','Download prepared PDF');
   if(q('pt-back')) q('pt-back').textContent = TX('슬라이드로 돌아가기','Back to the slides');
@@ -78,9 +78,9 @@ function applyStatic(){
 /* 이 덱이 무엇인가 — build 가 머리말의 DECK 자리에 window.DECK 을 꽂는다.
    제목과 배포용 PDF 이름이 덱마다 다르므로 엔진에 박아 두지 않는다. */
 const DECK = window.DECK || {};
-const PT_MSG = '[[슬라이드 <b>46장</b>을 한 장씩 지면에 펼쳤음 · 인쇄용이라 <b>밝은 배경</b>이 기본임 ·'
+const PT_MSG = '[[슬라이드 <b>#N#장</b>을 한 장씩 지면에 펼쳤음 · 인쇄용이라 <b>밝은 배경</b>이 기본임 ·'
              + ' 용지는 <b>가로</b>, 배율 <b>기본(100 %)</b> · 색을 살리려면 인쇄 설정에서 <b>배경 그래픽</b>을 켤 것'
-             + '||All <b>46 slides</b> laid out one per page · a <b>light background</b> by default, for printing ·'
+             + '||All <b>#N# slides</b> laid out one per page · a <b>light background</b> by default, for printing ·'
              + ' paper <b>landscape</b>, scale <b>default (100 %)</b> · turn on <b>Background graphics</b> to keep the colours]]';
 
 function setLang(l){
@@ -149,6 +149,36 @@ function track(obj,key,get,k=6){
 
 /* ---------- 선 그래프 ---------- */
 function poly(pts){ return pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' '); }
+
+/* ---------- SVG 요소 하나 ----------
+   init 안에서 도해를 JS 로 그릴 때 쓴다. 슬라이드마다 NS·mk 를 새로 쓰지 않게 엔진에 둔다. */
+function svgEl(tag, at){
+  const e=document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for(const k in at) e.setAttribute(k, at[k]);
+  return e;
+}
+
+/* ---------- 약어 표 ----------
+   덱 끝의 약어 장이 쓴다. R = [[약어, 원어, 뜻], …] — 뜻은 TX() 로 넘긴다. 한 장에 15줄까지. */
+function abbrTable(el, sel, R){
+  const mk=svgEl, G=el.querySelector(sel), gs=[];
+  [[TX('약어','Abbreviation'),0],[TX('원어','Expansion'),200],[TX('뜻','What it means'),640]]
+    .forEach(h=>{ const t=mk('text',{x:h[1],y:14,class:'lbl'}); t.textContent=h[0]; G.appendChild(t); });
+  G.appendChild(mk('line',{x1:0,y1:24,x2:1100,y2:24,stroke:'var(--cool)'}));
+  R.forEach((r,i)=>{
+    const y=48+i*29, g=mk('g',{opacity:0});
+    const k=mk('text',{x:0,y:y,'font-family':'var(--mono)','font-size':15.5,fill:'var(--cool)',
+      'font-weight':600}); k.textContent=r[0]; g.appendChild(k);
+    const e=mk('text',{x:200,y:y,'font-family':'var(--sans)','font-size':15.5,fill:'var(--ink)',
+      'font-weight':300}); e.textContent=r[1]; g.appendChild(e);
+    const m=mk('text',{x:640,y:y,'font-family':'var(--sans)','font-size':15.5,fill:'var(--ink-2)',
+      'font-weight':300}); m.textContent=r[2]; g.appendChild(m);
+    g.appendChild(mk('line',{x1:0,y1:y+9,x2:1100,y2:y+9,stroke:'var(--rule)','stroke-opacity':0.55}));
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:220,delay:45*i,fill:'forwards'}));
+}
 
 /* ---------- SVG 안에서 줄을 나눈다 ----------
    SVG <text> 에는 자동 줄바꿈이 없다. 한글은 공백이 드물어 단어 기준으로 자르면 칸을 넘으므로
@@ -224,7 +254,7 @@ function go(i,dir){
 }
 function replay(){ const i=cur; cur=-1; go(i); }
 
-/* ---------- 인쇄(PDF) 모드 — 46장을 한 번에 지면에 펼친다 ---------- */
+/* ---------- 인쇄(PDF) 모드 — 모든 장을 한 번에 지면에 펼친다 ---------- */
 function buildPrint(){
   document.body.classList.add('printing');
   FREEZE = 3.4;                                   // 3.4 초 뒤 모든 애니메이션 정지

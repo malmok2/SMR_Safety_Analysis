@@ -1,0 +1,200 @@
+<script>
+/* ================================================================
+   SECTION 06 — 헬륨으로 계통코드를 돌린다  (교재 6장)
+   「원자로 계통코드 직접 만들기」 III권의 코드(mrelap3)를 전제로 한다.
+   ================================================================ */
+SECT('06 · [[헬륨 계통코드||Helium in a system code]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;06 헬륨으로 계통코드를 돌린다||&#167;06 Running a system code on helium]]',
+html:`[[<div class="no">06</div><h2>헬륨으로 계통코드를 돌린다</h2><div class="ln"></div>
+<p>III권에서 짠 제어체적 코드에 헬륨을 넣는다. 바뀌는 것은 물성과 구성모델 두 층뿐이다.
+대신 <b>흑연이 주인공이고 헬륨은 심부름꾼</b>이라는 사실이 해석의 무게중심을 옮긴다.</p>||<div class="no">06</div><h2>Running a system code on helium</h2><div class="ln"></div>
+<p>We put helium into the control-volume code written in Volume III. Only two layers change - properties and closures.
+But the fact that <b>graphite is the lead and helium the errand boy</b> moves the centre of gravity of the analysis.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 네 층 */
+S({tag:'FOUR LAYERS', ov:'[[냉각재를 바꿀 때 바뀌는 층과 그대로인 층||Which code layers change with the coolant, and which stay]]',
+src:'[[<b>출처</b> 본 교재 6.1절 그림 6.1 · 「원자로 계통코드 직접 만들기」 III권의 네 층 구조||<b>Source</b> This textbook &#167;6.1, Fig. 6.1 · the four-layer structure of <i>Writing a Reactor System Code</i>, Volume III]]',
+abbr:'[[<b>제어체적</b> 질량·에너지를 세는 유한 부피 · <b>접합부</b> 제어체적 사이의 유로 · <b>구성모델</b> 마찰·열전달처럼 식을 닫아 주는 상관식 · <b>반음해법</b> 압력은 음해, 나머지는 양해로 푸는 방식||<b>control volume</b> a finite volume for mass and energy accounting · <b>junction</b> the flow path between volumes · <b>closure</b> correlations such as friction and heat transfer that close the equations · <b>semi-implicit</b> pressure implicit, the rest explicit]]',
+html:`<h2 class="t">[[냉각재를 바꿀 때 <em>바뀌는 층</em>과 그대로인 층||Which code layers <em>change</em> with the coolant, and which stay]]</h2>
+<ul class="b">
+  <li>[[바뀌는 것은 <b class="cool">1층 물성 · 2층 구성모델</b>뿐, 3층 수치 · 4층 플랜트는 그대로임 — 제어체적 코드의 힘||Only <b class="cool">layer 1 (properties) and layer 2 (closures)</b> change; numerics and plant layout stay - the strength of a control-volume code]]</li>
+  <li>[[&#8220;그대로&#8221;에는 각주가 붙음 — <b class="amb">시간간격 제어는 물성에 따라 실질적으로 다르게 동작</b>함(뒤의 Courant 조건)||&#8220;Stay&#8221; has a footnote - <b class="amb">time-step control behaves differently with each fluid</b> (Courant, below)]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f6_01', cap:'[[노형별 교체 지도 — 노심 연결 구조는 그대로 두고 네 칸만 갈아끼움 · 교재 그림 6.1||Swap map by reactor type - keep the core connectivity, change four boxes · textbook Fig. 6.1]]'})}
+  </div>
+  <div class="side">
+    <div class="readout hi"><span class="k">[[1층 · 물성 (Fluid)||Layer 1 · properties]]</span><span class="v" style="font-size:16px">[[p, h &#8594; ρ, T, 상태량 미분||p, h &#8594; ρ, T, derivatives]]</span></div>
+    <div class="readout hi"><span class="k">[[2층 · 구성모델||Layer 2 · closures]]</span><span class="v" style="font-size:16px">[[마찰 · 열전달 · 임계유량||friction · heat transfer · choking]]</span></div>
+    <div class="readout"><span class="k">[[3층 · 수치||Layer 3 · numerics]]</span><span class="v" style="font-size:16px;color:var(--ink-2)">[[이산화 · 압력방정식 · Δt||discretisation · pressure eq. · Δt]]</span></div>
+    <div class="readout"><span class="k">[[4층 · 플랜트||Layer 4 · plant]]</span><span class="v" style="font-size:16px;color:var(--ink-2)">[[체적을 어떻게 이었나||how volumes are joined]]</span></div>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 헬륨 물성 클래스 */
+S({tag:'IDEAL-GAS CLASS', ov:'[[헬륨 물성 클래스 — 닫힌 식과 음속||The helium property class - closed forms and the speed of sound]]',
+src:'[[<b>출처</b> 본 교재 6.2절 · III권 3장의 음속 c = 1/√(ρ<sub>p</sub> + ρ<sub>h</sub>/ρ) 에 이상기체를 넣으면 √(γRT) · R = 2077.3, c<sub>p</sub> = 5195 J/(kg·K)||<b>Source</b> This textbook &#167;6.2 · putting an ideal gas into Volume III&#8217;s c = 1/√(ρ<sub>p</sub> + ρ<sub>h</sub>/ρ) gives √(γRT) · R = 2077.3, c<sub>p</sub> = 5195 J/(kg·K)]]',
+abbr:'[[<b>ρ<sub>p</sub> · ρ<sub>h</sub></b> 엔탈피 · 압력을 고정했을 때 압력 · 엔탈피에 대한 밀도의 편미분 · <b>IAPWS</b> 물·수증기 물성 국제 표준 · <b>대각항</b> 압력방정식 행렬의 대각 성분||<b>ρ<sub>p</sub>, ρ<sub>h</sub></b> partial derivatives of density with pressure and with enthalpy · <b>IAPWS</b> the international water and steam property standard · <b>diagonal term</b> the diagonal of the pressure-equation matrix]]',
+html:`<h2 class="t">[[헬륨 물성 클래스 — <em>닫힌 식</em>과 음속||The helium property class - <em>closed forms</em> and the speed of sound]]</h2>
+<ul class="b">
+  <li>[[물의 IAPWS 표에서 수치 미분으로 얻던 상태량 미분을 <b>닫힌 식</b>으로 얻음 — 표 밖으로 나가 발산하거나 포화선에서 요동칠 일이 없어 <b class="ok">물보다 훨씬 견고</b>함||Derivatives once taken numerically from IAPWS tables now come in <b>closed form</b> - nothing leaves a table or chatters across saturation, so it is <b class="ok">far more robust than water</b>]]</li>
+  <li>[[압력방정식의 대각항이 물리적 음속과 <b>정확히 같다</b>는 것을 손으로 확인할 수 있는 드문 경우 — 학생이 직접 유도해 볼 것||A rare case where the pressure equation&#8217;s diagonal can be shown by hand to <b>equal</b> the physical speed of sound - derive it yourself]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <div class="formula" style="font-size:18px;text-align:left;line-height:2.05;padding-left:30px">
+    T <span class="op">=</span> h/c<sub>p</sub>, &nbsp;&nbsp; ρ <span class="op">=</span> p/(RT)<br>
+    ρ<sub>p</sub> <span class="op">=</span> 1/(RT), &nbsp;&nbsp; ρ<sub>h</sub> <span class="op">=</span> −p/(RT²c<sub>p</sub>)<br>
+    ρ<sub>p</sub> + ρ<sub>h</sub>/ρ <span class="op">=</span> 1/(RT) − 1/(Tc<sub>p</sub>) <span class="op">=</span> (1/RT)(1 − R/c<sub>p</sub>) <span class="op">=</span> (1/RT)(c<sub>v</sub>/c<sub>p</sub>)<br>
+    c <span class="op">=</span> 1/√(ρ<sub>p</sub> + ρ<sub>h</sub>/ρ) <span class="op">=</span> √(γRT)</div>
+  </div>
+  <div class="side">
+    <div class="readout hi"><span class="k">[[음속 · 압력방정식에서||Speed of sound · from the pressure eq.]]</span><span class="v" id="ig-a">1882<small>m/s</small></span></div>
+    <div class="readout good"><span class="k">√(γRT)</span><span class="v" id="ig-b">1882<small>m/s</small></span></div>
+    <div class="ctl"><label>[[헬륨 온도||Helium temperature]] <span id="ig-ts">750 °C</span></label>
+      <input type="range" id="ig-sl" min="100" max="1000" step="10" value="750"></div>
+  </div>
+</div>`,
+init(el){
+  const R=2077.3, cp=5195, p=7e6, sl=el.querySelector('#ig-sl');
+  function upd(){
+    const T=+sl.value+273.15, rho=p/(R*T), rp=1/(R*T), rh=-p/(R*T*T*cp);
+    const a1=1/Math.sqrt(rp+rh/rho), a2=Math.sqrt(cp/(cp-R)*R*T);
+    el.querySelector('#ig-a').innerHTML=fmt(a1)+'<small>m/s</small>';
+    el.querySelector('#ig-b').innerHTML=fmt(a2)+'<small>m/s</small>';
+    el.querySelector('#ig-ts').textContent=sl.value+' °C';
+  }
+  sl.oninput=upd; upd();
+}});
+
+
+/* ---------------------------------------------------------------- 6 CV 루프 */
+S({tag:'SIX-VOLUME LOOP', ov:'[[HTR-PM 한 모듈의 6 제어체적 축약 모델과 열용량 비||A six-volume model of one HTR-PM module, and the heat-capacity ratio]]',
+src:'[[<b>계산</b> 본 교재 6.3절 htgr_loop.py · 부피 합 146 m³ · 헬륨 약 4.4 kg/m³ × 146 m³ ≈ 640 kg · 640 × 5195 = 3.3 MJ/K · 흑연 78 m³ × 1750 kg/m³ × 1759 J/(kg·K) = 240 MJ/K · 일주 시간 640/96 ≈ 6.7 s||<b>Calculation</b> This textbook &#167;6.3, htgr_loop.py · volumes total 146 m³ · helium about 4.4 kg/m³ × 146 m³ ≈ 640 kg · 640 × 5195 = 3.3 MJ/K · graphite 78 m³ × 1750 kg/m³ × 1759 J/(kg·K) = 240 MJ/K · loop transit 640/96 ≈ 6.7 s]]',
+abbr:'[[<b>HeatStructure</b> 코드에서 고체(흑연·연료) 열전도를 푸는 객체 · <b>강성(stiff)</b> 시간 척도가 크게 다른 현상이 섞여 작은 Δt 가 강요되는 방정식계 · <b>블로다운</b> 파단 후 계통이 감압되는 과정||<b>HeatStructure</b> the code object that solves conduction in solids · <b>stiff</b> a system mixing very different time scales, forcing tiny steps · <b>blowdown</b> depressurisation after a break]]',
+html:`<h2 class="t">[[HTR-PM 한 모듈의 <em>6 제어체적</em> 축약 모델과 열용량 비||A <em>six-volume</em> model of one HTR-PM module, and the heat-capacity ratio]]</h2>
+<ul class="b">
+  <li>[[<b>흑연이 주인공이고 헬륨은 심부름꾼</b> — 고체 열용량이 유체의 73배. HeatStructure의 절점 수와 <b>조사된 흑연 열전도도</b>가 결과를 지배함||<b>Graphite is the lead, helium the errand boy</b> - the solid holds 73 times the fluid&#8217;s heat. HeatStructure nodes and <b>irradiated graphite conductivity</b> dominate the answer]]</li>
+  <li>[[시간 척도가 둘 — 유체 수 초, 고체 수 시간~수십 시간(비 약 10⁴, 강성). 실무에서는 <b class="amb">블로다운과 전도냉각을 나눠 풂</b>||Two time scales - seconds for the gas, hours to days for the solid (ratio ~10⁴, stiff). In practice <b class="amb">blowdown and conduction cooling are solved separately</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 330" role="img" aria-label="[[하강 환형유로·노심 3분할·열가스덕트·증기발생기의 6개 제어체적 사슬과, 헬륨 3.3 MJ/K 대 흑연 240 MJ/K의 열용량 막대||A chain of six control volumes - downcomer, three core segments, hot duct, steam generator - and bars of helium 3.3 MJ/K against graphite 240 MJ/K]]">
+  <g id="cv-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#cv-g'), gs=[];
+  const V=[['dc',40,'250 °C','var(--cool)',TX('하강 환형','downcomer')],['core1',26,'417 °C','var(--amber)',TX('노심 하','core low')],
+           ['core2',26,'584 °C','var(--amber)',TX('노심 중','core mid')],['core3',26,'750 °C','var(--hot)',TX('노심 상','core top')],
+           ['duct',8,'750 °C','var(--hot)',TX('열가스덕트','hot duct')],['sg',20,'250 °C','var(--cool)',TX('증기발생기','steam gen.')]];
+  V.forEach((v,i)=>{
+    const x=i*186, g=mk('g',{transform:'translate('+x+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:160,height:92,fill:'var(--panel)',stroke:v[3],'stroke-width':1.6}));
+    g.appendChild(mk('text',{x:14,y:28,'font-family':'var(--mono)','font-size':16,fill:v[3],'font-weight':600})).textContent=v[0];
+    g.appendChild(mk('text',{x:146,y:28,'text-anchor':'end',class:'lbl'})).textContent=v[4];
+    g.appendChild(mk('text',{x:14,y:62,'font-family':'var(--mono)','font-size':22,fill:'var(--ink)','font-weight':600})).textContent=v[1]+' m³';
+    g.appendChild(mk('text',{x:14,y:82,class:'lbl'})).textContent=v[2];
+    if(i<5) g.appendChild(mk('path',{d:'M162,46 H182 M176,40 L182,46 L176,52',stroke:'var(--ink-3)','stroke-width':1.6,fill:'none'}));
+    G.appendChild(g); gs.push(g);
+  });
+  G.appendChild(mk('text',{x:0,y:124,class:'lbl'})).textContent=TX('합 146 m³ · 헬륨 약 640 kg · 96 kg/s 로 일주 약 6.7 s','total 146 m³ · about 640 kg of helium · a loop transit of about 6.7 s at 96 kg/s');
+  const X0=170, k=900/240, bars=[];
+  [[TX('헬륨 (유체)','Helium (fluid)'),3.3,'var(--cool)','3.3 MJ/K'],[TX('노심 흑연 (고체)','Core graphite (solid)'),240,'var(--ok)','240 MJ/K']].forEach((b,i)=>{
+    const y=168+i*72;
+    G.appendChild(mk('text',{x:X0-14,y:y+30,'text-anchor':'end','font-family':'var(--sans)','font-size':17,fill:'var(--ink)','font-weight':600})).textContent=b[0];
+    const r=mk('rect',{x:X0,y:y,width:'0',height:46,fill:b[2],opacity:0.85}); G.appendChild(r); bars.push([r,Math.max(4,b[1]*k)]);
+    G.appendChild(mk('text',{x:i?X0+b[1]*k-12:X0+b[1]*k+14,y:y+30,'text-anchor':i?'end':'start','font-family':'var(--mono)','font-size':18,
+      fill:i?'var(--on-accent)':b[2],'font-weight':600})).textContent=b[3];
+  });
+  G.appendChild(mk('text',{x:X0+900,y:320,'text-anchor':'end','font-family':'var(--mono)','font-size':16,fill:'var(--ok)','font-weight':600})).textContent=TX('고체가 유체의 73배','the solid holds 73 ×');
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); bars.forEach(b=>b[0].setAttribute('width',b[1])); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:280,delay:110*i,fill:'forwards'}));
+  bars.forEach((b,i)=>b[0].animate([{width:'0px'},{width:b[1]+'px'}],{duration:900,delay:900+300*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- 시간간격 */
+S({tag:'TIME STEP', ov:'[[시간간격을 정하는 두 Courant 조건과 헬륨의 유속||The two Courant limits on the time step, and helium&#8217;s velocity]]',
+src:'[[<b>출처</b> 본 교재 6.4절 그림 6.2 · Δx = 1 m · 750 °C 헬륨 음속 1882 m/s(물 약 1000 m/s) · 유속 약 30 m/s(물의 약 6배)||<b>Source</b> This textbook &#167;6.4, Fig. 6.2 · Δx = 1 m · helium at 750 °C carries sound at 1882 m/s (water about 1000 m/s) · velocity about 30 m/s (about 6× water)]]',
+abbr:'[[<b>Courant 조건</b> 한 시간간격 동안 정보가 한 격자보다 멀리 가지 못하게 하는 안정 조건 · <b>양해법</b> 현재 값만으로 다음 값을 계산 · <b>반음해법</b> 압력만 음해로 풀어 음속 제한을 없앤 방식||<b>Courant condition</b> the stability rule that information may not cross more than one cell per step · <b>explicit</b> next value from current values only · <b>semi-implicit</b> pressure solved implicitly, removing the sonic limit]]',
+html:`<h2 class="t">[[시간간격을 정하는 두 <em>Courant 조건</em>과 헬륨의 유속||The two <em>Courant limits</em> on the time step, and helium&#8217;s velocity]]</h2>
+<ul class="b">
+  <li>[[헬륨이 특별한 점은 음속이 아니라 <b>유속</b>임 — 밀도가 낮아 약 30 m/s로 물보다 6배 빠름 &#8594; 반음해법에서도 <b class="hot">물질 Courant 한계가 물보다 6배 빡빡</b>함||What sets helium apart is <b>velocity</b>, not sound speed - low density means about 30 m/s, six times water &#8594; even semi-implicit, <b class="hot">the material Courant limit is six times tighter</b>]]</li>
+  <li>[[III권 IdealGas 기본값 μ = 3.9×10⁻⁵, k = 0.29는 <b>약 450 °C 값</b>. 750 °C에서는 4.7×10⁻⁵, 0.37 — <b class="amb">상수로 두면 출구 온도가 수십 K 틀림</b>||Volume III&#8217;s IdealGas defaults μ = 3.9×10⁻⁵, k = 0.29 are <b>~450 °C values</b>; at 750 °C they are 4.7×10⁻⁵ and 0.37 - <b class="amb">left constant, the outlet is off by tens of kelvin</b>]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f6_02', cap:'[[냉각재별 시간간격 한계(Δx = 1 m) — 양해법이면 어느 냉각재든 1 ms 를 못 넘고, 반음해법이면 수십~수백 ms · 교재 그림 6.2||Time-step limits by coolant (Δx = 1 m) - explicit never passes 1 ms; semi-implicit reaches tens to hundreds of ms · textbook Fig. 6.2]]'})}
+  </div>
+  <div class="side" style="width:300px">
+    <div class="formula" style="font-size:18px;text-align:left;line-height:2">Δt<sub>[[음향||sonic]]</sub> <span class="op">≤</span> Δx/(u + a)<br>Δt<sub>[[물질||material]]</sub> <span class="op">≤</span> Δx/u</div>
+    <div class="readout warn"><span class="k">[[헬륨 반음해 한계 (7 MPa, 750 °C)||Helium, semi-implicit (7 MPa, 750 °C)]]</span><span class="v">33<small>ms</small></span></div>
+    <div class="readout"><span class="k">[[물 반음해 한계 (PWR, 310 °C)||Water, semi-implicit (PWR, 310 °C)]]</span><span class="v">200<small>ms</small></span></div>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 못 푸는 것 */
+S({tag:'WHAT OUR CODE CANNOT DO', ov:'[[III권 코드로 풀 수 없는 것 — 공기유입과 페블베드 우회||What the Volume III code cannot solve]]',
+src:'[[<b>출처</b> 본 교재 6.5절 · Y<sub>i</sub> 성분 i 의 질량분율, D<sub>i</sub> 확산계수, S<sub>i</sub> 화학반응 생성·소멸 · 연구실 GAMMA+ 입문교재로 넘어갈 것||<b>Source</b> This textbook &#167;6.5 · Y<sub>i</sub> mass fraction of species i, D<sub>i</sub> its diffusivity, S<sub>i</sub> its reaction source · continue with the lab&#8217;s GAMMA+ primer]]',
+abbr:'[[<b>다성분 혼합물</b> 여러 기체 성분이 섞인 유체 — 성분마다 보존식이 따로 필요 · <b>공극률</b> 빈 공간 비율 · <b>우회 유로(bypass)</b> 노심을 거치지 않고 벽 쪽으로 빠지는 흐름 · <b>다공성 매질 모델</b> 페블 더미를 평균 공극률의 스펀지처럼 다루는 모델||<b>multi-component mixture</b> several gas species, each needing its own conservation equation · <b>porosity</b> void fraction · <b>bypass</b> flow slipping along the wall past the core · <b>porous-medium model</b> treating the bed as a sponge of average porosity]]',
+html:`<h2 class="t">[[III권 코드로 <em>풀 수 없는 것</em> — 공기유입과 페블베드 우회||What the Volume III code <em>cannot solve</em>]]</h2>
+<ul class="b">
+  <li>[[정상운전 · 유량상실 · 감압까지는 풀림. 그러나 우리 제어체적은 <b>단일 유체</b>를 담음 — 공기유입은 성분마다 질량보존식과 확산항이 따로 필요해 <b class="hot">코드의 절반을 다시 짜야 함</b>||Normal operation, loss of flow and depressurisation run. But each volume holds <b>one fluid</b> - air ingress needs per-species mass equations and diffusion, so <b class="hot">half the code would be rewritten</b>]]</li>
+  <li>[[1차원 제어체적 사슬은 벽 근처 공극률이 <b>0.39 &#8594; 1.0 가까이</b> 치솟아 생기는 우회 유로를 통째로 놓침||A 1-D chain misses the bypass along the wall, where porosity climbs <b>from 0.39 to nearly 1.0</b>]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <div class="formula" style="font-size:22px;padding:4px 0 12px">∂(ρY<sub>i</sub>)/∂t <span class="op">+</span> ∇·(ρuY<sub>i</sub>) <span class="op">=</span> ∇·(ρD<sub>i</sub>∇Y<sub>i</sub>) <span class="op">+</span> S<sub>i</sub></div>
+  <svg viewBox="0 0 800 340" role="img" aria-label="[[III권 코드가 푸는 것과 못 푸는 것의 목록||What the Volume III code solves and what it does not]]">
+    <g id="cn-g"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <blockquote class="q" style="font-size:15.5px">[[KAERI 의 <b>GAMMA / GAMMA+</b> 코드가 정확히 이 목적으로 만들어졌음. 연구실에 입문교재가 있으니 여기서 다시 유도하지 말고 <b>그 교재로 넘어갈 것</b>.||KAERI&#8217;s <b>GAMMA / GAMMA+</b> code was built for exactly this. The lab already has a primer - <b>go there</b> rather than re-deriving it here.]]</blockquote>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#cn-g');
+  [[TX('풀림','Solves'),'var(--ok)',[[TX('정상운전','Normal operation'),TX('단상 헬륨 · 강제순환','single-phase helium, forced flow')],
+       [TX('유량상실','Loss of flow'),TX('송풍기 정지 · 전도로 넘어감','circulator trip, into conduction')],
+       [TX('감압 · 블로다운','Depressurisation'),TX('단일 유체가 빠져나감','one fluid leaving')]]],
+   [TX('못 풂','Does not'),'var(--hot)',[[TX('공기유입','Air ingress'),TX('성분별 보존식 · 분자확산 필요','per-species equations, diffusion')],
+       [TX('페블베드 벽 우회','Pebble-bed wall bypass'),TX('공극률 0.39 → 1.0 · 다차원','porosity 0.39 → 1.0, multi-D')],
+       [TX('흑연 산화 반응열','Oxidation heat'),TX('화학반응 원천항 S_i','the reaction source S_i')]]]]
+  .forEach((c,i)=>{
+    const g=mk('g',{transform:'translate('+(i*410)+',0)'});
+    g.appendChild(mk('rect',{width:390,height:330,fill:'var(--panel)',stroke:c[1]}));
+    g.appendChild(mk('text',{x:20,y:40,'font-family':'var(--sans)','font-size':21,fill:c[1],'font-weight':600})).textContent=c[0];
+    c[2].forEach((t,j)=>{
+      g.appendChild(mk('text',{x:20,y:100+j*84,'font-family':'var(--sans)','font-size':18,fill:'var(--ink)','font-weight':600})).textContent=t[0];
+      g.appendChild(mk('text',{x:20,y:128+j*84,'font-family':'var(--sans)','font-size':15.5,fill:'var(--ink-2)','font-weight':300})).textContent=t[1];
+    });
+    G.appendChild(g);
+  });
+}});
+
+
+/* ---------------------------------------------------------------- 검증 데이터 */
+S({tag:'VALIDATION DATA', ov:'[[HTGR 계통코드 검증용 적분 데이터||Integral data for validating HTGR system codes]]',
+src:'[[<b>출처</b> 본 교재 6.6절 표 6.1 · SFR 은 EBR-II · Phénix 의 30년 전 데이터, MSR 은 MSRE 의 60년 전 데이터에 기댐||<b>Source</b> This textbook &#167;6.6, Table 6.1 · SFR validation leans on 30-year-old EBR-II and Phénix data, MSR on 60-year-old MSRE data]]',
+abbr:'[[<b>적분 데이터</b> 계통 전체의 거동을 한꺼번에 잰 데이터 · <b>NACOK</b> 독일 공기유입 자연순환 시험설비 · <b>비핵</b> 핵연료 없이 전기 가열로 모사한 시험||<b>integral data</b> measurements of whole-system behaviour at once · <b>NACOK</b> the German air-ingress natural-circulation facility · <b>non-nuclear</b> electrically heated, with no fuel]]',
+html:`<h2 class="t">[[HTGR 계통코드 검증용 <em>적분 데이터</em>||<em>Integral data</em> for validating HTGR system codes]]</h2>
+<ul class="b">
+  <li>[[코드를 짜는 것보다 어려운 것이 <b>맞는지 확인하는 것</b>임. HTGR 검증에 쓸 수 있는 적분 데이터는 아래가 전부임||Harder than writing the code is <b>checking that it is right</b>. The integral data for HTGRs are the four rows below - nothing more]]</li>
+  <li>[[마지막 줄이 판을 바꿈 — <b class="ok">상용 규모 적분 데이터가 존재하는 유일한 비경수로가 HTGR</b>임. 코드 개발 과제를 설계할 때 이 차이를 알고 시작할 것||The last row changed the field - <b class="ok">the HTGR is the only non-LWR with commercial-scale integral data</b>. Know this before designing a code project]]</li>
+</ul>
+<div class="body"><div class="fig">
+<table class="d">
+  <tr><th>[[데이터||Data]]</th><th>[[규모||Scale]]</th><th>[[무엇을 검증하나||What it validates]]</th></tr>
+  <tr><td>[[HTTR LOFC 시험 (2010 · 2022 · 2024)||HTTR LOFC tests (2010, 2022, 2024)]]</td><td class="n">30 MWt</td><td>[[프리즘형 전도냉각, ATWS||prismatic conduction cooling, ATWS]]</td></tr>
+  <tr><td>[[HTR-10 순환기 정지 무정지 시험||HTR-10 circulator trip without scram]]</td><td class="n">3 MWt</td><td>[[페블형 온도 피드백||pebble-bed temperature feedback]]</td></tr>
+  <tr><td>[[NACOK 시험설비 (독일)||NACOK facility (Germany)]]</td><td class="n">[[비핵||non-nuclear]]</td><td>[[공기유입 자연순환||air-ingress natural circulation]]</td></tr>
+  <tr class="mark"><td>[[HTR-PM 냉각상실 시험 (2023)||HTR-PM loss-of-cooling tests (2023)]]</td><td class="n">200 MWt</td><td>[[상용 규모 전도냉각 전체||full conduction cooling at commercial scale]]</td></tr>
+</table>
+</div></div>`});
+</script>

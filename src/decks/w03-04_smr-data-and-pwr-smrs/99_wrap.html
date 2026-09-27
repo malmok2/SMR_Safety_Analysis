@@ -58,30 +58,6 @@ init(el){ abbrTable(el,'#ab2',[
   ['ESBWR · PCV','Economic Simplified BWR · Primary Containment Vessel',TX('BWRX-300의 모체 설계 · 1차격납용기','the parent design of BWRX-300, and the primary containment')]
 ]);}});
 
-/* 약어 표 하나를 그린다 — 두 장이 같은 모양을 쓴다 */
-function abbrTable(el, sel, R){
-  const NS='http://www.w3.org/2000/svg', mk=(t,at)=>{const e=document.createElementNS(NS,t);
-    for(const k in at) e.setAttribute(k,at[k]); return e;};
-  const G=el.querySelector(sel), gs=[];
-  [[TX('약어','Abbreviation'),0],[TX('원어','Expansion'),200],[TX('뜻','What it means'),640]]
-    .forEach(h=>{ const t=mk('text',{x:h[1],y:14,class:'lbl'}); t.textContent=h[0]; G.appendChild(t); });
-  G.appendChild(mk('line',{x1:0,y1:24,x2:1100,y2:24,stroke:'var(--cool)'}));
-  R.forEach((r,i)=>{
-    const y=48+i*29, g=mk('g',{opacity:0});
-    const k=mk('text',{x:0,y:y,'font-family':'var(--mono)','font-size':15.5,fill:'var(--cool)',
-      'font-weight':600}); k.textContent=r[0]; g.appendChild(k);
-    const e=mk('text',{x:200,y:y,'font-family':'var(--sans)','font-size':15.5,fill:'var(--ink)',
-      'font-weight':300}); e.textContent=r[1]; g.appendChild(e);
-    const m=mk('text',{x:640,y:y,'font-family':'var(--sans)','font-size':15.5,fill:'var(--ink-2)',
-      'font-weight':300}); m.textContent=r[2]; g.appendChild(m);
-    g.appendChild(mk('line',{x1:0,y1:y+9,x2:1100,y2:y+9,stroke:'var(--rule)','stroke-opacity':0.55}));
-    G.appendChild(g); gs.push(g);
-  });
-  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
-  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:220,delay:45*i,fill:'forwards'}));
-}
-
-
 /* ---------------------------------------------------------------- 자료원 */
 S({tag:'SOURCE LIST', ov:'[[자료원 목록||Source list]]',
 src:'[[<b>출처</b> 본 교재 부록 B · 이 교재의 인허가·사업 현황은 모두 <b>2026년 9월 기준</b>임. 반년이면 낡음||<b>Source</b> This textbook, Appendix B · all licensing and project status here is <b>as of September 2026</b> and ages within six months]]',

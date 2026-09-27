@@ -1,0 +1,281 @@
+<script>
+/* ================================================================
+   SECTION 02 — 헬륨과 흑연, HTGR 의 세 기둥  (교재 2장)
+   ================================================================ */
+SECT('02 · [[헬륨과 흑연||Helium and graphite]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;02 헬륨과 흑연 — HTGR의 세 기둥||&#167;02 Helium and graphite - the three pillars of the HTGR]]',
+html:`[[<div class="no">02</div><h2>헬륨과 흑연</h2><div class="ln"></div>
+<p>헬륨은 냉각재로서 거의 모든 면에서 나쁘다. 그런데도 쓰는 이유는 <b>헬륨이 아무것도 하지 않기 때문</b>이다.
+못 나르는 만큼을 흑연이 담고, 흑연이 담는 동안 TRISO가 핵분열생성물을 붙잡는다.</p>||<div class="no">02</div><h2>Helium and graphite</h2><div class="ln"></div>
+<p>As a coolant helium is poor in almost every way. It is used because <b>helium does nothing at all</b>.
+What it cannot carry, graphite stores; while graphite stores it, TRISO holds on to the fission products.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 세 기둥 */
+S({tag:'THREE PILLARS', ov:'[[헬륨을 쓰는 이유와 HTGR의 세 기둥||Why helium, and the three pillars of the HTGR]]',
+src:'[[<b>출처</b> 본 교재 2.1절 · 흑연 체적 열용량은 헬륨의 약 180배(그림 1.2)||<b>Source</b> This textbook &#167;2.1 · graphite holds about 180 times helium&#8217;s heat per volume (Fig. 1.2)]]',
+abbr:'[[<b>보이드 반응도</b> 냉각재가 빠져 빈 자리(보이드)가 생길 때의 반응도 변화 · <b>감속</b> 중성자를 느리게 만드는 일 · <b>이상유동</b> 액체와 기체가 섞여 흐르는 유동||<b>void reactivity</b> the reactivity change when coolant leaves and voids form · <b>moderation</b> slowing neutrons down · <b>two-phase flow</b> liquid and gas flowing together]]',
+html:`<h2 class="t">[[헬륨을 쓰는 이유와 HTGR의 <em>세 기둥</em>||Why helium, and the <em>three pillars</em> of the HTGR]]</h2>
+<ul class="b">
+  <li>[[헬륨의 장점은 전부 <b>&#8220;하지 않는 것&#8221;</b>임 — 반응하지 않고, 흡수하지 않고, 끓지 않고, 얼지 않음||Every one of helium&#8217;s merits is <b>something it does not do</b> - it does not react, absorb, boil or freeze]]</li>
+  <li>[[셋 중 <b class="hot">하나만 빠져도 논리가 무너짐</b> — 흑연이 없으면 열이 갈 곳이 없고, TRISO가 없으면 격납이 없음||<b class="hot">Remove any one and the logic collapses</b> - without graphite the heat has nowhere to go, without TRISO there is no containment]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 360" role="img" aria-label="[[헬륨의 네 가지 성질과, 헬륨·흑연·TRISO 세 기둥이 각각 맡는 일||Four properties of helium, and what each of the three pillars - helium, graphite, TRISO - does]]">
+  <g id="tp-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#tp-g'), gs=[];
+  const F=[[TX('화학적 불활성','Chemically inert'),TX('무엇과도 반응 안 함','reacts with nothing')],
+           [TX('중성자 흡수·감속 거의 없음','Almost no absorption'),TX('보이드 반응도 ≈ 0','void reactivity ≈ 0')],
+           [TX('상변화 없음','No phase change'),TX('증기표·유동양식 로직 불필요','no steam tables, no flow regimes')],
+           [TX('어떤 온도에서도 기체','A gas at any temperature'),TX('상한은 구조재·연료가 정함','the limit is set by materials')]];
+  F.forEach((f,i)=>{
+    const g=mk('g',{transform:'translate('+(i*283)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:268,height:78,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:268,height:3,fill:'var(--cool)'}));
+    g.appendChild(mk('text',{x:16,y:34,'font-family':'var(--sans)','font-size':17,fill:'var(--ink)','font-weight':600})).textContent=f[0];
+    g.appendChild(mk('text',{x:16,y:59,'font-family':'var(--sans)','font-size':15,fill:'var(--ink-2)','font-weight':300})).textContent=f[1];
+    G.appendChild(g); gs.push(g);
+  });
+  const P=[[TX('헬륨','Helium'),TX('열을 나른다','carries the heat'),TX('못 나르는 만큼 흑연에 맡김','leaves what it cannot carry to graphite'),'var(--cool)'],
+           [TX('흑연','Graphite'),TX('중성자를 느리게 하고 열을 담는다','moderates and stores heat'),TX('3000 °C 넘어서까지 고체','solid well past 3000 °C'),'var(--ok)'],
+           [TX('TRISO','TRISO'),TX('핵분열생성물을 붙잡는다','holds the fission products'),TX('알갱이 하나가 격납용기 (3장)','each particle a containment (ch. 3)'),'var(--amber)']];
+  P.forEach((p,i)=>{
+    const x=i*378, g=mk('g',{transform:'translate('+x+',112)',opacity:0});
+    g.appendChild(mk('rect',{width:364,height:190,fill:'var(--panel)',stroke:p[3],'stroke-width':1.6}));
+    g.appendChild(mk('rect',{x:0,y:190,width:364,height:14,fill:p[3],opacity:0.55}));
+    g.appendChild(mk('text',{x:182,y:52,'text-anchor':'middle','font-family':'var(--sans)','font-size':30,fill:p[3],'font-weight':600})).textContent=p[0];
+    g.appendChild(mk('text',{x:182,y:104,'text-anchor':'middle','font-family':'var(--sans)','font-size':18,fill:'var(--ink)','font-weight':600})).textContent=p[1];
+    g.appendChild(mk('text',{x:182,y:140,'text-anchor':'middle','font-family':'var(--sans)','font-size':15.5,fill:'var(--ink-2)','font-weight':300})).textContent=p[2];
+    G.appendChild(g); gs.push(g);
+  });
+  G.appendChild(mk('text',{x:560,y:352,'text-anchor':'middle',class:'lbl'})).textContent=
+    TX('헬륨이 못 나르는 만큼 흑연이 담아 두고, 흑연이 담아 두는 동안 TRISO 가 핵분열생성물을 붙잡는다',
+       'what helium cannot carry, graphite stores; while graphite stores it, TRISO holds the fission products');
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:320,delay:(i<4?110*i:650+220*(i-4)),fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 헬륨 물성 */
+S({tag:'HELIUM PROPERTIES', ov:'[[헬륨의 물성 — 이상기체 · 상수 비열 · Risø 상관식||Helium properties - ideal gas, constant c<sub>p</sub>, the Risø correlations]]',
+src:'[[<b>출처</b> 본 교재 2.2절 · 그림 2.1 · 점성·열전도 상관식은 Risø(T 는 K, P 는 bar) · 음영은 HTR-PM 운전 영역 250~750 °C||<b>Source</b> This textbook &#167;2.2, Fig. 2.1 · viscosity and conductivity from the Risø correlations (T in K, P in bar) · shading is the HTR-PM range, 250-750 °C]]',
+abbr:'[[<b>압축계수 Z</b> 실제 기체가 이상기체에서 벗어난 정도(1이면 이상기체) · <b>프란틀수 Pr</b> 운동량 확산과 열 확산의 비 · <b>γ</b> 비열비 c<sub>p</sub>/c<sub>v</sub>||<b>compressibility Z</b> how far a real gas departs from ideal (1 = ideal) · <b>Prandtl number Pr</b> ratio of momentum to thermal diffusivity · <b>γ</b> the heat-capacity ratio c<sub>p</sub>/c<sub>v</sub>]]',
+html:`<h2 class="t">[[헬륨의 물성 — <em>이상기체</em> · 상수 비열 · Risø 상관식||Helium properties - <em>ideal gas</em>, constant c<sub>p</sub>, the Risø correlations]]</h2>
+<ul class="b">
+  <li>[[7 MPa · 750 °C에서 압축계수 <b>약 1.02</b> — 이상기체로 2 % 안쪽임. 비열은 온도에 거의 무관한 상수||Compressibility is <b>about 1.02</b> at 7 MPa and 750 °C - ideal to within 2 %. c<sub>p</sub> is essentially constant]]</li>
+  <li>[[μ와 k의 온도 지수가 0.70 · 0.71로 거의 같음 &#8594; <b class="cool">Pr ≈ 0.66으로 거의 일정</b>. 헬륨 해석에서 Pr은 사실상 상수임||The exponents in μ and k are 0.70 and 0.71 &#8594; <b class="cool">Pr stays near 0.66</b>. In helium analysis Pr is effectively a constant]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f2_01', cap:'[[7 MPa 헬륨의 밀도 · 열전도도 · 음속 — 교재 그림 2.1||Density, thermal conductivity and speed of sound of helium at 7 MPa - textbook Fig. 2.1]]'})}
+  </div>
+  <div class="side">
+    <div class="formula" style="font-size:17px;text-align:left;line-height:1.75">P <span class="op">=</span> ρRT, &nbsp;R <span class="op">=</span> 2077 <small>J/(kg·K)</small><br>
+      c<sub>p</sub> <span class="op">=</span> 5195 <small>J/(kg·K)</small>, &nbsp;γ <span class="op">=</span> 1.667<br>
+      μ <span class="op">=</span> 3.674×10<sup>−7</sup> T<sup>0.7</sup> <small>Pa·s</small><br>
+      k <span class="op">=</span> 2.682×10<sup>−3</sup>(1+1.123×10<sup>−3</sup>P)<br>&nbsp;&nbsp;&nbsp;× T<sup>0.71(1−2×10<sup>−4</sup>P)</sup> <small>W/(m·K)</small></div>
+    <div class="readout hi"><span class="k">[[프란틀수 Pr||Prandtl number Pr]]</span><span class="v">≈ 0.66<small>[[온도 무관||any T]]</small></span></div>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 7 MPa */
+S({tag:'WHY 7 MPA', ov:'[[헬륨을 7 MPa로 가압하는 이유 — 송풍 동력||Why helium is held at 7 MPa - blower power]]',
+src:'[[<b>계산</b> 본 교재 2.2절 · ṁ = Q/(c<sub>p</sub>ΔT) = 250 MW/(5195 × 500) = 96.2 kg/s · 입구 250 °C · ρ = P/(RT) · 마찰 손실 ∝ ṁ²/ρ, 송풍 동력 ∝ ṁ³/ρ² · 배수는 7 MPa 기준||<b>Calculation</b> This textbook &#167;2.2 · ṁ = Q/(c<sub>p</sub>ΔT) = 250 MW/(5195 × 500) = 96.2 kg/s · inlet 250 °C · ρ = P/(RT) · friction loss ∝ ṁ²/ρ, blower power ∝ ṁ³/ρ² · multiples relative to 7 MPa]]',
+abbr:'[[<b>체적유량 V̇</b> 1초에 밀어야 하는 부피 = 질량유량/밀도 · <b>송풍기</b> 기체를 미는 회전기계(액체의 펌프에 해당)||<b>volumetric flow V̇</b> the volume pushed per second = mass flow/density · <b>circulator (blower)</b> the rotating machine that pushes a gas, the gas-side counterpart of a pump]]',
+html:`<h2 class="t">[[헬륨을 <em>7 MPa</em>로 가압하는 이유 — 송풍 동력||Why helium is held at <em>7 MPa</em> - blower power]]</h2>
+<ul class="b">
+  <li>[[7 MPa에서도 체적유량이 <b>약 15 m³/s</b> — 3400 MWt 경수로가 26 m³/s를 미는 것과 비교하면 <b>MW당 8배</b>임||Even at 7 MPa the volume flow is <b>about 15 m³/s</b> - a 3400 MWt LWR pushes 26 m³/s, so this is <b>eight times more per MW</b>]]</li>
+  <li>[[대기압이면 부피유량 70배, 동력은 70² ≈ <b class="hot">4900배</b>. 가압은 열역학이 아니라 <b>송풍 동력을 감당할 수준으로 낮추려는 선택</b>임||At atmospheric pressure the volume is 70 times and the power 70² ≈ <b class="hot">4900 times</b>. The pressure is chosen <b>to make blower power affordable</b>, not for thermodynamics]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 800 330" role="img" aria-label="[[압력에 따라 헬륨 밀도·체적유량·송풍 동력 배수가 어떻게 바뀌는지 보여 주는 덕트와 막대||A duct and bars showing how helium density, volume flow and blower-power multiple change with pressure]]">
+    <text x="0" y="22" class="lbl">[[HTR-PM 한 모듈 · 250 MWt · 96.2 kg/s · 입구 250 °C||One HTR-PM module · 250 MWt · 96.2 kg/s · 250 °C inlet]]</text>
+    <rect x="0" y="44" width="800" height="92" fill="var(--panel)" stroke="var(--rule)"/>
+    <path id="p7-path" d="M0,90 H800" fill="none" stroke="none"/>
+    <text x="0" y="176" class="lbl">[[송풍 동력 배수 (로그) — 7 MPa = 1||Blower power multiple (log) - 7 MPa = 1]]</text>
+    <g id="p7-ax"></g>
+    <rect id="p7-bar" x="0" y="190" width="10" height="34" fill="var(--hot)" opacity="0.85"/>
+    <text id="p7-bt" x="0" y="252" class="lbl" fill="var(--hot)"></text>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout"><span class="k">[[헬륨 밀도 ρ||Helium density ρ]]</span><span class="v" id="p7-r">6.44<small>kg/m³</small></span></div>
+    <div class="readout hi"><span class="k">[[체적유량 V̇||Volume flow V̇]]</span><span class="v" id="p7-v">14.9<small>m³/s</small></span></div>
+    <div class="readout warn"><span class="k">[[송풍 동력 배수||Blower power multiple]]</span><span class="v" id="p7-w">×1<small></small></span></div>
+    <div class="ctl"><label>[[1차계통 압력||Primary pressure]] <span id="p7-ps">7.0 MPa</span></label>
+      <input type="range" id="p7-sl" min="-1" max="0.954" step="0.005" value="0.845"></div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, R=2077.3, T=523.15, mdot=96.2;
+  const ax=el.querySelector('#p7-ax'), bar=el.querySelector('#p7-bar'), bt=el.querySelector('#p7-bt');
+  const sx=m=>Math.log10(Math.max(m,1))/Math.log10(1e4)*790;
+  [1,10,100,1000,10000].forEach(m=>{
+    ax.appendChild(mk('line',{x1:sx(m),x2:sx(m),y1:186,y2:228,class:'grid'}));
+    ax.appendChild(mk('text',{x:Math.min(sx(m),770),y:282,'text-anchor':m===1?'start':'middle',class:'lbl'})).textContent='×'+fmt(m);
+  });
+  const f=flow(el.querySelector('#p7-path'),{n:14,color:'var(--cool)',r:4,speed:0.2});
+  const sl=el.querySelector('#p7-sl');
+  function upd(){
+    const P=Math.pow(10,+sl.value)*1e6, rho=P/(R*T), V=mdot/rho, mult=Math.pow(7e6/P,2);
+    el.querySelector('#p7-ps').textContent=(P/1e6).toFixed(P<1e6?2:1)+' MPa';
+    el.querySelector('#p7-r').innerHTML=rho.toFixed(rho<1?3:2)+'<small>kg/m³</small>';
+    el.querySelector('#p7-v').innerHTML=fmt(V,V<100?1:0)+'<small>m³/s</small>';
+    el.querySelector('#p7-w').innerHTML='×'+fmt(mult,mult<10?1:0);
+    bar.setAttribute('width',Math.max(6,sx(mult)));
+    /* 막대가 길면 글자를 막대 안쪽 끝에, 짧으면 막대 바로 뒤에 둔다 */
+    const w=Math.max(6,sx(mult)), inside=w>420;
+    bt.setAttribute('x',inside?w-12:w+10); bt.setAttribute('y',213);
+    bt.setAttribute('text-anchor',inside?'end':'start');
+    bt.setAttribute('fill',inside?'var(--on-accent)':'var(--hot)');
+    bt.textContent=mult<1.05?TX('기준','reference'):TX('7 MPa 의 ','')+fmt(mult,mult<10?1:0)+TX('배',' × the 7 MPa value');
+    f.speed=0.05+0.55*clamp(Math.log10(V/5)/Math.log10(250),0,1);
+  }
+  sl.oninput=upd; upd();
+  if(RM) return;
+  raf(t=>{ if(t>3.0) return; const u=clamp(t/2.8,0,1);
+    sl.value=(u<0.5? lerp(0.845,-1,u*2) : lerp(-1,0.845,(u-0.5)*2)).toFixed(3); upd(); });
+}});
+
+
+/* ---------------------------------------------------------------- 송풍기 검산 */
+S({tag:'CIRCULATOR CHECK', ov:'[[HTR-PM 주헬륨송풍기 공개 사양 검산||Checking the published HTR-PM circulator specifications]]',
+src:'[[<b>출처</b> 본 교재 2.3절 · 공개 사양 = 압력상승 200 kPa · 흡입 250 °C · 4000 rpm · 전동기 4500 kW · 단열효율 0.85 는 가정 · 비압축 근사||<b>Source</b> This textbook &#167;2.3 · published specs: 200 kPa rise, 250 °C suction, 4000 rpm, 4500 kW motor · adiabatic efficiency 0.85 is assumed · incompressible approximation]]',
+abbr:'[[<b>축동력</b> 회전축이 실제로 받아야 하는 동력 = 이상동력/효율 · <b>단열효율</b> 이상 압축일과 실제 압축일의 비||<b>shaft power</b> the power the shaft must actually deliver = ideal power/efficiency · <b>adiabatic efficiency</b> ratio of ideal to actual compression work]]',
+html:`<h2 class="t">[[HTR-PM <em>주헬륨송풍기</em> 공개 사양 검산||Checking the published HTR-PM <em>circulator</em> specifications]]</h2>
+<ul class="b">
+  <li>[[공개된 네 숫자가 서로 모순되지 않는지 <b>30줄 계산</b>으로 확인됨 — 자료를 읽을 때 늘 한 번 씹어 보는 습관을 들일 것||Thirty lines of arithmetic show the four published figures <b>do not contradict each other</b> - chew on every dataset like this once]]</li>
+  <li>[[축동력 3.5 MW는 열출력의 <b>1.4 %</b>이고 전부 저온측 헬륨으로 들어감. 이 발열을 빼면 <b class="hot">노심 입구 온도가 약 7 K 낮게</b> 계산됨||3.5 MW of shaft power is <b>1.4 %</b> of the thermal output and all of it ends up in the cold helium. Leave it out and <b class="hot">the core inlet comes out about 7 K too low</b>]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 800 390" role="img" aria-label="[[이상동력 2990 kW, 축동력 3520 kW, 전동기 정격 4500 kW를 막대로 비교||Ideal power 2990 kW, shaft power 3520 kW and the 4500 kW motor rating as bars]]">
+    <g id="cc-g"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <table class="d sm">
+      <tr><th>[[항목||Quantity]]</th><th>[[값||Value]]</th></tr>
+      <tr><td>[[질량유량 ṁ||Mass flow ṁ]]</td><td class="n">96.2 kg/s</td></tr>
+      <tr><td>[[밀도 ρ (7 MPa, 250 °C)||Density ρ (7 MPa, 250 °C)]]</td><td class="n">6.44 kg/m³</td></tr>
+      <tr><td>[[체적유량 V̇||Volume flow V̇]]</td><td class="n">14.9 m³/s</td></tr>
+      <tr><td>[[이상동력 V̇Δp||Ideal power V̇Δp]]</td><td class="n">2 990 kW</td></tr>
+      <tr class="mark"><td>[[축동력 (η = 0.85)||Shaft power (η = 0.85)]]</td><td class="n">3 520 kW</td></tr>
+      <tr><td>[[전동기 정격||Motor rating]]</td><td class="n">4 500 kW</td></tr>
+    </table>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#cc-g'), X0=150, k=600/4500, bars=[];
+  [0,1000,2000,3000,4000].forEach(v=>{
+    G.appendChild(mk('line',{x1:X0+v*k,x2:X0+v*k,y1:10,y2:320,class:'grid'}));
+    G.appendChild(mk('text',{x:X0+v*k,y:344,'text-anchor':'middle',class:'lbl'})).textContent=fmt(v);
+  });
+  G.appendChild(mk('text',{x:X0+600,y:370,'text-anchor':'end',class:'lbl'})).textContent='kW';
+  [[TX('이상동력','Ideal'),2990,'var(--cool)'],[TX('축동력','Shaft'),3520,'var(--hot)'],[TX('전동기 정격','Motor rating'),4500,'var(--ink-3)']]
+    .forEach((b,i)=>{
+      const y=28+i*100;
+      G.appendChild(mk('text',{x:X0-14,y:y+36,'text-anchor':'end','font-family':'var(--sans)','font-size':17,fill:'var(--ink)','font-weight':600})).textContent=b[0];
+      const r=mk('rect',{x:X0,y:y,width:'0',height:58,fill:b[2],opacity:0.85}); G.appendChild(r); bars.push([r,b[1]*k]);
+      G.appendChild(mk('text',{x:X0+b[1]*k-10,y:y+36,'text-anchor':'end','font-family':'var(--mono)','font-size':17,fill:'var(--on-accent)','font-weight':600})).textContent=fmt(b[1]);
+    });
+  G.appendChild(mk('text',{x:X0+3520*k+8,y:162,class:'lbl',fill:'var(--ok)'})).textContent=TX('여유 약 28 %','≈ 28 % margin');
+  if(RM){ bars.forEach(b=>b[0].setAttribute('width',b[1])); return; }
+  bars.forEach((b,i)=>b[0].animate([{width:'0px'},{width:b[1]+'px'}],{duration:650,delay:200*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- 페블베드 전열 */
+S({tag:'PEBBLE-BED HEAT TRANSFER', ov:'[[페블베드 전열·압력손실 상관식과 프리즘형 보정||Pebble-bed correlations and the prismatic correction]]',
+src:'[[<b>출처</b> 본 교재 2.4절 그림 2.2 · KTA 3102.2(전열) · 3102.3(압력손실) · Taylor 상관식은 헬륨·질소 데이터의 98 %가 ±25 % 이내||<b>Source</b> This textbook &#167;2.4, Fig. 2.2 · KTA 3102.2 (heat transfer), 3102.3 (pressure drop) · Taylor fits 98 % of helium and nitrogen data within ±25 %]]',
+abbr:'[[<b>KTA</b> 독일 원자력기술위원회 표준 · <b>공극률 ε</b> 페블 사이 빈 공간의 부피 비율 · <b>Nu</b> 누셀트수, 대류 열전달의 무차원 세기 · <b>Re</b> 레이놀즈수||<b>KTA</b> the German nuclear safety standards commission · <b>porosity ε</b> the fraction of bed volume between pebbles · <b>Nu</b> Nusselt number, dimensionless convective heat transfer · <b>Re</b> Reynolds number]]',
+html:`<h2 class="t">[[<em>페블베드</em> 전열·압력손실 상관식과 프리즘형 보정||<em>Pebble-bed</em> correlations and the prismatic correction]]</h2>
+<ul class="b">
+  <li>[[구슬 사이를 빠져나가는 유동이라 원관 상관식을 못 씀 — <b>KTA 3102.2</b>가 사실상 표준(100 &lt; Re &lt; 10⁵, 0.36 &lt; ε &lt; 0.42, ±20 %)||Flow threads between spheres, so pipe correlations do not apply - <b>KTA 3102.2</b> is the de facto standard (100 &lt; Re &lt; 10⁵, 0.36 &lt; ε &lt; 0.42, ±20 %)]]</li>
+  <li>[[프리즘형 냉각채널은 원관이지만 강한 가열로 벽 물성이 달라짐 — Dittus–Boelter 그대로면 <b class="hot">18~32 % 과대평가</b>, Taylor 보정이 표준||Prismatic channels are pipes, but heavy heating changes wall properties - raw Dittus–Boelter <b class="hot">overpredicts by 18-32 %</b>; the Taylor correction is standard]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f2_02', cap:'[[페블베드 전열 상관식 비교 (Pr = 0.66, ε = 0.39) — 낮은 Re 는 KTA, 높은 Re 는 Wakao–Kagei 가 데이터에 잘 맞음 · 교재 그림 2.2||Pebble-bed correlations compared (Pr = 0.66, ε = 0.39) - KTA fits data at low Re, Wakao–Kagei at high Re · textbook Fig. 2.2]]'})}
+  </div>
+  <div class="side">
+    <div class="formula" style="font-size:15px;text-align:left;line-height:1.8"><small>KTA 3102.2</small><br>
+      Nu <span class="op">=</span> 1.27 Pr<sup>1/3</sup>ε<sup>−1.18</sup>Re<sup>0.36</sup><br>&nbsp;&nbsp;<span class="op">+</span> 0.033 Pr<sup>1/2</sup>ε<sup>−1.07</sup>Re<sup>0.86</sup><br>
+      <small>[[프리즘형 · Taylor 보정||Prismatic · Taylor]]</small><br>
+      Nu<sub>b</sub> <span class="op">=</span> 0.023 Re<sub>b</sub><sup>0.8</sup>Pr<sub>b</sub><sup>0.4</sup><br>&nbsp;&nbsp;<span class="op">×</span> <span style="white-space:nowrap">(T<sub>s</sub>/T<sub>b</sub>)<sup>−0.57−1.59D/x</sup></span></div>
+    <div class="readout warn"><span class="k">[[층류 바닥값 — 항상 깔아 둘 것||Laminar floor - always keep it]]</span><span class="v">Nu = 4.364</span></div>
+    <div class="src" style="font-size:12.5px">[[사고 때 강제순환이 멎으면 Re 가 수백 아래로 떨어짐. 난류식만 쓰면 Nu 가 0으로 가서 계산이 비현실적으로 뜨거워짐||When forced flow stops Re falls to a few hundred; a turbulent correlation alone sends Nu to zero and the calculation overheats unrealistically]]</div>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 흑연 */
+S({tag:'GRAPHITE AGEING', ov:'[[조사된 흑연 — 치수 변화 · 열전도도 저하 · 위그너 에너지||Irradiated graphite - size, conductivity and Wigner energy]]',
+src:'[[<b>출처</b> 본 교재 2.5절 · IG-110 기준 · 위그너 에너지 방출률은 HTGR 온도 조사 흑연의 실측 데이터가 없음(ORNL)||<b>Source</b> This textbook &#167;2.5 · IG-110 values · ORNL states there is no measured release-rate data for graphite irradiated at HTGR temperatures]]',
+abbr:'[[<b>dpa</b> 원자당 변위수 — 원자 하나가 제자리에서 밀려난 평균 횟수, 조사량의 척도 · <b>전환점(turnaround)</b> 수축이 팽창으로 바뀌는 조사량 · <b>위그너 에너지</b> 조사로 격자에 쌓였다가 한꺼번에 풀릴 수 있는 에너지 · <b>MELCOR</b> 미국 중대사고 해석 코드||<b>dpa</b> displacements per atom, a measure of irradiation dose · <b>turnaround</b> the dose where shrinkage turns to swelling · <b>Wigner energy</b> energy stored in the lattice by irradiation that can be released at once · <b>MELCOR</b> the US severe-accident code]]',
+html:`<h2 class="t">[[조사된 흑연 — <em>치수 변화</em> · 열전도도 저하 · 위그너 에너지||Irradiated graphite - <em>size</em>, conductivity and Wigner energy]]</h2>
+<ul class="b">
+  <li>[[흑연은 <b>소모품</b>임 — 수축하다가 전환점을 넘으면 팽창함. 이 전환점이 흑연 부품 수명을 정함||Graphite is <b>a consumable</b> - it shrinks, then past the turnaround it swells. That turnaround sets the component life]]</li>
+  <li>[[열전도도는 25 dpa에서 <b class="hot">86 % 감소</b>하고 그 대부분이 <b>1 dpa 이전</b>에 일어남. 조사 전 물성으로 전도냉각을 풀면 여유를 크게 부풀림||Conductivity falls <b class="hot">86 %</b> by 25 dpa, most of it <b>before 1 dpa</b>. Solving conduction cooling with unirradiated values badly inflates the margin]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <table class="d">
+    <tr><th>[[현상||Effect]]</th><th>[[값 (IG-110)||Value (IG-110)]]</th><th>[[해석에 주는 뜻||What it means for analysis]]</th></tr>
+    <tr><td>[[치수 전환점||Dimensional turnaround]]</td><td class="n">[[600 °C · 약 15 dpa · 체적 −7 %||600 °C · ~15 dpa · −7 % volume]]</td><td>[[부품 수명을 정함||sets component life]]</td></tr>
+    <tr class="mark"><td>[[열전도도||Thermal conductivity]]</td><td class="n">[[130~160 &#8594; 25 dpa 에서 −86 %||130-160 &#8594; −86 % at 25 dpa]]</td><td>[[사고 시 최고연료온도의 1순위 불확실성 인자 (MELCOR)||top uncertainty in peak accident fuel temperature (MELCOR)]]</td></tr>
+    <tr><td>[[위그너 에너지 · 30 °C 조사||Wigner energy · irradiated at 30 °C]]</td><td class="n">[[최대 630 cal/g||up to 630 cal/g]]</td><td>[[저온 조사 흑연의 문제||a low-temperature problem]]</td></tr>
+    <tr><td>[[위그너 에너지 · 450 °C 조사||Wigner energy · irradiated at 450 °C]]</td><td class="n">[[15 cal/g||15 cal/g]]</td><td>[[HTGR(250~1100 °C)에서는 문제되지 않음 — 추론임||not an issue at HTGR temperatures (250-1100 °C) - an inference]]</td></tr>
+  </table>
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">[[열전도도 저하 · 25 dpa||Conductivity loss · 25 dpa]]</span><span class="v">−86<small>%</small></span></div>
+    <blockquote class="q" style="font-size:15px;padding:11px 15px">[[위그너 에너지가 HTGR에서 문제없다는 것은 <b>잘 근거된 추론이지 측정된 사실은 아님</b>. ORNL이 HTGR 온도 조사 흑연의 방출률 실측 데이터가 없다고 명시함.||That Wigner energy is harmless in an HTGR is <b>a well-grounded inference, not a measurement</b>. ORNL says outright that no release-rate data exist for graphite irradiated at HTGR temperatures.]]</blockquote>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 출력밀도 */
+S({tag:'POWER DENSITY', ov:'[[노형별 노심 평균 출력밀도||Average core power density by reactor type]]',
+src:'[[<b>출처</b> 본 교재 2.6절 그림 2.3 · 단위 MW/m³ · 로그 눈금 · HTR-PM 노심 ∅ 3 m × 11 m = 78 m³||<b>Source</b> This textbook &#167;2.6, Fig. 2.3 · MW/m³ · log scale · HTR-PM core ∅ 3 m × 11 m = 78 m³]]',
+abbr:'[[<b>출력밀도</b> 노심 단위 부피당 열출력 · <b>BN-800 · BN-1200</b> 러시아 소듐냉각고속로 · <b>MSRE</b> 1960년대 ORNL 용융염 실험로||<b>power density</b> thermal power per unit core volume · <b>BN-800, BN-1200</b> Russian sodium-cooled fast reactors · <b>MSRE</b> the 1960s ORNL Molten Salt Reactor Experiment]]',
+html:`<h2 class="t">[[노형별 노심 평균 <em>출력밀도</em>||Average core <em>power density</em> by reactor type]]</h2>
+<ul class="b">
+  <li>[[HTR-PM 3.3 MW/m³는 경수로의 <b>약 1/30</b> — 설계 실패가 아니라 <b>의도</b>임. 붕괴열을 넓은 흑연에 퍼뜨려 전도·복사만으로 빼려는 것||HTR-PM&#8217;s 3.3 MW/m³ is <b>about 1/30</b> of an LWR - <b>by intent</b>, not failure. Spreading decay heat over a large graphite mass lets conduction and radiation alone remove it]]</li>
+  <li>[[대가는 부피임 — 250 MWt에 <b>78 m³</b> 노심, 같은 열출력 경수로는 <b>2.5 m³</b>. <b class="ok">피동안전은 공짜가 아니라 부피로 삼</b>||The price is volume - <b>78 m³</b> of core for 250 MWt against <b>2.5 m³</b> for an LWR. <b class="ok">Passive safety is not free; it is bought with volume</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 330" role="img" aria-label="[[PWR 100, BWR 50, SFR BN-800 450, BN-1200 230, HTGR HTR-PM 3.3, MSR MSRE 2.9 MW/m³의 출력밀도를 로그 막대로 비교||Power density on a log scale - PWR 100, BWR 50, SFR BN-800 450, BN-1200 230, HTGR HTR-PM 3.3, MSR MSRE 2.9 MW/m³]]">
+  <g id="pd-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#pd-g');
+  const Y0=262, Y1=14, X0=90, sy=v=>Y0-Math.log10(v)/3*(Y0-Y1);
+  [1,10,100,1000].forEach(v=>{
+    G.appendChild(mk('line',{x1:X0,x2:1110,y1:sy(v),y2:sy(v),class:'grid'}));
+    G.appendChild(mk('text',{x:X0-12,y:sy(v)+5,'text-anchor':'end',class:'lbl'})).textContent=fmt(v);
+  });
+  G.appendChild(mk('text',{x:X0-12,y:Y0+26,'text-anchor':'end',class:'lbl'})).textContent='MW/m³';
+  const B=[['PWR','',100,'var(--ink-3)'],['BWR','',50,'var(--ink-3)'],['SFR','BN-800',450,'var(--hot)'],['SFR','BN-1200',230,'var(--hot)'],
+           ['HTGR','HTR-PM',3.3,'var(--cool)'],['MSR','MSRE',2.9,'var(--amber)']];
+  const W=110, gap=(1110-X0-6*W)/6, bars=[];
+  B.forEach((b,i)=>{
+    const x=X0+gap/2+i*(W+gap), h=Y0-sy(b[2]);
+    const r=mk('rect',{x:x,y:Y0,width:W,height:'0',fill:b[3],opacity:0.85}); G.appendChild(r); bars.push([r,h]);
+    G.appendChild(mk('text',{x:x+W/2,y:sy(b[2])-10,'text-anchor':'middle','font-family':'var(--mono)','font-size':18,fill:b[3],'font-weight':600})).textContent=String(b[2]);
+    G.appendChild(mk('text',{x:x+W/2,y:Y0+26,'text-anchor':'middle','font-family':'var(--sans)','font-size':17,fill:'var(--ink)','font-weight':600})).textContent=b[0];
+    if(b[1]) G.appendChild(mk('text',{x:x+W/2,y:Y0+48,'text-anchor':'middle',class:'lbl'})).textContent=b[1];
+  });
+  G.appendChild(mk('line',{x1:X0,x2:1110,y1:Y0,y2:Y0,stroke:'var(--rule)'}));
+  if(RM){ bars.forEach(b=>{ b[0].setAttribute('y',Y0-b[1]); b[0].setAttribute('height',b[1]); }); return; }
+  bars.forEach((b,i)=>b[0].animate([{y:Y0+'px',height:'0px'},{y:(Y0-b[1])+'px',height:b[1]+'px'}],
+    {duration:700,delay:140*i,fill:'forwards',easing:'cubic-bezier(.2,.7,.3,1)'}));
+}});
+</script>

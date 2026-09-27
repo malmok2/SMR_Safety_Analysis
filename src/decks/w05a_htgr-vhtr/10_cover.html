@@ -1,0 +1,76 @@
+<script>
+/* ================================================================
+   표지 · 세 덱의 구성
+   교재 「물을 쓰지 않는 SMR — VHTR · SFR · MSR」(Rev1.0, 2026-09)
+   이 덱은 1~6장. SFR(7~11장)은 w05b_sfr, MSR(12~18장)은 w06_msr.
+   ================================================================ */
+S({bare:true, cls:'cover', ov:'[[표지||Cover]]',
+html:`<div class="kick">[[한양대학교 원자력공학과 · THINK Lab · NUE4067 · 비경수로 편 ①||Hanyang University · Dept. of Nuclear Engineering · THINK Lab · NUE4067 · Non-LWR part 1]]</div>
+<h1>[[물을 쓰지 않는 SMR<br><span>고온가스로(HTGR)</span>||SMRs without water<br><span>the gas-cooled reactor</span>]]</h1>
+<div class="ln"></div>
+<div class="meta">
+  [[헬륨 · 흑연 · TRISO 세 기둥, 그리고 <b>HTR-PM</b>을 기기 단위로 읽기<br>
+  5주차 강의 · 지도교수 <b>송민섭</b> · Rev1.0 · 2026년 9월||Helium, graphite and TRISO, then reading <b>HTR-PM</b> component by component<br>
+  Week 5 · Instructor <b>Minseop Song</b> · Rev1.0 · September 2026]]
+</div>
+<div class="hint">[[<kbd>&#8594;</kbd> 다음 &nbsp; <kbd>&#8592;</kbd> 이전 &nbsp; <kbd>O</kbd> 목차 &nbsp; <kbd>L</kbd> 한/영 &nbsp; <kbd>T</kbd> 배경 &nbsp; <kbd>P</kbd> 인쇄·PDF &nbsp; <kbd>F</kbd> 전체화면||<kbd>&#8594;</kbd> Next &nbsp; <kbd>&#8592;</kbd> Prev &nbsp; <kbd>O</kbd> Index &nbsp; <kbd>L</kbd> KO/EN &nbsp; <kbd>T</kbd> Theme &nbsp; <kbd>P</kbd> Print·PDF &nbsp; <kbd>F</kbd> Fullscreen]]</div>`,
+init(el){
+  if(RM) return;
+  const h1=el.querySelector('h1'), ln=el.querySelector('.ln');
+  h1.style.opacity=0; ln.style.width='0px';
+  h1.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],
+    {duration:700,easing:'cubic-bezier(.2,.7,.3,1)',fill:'forwards'});
+  ln.animate([{width:'0px'},{width:'120px'}],{duration:600,delay:500,fill:'forwards'});
+}});
+
+
+/* ---------------------------------------------------------------- 교재 구성 */
+S({tag:'ROADMAP', ov:'[[교재의 구성 — 네 부, 세 덱||How the textbook is organised - four parts, three decks]]',
+src:'[[<b>출처</b> 본 교재 1.3절 표 1.1 · 인허가·건설 현황은 <b>2026년 9월 기준</b> — 비경수로는 반년이면 지형이 바뀜||<b>Source</b> This textbook &#167;1.3, Table 1.1 · licensing and construction status <b>as of September 2026</b> - the non-LWR landscape shifts within six months]]',
+html:`<h2 class="t">[[교재의 구성 — <em>네 부</em>, 세 덱||How the textbook is organised - <em>four parts</em>, three decks]]</h2>
+<ul class="b">
+  <li>[[노형마다 <b>원리 &#8594; 연료·재료 &#8594; 계통 &#8594; 안전 &#8594; 계통코드</b> 다섯 장으로 다룸. 마지막 계통코드 장이 이 교재의 색깔임||Each reactor gets five chapters: <b>principle &#8594; fuel and materials &#8594; systems &#8594; safety &#8594; system code</b>. The system-code chapter is what sets this book apart]]</li>
+  <li>[[「원자로 계통코드 직접 만들기」 III권 6장에서 <b>물성 클래스만 갈아끼우면</b> 다른 유체로 간다고 했음 — 이 교재가 실제로 갈아끼움||Volume III, ch. 6 of <i>Writing a Reactor System Code</i> said <b>swap the property class</b> and the code runs another fluid - this book actually does it]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 380" role="img" aria-label="[[교재 네 부와 그것을 나눈 세 덱. 제1부 HTGR은 이 덱, 제2부 SFR과 제3·4부 MSR·종합은 다음 두 덱||The textbook's four parts and the three decks they fill - Part 1 HTGR here, Part 2 SFR and Parts 3-4 MSR and synthesis in the next two]]">
+  <g id="rm-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#rm-g'), gs=[];
+  const P=[
+    ['1', TX('제1부 · VHTR / HTGR','Part 1 · VHTR / HTGR'), TX('헬륨','helium'), '1~6',
+     TX('열을 못 나르는 기체로 어떻게 원자로를 식히는가','How do you cool a reactor with a gas that barely carries heat?'),
+     'var(--cool)', TX('이 덱 · 5주차','this deck · week 5'), true],
+    ['2', TX('제2부 · SFR','Part 2 · SFR'), TX('나트륨','sodium'), '7~11',
+     TX('물과 폭발하는 금속을 왜 굳이 쓰는가','Why use a metal that explodes on contact with water?'),
+     'var(--hot)', TX('다음 덱 · 5~6주차','next deck · weeks 5-6'), false],
+    ['3', TX('제3부 · MSR','Part 3 · MSR'), TX('용융염','molten salt'), '12~16',
+     TX('연료가 흐른다는 것이 무슨 뜻인가','What does it mean for the fuel to flow?'),
+     'var(--amber)', TX('세 번째 덱 · 6주차','third deck · week 6'), false],
+    ['4', TX('제4부 · 종합','Part 4 · synthesis'), '—', '17~18',
+     TX('셋을 같은 자로 재면 무엇이 보이는가','Measure all three with one ruler - what shows?'),
+     'var(--ok)', TX('세 번째 덱 끝','end of the third deck'), false]
+  ];
+  P.forEach((p,i)=>{
+    const y=8+i*92, g=mk('g',{transform:'translate(0,'+y+')',opacity:0});
+    g.appendChild(mk('rect',{width:1120,height:80,fill:'var(--panel)',stroke:p[7]?p[5]:'var(--rule)',
+      'stroke-width':p[7]?1.8:1}));
+    g.appendChild(mk('rect',{width:4,height:80,fill:p[5]}));
+    g.appendChild(mk('text',{x:26,y:50,'font-family':'var(--mono)','font-size':30,fill:p[5],
+      'font-weight':600})).textContent=p[0];
+    g.appendChild(mk('text',{x:72,y:34,'font-family':'var(--sans)','font-size':20,fill:p[5],
+      'font-weight':600})).textContent=p[1];
+    g.appendChild(mk('text',{x:72,y:60,class:'lbl'})).textContent=
+      TX('냉각재 ','coolant ')+p[2]+TX(' · 교재 ',' · chapters ')+p[3]+TX('장','');
+    g.appendChild(mk('text',{x:380,y:47,'font-family':'var(--sans)','font-size':18.5,fill:'var(--ink)',
+      'font-weight':300})).textContent=p[4];
+    g.appendChild(mk('text',{x:1096,y:47,'text-anchor':'end','font-family':'var(--mono)','font-size':13,
+      fill:p[7]?p[5]:'var(--ink-3)','letter-spacing':'.06em'})).textContent=p[6];
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:360,delay:150*i,fill:'forwards'}));
+}});
+</script>

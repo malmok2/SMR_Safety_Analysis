@@ -1,0 +1,223 @@
+<script>
+/* ================================================================
+   SECTION 01 — 왜 물을 버리는가  (교재 1장)
+   ================================================================ */
+SECT('01 · [[왜 물을 버리는가||Why give up water]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;01 왜 물을 버리는가||&#167;01 Why give up water]]',
+html:`[[<div class="no">01</div><h2>왜 물을 버리는가</h2><div class="ln"></div>
+<p>지금까지 다룬 SMR은 전부 물로 열을 빼고 물로 중성자를 느리게 했다. 물을 버리는 이유는
+<b>물성표 한 줄</b>에서 나온다. 그 대신 무엇이 새로 생기는지까지 세어야 &#8220;더 안전하다&#8221;는 말에 뜻이 생긴다.</p>||<div class="no">01</div><h2>Why give up water</h2><div class="ln"></div>
+<p>Every SMR so far removed heat with water and slowed neutrons with water. The reason to give it up comes from
+<b>one line of the property table</b>. Only once you also count what the alternatives bring does &#8220;safer&#8221; mean anything.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 맞바꿈 */
+S({tag:'TRADE-OFF', ov:'[[물 냉각재의 제약 네 가지와 비경수로의 새 문제 네 가지||Four constraints of water, and four new problems without it]]',
+src:'[[<b>출처</b> 본 교재 1.1절 · 물은 300 °C 액체를 유지하려면 약 15 MPa(대기압의 150배)가 필요함||<b>Source</b> This textbook &#167;1.1 · keeping water liquid at 300 °C takes about 15 MPa, 150 times atmospheric]]',
+abbr:'[[<b>LOCA</b> 냉각재상실사고 · <b>ECCS</b> 비상노심냉각계통 · <b>맞바꿈(trade-off)</b> 하나를 얻으면 다른 하나를 내주는 관계||<b>LOCA</b> Loss-of-Coolant Accident · <b>ECCS</b> Emergency Core Cooling System · <b>trade-off</b> gaining one thing at the cost of another]]',
+html:`<h2 class="t">[[물 냉각재의 <em>제약 네 가지</em>와 비경수로의 새 문제 네 가지||Four <em>constraints of water</em>, and four new problems without it]]</h2>
+<ul class="b">
+  <li>[[물은 100 °C에서 끓음. 300 °C 액체로 붙잡으려면 <b class="hot">15 MPa</b>로 눌러야 하고, 이 압력 하나가 설계의 거의 전부를 정함||Water boils at 100 °C. Holding it liquid at 300 °C takes <b class="hot">15 MPa</b>, and that one pressure sets nearly the whole design]]</li>
+  <li>[[물을 버리면 왼쪽 넷이 통째로 사라지고 오른쪽 넷이 생김 — &#8220;더 안전하다&#8221;는 이 목록을 <b>다 센 뒤에야</b> 할 수 있는 말임||Drop water and the four on the left vanish while the four on the right appear - &#8220;safer&#8221; can only be said <b>after counting both lists</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 360" role="img" aria-label="[[물을 쓸 때의 제약 네 가지와 물을 버릴 때 새로 생기는 문제 네 가지를 좌우로 대비한 그림||Four constraints of water on the left, four new problems of the alternatives on the right]]">
+  <g id="to-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#to-g'), gs=[];
+  const L=[[TX('두꺼운 압력용기','A thick pressure vessel'),TX('만들 수 있는 공장이 세계에 손꼽음','Only a handful of forges worldwide can make one')],
+           [TX('LOCA 가 설계기준사고의 주인공','LOCA dominates the design basis'),TX('ECCS 와 격납건물이 그에 맞춰 커짐','ECCS and containment grow to match')],
+           [TX('출구 325 °C · 효율 33 % 안팎','325 °C outlet, about 33 % efficiency'),TX('증기 조건이 나빠 효율이 묶임','Poor steam conditions cap the efficiency')],
+           [TX('지르코늄–물 반응으로 수소','Hydrogen from zirconium and water'),TX('후쿠시마에서 건물을 날린 것이 이 수소','The hydrogen that blew apart Fukushima')]];
+  const R=[[TX('헬륨은 열을 잘 못 나름','Helium carries heat poorly'),TX('7 MPa 가압 · 4.5 MW 송풍기 (제1부)','7 MPa, a 4.5 MW blower (Part 1)'),'var(--cool)'],
+           [TX('나트륨은 물과 만나면 폭발','Sodium explodes with water'),TX('중간 루프 · 증기발생기 설계 (제2부)','Intermediate loop, steam generator (Part 2)'),'var(--hot)'],
+           [TX('용융염은 459 °C 아래에서 얾','Salt freezes below 459 °C'),TX('동결 · 배관 막힘이 사고 시나리오 (제3부)','Freezing and plugging become accidents (Part 3)'),'var(--amber)'],
+           [TX('운전 경험이 턱없이 적음','Very little operating experience'),TX('검증 데이터가 30~60년 전 것 (제4부)','Validation data 30 to 60 years old (Part 4)'),'var(--ok)']];
+  const hd=(x,t,c)=>{ const e=mk('text',{x:x,y:18,'font-family':'var(--mono)','font-size':13,fill:c,
+    'letter-spacing':'.14em'}); e.textContent=t; G.appendChild(e); };
+  hd(0,TX('물을 쓰면 따라오는 것','WHAT WATER BRINGS'),'var(--ink-3)');
+  hd(590,TX('물을 버리면 새로 생기는 것','WHAT GIVING IT UP BRINGS'),'var(--ink-3)');
+  const card=(x,y,a,b,col,side)=>{
+    const g=mk('g',{transform:'translate('+x+','+y+')',opacity:0});
+    g.appendChild(mk('rect',{width:530,height:70,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:3,height:70,fill:col}));
+    g.appendChild(mk('text',{x:20,y:30,'font-family':'var(--sans)','font-size':19,fill:'var(--ink)',
+      'font-weight':600})).textContent=a;
+    g.appendChild(mk('text',{x:20,y:54,'font-family':'var(--sans)','font-size':15.5,fill:'var(--ink-2)',
+      'font-weight':300})).textContent=b;
+    G.appendChild(g); gs.push(g);
+  };
+  L.forEach((r,i)=>card(0,34+i*82,r[0],r[1],'var(--ink-3)'));
+  R.forEach((r,i)=>card(590,34+i*82,r[0],r[1],r[2]));
+  G.appendChild(mk('path',{d:'M540,190 H578',stroke:'var(--cool)','stroke-width':2,fill:'none'}));
+  G.appendChild(mk('path',{d:'M570,183 L580,190 L570,197',stroke:'var(--cool)','stroke-width':2,fill:'none'}));
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:320,delay:(i<4?120*i:700+160*(i-4)),fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 온도-압력 지도 */
+S({tag:'T-P MAP', ov:'[[노형별 노심 출구 온도와 1차계통 압력||Core outlet temperature and primary pressure by reactor type]]',
+src:'[[<b>출처</b> 본 교재 1.1절 그림 1.1 · 세로축은 로그 눈금||<b>Source</b> This textbook &#167;1.1, Fig. 1.1 · the vertical axis is logarithmic]]',
+abbr:'[[<b>HTGR</b> 고온가스로 · <b>HTTR</b> 일본 고온공학시험로 · <b>SFR</b> 소듐냉각고속로 · <b>MSR</b> 용융염로 · <b>MSRE</b> 1960년대 ORNL 용융염 실험로 · <b>FHR</b> 불화염냉각 고온로||<b>HTGR</b> High-Temperature Gas-cooled Reactor · <b>HTTR</b> Japan&#8217;s High Temperature engineering Test Reactor · <b>SFR</b> Sodium-cooled Fast Reactor · <b>MSR</b> Molten Salt Reactor · <b>MSRE</b> the 1960s ORNL Molten Salt Reactor Experiment · <b>FHR</b> Fluoride-salt-cooled High-temperature Reactor]]',
+html:`<h2 class="t">[[노형별 노심 <em>출구 온도</em>와 1차계통 압력||Core <em>outlet temperature</em> and primary pressure by reactor type]]</h2>
+<ul class="b">
+  <li>[[비경수로는 예외 없이 <b>오른쪽 아래</b> — 더 뜨겁고 더 낮은 압력 쪽으로 감||Every non-LWR sits <b>lower right</b> - hotter, and at lower pressure]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f1_01', cap:'[[노형별 노심 출구 온도(가로)와 1차계통 압력(세로, 로그) — 교재 그림 1.1||Core outlet temperature (horizontal) against primary pressure (vertical, log) - textbook Fig. 1.1]]'})}
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">[[경수로 · PWR||Light water · PWR]]</span><span class="v">~15<small>MPa · 325 °C</small></span></div>
+    <div class="readout hi"><span class="k">[[고온가스로 · HTR-PM||Gas-cooled · HTR-PM]]</span><span class="v">7.0<small>MPa · 750 °C</small></span></div>
+    <div class="readout good"><span class="k">[[소듐 · 용융염||Sodium · molten salt]]</span><span class="v">~0.1<small>MPa · 500~700 °C</small></span></div>
+    <blockquote class="q" style="font-size:15px;padding:11px 15px">[[압력이 대기압 근처로 내려오면 <b>LOCA 의 모양 자체가 바뀜</b>. 물처럼 순식간에 증기로 팽창하며 빠져나가는 일이 없음.||Near atmospheric pressure <b>the shape of a LOCA changes</b>. Nothing flashes to steam and blows out the way water does.]]</blockquote>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 두 식 */
+S({tag:'CARNOT · VESSEL WALL', ov:'[[카르노 효율 상한과 압력용기 두께||The Carnot limit and pressure-vessel wall thickness]]',
+src:'[[<b>출처</b> 본 교재 1.2절 · T<sub>c</sub> = 300 K · 실제 효율은 경수로 33 %, HTGR 40 %대 · 두께는 얇은 껍질 근사||<b>Source</b> This textbook &#167;1.2 · T<sub>c</sub> = 300 K · actual efficiency 33 % for LWRs, low 40s for HTGRs · wall from the thin-shell approximation]]',
+abbr:'[[<b>카르노 효율</b> 두 온도 사이에서 열기관이 낼 수 있는 효율의 이론 상한 · <b>허용응력 σ<sub>allow</sub></b> 설계 규격이 재료에 허용하는 최대 응력||<b>Carnot efficiency</b> the theoretical upper limit for a heat engine between two temperatures · <b>allowable stress σ<sub>allow</sub></b> the highest stress the design code permits in the material]]',
+html:`<h2 class="t">[[<em>카르노 효율</em> 상한과 압력용기 두께||The <em>Carnot limit</em> and pressure-vessel wall thickness]]</h2>
+<ul class="b">
+  <li>[[온도를 올리는 것은 그 자체로 <b>경제성</b>임 — 경수로 상한 50 %(실제 33 %), HTGR 상한 71 %(실제 40 %대)||Raising temperature is <b>economics</b> in itself - an LWR tops out at 50 % (33 % actual), an HTGR at 71 % (low 40s actual)]]</li>
+  <li>[[두께는 압력에 비례함. 15.5 MPa &#8594; 0.1 MPa면 <b class="ok">거의 1/150</b> — SFR·MSR 용기를 얇은 강판으로, 조선소에서 만들 수 있다는 말의 근거임||Wall thickness scales with pressure. From 15.5 to 0.1 MPa it drops to <b class="ok">nearly 1/150</b> - why SFR and MSR vessels are thin plate, and why &#8220;built in a shipyard&#8221; is said at all]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <div class="formula" style="font-size:21px;padding:4px 0 10px">η<sub>max</sub> <span class="op">=</span> 1 − T<sub>c</sub>/T<sub>h</sub>
+    &nbsp;&nbsp;&nbsp;&nbsp; t <span class="op">=</span> p R / (σ<sub>allow</sub> − 0.6 p)</div>
+  <svg viewBox="0 0 800 400" role="img" aria-label="[[열원 온도에 따른 카르노 효율 상한 곡선과 경수로·HTGR의 위치||The Carnot limit against source temperature, with the LWR and HTGR marked]]">
+    <g id="ca-ax"></g>
+    <path id="ca-c" d="" fill="none" stroke="var(--cool)" stroke-width="3"/>
+    <g id="ca-pt"></g>
+    <line id="ca-v" y1="16" y2="340" stroke="var(--amber)" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <circle id="ca-d" r="7" fill="var(--amber)"/>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout hi"><span class="k">[[카르노 상한 η<sub>max</sub>||Carnot limit η<sub>max</sub>]]</span><span class="v" id="ca-e">71<small>%</small></span></div>
+    <div class="readout"><span class="k">[[열원 온도 T<sub>h</sub>||Source temperature T<sub>h</sub>]]</span><span class="v" id="ca-t">1020<small>K</small></span></div>
+    <div class="ctl"><label>[[열원 온도||Source temperature]] <span id="ca-ts">747 °C</span></label>
+      <input type="range" id="ca-sl" min="500" max="1300" step="5" value="1020"></div>
+    <div class="readout good"><span class="k">[[용기 두께 비 (0.1 / 15.5 MPa)||Wall ratio (0.1 / 15.5 MPa)]]</span><span class="v">≈ 1/150</div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, ax=el.querySelector('#ca-ax');
+  const X0=70, X1=760, Y0=340, Y1=16, T0=500, T1=1300;
+  const sx=T=>X0+(T-T0)/(T1-T0)*(X1-X0), sy=e=>Y0-e/0.8*(Y0-Y1);
+  for(let e=0;e<=0.8001;e+=0.2){
+    ax.appendChild(mk('line',{x1:X0,x2:X1,y1:sy(e),y2:sy(e),class:'grid'}));
+    ax.appendChild(mk('text',{x:X0-10,y:sy(e)+4,'text-anchor':'end',class:'lbl'})).textContent=Math.round(e*100)+' %';
+  }
+  for(let T=500;T<=1300;T+=200)
+    ax.appendChild(mk('text',{x:sx(T),y:Y0+20,'text-anchor':'middle',class:'lbl'})).textContent=T+' K';
+  ax.appendChild(mk('text',{x:X1,y:Y0+40,'text-anchor':'end',class:'lbl'})).textContent=TX('열원 온도 T_h (T_c = 300 K)','source temperature T_h (T_c = 300 K)');
+  let d=''; for(let T=T0;T<=T1;T+=10) d+=(d?'L':'M')+sx(T).toFixed(1)+','+sy(1-300/T).toFixed(1);
+  el.querySelector('#ca-c').setAttribute('d',d);
+  const P=el.querySelector('#ca-pt');
+  [[600,0.33,TX('경수로 · 실제 33 %','LWR · actual 33 %'),'var(--hot)'],
+   [1020,0.40,TX('HTGR · 실제 40 %대','HTGR · actual ~40 %'),'var(--ok)']].forEach(p=>{
+    P.appendChild(mk('circle',{cx:sx(p[0]),cy:sy(1-300/p[0]),r:5,fill:'none',stroke:p[3],'stroke-width':2}));
+    P.appendChild(mk('rect',{x:sx(p[0])-5,y:sy(p[1])-5,width:10,height:10,fill:p[3]}));
+    P.appendChild(mk('line',{x1:sx(p[0]),x2:sx(p[0]),y1:sy(1-300/p[0])+6,y2:sy(p[1])-6,stroke:p[3],'stroke-dasharray':'2 3'}));
+    P.appendChild(mk('text',{x:sx(p[0])+12,y:sy(p[1])+5,class:'lbl',fill:p[3]})).textContent=p[2];
+  });
+  const sl=el.querySelector('#ca-sl'), v=el.querySelector('#ca-v'), dot=el.querySelector('#ca-d');
+  function upd(){
+    const T=+sl.value, e=1-300/T;
+    v.setAttribute('x1',sx(T)); v.setAttribute('x2',sx(T));
+    dot.setAttribute('cx',sx(T)); dot.setAttribute('cy',sy(e));
+    el.querySelector('#ca-e').innerHTML=Math.round(e*100)+'<small>%</small>';
+    el.querySelector('#ca-t').innerHTML=T+'<small>K</small>';
+    el.querySelector('#ca-ts').textContent=Math.round(T-273)+' °C';
+  }
+  sl.oninput=upd; upd();
+  if(RM) return;
+  raf(t=>{ if(t>2.6) return; sl.value=Math.round(lerp(600,1020,clamp(t/2.4,0,1))/5)*5; upd(); });
+}});
+
+
+/* ---------------------------------------------------------------- 체적 열용량 */
+S({tag:'VOLUMETRIC HEAT CAPACITY', ov:'[[냉각재별 체적 열용량 ρc<sub>p</sub>||Volumetric heat capacity ρc<sub>p</sub> by coolant]]',
+src:'[[<b>출처</b> 본 교재 1.4절 그림 1.2 · 단위 kJ/(m³·K) · 세로축 로그 눈금 · 흑연은 고체||<b>Source</b> This textbook &#167;1.4, Fig. 1.2 · units kJ/(m³·K) · logarithmic vertical axis · graphite is a solid]]',
+abbr:'[[<b>체적 열용량 ρc<sub>p</sub></b> 같은 부피가 1 K 데워질 때 담는 열 — 작으면 같은 열을 나르려고 더 큰 부피를 더 빨리 밀어야 함 · <b>FLiBe</b> LiF–BeF<sub>2</sub> 불화염||<b>volumetric heat capacity ρc<sub>p</sub></b> heat stored per unit volume per kelvin - the smaller it is, the more volume must be pushed, faster, to carry the same heat · <b>FLiBe</b> the LiF–BeF<sub>2</sub> fluoride salt]]',
+html:`<h2 class="t">[[냉각재별 <em>체적 열용량</em> ρc<sub>p</sub>||<em>Volumetric heat capacity</em> ρc<sub>p</sub> by coolant]]</h2>
+<ul class="b">
+  <li>[[헬륨은 물의 <b class="hot">약 1/225</b>, 흑연의 <b class="hot">약 1/180</b>. 그래서 7 MPa로 누르고 4.5 MW 송풍기를 돌려야 함||Helium holds <b class="hot">about 1/225</b> of water and <b class="hot">about 1/180</b> of graphite. Hence 7 MPa and a 4.5 MW blower]]</li>
+  <li>[[대신 흑연 막대가 길기 때문에 <b class="ok">냉각재가 다 빠져도 며칠을 버팀</b> — 제1부의 이야기가 이 그림 한 장에 다 있음||But the long graphite bar is why <b class="ok">the core survives for days with the coolant gone</b> - all of Part 1 is in this one chart]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 372" role="img" aria-label="[[헬륨 17, 물 3870, 나트륨 1055, FLiBe 4707, 흑연 3078 kJ/(m³·K)의 체적 열용량을 로그 눈금 막대로 비교||Volumetric heat capacity on a log scale - helium 17, water 3870, sodium 1055, FLiBe 4707, graphite 3078 kJ/(m³·K)]]">
+  <g id="vh-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#vh-g');
+  const Y0=300, Y1=18, X0=110, lg=v=>Math.log10(v), sy=v=>Y0-(lg(v)-1)/(lg(1e4)-1)*(Y0-Y1);
+  [10,100,1000,10000].forEach(v=>{
+    G.appendChild(mk('line',{x1:X0,x2:1110,y1:sy(v),y2:sy(v),class:'grid'}));
+    G.appendChild(mk('text',{x:X0-12,y:sy(v)+5,'text-anchor':'end',class:'lbl'})).textContent=v>=1000?fmt(v):String(v);
+  });
+  G.appendChild(mk('text',{x:X0-12,y:Y0+26,'text-anchor':'end',class:'lbl'})).textContent='kJ/(m³·K)';
+  const B=[[TX('헬륨','Helium'),TX('7 MPa, 750 °C','7 MPa, 750 °C'),17,'var(--cool)'],
+           [TX('물','Water'),TX('15.5 MPa, 310 °C','15.5 MPa, 310 °C'),3870,'var(--ink-3)'],
+           [TX('나트륨','Sodium'),TX('0.1 MPa, 500 °C','0.1 MPa, 500 °C'),1055,'var(--hot)'],
+           ['FLiBe',TX('0.1 MPa, 650 °C','0.1 MPa, 650 °C'),4707,'var(--amber)'],
+           [TX('흑연 (고체)','Graphite (solid)'),'1000 K',3078,'var(--ok)']];
+  const W=120, gap=(1110-X0-5*W)/5, bars=[];
+  B.forEach((b,i)=>{
+    const x=X0+gap/2+i*(W+gap), h=Y0-sy(b[2]);
+    const r=mk('rect',{x:x,y:Y0,width:W,height:'0',fill:b[3],opacity:0.85});
+    G.appendChild(r); bars.push([r,h]);
+    const v=mk('text',{x:x+W/2,y:sy(b[2])-10,'text-anchor':'middle','font-family':'var(--mono)','font-size':18,
+      fill:b[3],'font-weight':600}); v.textContent=fmt(b[2]); G.appendChild(v);
+    G.appendChild(mk('text',{x:x+W/2,y:Y0+26,'text-anchor':'middle','font-family':'var(--sans)','font-size':17,
+      fill:'var(--ink)','font-weight':600})).textContent=b[0];
+    G.appendChild(mk('text',{x:x+W/2,y:Y0+48,'text-anchor':'middle',class:'lbl'})).textContent=b[1];
+  });
+  G.appendChild(mk('line',{x1:X0,x2:1110,y1:Y0,y2:Y0,stroke:'var(--rule)'}));
+  if(RM){ bars.forEach(b=>{ b[0].setAttribute('y',Y0-b[1]); b[0].setAttribute('height',b[1]); }); return; }
+  bars.forEach((b,i)=>b[0].animate([{y:Y0+'px',height:'0px'},{y:(Y0-b[1])+'px',height:b[1]+'px'}],
+    {duration:700,delay:150*i,fill:'forwards',easing:'cubic-bezier(.2,.7,.3,1)'}));
+}});
+
+
+/* ---------------------------------------------------------------- 용어 */
+S({tag:'TERMS', ov:'[[용어 정리 — HTGR · VHTR · FHR · MSR||Terms - HTGR, VHTR, FHR and MSR]]',
+src:'[[<b>출처</b> 본 교재 1.5 · 1.6절 · 문헌마다 쓰임이 다르므로 이 교재에서는 아래로 통일함||<b>Source</b> This textbook &#167;&#167;1.5-1.6 · usage varies between sources; this book fixes it as below]]',
+abbr:'[[<b>TRISO</b> 세 겹 피복 연료입자 · <b>AiP</b> 선급의 기본승인 · <b>ABS</b> 미국 선급 · <b>GAMMA+</b> KAERI 가 만든 HTGR 다성분 유동 해석 코드||<b>TRISO</b> tri-structural isotropic coated fuel particle · <b>AiP</b> Approval in Principle from a classification society · <b>ABS</b> American Bureau of Shipping · <b>GAMMA+</b> KAERI&#8217;s multi-component flow code for HTGRs]]',
+html:`<h2 class="t">[[용어 정리 — <em>HTGR · VHTR · FHR · MSR</em>||Terms - <em>HTGR, VHTR, FHR and MSR</em>]]</h2>
+<ul class="b">
+  <li>[[HTR-PM은 출구 750 °C이므로 엄밀히는 <b>HTGR</b>임. VHTR은 900 °C 이상을 노리는 4세대 분류명||HTR-PM runs at 750 °C, so strictly it is an <b>HTGR</b>. VHTR is the Generation IV label for 900 °C and up]]</li>
+  <li>[[<b class="amb">FHR과 액체연료 MSR을 혼동하지 말 것</b> — 둘 다 불화염을 쓰지만 FHR의 연료는 고체 TRISO임||<b class="amb">Do not confuse an FHR with a liquid-fuel MSR</b> - both use fluoride salt, but the FHR&#8217;s fuel is solid TRISO]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <table class="d">
+    <tr><th>[[용어||Term]]</th><th>[[원어||Expansion]]</th><th>[[이 교재의 뜻||Meaning here]]</th></tr>
+    <tr><td>HTGR</td><td>High Temperature Gas-cooled Reactor</td><td>[[헬륨 냉각 · 흑연 감속로 전체||All helium-cooled, graphite-moderated reactors]]</td></tr>
+    <tr><td>VHTR</td><td>Very High Temperature Reactor</td><td>[[출구 900 °C 이상을 노리는 4세대 분류명||Generation IV class aiming at 900 °C and above]]</td></tr>
+    <tr class="mark"><td>FHR</td><td>Fluoride-salt-cooled High-temp. Reactor</td><td>[[연료는 TRISO 고체, 냉각재만 불화염 (Kairos)||Solid TRISO fuel, fluoride salt coolant only (Kairos)]]</td></tr>
+    <tr><td>MSR</td><td>Molten Salt Reactor</td><td>[[연료가 염에 녹아 함께 흐름 (제3부)||Fuel dissolved in the salt, flowing with it (Part 3)]]</td></tr>
+    <tr><td>SFR</td><td>Sodium-cooled Fast Reactor</td><td>[[나트륨 냉각 고속로 (제2부)||Sodium-cooled fast-spectrum reactor (Part 2)]]</td></tr>
+  </table>
+  </div>
+  <div class="side">
+    <blockquote class="q" style="font-size:15px;padding:12px 16px">[[<b>THINK Lab 과제와 닿는 곳</b><br>
+      ① <b>해상 부유식 MSR</b> — 2026-07 KAERI·KRISO·삼성중공업 용융염로 추진 컨테이너선이 ABS 기본승인(AiP). 14장<br>
+      ② <b>GAMMA+</b> — HTGR 공기유입을 풀려고 만든 코드. 6장이 그 이유를 설명함<br>
+      ③ <b>스케일링 · 유동가시화</b> — 나트륨·용융염 대신 물이나 대체유체로 상사 실험을 설계해야 함||<b>Where THINK Lab&#8217;s projects meet this book</b><br>
+      &#9312; <b>Floating MSR</b> - in July 2026 the KAERI-KRISO-Samsung Heavy molten-salt container ship got ABS Approval in Principle. Ch. 14<br>
+      &#9313; <b>GAMMA+</b> - built to solve HTGR air ingress. Ch. 6 explains why<br>
+      &#9314; <b>Scaling and flow visualisation</b> - sodium and salt must be replaced by water or surrogate fluids in similarity tests]]</blockquote>
+  </div>
+</div>`});
+</script>

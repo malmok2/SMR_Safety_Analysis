@@ -1,0 +1,259 @@
+<script>
+/* ================================================================
+   SECTION 03 — TRISO, 알갱이 하나가 격납용기  (교재 3장)
+   ================================================================ */
+SECT('03 · TRISO');
+
+S({bare:true, cls:'div', ov:'[[&#167;03 TRISO — 입자 하나가 격납용기||&#167;03 TRISO - each particle a containment]]',
+html:`[[<div class="no">03</div><h2>TRISO</h2><div class="ln"></div>
+<p>경수로는 핵분열생성물을 막는 벽을 피복재와 건물에 둔다. HTGR은 그 벽을 <b>연료 알갱이 안으로</b> 옮긴다.
+그 주장이 감이 아니라 데이터에 근거한다는 것을 AGR 시험으로 확인한다.</p>||<div class="no">03</div><h2>TRISO</h2><div class="ln"></div>
+<p>A light-water reactor puts the fission-product barrier in the cladding and the building. The HTGR moves it
+<b>inside the fuel grain</b>. The AGR tests show that this rests on data, not on instinct.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 층 구조 */
+S({tag:'TRISO LAYERS', ov:'[[TRISO 입자의 층 구조와 격납의 위치||TRISO layers, and where containment moves to]]',
+src:'[[<b>출처</b> 본 교재 3.1절 그림 3.1 · 표 3.1 · AGR-2 UCO 기준 치수 · 입자 바깥지름 약 855 μm||<b>Source</b> This textbook &#167;3.1, Fig. 3.1, Table 3.1 · AGR-2 UCO dimensions · particle outer diameter about 855 μm]]',
+abbr:'[[<b>UCO</b> 우라늄 산화물+탄화물 혼합 커널 · <b>PyC</b> 열분해탄소 · <b>IPyC · OPyC</b> 안쪽 · 바깥쪽 치밀 열분해탄소층 · <b>SiC</b> 탄화규소 · <b>confinement</b> 압력을 견디는 격납 대신 저압으로 가두는 건물||<b>UCO</b> uranium oxycarbide kernel · <b>PyC</b> pyrolytic carbon · <b>IPyC, OPyC</b> inner and outer dense pyrocarbon · <b>SiC</b> silicon carbide · <b>confinement</b> a low-pressure building in place of a pressure-retaining containment]]',
+html:`<h2 class="t">[[TRISO 입자의 층 구조와 <em>격납의 위치</em>||TRISO layers, and <em>where containment moves to</em>]]</h2>
+<ul class="b">
+  <li>[[경수로의 벽은 펠릿 · 피복재 · 압력경계 · 격납건물 네 겹. HTGR은 이 벽을 <b>지름 0.9 mm도 안 되는 입자 안</b>으로 옮김 — 한 모듈에 약 <b>50억 개</b>||An LWR has four barriers: pellet, cladding, pressure boundary, containment. The HTGR moves them <b>inside a particle under 0.9 mm across</b> - about <b>5 billion</b> per module]]</li>
+  <li>[[방출 한계가 건물 건전성이 아니라 <b>입자의 통계</b>로 정해짐 &#8594; 저압 격납건물(confinement)만 두는 설계가 가능해짐||The release limit is set by <b>particle statistics</b>, not building integrity &#8594; a low-pressure confinement becomes possible]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f3_01', cap:'[[TRISO 입자 단면 (AGR-2 UCO) — 이 알갱이 하나가 완결된 격납용기 · 교재 그림 3.1||A TRISO particle in section (AGR-2 UCO) - each grain a complete containment · textbook Fig. 3.1]]'})}
+  </div>
+  <div class="side" style="width:400px">
+    <table class="d sm">
+      <tr><th>[[층||Layer]]</th><th>[[두께||Thickness]]</th><th>[[역할||Role]]</th></tr>
+      <tr><td>[[커널||Kernel]]</td><td class="n">∅ 425~500 μm</td><td>[[핵분열이 일어나는 곳||where fission happens]]</td></tr>
+      <tr><td>[[완충층||Buffer]]</td><td class="n">~100 μm</td><td>[[핵분열 기체를 담고 팽윤 흡수||holds fission gas, absorbs swelling]]</td></tr>
+      <tr><td>IPyC</td><td class="n">40 μm</td><td>[[커널 화학종이 SiC에 닿지 않게||keeps kernel species off the SiC]]</td></tr>
+      <tr class="mark"><td>SiC</td><td class="n">35 μm</td><td>[[실제 압력경계 · 금속 핵종 차단||the real pressure boundary, stops metals]]</td></tr>
+      <tr><td>OPyC</td><td class="n">40 μm</td><td>[[SiC 보호 · 매트릭스와 결합||protects SiC, bonds to matrix]]</td></tr>
+    </table>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 페블 */
+S({tag:'PEBBLE TO PARTICLE', ov:'[[페블에서 TRISO 입자까지 — 크기의 사슬||From pebble to TRISO particle - the chain of scales]]',
+src:'[[<b>출처</b> 본 교재 3.1절 그림 3.2 · 4.2절 표 4.1 · HTR-PM 페블 ∅ 60 mm(연료영역 50 mm) · 페블당 중금속 7.0 g · 평형 시 모듈당 420,000개||<b>Source</b> This textbook &#167;3.1, Fig. 3.2; &#167;4.2, Table 4.1 · HTR-PM pebble ∅ 60 mm (50 mm fuelled zone) · 7.0 g heavy metal per pebble · 420,000 pebbles per module at equilibrium]]',
+html:`<h2 class="t">[[페블에서 <em>TRISO 입자</em>까지 — 크기의 사슬||From pebble to <em>TRISO particle</em> - the chain of scales]]</h2>
+<ul class="b">
+  <li>[[지름 60 mm 흑연 페블 하나에 TRISO 입자 <b>약 12,000개</b>(HTR-PM)가 흑연 매트릭스에 박혀 있음||Each 60 mm graphite pebble holds <b>about 12,000</b> TRISO particles (HTR-PM) embedded in a graphite matrix]]</li>
+  <li>[[바깥 5 mm는 연료 없는 흑연 껍질 — 페블끼리 부딪혀도 입자가 드러나지 않게 함||The outer 5 mm is fuel-free graphite - so particles are not exposed when pebbles knock together]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f3_02', cap:'[[연료구(∅ 60 mm) &#8594; 단면 &#8594; TRISO 피복입자(∅ ~0.92 mm) &#8594; 연료 커널(∅ ~0.5 mm) · 교재 그림 3.2||Fuel sphere (∅ 60 mm) &#8594; section &#8594; TRISO coated particle (∅ ~0.92 mm) &#8594; fuel kernel (∅ ~0.5 mm) · textbook Fig. 3.2]]'})}
+  </div>
+  <div class="side">
+    <div class="readout hi"><span class="k">[[페블 지름 · 연료영역||Pebble · fuelled zone]]</span><span class="v">60<small>mm · 50 mm</small></span></div>
+    <div class="readout"><span class="k">[[페블당 입자 수 (HTR-PM)||Particles per pebble (HTR-PM)]]</span><span class="v">~12 000</div>
+    <div class="readout"><span class="k">[[페블당 중금속||Heavy metal per pebble]]</span><span class="v">7.0<small>g</small></span></div>
+    <div class="readout good"><span class="k">[[모듈당 페블 (평형)||Pebbles per module (equilibrium)]]</span><span class="v">420 000</div>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- SiC 응력 · 아메바 */
+S({tag:'SiC STRESS · AMOEBA', ov:'[[SiC 응력과 CO 에 의한 아메바 효과 — UCO 를 쓰는 이유||SiC stress and the CO amoeba effect - why UCO]]',
+src:'[[<b>출처</b> 본 교재 3.2절 · 얇은 구각 근사 · 그림은 아메바 효과의 개념도(치수·속도는 임의)||<b>Source</b> This textbook &#167;3.2 · thin spherical-shell approximation · the drawing is a concept sketch of the amoeba effect (sizes and speed not to scale)]]',
+abbr:'[[<b>접선 응력 σ<sub>θ</sub></b> 구각을 원둘레 방향으로 잡아당기는 응력 · <b>아메바 효과</b> 온도 구배를 따라 CO/CO<sub>2</sub> 가 탄소를 옮겨 커널이 뜨거운 쪽으로 이동하는 현상 · <b>UC<sub>2</sub></b> 우라늄 탄화물||<b>hoop stress σ<sub>θ</sub></b> the circumferential tensile stress in a spherical shell · <b>amoeba effect</b> CO/CO<sub>2</sub> carrying carbon along the temperature gradient so the kernel migrates toward the hot side · <b>UC<sub>2</sub></b> uranium dicarbide]]',
+html:`<h2 class="t">[[<em>SiC 응력</em>과 CO 에 의한 아메바 효과 — UCO 를 쓰는 이유||<em>SiC stress</em> and the CO amoeba effect - why UCO]]</h2>
+<ul class="b">
+  <li>[[완충층을 두껍게 하면 기체 부피가 커져 p가 떨어지고, SiC를 두껍게 하면 σ<sub>θ</sub>가 떨어짐 — <b>고연소도에는 둘 다 필요</b>함||A thicker buffer gives the gas more room and lowers p; a thicker SiC lowers σ<sub>θ</sub> - <b>high burnup needs both</b>]]</li>
+  <li>[[실제로는 CO가 먼저 옴 — 내압을 올리고, 커널을 뜨거운 쪽으로 옮김. <b class="amb">UCO는 탄화물(UC<sub>2</sub>)이 남는 산소를 잡아 CO 생성 자체를 막음</b>||In practice CO comes first - it raises pressure and walks the kernel toward the hot side. <b class="amb">In UCO the carbide (UC<sub>2</sub>) takes up the excess oxygen, so CO never forms</b>]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 790 360" role="img" aria-label="[[UO2 커널이 온도 구배를 따라 뜨거운 쪽 SiC 로 이동하는 아메바 효과와, UCO 커널이 제자리에 머무는 모습의 비교||An UO2 kernel migrating up the temperature gradient toward the SiC, next to a UCO kernel that stays put]]">
+    <defs><linearGradient id="am-grad" x1="0" x2="1"><stop offset="0" stop-color="var(--cool)" stop-opacity=".25"/><stop offset="1" stop-color="var(--hot)" stop-opacity=".35"/></linearGradient></defs>
+    <rect x="0" y="36" width="790" height="250" fill="url(#am-grad)"/>
+    <text x="10" y="26" class="lbl" fill="var(--cool)">[[차가운 쪽||cold side]]</text>
+    <text x="780" y="26" class="lbl" fill="var(--hot)" text-anchor="end">[[뜨거운 쪽 &#8594; 온도 구배||hot side &#8594; temperature gradient]]</text>
+    <g id="am-a" transform="translate(200,160)"></g>
+    <g id="am-b" transform="translate(590,160)"></g>
+    <text x="200" y="316" text-anchor="middle" class="val" fill="var(--hot)">UO₂</text>
+    <text x="200" y="340" text-anchor="middle" class="lbl">[[CO/CO₂ 가 탄소를 옮김 &#8594; 커널이 SiC 로 다가감||CO/CO₂ carries carbon &#8594; kernel closes on the SiC]]</text>
+    <text x="590" y="316" text-anchor="middle" class="val" fill="var(--ok)">UCO</text>
+    <text x="590" y="340" text-anchor="middle" class="lbl">[[UC₂ 가 산소를 잡음 &#8594; CO 없음 &#8594; 제자리||UC₂ takes the oxygen &#8594; no CO &#8594; stays put]]</text>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="formula" style="font-size:22px">σ<sub>θ</sub> <span class="op">=</span> p r / (2 t<sub>SiC</sub>)</div>
+    <div class="formula" style="font-size:15px;text-align:left;line-height:1.8">UO₂ + FP <span class="op">&#8594;</span> [[산화물||oxides]] + O<sub>[[잉여||excess]]</sub><br>C + O <span class="op">&#8594;</span> CO</div>
+    <div class="readout warn"><span class="k">[[CO 가 끼치는 해 두 가지||Two harms from CO]]</span><span class="v" style="font-size:16px;line-height:1.5">[[① 내압 상승<br>② 커널 이동 &#8594; SiC 접촉||&#9312; higher pressure<br>&#9313; kernel migration &#8594; SiC contact]]</span></div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl;
+  function particle(g){
+    [[118,'var(--ok)',0.35],[104,'var(--ink-3)',0.9],[90,'var(--ink-3)',0.35],[76,'var(--panel)',1]].forEach(l=>
+      g.appendChild(mk('circle',{r:l[0],fill:l[1],opacity:l[2]})));
+    g.appendChild(mk('circle',{r:104,fill:'none',stroke:'var(--amber)','stroke-width':6,opacity:0.9}));
+    const k=mk('circle',{cx:0,cy:0,r:40,fill:'var(--hot)',opacity:0.9}); g.appendChild(k);
+    return k;
+  }
+  const ka=particle(el.querySelector('#am-a')), kb=particle(el.querySelector('#am-b'));
+  kb.setAttribute('fill','var(--ok)');
+  el.querySelector('#am-a').appendChild(mk('text',{x:0,y:-110,'text-anchor':'middle',class:'lbl',fill:'var(--amber)'})).textContent='SiC';
+  el.querySelector('#am-b').appendChild(mk('text',{x:0,y:-110,'text-anchor':'middle',class:'lbl',fill:'var(--amber)'})).textContent='SiC';
+  if(RM){ ka.setAttribute('cx',52); return; }
+  raf(t=>{ ka.setAttribute('cx',(52*clamp(t/3,0,1)).toFixed(1)); });
+}});
+
+
+/* ---------------------------------------------------------------- AGR-1 */
+S({tag:'AGR-1 HEATING TESTS', ov:'[[AGR-1 조사 후 가열시험 — 온도에 따른 SiC 파손분율||AGR-1 post-irradiation heating - SiC failure fraction against temperature]]',
+src:'[[<b>출처</b> 본 교재 3.3절 표 3.2 · 그림 3.3 · AGR-1(2006~2009, 620 EFPD) · UCO 약 30만 입자 · 연소도 11.3~19.6 % FIMA · 시간평균 최고온도 1069~1197 °C · 로 밖 노(FACS)에서 300 h 가열||<b>Source</b> This textbook &#167;3.3, Table 3.2, Fig. 3.3 · AGR-1 (2006-2009, 620 EFPD) · about 300,000 UCO particles · 11.3-19.6 % FIMA · time-averaged peak 1069-1197 °C · 300 h in the FACS furnace]]',
+abbr:'[[<b>AGR</b> 미국 차세대 가스로 연료 시험 프로그램 · <b>ATR</b> INL 의 시험로 · <b>EFPD</b> 전출력 환산 일수 · <b>FIMA</b> 초기 중금속 원자 중 핵분열한 비율 · <b>FACS</b> 조사 후 가열시험 노||<b>AGR</b> the US Advanced Gas Reactor fuel programme · <b>ATR</b> INL&#8217;s Advanced Test Reactor · <b>EFPD</b> effective full-power days · <b>FIMA</b> fissions per initial metal atom · <b>FACS</b> the post-irradiation heating furnace]]',
+html:`<h2 class="t">[[AGR-1 조사 후 <em>가열시험</em> — 온도에 따른 SiC 파손분율||AGR-1 post-irradiation <em>heating</em> - SiC failure fraction against temperature]]</h2>
+<ul class="b">
+  <li>[[읽을 것은 숫자가 아니라 <b>기울기</b>임 — 1600 &#8594; 1800 °C, 200 K에 파손분율 <b class="hot">15배</b>. 설계한계 1600 °C는 곡선이 꺾이기 직전에 놓인 값임||Read the <b>slope</b>, not the numbers - 1600 &#8594; 1800 °C, 200 K, and the failure fraction rises <b class="hot">15-fold</b>. The 1600 °C limit sits just before the curve bends]]</li>
+  <li>[[조사 중 TRISO(3층) 파손 <b class="ok">0건</b>. 1800 °C에서도 전층 파손은 16,500개 중 2개||<b class="ok">No</b> TRISO (three-layer) failures in irradiation. Even at 1800 °C, only 2 of 16,500 failed through all layers]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f3_03', cap:'[[AGR-1 가열시험 (약 300 h 유지, 30만 입자) — 파랑 SiC 층 파손(실측) · 회색 95 % 신뢰상한 · 빨강 TRISO 전층 · 교재 그림 3.3||AGR-1 heating tests (about 300 h, 300,000 particles) - blue SiC failure (measured), grey 95 % upper bound, red all-layer failure · textbook Fig. 3.3]]'})}
+  </div>
+  <div class="side" style="width:380px">
+    <table class="d sm">
+      <tr><th>[[조건||Condition]]</th><th>[[SiC 파손||SiC failed]]</th><th>[[95 % 상한||95 % bound]]</th><th>[[전층||All]]</th></tr>
+      <tr><td>[[조사 직후||As irradiated]]</td><td class="n">1.3×10⁻⁵</td><td class="n">3.1×10⁻⁵</td><td class="n">0</td></tr>
+      <tr class="mark"><td>1600 °C</td><td class="n">9.1×10⁻⁵</td><td class="n">2.4×10⁻⁴</td><td class="n">0</td></tr>
+      <tr><td>1700 °C</td><td class="n">5.6×10⁻⁴</td><td class="n">1.1×10⁻³</td><td class="n">0</td></tr>
+      <tr><td>1800 °C</td><td class="n">1.4×10⁻³</td><td class="n">2.0×10⁻³</td><td class="n">2/16 500</td></tr>
+    </table>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- AGR-2 · 5/6/7 · 은 */
+S({tag:'AGR-2 · AGR-5/6/7 · SILVER', ov:'[[AGR-2와 AGR-5/6/7, 그리고 TRISO의 약점 은(Ag-110m)||AGR-2 and AGR-5/6/7, and TRISO&#8217;s weak spot - silver (Ag-110m)]]',
+src:'[[<b>출처</b> 본 교재 3.3절 · AGR-5/6/7(2018~2020) 캡슐 1 파손은 가스라인 누설에 의한 시험장치 결함으로 보고됨||<b>Source</b> This textbook &#167;3.3 · the capsule 1 failures in AGR-5/6/7 (2018-2020) were reported as a gas-line leak in the test rig]]',
+abbr:'[[<b>Ag-110m</b> 은의 방사성 동위원소 — SiC 를 통과함 · <b>자격시험</b> 인허가에 쓰기 위해 정해진 조건으로 성능을 입증하는 시험 · <b>정비 피폭선량</b> 정비 작업자가 받는 방사선량||<b>Ag-110m</b> a radioactive silver isotope that passes through SiC · <b>qualification test</b> proving performance under set conditions for licensing · <b>maintenance dose</b> radiation dose to maintenance workers]]',
+html:`<h2 class="t">[[AGR-2와 AGR-5/6/7, 그리고 TRISO의 약점 <em>은(Ag-110m)</em>||AGR-2 and AGR-5/6/7, and TRISO&#8217;s weak spot - <em>silver (Ag-110m)</em>]]</h2>
+<ul class="b">
+  <li>[[숫자만 인용하면 안 됨 — AGR-5/6/7 캡슐 1의 180~440건은 <b>가스라인 누설에 의한 실험 결함</b>이지 연료 성능이 아님||Never quote the number alone - the 180-440 failures in AGR-5/6/7 capsule 1 were <b>a gas-line leak in the rig</b>, not fuel performance]]</li>
+  <li>[[발표에서 &#8220;TRISO는 완벽하다&#8221;고 하면 반드시 <b class="hot">은</b>에 대한 질문이 들어옴||Say &#8220;TRISO is perfect&#8221; in a talk and the question about <b class="hot">silver</b> is certain to come]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 330" role="img" aria-label="[[AGR-2의 UCO와 UO2 비교, AGR-5/6/7 자격시험 결과, 은 방출률을 세 칸으로 정리||Three panels - AGR-2 UCO against UO2, AGR-5/6/7 qualification results, and silver release]]">
+  <g id="ag-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#ag-g'), gs=[];
+  const C=[
+    ['AGR-2','var(--ok)',TX('UCO 와 UO₂ 를 한 캡슐에','UCO and UO₂ in one capsule'),
+     [TX('같은 조건으로 조사하고 가열함','irradiated and heated alike'),
+      TX('UCO — 1800 °C 에서만 SiC 파손','UCO - SiC fails only at 1800 °C'),
+      TX('UO₂ — 1600 °C 에서 이미 여러 개','UO₂ - several already at 1600 °C'),
+      TX('SiC 의 CO 부식 흔적이 명확함','clear CO attack on the SiC'),
+      TX('&#8594; 3.2절의 화학이 실험으로 확인됨','&#8594; the chemistry is confirmed')]],
+    ['AGR-5/6/7','var(--cool)',TX('인허가용 자격시험 (2018~2020)','licensing qualification (2018-2020)'),
+     [TX('약 57만 입자','about 570,000 particles'),
+      TX('최고 연소도 15.3 % FIMA','peak burnup 15.3 % FIMA'),
+      TX('최고 시간평균온도 1432 °C','peak time-averaged 1432 °C'),
+      TX('캡슐 4 · 5 조사 중 파손 0건','capsules 4 and 5 - zero failures'),
+      TX('캡슐 1 의 180~440건 = 장치 결함','capsule 1, 180-440 = rig defect')]],
+    [TX('은 Ag-110m','Silver Ag-110m'),'var(--hot)',TX('SiC 가 못 잡는 유일한 핵종','the one species SiC cannot hold'),
+     [TX('AGR-1 캡슐 평균 방출률 0.012~0.38','AGR-1 capsule release 0.012-0.38'),
+      TX('1695 °C 과도시험에서 약 7 %','about 7 % in a 1695 °C transient'),
+      TX('안전한계와는 무관함','irrelevant to safety limits'),
+      TX('열교환기 표면에 침착함','deposits on heat-exchanger surfaces'),
+      TX('&#8594; 정비 피폭선량에 직결','&#8594; drives maintenance dose')]]];
+  C.forEach((c,i)=>{
+    const g=mk('g',{transform:'translate('+(i*378)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:362,height:318,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:362,height:3,fill:c[1]}));
+    g.appendChild(mk('text',{x:20,y:42,'font-family':'var(--mono)','font-size':22,fill:c[1],'font-weight':600})).textContent=c[0];
+    g.appendChild(mk('text',{x:20,y:70,'font-family':'var(--sans)','font-size':16,fill:'var(--ink)','font-weight':600})).textContent=c[2];
+    c[3].forEach((t,j)=>{
+      const e=mk('text',{x:20,y:112+j*42,'font-family':'var(--sans)','font-size':15.5,
+        fill:j===4?c[1]:'var(--ink-2)','font-weight':j===4?600:300});
+      e.textContent=t.replace('&#8594;','→'); g.appendChild(e);
+    });
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:360,delay:220*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 페블 순환 */
+S({tag:'PEBBLE RECIRCULATION', ov:'[[페블 순환과 온라인 재장전 — 이점 셋, 대가 셋||Pebble recirculation and online refuelling - three gains, three costs]]',
+src:'[[<b>출처</b> 본 교재 3.4절 그림 3.4 · 3.5 · HTR-PM 페블은 평균 약 15회 노심을 통과한 뒤 90 GWd/tU로 배출||<b>Source</b> This textbook &#167;3.4, Figs. 3.4-3.5 · HTR-PM pebbles pass the core about 15 times on average and leave at 90 GWd/tU]]',
+abbr:'[[<b>온라인 재장전</b> 원자로를 세우지 않고 연료를 넣고 빼는 것 · <b>잉여반응도</b> 임계에 필요한 것보다 더 가진 반응도 · <b>프리즘형</b> 육각 흑연 블록에 연료를 꽂는 HTGR · <b>GWd/tU</b> 우라늄 1톤당 낸 열에너지(연소도)||<b>online refuelling</b> loading and unloading fuel without shutting down · <b>excess reactivity</b> reactivity beyond what criticality needs · <b>prismatic</b> an HTGR with fuel in hexagonal graphite blocks · <b>GWd/tU</b> thermal energy per tonne of uranium (burnup)]]',
+html:`<h2 class="t">[[<em>페블 순환</em>과 온라인 재장전 — 이점 셋, 대가 셋||<em>Pebble recirculation</em> and online refuelling - three gains, three costs]]</h2>
+<ul class="b">
+  <li>[[<b class="ok">이점</b> — 매일 새 연료가 들어가 잉여반응도가 작음 · 정지 없이 운전 · 연소도 분포가 평평함||<b class="ok">Gains</b> - fresh fuel every day keeps excess reactivity small, no shutdowns, flat burnup]]</li>
+  <li>[[<b class="hot">대가</b> — 기계장치가 복잡함 · 깨진 페블의 흑연 분진이 계통을 돎 · 노심 내 연료 위치를 <b>확률적으로만</b> 앎(노심 계산이 통계적이 됨)||<b class="hot">Costs</b> - complex machinery, graphite dust from broken pebbles, and fuel positions known <b>only statistically</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+${PH({src:'f3_04', w:3, cap:'[[페블 순환 — 배출 &#8594; 파손품 선별 &#8594; 연소도 측정 &#8594; 재장전 또는 폐기 · 그림 3.4||Pebble circuit - discharge &#8594; broken-pebble sorting &#8594; burnup gauge &#8594; reload or discard · Fig. 3.4]]'},
+     {src:'f3_05', w:2, cap:'[[실물 크기 연료취급계통 시험설비 · 그림 3.5||Full-scale fuel-handling test rig · Fig. 3.5]]'})}
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 흑연 산화 */
+S({tag:'GRAPHITE OXIDATION', ov:'[[흑연 산화의 세 영역 — 온도에 따라 바뀌는 지배 기구||Three regimes of graphite oxidation, by temperature]]',
+src:'[[<b>출처</b> 본 교재 3.5절 · 활성화에너지는 NBG-18 187 kJ/mol, IG-110 222 kJ/mol(영역 1)||<b>Source</b> This textbook &#167;3.5 · activation energy 187 kJ/mol for NBG-18 and 222 kJ/mol for IG-110 (regime 1)]]',
+abbr:'[[<b>활성화에너지</b> 반응 속도가 온도에 얼마나 민감한지를 정하는 값 · <b>아레니우스 식</b> 반응 속도 = A·exp(−E/RT) · <b>경계층 물질전달</b> 표면 근처 기체층을 통해 산소가 공급되는 과정||<b>activation energy</b> sets how sensitive a reaction rate is to temperature · <b>Arrhenius law</b> rate = A·exp(−E/RT) · <b>boundary-layer mass transfer</b> oxygen supply through the gas layer next to the surface]]',
+html:`<h2 class="t">[[흑연 산화의 <em>세 영역</em> — 온도에 따라 바뀌는 지배 기구||Three regimes of <em>graphite oxidation</em>, by temperature]]</h2>
+<ul class="b">
+  <li>[[흑연은 공기와 수증기 모두와 반응함. 지배 기구가 온도 영역마다 완전히 달라짐||Graphite reacts with both air and steam. The controlling mechanism is entirely different in each temperature range]]</li>
+  <li>[[어느 영역인지 먼저 판정하지 않고 <b class="hot">하나의 아레니우스 식을 전 구간에 쓰면 답이 크게 틀림</b>||Using <b class="hot">one Arrhenius law across all ranges without first deciding the regime gives badly wrong answers</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 400" role="img" aria-label="[[온도 축 위에 화학반응 지배, 공극 확산 지배, 경계층 물질전달 지배의 세 영역과 각각의 특징||A temperature axis with the chemical, pore-diffusion and boundary-layer regimes and what marks each]]">
+  <g id="go-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#go-g'), gs=[];
+  const Z=[[TX('영역 1 · 화학반응 지배','Regime 1 · chemical control'),TX('약 600~750 °C','about 600-750 °C'),'var(--ok)',
+            [TX('산소가 3~4 mm 까지 침투','oxygen penetrates 3-4 mm'),TX('내부까지 골고루 갉아먹음','attacks the interior evenly'),TX('활성화에너지 큼 · 온도에 민감','high activation energy, T-sensitive'),'NBG-18 187 · IG-110 222 kJ/mol']],
+           [TX('영역 2 · 공극 확산 지배','Regime 2 · pore diffusion'),TX('중간 온도','intermediate'),'var(--amber)',
+            [TX('공극 속 확산이 속도를 정함','diffusion in pores sets the rate'),TX('활성화에너지가 절반으로','activation energy halves'),TX('침투 깊이 줄어듦','shallower penetration'),'']],
+           [TX('영역 3 · 경계층 물질전달','Regime 3 · boundary layer'),TX('900 °C 이상','above 900 °C'),'var(--hot)',
+            [TX('표면만 깎임','only the surface erodes'),TX('온도 의존성이 거의 없음','almost no T-dependence'),TX('산소 공급 속도가 한계','oxygen supply is the limit'),'']]];
+  Z.forEach((z,i)=>{
+    const g=mk('g',{transform:'translate('+(i*378)+',0)',opacity:0});
+    g.appendChild(mk('rect',{width:362,height:44,fill:z[2],opacity:0.22}));
+    g.appendChild(mk('text',{x:16,y:28,'font-family':'var(--mono)','font-size':15,fill:z[2],'font-weight':600})).textContent=z[1];
+    g.appendChild(mk('rect',{y:54,width:362,height:340,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('text',{x:18,y:100,'font-family':'var(--sans)','font-size':19,fill:z[2],'font-weight':600})).textContent=z[0];
+    z[3].forEach((t,j)=>{ if(!t) return;
+      g.appendChild(mk('text',{x:18,y:160+j*56,'font-family':j===3?'var(--mono)':'var(--sans)','font-size':j===3?14:16,
+        fill:j===3?'var(--ink)':'var(--ink-2)','font-weight':300})).textContent=t; });
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:360,delay:200*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 공급망 */
+S({tag:'FUEL SUPPLY CHAIN', ov:'[[TRISO 연료 공급망 — 중국 · 미국 · 한국||The TRISO fuel supply chain - China, the US and Korea]]',
+src:'[[<b>출처</b> 본 교재 3.6절 그림 3.6 · <b>2026년 8~9월 기준</b> · TX-1 은 미국 최초 HALEU 취급 Category 2 핵연료 공장 인가||<b>Source</b> This textbook &#167;3.6, Fig. 3.6 · <b>as of August-September 2026</b> · TX-1 holds the first US Category 2 licence for a HALEU fuel plant]]',
+abbr:'[[<b>HALEU</b> 농축도 5~20 % 우라늄 · <b>TRISO-X</b> X-energy 의 연료 자회사 · <b>Category 2</b> 미국 핵물질 취급 시설 등급(중간 위험도)||<b>HALEU</b> uranium enriched to 5-20 % · <b>TRISO-X</b> X-energy&#8217;s fuel subsidiary · <b>Category 2</b> the US facility class for moderate-strategic-significance material]]',
+html:`<h2 class="t">[[TRISO <em>연료 공급망</em> — 중국 · 미국 · 한국||The TRISO <em>fuel supply chain</em> - China, the US and Korea]]</h2>
+<ul class="b">
+  <li>[[TRISO는 기술 문제가 아니라 <b>공급망 문제</b>임. 중국은 이미 넘어섰고 미국은 따라가는 중이며, <b class="hot">한국에는 상용 생산 능력이 없음</b>||TRISO is a <b>supply-chain problem</b>, not a technology problem. China is past it, the US is catching up, and <b class="hot">Korea has no commercial production</b>]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  ${PH({src:'f3_06', cap:'[[바오터우 상용 페블 연료공장 — 2013년 착공 · 2017년 12월까지 30만 개 생산 · 교재 그림 3.6||The Baotou commercial pebble plant - construction 2013, 300,000 pebbles by December 2017 · textbook Fig. 3.6]]'})}
+  </div>
+  <div class="side">
+    <div class="readout good"><span class="k">[[중국 · 바오터우||China · Baotou]]</span><span class="v" style="font-size:16px;line-height:1.5">[[연산 30만 개 체제. 2017-12 까지 30만 개 생산||300,000 pebbles a year; 300,000 made by Dec 2017]]</span></div>
+    <div class="readout hi"><span class="k">[[미국 · TRISO-X TX-1 (오크리지)||US · TRISO-X TX-1 (Oak Ridge)]]</span><span class="v" style="font-size:16px;line-height:1.5">[[연산 70만 개 · 우라늄 5 t · Xe-100 11기분. 2026-08 골조 완성, 내부 설비 공사 중||700,000 pebbles, 5 t U a year - eleven Xe-100s. Shell done Aug 2026, fit-out under way]]</span></div>
+    <div class="readout warn"><span class="k">[[한국||Korea]]</span><span class="v" style="font-size:16px;line-height:1.5">[[상용 생산 없음. 2024-07 시작한 445억 원 민관 과제가 이 공백을 메울지가 관전 포인트||No commercial production. Whether the ₩44.5 bn public-private project (from July 2024) fills the gap is the question]]</span></div>
+  </div>
+</div>`});
+</script>

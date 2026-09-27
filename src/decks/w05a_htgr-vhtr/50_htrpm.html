@@ -1,0 +1,380 @@
+<script>
+/* ================================================================
+   SECTION 04 — HTR-PM 을 뜯어본다  (교재 4장)
+   ================================================================ */
+SECT('04 · HTR-PM');
+
+S({bare:true, cls:'div', ov:'[[&#167;04 HTR-PM — 계통과 기기||&#167;04 HTR-PM - systems and components]]',
+html:`[[<div class="no">04</div><h2>HTR-PM을 뜯어본다</h2><div class="ln"></div>
+<p>세계에서 유일하게 상업운전 중인 4세대 원자로를 기기 단위로 본다. 공개된 설계값이 서로 맞는지
+<b>손으로 검산</b>하고, 소개 문구의 &#8220;정격&#8221;과 실제 운전을 구분한다.</p>||<div class="no">04</div><h2>Taking HTR-PM apart</h2><div class="ln"></div>
+<p>The only Generation IV reactor in commercial operation, component by component. We <b>check by hand</b>
+that the published design values agree, and separate the brochure&#8217;s &#8220;rated&#8221; from how it actually runs.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 헬륨 유로 */
+S({tag:'HELIUM FLOW PATH', ov:'[[HTR-PM 한 모듈의 헬륨 유로||The helium flow path in one HTR-PM module]]',
+src:'[[<b>출처</b> 본 교재 4.1절 · 그림은 유로 순서를 보이는 개념도(치수 임의) · 산둥성 스다오완 · 칭화대 INET 설계 · 뿌리는 2000-12 초임계한 HTR-10(10 MWt)||<b>Source</b> This textbook &#167;4.1 · the drawing is a concept sketch of the flow order, not to scale · Shidaowan, Shandong · designed by Tsinghua INET · descended from HTR-10 (10 MWt, critical December 2000)]]',
+abbr:'[[<b>HTR-PM</b> High Temperature Reactor – Pebble-bed Module · <b>INET</b> 칭화대 핵능신기술연구원 · <b>열가스덕트</b> 뜨거운 헬륨을 증기발생기로 보내는 굵은 관(동축 — 안은 뜨겁고 바깥은 찬 헬륨)||<b>HTR-PM</b> High Temperature Reactor – Pebble-bed Module · <b>INET</b> Tsinghua&#8217;s Institute of Nuclear and New Energy Technology · <b>hot gas duct</b> the large coaxial pipe to the steam generator - hot inside, cold outside]]',
+html:`<h2 class="t">[[HTR-PM 한 모듈의 <em>헬륨 유로</em>||The <em>helium flow path</em> in one HTR-PM module]]</h2>
+<ul class="b">
+  <li>[[250 MWt 모듈 2기가 터빈 1대를 공유함 — 500 MWt / 211 MWe(총). <b>2021-12 계통 연결 · 2023-12-05 상업운전</b>, 세계 최초의 상용 4세대로||Two 250 MWt modules share one turbine - 500 MWt / 211 MWe gross. <b>Grid December 2021, commercial 5 December 2023</b> - the first commercial Gen IV plant]]</li>
+  <li>[[찬 헬륨이 <b class="cool">용기 벽을 따라 올라가</b> 위에서 방향을 바꾸고, 페블 사이를 <b class="hot">아래로 지나며 데워져</b> 하부 열가스덕트로 나감||Cold helium <b class="cool">rises along the vessel wall</b>, turns at the top, and <b class="hot">heats up flowing down</b> through the pebbles to the hot gas duct at the bottom]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 790 404" role="img" aria-label="[[송풍기에서 나온 찬 헬륨이 용기 벽의 통로로 올라가 노심을 아래로 지나 데워지고, 열가스덕트로 증기발생기에 가서 열을 넘긴 뒤 송풍기로 돌아오는 유로||Cold helium from the circulator rises in the wall passage, heats flowing down the core, goes through the hot gas duct to the steam generator, gives up its heat and returns to the circulator]]">
+    <g id="hp-g"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">[[노심 출구 · 열가스덕트||Core outlet · hot duct]]</span><span class="v">750<small>°C</small></span></div>
+    <div class="readout hi"><span class="k">[[노심 입구 · 찬 헬륨||Core inlet · cold helium]]</span><span class="v">250<small>°C</small></span></div>
+    <div class="readout"><span class="k">[[압력 · 유량 (모듈당)||Pressure · flow (per module)]]</span><span class="v">7.0<small>MPa · 96 kg/s</small></span></div>
+    <div class="readout good"><span class="k">[[모듈 열출력||Module thermal power]]</span><span class="v">250<small>MWt × 2</small></span></div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#hp-g');
+  /* 원자로용기 */
+  G.appendChild(mk('rect',{x:60,y:20,width:200,height:360,rx:34,fill:'var(--panel)',stroke:'var(--ink-3)','stroke-width':2}));
+  /* 흑연 반사체 */
+  G.appendChild(mk('rect',{x:78,y:40,width:164,height:320,rx:18,fill:'var(--ok)',opacity:0.13,stroke:'var(--ok)','stroke-opacity':0.5}));
+  /* 페블 노심 */
+  G.appendChild(mk('rect',{x:112,y:78,width:96,height:236,fill:'var(--ground)',stroke:'var(--rule)'}));
+  for(let r=0;r<11;r++) for(let c=0;c<4;c++){
+    const cx=124+c*24+(r%2)*12, cy=90+r*21; if(cx>202) continue;
+    G.appendChild(mk('circle',{cx:cx,cy:cy,r:9,fill:'var(--ink-3)',opacity:0.35}));
+  }
+  /* 동축 열가스덕트 */
+  G.appendChild(mk('rect',{x:258,y:318,width:156,height:44,fill:'var(--panel)',stroke:'var(--ink-3)','stroke-width':1.6}));
+  G.appendChild(mk('rect',{x:258,y:333,width:156,height:14,fill:'var(--hot)',opacity:0.28}));
+  /* 증기발생기 */
+  G.appendChild(mk('rect',{x:412,y:84,width:150,height:296,rx:26,fill:'var(--panel)',stroke:'var(--ink-3)','stroke-width':2}));
+  let z='M444,150'; for(let i=0;i<9;i++) z+=' L'+(i%2?444:530)+','+(162+i*18);
+  G.appendChild(mk('path',{d:z,fill:'none',stroke:'var(--cool)','stroke-width':2.4,opacity:0.7}));
+  /* 송풍기 — 증기발생기 위 */
+  G.appendChild(mk('rect',{x:442,y:30,width:90,height:54,rx:8,fill:'var(--panel)',stroke:'var(--amber)','stroke-width':2}));
+  G.appendChild(mk('circle',{cx:487,cy:57,r:15,fill:'none',stroke:'var(--amber)','stroke-width':2}));
+  /* 유로 — 찬 쪽, 뜨거운 쪽, 증기발생기 안에서 식는 쪽 */
+  const pc=mk('path',{d:'M510,58 H548 V326 H232 V40 H160',fill:'none',stroke:'var(--cool)','stroke-width':1.2,'stroke-dasharray':'3 5',opacity:0.5});
+  const ph=mk('path',{d:'M160,72 V340 H487 V270',fill:'none',stroke:'var(--hot)','stroke-width':1.2,'stroke-dasharray':'3 5',opacity:0.5});
+  const pg=mk('path',{d:'M487,270 V150 M487,150 V78',fill:'none',stroke:'none'});
+  const pg2=mk('path',{d:'M487,270 V74',fill:'none',stroke:'none'});
+  [pc,ph,pg2].forEach(p=>G.appendChild(p));
+  flow(pc,{n:16,color:'var(--cool)',r:4,speed:0.07});
+  flow(ph,{n:14,color:'var(--hot)',r:4,speed:0.08});
+  flow(pg2,{n:6,color:'var(--amber)',r:3.6,speed:0.18});
+  /* 라벨 */
+  const L=(x,y,t,c,a)=>{ const e=mk('text',{x:x,y:y,class:'lbl',fill:c||'var(--ink-2)','text-anchor':a||'start'}); e.textContent=t; G.appendChild(e); };
+  L(160,396,TX('원자로용기','reactor vessel'),null,'middle');
+  L(160,66,TX('페블 노심','pebble bed'),'var(--ink)','middle');
+  L(487,396,TX('증기발생기','steam generator'),null,'middle');
+  L(487,20,TX('주헬륨송풍기','helium circulator'),'var(--amber)','middle');
+  L(336,310,TX('열가스덕트 (동축)','hot gas duct (coaxial)'),null,'middle');
+  L(572,200,TX('찬 헬륨 250 °C','cold helium 250 °C'),'var(--cool)');
+  L(572,220,TX('&#8594; 용기 벽 통로로 상승','→ up the wall passage').replace('&#8594;','→'),'var(--cool)');
+  L(572,352,TX('뜨거운 헬륨 750 °C','hot helium 750 °C'),'var(--hot)');
+  const rl=mk('text',{x:95,y:200,class:'lbl',fill:'var(--ok)','text-anchor':'middle',transform:'rotate(-90 95 200)'});
+  rl.textContent=TX('흑연 반사체','graphite reflector'); G.appendChild(rl);
+}});
+
+
+/* ---------------------------------------------------------------- 배치 */
+S({tag:'LAYOUT', ov:'[[1차 루프 배치의 세 가지 특징||Three features of the primary-loop layout]]',
+src:'[[<b>출처</b> 본 교재 4.1절 그림 4.1 · 원자로용기(왼쪽)와 증기발생기(오른쪽), 송풍기는 증기발생기 위||<b>Source</b> This textbook &#167;4.1, Fig. 4.1 · reactor vessel on the left, steam generator on the right, circulator on top of the steam generator]]',
+abbr:'[[<b>SA-508</b> 원자로 압력용기에 흔히 쓰는 저합금강 · <b>LOCA</b> 냉각재상실사고 · <b>부력</b> 밀도차로 생기는 뜨는 힘||<b>SA-508</b> the low-alloy steel common in reactor pressure vessels · <b>LOCA</b> loss-of-coolant accident · <b>buoyancy</b> the lift that density differences produce]]',
+html:`<h2 class="t">[[1차 루프 배치의 <em>세 가지 특징</em>||<em>Three features</em> of the primary-loop layout]]</h2>
+<div class="body">
+  <div class="fig" style="flex:0 0 380px">
+  ${PH({src:'f4_01', cap:'[[HTR-PM 1차 루프 — 교재 그림 4.1||The HTR-PM primary loop - textbook Fig. 4.1]]'})}
+  </div>
+  <div class="fig">
+  <svg viewBox="0 0 760 470" role="img" aria-label="[[1차 루프 배치의 세 가지 특징 — 나란한 용기와 증기발생기, 찬 헬륨이 씻는 용기 벽, 아래로 흐르는 헬륨||Three layout features - vessel and steam generator side by side, a vessel wall washed by cold helium, and downward helium flow]]">
+    <g id="ly-g"></g>
+  </svg>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#ly-g'), gs=[];
+  const C=[['1',TX('용기와 증기발생기가 나란히 섬','Vessel and SG stand side by side'),'var(--hot)',
+            TX('경수로처럼 증기발생기가 위에 있지 않고 굵은 덕트로 이어짐. 이 덕트가 파단하면 그것이 이 노형의 LOCA 임.',
+               'Unlike an LWR the SG is not above the core; a large duct joins them. A break in that duct is this reactor&#8217;s LOCA.')],
+           ['2',TX('찬 헬륨이 용기 벽을 먼저 씻음','Cold helium washes the vessel wall first'),'var(--cool)',
+            TX('750 °C 노심을 담고도 용기 자체는 250 °C 근처에 머묾. 일반 압력용기강(SA-508 계열)을 쓸 수 있는 이유임.',
+               'The vessel stays near 250 °C around a 750 °C core, which is why ordinary vessel steel (SA-508 family) will do.')],
+           ['3',TX('헬륨이 위에서 아래로 흐름','Helium flows top to bottom'),'var(--ok)',
+            TX('페블 더미가 눌려 안정됨. 강제순환이 멎으면 부력 자연순환은 반대 방향(위로)이 되어 유동이 스스로 멎음.',
+               'The pebble bed is pressed down and stable. When forced flow stops, buoyancy acts upward, against it, and flow halts by itself.')]];
+  C.forEach((c,i)=>{
+    const g=mk('g',{transform:'translate(0,'+(i*158)+')',opacity:0});
+    g.appendChild(mk('rect',{width:760,height:144,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:3,height:144,fill:c[2]}));
+    g.appendChild(mk('text',{x:24,y:44,'font-family':'var(--mono)','font-size':26,fill:c[2],'font-weight':600})).textContent=c[0];
+    g.appendChild(mk('text',{x:62,y:42,'font-family':'var(--sans)','font-size':21,fill:c[2],'font-weight':600})).textContent=c[1];
+    wrapT(c[3],40).slice(0,3).forEach((ln,j)=>g.appendChild(mk('text',{x:62,y:78+j*25,'font-family':'var(--sans)',
+      'font-size':17,fill:'var(--ink-2)','font-weight':300})).textContent=ln);
+    G.appendChild(g); gs.push(g);
+  });
+  if(RM){ gs.forEach(g=>g.setAttribute('opacity',1)); return; }
+  gs.forEach((g,i)=>g.animate([{opacity:0},{opacity:1}],{duration:360,delay:200*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 발전소 계통 */
+S({tag:'PLANT SCHEMATIC', ov:'[[발전소 계통 — 원자로 2기가 터빈 1대를 공유||Plant schematic - two reactors share one turbine]]',
+src:'[[<b>출처</b> 본 교재 4.1절 그림 4.2 · 총 211 MWe / 순 150 MWe||<b>Source</b> This textbook &#167;4.1, Fig. 4.2 · 211 MWe gross / 150 MWe net]]',
+html:`<h2 class="t">[[발전소 계통 — 원자로 2기가 <em>터빈 1대</em>를 공유||Plant schematic - two reactors share <em>one turbine</em>]]</h2>
+<ul class="b">
+  <li>[[모듈마다 원자로 · 증기발생기 · 송풍기 한 벌. 두 모듈의 증기가 <b>하나의 터빈</b>으로 모임||Each module has its own reactor, steam generator and circulator. Steam from both goes to <b>one turbine</b>]]</li>
+  <li>[[증기 조건 <b>13.25 MPa / 567 °C</b> — 경수로(약 7 MPa 포화증기)보다 훨씬 좋아 효율이 올라감||Steam at <b>13.25 MPa / 567 °C</b> - far better than an LWR&#8217;s saturated steam near 7 MPa, hence the higher efficiency]]</li>
+</ul>
+<div class="body"><div class="fig">
+${PH({src:'f4_02', cap:'[[HTR-PM 실증 발전소 단순 계통도 — 왼쪽 두 모듈(원자로·증기발생기·송풍기), 가운데 터빈·발전기, 오른쪽 급수가열기 · 교재 그림 4.2||Simplified HTR-PM demonstration plant - two modules on the left, turbine-generator in the middle, feedwater heaters on the right · textbook Fig. 4.2]]'})}
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 설계값 표 */
+S({tag:'DESIGN DATA', ov:'[[HTR-PM 주요 설계값||HTR-PM principal design data]]',
+src:'[[<b>출처</b> 본 교재 4.2절 표 4.1 · 증기 조건은 터빈 입구 기준 자료에 14.1 MPa / 570 °C 로도 나옴 · 2023년 시험은 6.8 MPa||<b>Source</b> This textbook &#167;4.2, Table 4.1 · steam is also quoted as 14.1 MPa / 570 °C at the turbine inlet · the 2023 tests ran at 6.8 MPa]]',
+abbr:'[[<b>농축도</b> 우라늄 중 U-235 비율 · <b>온도계수</b> 온도 1 K 당 반응도 변화 — 음이면 스스로 출력을 줄임 · <b>MWe · MWt</b> 전기출력 · 열출력||<b>enrichment</b> the U-235 share of the uranium · <b>temperature coefficient</b> reactivity change per kelvin - negative means self-limiting · <b>MWe, MWt</b> electrical and thermal megawatts]]',
+html:`<h2 class="t">[[HTR-PM <em>주요 설계값</em>||HTR-PM <em>principal design data</em>]]</h2>
+<div class="body">
+  <div class="fig">
+  <table class="d sm">
+    <tr><th>[[항목||Item]]</th><th>[[값||Value]]</th><th>[[비고||Note]]</th></tr>
+    <tr><td>[[모듈 열출력||Module thermal power]]</td><td class="n">250 MWt × 2</td><td></td></tr>
+    <tr><td>[[총 전기출력||Electrical output]]</td><td class="n">[[211 MWe (총) / 150 MWe (순)||211 MWe gross / 150 MWe net]]</td><td>[[터빈 1대 공유||one shared turbine]]</td></tr>
+    <tr class="mark"><td>[[헬륨 온도 · 압력||Helium temperature · pressure]]</td><td class="n">250 &#8594; 750 °C · 7.0 MPa</td><td>[[2023년 시험은 6.8 MPa||6.8 MPa in the 2023 tests]]</td></tr>
+    <tr><td>[[헬륨 유량||Helium flow]]</td><td class="n">[[96 kg/s (모듈당)||96 kg/s per module]]</td><td>[[ṁ = Q/(c<sub>p</sub>ΔT) 로 확인||checked with ṁ = Q/(c<sub>p</sub>ΔT)]]</td></tr>
+    <tr><td>[[노심 치수||Core size]]</td><td class="n">∅ 3.0 m × 11.0 m, 77.8 m³</td><td></td></tr>
+    <tr><td>[[출력밀도||Power density]]</td><td class="n">3.3 MW/m³</td><td>[[경수로의 약 1/30||about 1/30 of an LWR]]</td></tr>
+    <tr><td>[[페블||Pebbles]]</td><td class="n">[[∅ 60 mm · 평형 420,000개/모듈||∅ 60 mm · 420,000 per module]]</td><td>[[연료영역 50 mm||50 mm fuelled zone]]</td></tr>
+    <tr><td>[[농축도 · 연소도||Enrichment · burnup]]</td><td class="n">8.5 % · 90 GWd/tU</td><td>[[페블당 중금속 7.0 g||7.0 g heavy metal per pebble]]</td></tr>
+    <tr><td>[[증기 조건||Steam conditions]]</td><td class="n">13.25 MPa / 567 °C</td><td>[[자료에 따라 14.1 MPa / 570 °C||14.1 MPa / 570 °C in some sources]]</td></tr>
+    <tr><td>[[온도계수||Temperature coefficient]]</td><td class="n">[[약 −5 × 10⁻⁵ /K||about −5 × 10⁻⁵ /K]]</td><td>[[음의 값||negative]]</td></tr>
+    <tr class="mark"><td>[[연료 온도한계||Fuel temperature limit]]</td><td class="n">[[정상 1600 · 사고 1620 °C||1600 normal · 1620 °C accident]]</td><td>[[정상운전 최고 약 1200 °C||about 1200 °C peak in normal operation]]</td></tr>
+  </table>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 검산 */
+S({tag:'SPECIFIC POWER CHECK', ov:'[[출력밀도와 비출력 — 부피 기준과 질량 기준||Power density and specific power - per volume and per mass]]',
+src:'[[<b>계산</b> 본 교재 4.2절 · 420,000 × 7.0 g = 2.94 tU · 250 MW / 2.94 tU = 85 MW/tU · 90,000 MWd/tU ÷ 85 MW/tU = 1,059 d ≈ 2.9 년 · 평균 15회 통과 &#8594; 1회 약 70일||<b>Calculation</b> This textbook &#167;4.2 · 420,000 × 7.0 g = 2.94 tU · 250 MW / 2.94 tU = 85 MW/tU · 90,000 MWd/tU ÷ 85 MW/tU = 1,059 d ≈ 2.9 years · 15 passes on average &#8594; about 70 days a pass]]',
+abbr:'[[<b>출력밀도</b> 노심 부피당 열출력(MW/m³) · <b>비출력</b> 연료 질량당 열출력(MW/tU) · <b>체류시간</b> 연료가 노심에 머무는 총 기간||<b>power density</b> thermal power per core volume (MW/m³) · <b>specific power</b> thermal power per fuel mass (MW/tU) · <b>residence time</b> total time the fuel spends in the core]]',
+html:`<h2 class="t">[[출력밀도와 <em>비출력</em> — 부피 기준과 질량 기준||Power density and <em>specific power</em> - per volume and per mass]]</h2>
+<ul class="b">
+  <li>[[부피 기준 출력밀도는 경수로의 1/30인데, 질량 기준 비출력은 <b class="hot">오히려 2배 넘게 높음</b> — 흑연이 노심 부피의 대부분을 차지하기 때문||Per volume it is 1/30 of an LWR, yet per mass of uranium it is <b class="hot">more than twice as high</b> - because graphite fills most of the core]]</li>
+  <li>[[두 숫자를 섞어 쓰면 엉뚱한 결론이 나옴. 체류시간 2.9년도 발표자료의 &#8220;약 3년&#8221;과 맞음||Mix the two and the conclusion goes astray. The 2.9-year residence also matches the &#8220;about 3 years&#8221; in presentations]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 800 410" role="img" aria-label="[[부피 기준 출력밀도는 경수로 약 100, HTR-PM 3.3 MW/m³이고, 질량 기준 비출력은 경수로 35~40, HTR-PM 85 MW/tU임을 보이는 두 쌍의 막대||Two pairs of bars - per volume, about 100 against 3.3 MW/m³; per mass, 35-40 against 85 MW/tU]]">
+    <g id="sp-g"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="formula" style="font-size:17px;text-align:left;line-height:1.9">420 000 × 7.0 g <span class="op">=</span> 2.94 tU<br>250 MW / 2.94 tU <span class="op">=</span> 85 MW/tU<br>90 000 / 85 <span class="op">=</span> 1 059 d</div>
+    <div class="readout hi"><span class="k">[[노심 체류시간||Core residence]]</span><span class="v">2.9<small>[[년||years]]</small></span></div>
+    <div class="readout"><span class="k">[[통과 한 번 (15회 평균)||One pass (15 on average)]]</span><span class="v">~70<small>[[일||days]]</small></span></div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#sp-g'), bars=[];
+  const P=[[TX('부피 기준 · 출력밀도','Per volume · power density'),'MW/m³',[[TX('경수로','LWR'),100,'var(--ink-3)'],['HTR-PM',3.3,'var(--cool)']],100],
+           [TX('질량 기준 · 비출력','Per mass · specific power'),'MW/tU',[[TX('경수로','LWR'),37.5,'var(--ink-3)','35~40'],['HTR-PM',85,'var(--hot)']],100]];
+  P.forEach((p,k)=>{
+    const x0=k*410, Y0=340, H=270;
+    G.appendChild(mk('text',{x:x0,y:20,'font-family':'var(--sans)','font-size':18,fill:'var(--ink)','font-weight':600})).textContent=p[0];
+    G.appendChild(mk('text',{x:x0,y:42,class:'lbl'})).textContent=p[1];
+    G.appendChild(mk('line',{x1:x0,x2:x0+360,y1:Y0,y2:Y0,stroke:'var(--rule)'}));
+    p[2].forEach((b,i)=>{
+      const x=x0+40+i*170, h=b[1]/p[3]*H;
+      const r=mk('rect',{x:x,y:Y0,width:110,height:'0',fill:b[2],opacity:0.85}); G.appendChild(r); bars.push([r,h,Y0]);
+      G.appendChild(mk('text',{x:x+55,y:Y0-h-10,'text-anchor':'middle','font-family':'var(--mono)','font-size':20,fill:b[2],'font-weight':600})).textContent=b[3]||String(b[1]);
+      G.appendChild(mk('text',{x:x+55,y:Y0+26,'text-anchor':'middle','font-family':'var(--sans)','font-size':17,fill:'var(--ink)','font-weight':600})).textContent=b[0];
+    });
+  });
+  G.appendChild(mk('text',{x:205,y:396,'text-anchor':'middle',class:'lbl',fill:'var(--cool)'})).textContent=TX('약 1/30','about 1/30');
+  G.appendChild(mk('text',{x:615,y:396,'text-anchor':'middle',class:'lbl',fill:'var(--hot)'})).textContent=TX('2배 이상','more than 2×');
+  if(RM){ bars.forEach(b=>{ b[0].setAttribute('y',b[2]-b[1]); b[0].setAttribute('height',b[1]); }); return; }
+  bars.forEach((b,i)=>b[0].animate([{y:b[2]+'px',height:'0px'},{y:(b[2]-b[1])+'px',height:b[1]+'px'}],
+    {duration:700,delay:180*i,fill:'forwards',easing:'cubic-bezier(.2,.7,.3,1)'}));
+}});
+
+
+/* ---------------------------------------------------------------- 송풍기 · SG */
+S({tag:'CIRCULATOR · STEAM GENERATOR', ov:'[[주헬륨송풍기와 증기발생기||The helium circulator and the steam generator]]',
+src:'[[<b>출처</b> 본 교재 4.3절 그림 4.3 · 4.4 · 송풍기 200 kPa · 250 °C · 4000 rpm · 4500 kW · 증기발생기 253 MW · 19 다발 × 35관 = 665관||<b>Source</b> This textbook &#167;4.3, Figs. 4.3-4.4 · circulator 200 kPa, 250 °C, 4000 rpm, 4500 kW · steam generator 253 MW, 19 units × 35 tubes = 665 tubes]]',
+abbr:'[[<b>AMB</b> 능동자기베어링 — 전자석으로 축을 띄워 윤활유가 필요 없음 · <b>헬리컬 코일</b> 나선형으로 감은 전열관 · <b>수분유입</b> 전열관 파단으로 물이 1차계통에 들어오는 사고||<b>AMB</b> active magnetic bearing - electromagnets float the shaft, no lubricating oil · <b>helical coil</b> heat-transfer tubes wound in a spiral · <b>water ingress</b> water entering the primary circuit through a failed tube]]',
+html:`<h2 class="t">[[주헬륨송풍기와 <em>증기발생기</em>||The helium circulator and the <em>steam generator</em>]]</h2>
+<ul class="b">
+  <li>[[송풍기 축은 <b>능동자기베어링(AMB)</b>으로 띄움 — 윤활유가 없으니 1차계통에 기름이 들어갈 경로가 원천적으로 없음. 가스로에서 유증기는 곧 계통 막힘임||The circulator shaft floats on <b>active magnetic bearings</b> - no oil, so no route for oil into the primary circuit. In a gas reactor oil vapour means blockage]]</li>
+  <li>[[증기발생기가 <b class="hot">1차 압력경계 안</b>에 있음 — 관이 터지면 물이 헬륨 쪽으로 들어와 C + H₂O &#8594; CO + H₂. 19 다발로 나눈 이유가 격리임(5장)||The steam generator sits <b class="hot">inside the primary boundary</b> - a tube break lets water in, and C + H₂O &#8594; CO + H₂. The 19 units exist for isolation (ch. 5)]]</li>
+</ul>
+<div class="body"><div class="fig">
+${PH({src:'f4_03', cap:'[[주헬륨송풍기 단면과 사양 · 그림 4.3||Circulator section and data · Fig. 4.3]]'},
+     {src:'f4_04', cap:'[[증기발생기 — 19 다발, 665관 · 그림 4.4||Steam generator - 19 units, 665 tubes · Fig. 4.4]]'})}
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 용기 · 노심 */
+S({tag:'VESSEL · CORE', ov:'[[원자로용기와 노심 내부 — 제어봉과 SAS 는 반사체에||The vessel and core internals - rods and SAS in the reflector]]',
+src:'[[<b>출처</b> 본 교재 4.3절 그림 4.5 · 4.6 · 노심 단면은 바깥부터 노심통 · 탄소 블록 · 흑연 반사체 · 제어봉 공 · SAS 공||<b>Source</b> This textbook &#167;4.3, Figs. 4.5-4.6 · the core section runs outward from barrel to carbon blocks, graphite reflector, rod holes and SAS holes]]',
+abbr:'[[<b>SAS</b> 소형흡수구 정지계통 — 흑연 반사체 구멍에 흡수체 알갱이를 떨어뜨림 · <b>정지여유</b> 정지 상태를 유지하고 남는 음의 반응도 · <b>노심통(barrel)</b> 노심 구조물을 둘러싼 금속 원통||<b>SAS</b> small absorber sphere system - absorber balls dropped into reflector holes · <b>shutdown margin</b> negative reactivity to spare when shut down · <b>core barrel</b> the metal cylinder round the core structure]]',
+html:`<h2 class="t">[[원자로용기와 노심 내부 — <em>제어봉과 SAS</em>는 반사체에||The vessel and core internals - <em>rods and SAS</em> in the reflector]]</h2>
+<ul class="b">
+  <li>[[노심이 페블 더미라 그 안에 봉을 꽂을 수 없음 — 제어봉과 소형흡수구(SAS) <b>둘 다 바깥 흑연 반사체의 구멍</b>에 들어감||The core is a pile of pebbles, so nothing can be inserted into it - rods and small absorber spheres <b>both go into holes in the graphite reflector</b>]]</li>
+  <li>[[제어봉은 정상 운전과 정지에, <b class="amb">SAS는 장기 정지 시 정지여유 확보</b>에 씀 — 서로 독립인 두 반응도 제어 수단||Rods for operation and shutdown; <b class="amb">SAS for shutdown margin over long outages</b> - two independent means of reactivity control]]</li>
+</ul>
+<div class="body"><div class="fig">
+${PH({src:'f4_05', cap:'[[원자로용기 절개도 — 반응도 제어 · 장입구 · 반사체 · 노심 · 송풍기 · 증기발생기 · 배출구 · 그림 4.5||Vessel cutaway - reactivity control, fuel inlet, reflector, core, circulator, steam generator, discharge · Fig. 4.5]]'},
+     {src:'f4_06', cap:'[[노심 수평 단면 — 노심통 · 탄소 · 흑연 · 제어봉 · SAS · 그림 4.6||Core cross-section - barrel, carbon, graphite, rods, SAS · Fig. 4.6]]'})}
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- 실물 */
+S({tag:'HARDWARE', ov:'[[노심 상부 실물과 원자로용기 수송||The top of the core, and the vessel in transit]]',
+src:'[[<b>출처</b> 본 교재 4.3절 그림 4.7 · 4.8||<b>Source</b> This textbook &#167;4.3, Figs. 4.7-4.8]]',
+html:`<h2 class="t">[[노심 상부 실물과 <em>원자로용기 수송</em>||The top of the core, and <em>the vessel in transit</em>]]</h2>
+<ul class="b">
+  <li>[[페블 더미 위로 반사체에 꽂힌 <b>제어봉 관</b>이 보임 — 노심 안이 아니라 가장자리에 있음||Above the pebble bed the <b>rod guide tubes</b> in the reflector are visible - at the edge, not inside the core]]</li>
+  <li>[[노심 지름이 3 m로 묶여 있어 용기 지름도 작음 &#8594; <b class="ok">육상 수송이 가능</b>함. 지름을 묶는 이유는 5장의 전도 냉각||Because the core is held to 3 m across, the vessel is slim enough &#8594; <b class="ok">to travel by road</b>. Why the diameter is capped comes in ch. 5]]</li>
+</ul>
+<div class="body"><div class="fig">
+${PH({src:'f4_07', w:2, cap:'[[노심 상부 — 페블과 제어봉 관 · 그림 4.7||Top of the core - pebbles and rod tubes · Fig. 4.7]]'},
+     {src:'f4_08', w:3, cap:'[[원자로용기 수송 장면 · 그림 4.8||The reactor vessel in transit · Fig. 4.8]]'})}
+</div></div>`});
+
+
+/* ---------------------------------------------------------------- Xe-100 */
+S({tag:'XE-100', ov:'[[Xe-100 (X-energy) — 설계값과 인허가||Xe-100 (X-energy) - design data and licensing]]',
+src:'[[<b>출처</b> 본 교재 4.4절 그림 4.9 · <b>2026년 9월 기준</b> · Long Mott 건설허가 신청 2025-03 제출 · 2025-05 접수 · 2026-05 FONSI · 최종 안전평가서 2026-11 예정||<b>Source</b> This textbook &#167;4.4, Fig. 4.9 · <b>as of September 2026</b> · Long Mott construction permit filed March 2025, docketed May 2025 · FONSI May 2026 · final safety evaluation due November 2026]]',
+abbr:'[[<b>FONSI</b> 유의영향없음 결정 — 환경평가 결과 · <b>MTU</b> 금속 우라늄 톤 · <b>부하추종</b> 전력 수요에 따라 출력을 오르내리는 운전||<b>FONSI</b> Finding of No Significant Impact - the environmental assessment outcome · <b>MTU</b> metric tonne of uranium · <b>load following</b> raising and lowering output with demand]]',
+html:`<h2 class="t">[[<em>Xe-100</em> (X-energy) — 설계값과 인허가||<em>Xe-100</em> (X-energy) - design data and licensing]]</h2>
+<ul class="b">
+  <li>[[미국 인허가에서 가장 앞섬 — 첫 고객은 발전사가 아니라 <b>다우(Dow) 화학공장</b>(텍사스 시드리프트, Long Mott). 업계는 2027년 상반기 허가를 봄||Furthest along in US licensing - and its first customer is a <b>Dow chemical plant</b> (Seadrift, Texas; Long Mott), not a utility. The industry expects a permit in early 2027]]</li>
+  <li>[[<b class="amb">노심 지름·높이·출력밀도·입구온도·유량은 NRC 제출문서에서 비공개</b> — 발표자료에 적혀 있으면 십중팔구 누군가 추정한 값임||<b class="amb">Core diameter, height, power density, inlet temperature and flow are withheld in the NRC filings</b> - if a slide lists them, someone almost certainly guessed]]</li>
+</ul>
+<div class="body">
+  <div class="fig" style="flex:0 0 250px">
+  ${PH({src:'f4_09', cap:'[[Xe-100 절개도 · 그림 4.9||Xe-100 cutaway · Fig. 4.9]]'})}
+  </div>
+  <div class="fig">
+  <table class="d">
+    <tr><th>[[항목||Item]]</th><th>Xe-100</th><th>HTR-PM</th></tr>
+    <tr><td>[[모듈 출력||Module output]]</td><td class="n">200 MWt / 80 MWe</td><td class="n">250 MWt</td></tr>
+    <tr><td>[[표준 구성||Standard plant]]</td><td class="n">[[4모듈 · 320 MWe||4 modules · 320 MWe]]</td><td class="n">[[2모듈 · 211 MWe||2 modules · 211 MWe]]</td></tr>
+    <tr class="mark"><td>[[헬륨 압력||Helium pressure]]</td><td class="n">6 MPa</td><td class="n">7 MPa</td></tr>
+    <tr><td>[[출구 온도 · 증기||Outlet · steam]]</td><td class="n">750 °C · 565 °C / 16.5 MPa</td><td class="n">750 °C · 567 °C / 13.25 MPa</td></tr>
+    <tr><td>[[페블 · 커널||Pebbles · kernel]]</td><td class="n">[[약 22만 · UCO 425 μm||~220,000 · UCO 425 μm]]</td><td class="n">[[42만 · UO₂||420,000 · UO₂]]</td></tr>
+    <tr class="mark"><td>[[농축도 · 배출 연소도||Enrichment · discharge burnup]]</td><td class="n">15.5 % · 163 GWd/MTU</td><td class="n">8.5 % · 90 GWd/tU</td></tr>
+    <tr><td>[[부하추종||Load following]]</td><td class="n">[[12분에 40 &#8594; 100 %||40 &#8594; 100 % in 12 min]]</td><td class="n">—</td></tr>
+  </table>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 그 밖의 HTGR */
+S({tag:'OTHER HTGRS', ov:'[[그 밖의 HTGR — KRONOS MMR · BANR · HTTR · 한국 · 영국||Other HTGRs - KRONOS MMR, BANR, HTTR, Korea and the UK]]',
+src:'[[<b>출처</b> 본 교재 4.4절 그림 4.10 · <b>2026년 9월 기준</b> · USNC 2024-10 파산(Chapter 11), NANO Nuclear 가 850만 달러에 IP 인수||<b>Source</b> This textbook &#167;4.4, Fig. 4.10 · <b>as of September 2026</b> · USNC filed Chapter 11 in October 2024; NANO Nuclear bought the IP for $8.5 M]]',
+abbr:'[[<b>MMR</b> Micro Modular Reactor · <b>FCM</b> TRISO 를 세라믹에 박은 완전세라믹 캡슐 연료 · <b>BANR</b> BWXT Advanced Nuclear Reactor · <b>NHDD</b> 원자력수소 실증 사업 · <b>AMR</b> 영국 첨단모듈로 프로그램 · <b>MOU</b> 양해각서||<b>MMR</b> Micro Modular Reactor · <b>FCM</b> Fully Ceramic Microencapsulated fuel · <b>BANR</b> BWXT Advanced Nuclear Reactor · <b>NHDD</b> Korea&#8217;s nuclear hydrogen demonstration · <b>AMR</b> the UK Advanced Modular Reactor programme · <b>MOU</b> memorandum of understanding]]',
+html:`<h2 class="t">[[그 밖의 HTGR — <em>KRONOS MMR</em> · BANR · HTTR · 한국 · 영국||Other HTGRs - <em>KRONOS MMR</em>, BANR, HTTR, Korea and the UK]]</h2>
+<ul class="b">
+  <li>[[<b class="amb">&#8220;MMR = 15 MWt&#8221;는 옛 USNC 설계</b>, NRC에 접수된 KRONOS는 45 MWth — 둘 다 맞되 출처를 붙여 구분해야 함. 비경수로 자료에서 아주 흔한 혼선임||<b class="amb">&#8220;MMR = 15 MWt&#8221; is the old USNC design</b>; the KRONOS docketed at NRC is 45 MWth - both true, but cite which. This mix-up is very common in non-LWR material]]</li>
+</ul>
+<div class="body">
+  <div class="fig" style="flex:0 0 330px">
+  ${PH({src:'f4_10', cap:'[[MMR 지하 배치 개념도 · 그림 4.10||MMR below-grade layout concept · Fig. 4.10]]'})}
+  </div>
+  <div class="fig">
+  <table class="d sm">
+    <tr><th>[[설계||Design]]</th><th>[[규모||Size]]</th><th>[[현황 (2026-09)||Status (Sept 2026)]]</th></tr>
+    <tr><td>KRONOS MMR</td><td class="n">[[45 MWth (NRC 등록)||45 MWth (as docketed)]]</td><td>[[UIUC 가 2026-03 건설허가 신청, 05 접수. 헬륨 1차 + 용융염 축열 · FCM 연료||UIUC filed a construction permit March 2026, docketed May. Helium primary with molten-salt storage, FCM fuel]]</td></tr>
+    <tr><td>BWXT BANR</td><td class="n">75 MWt / 20 MWe</td><td>[[2026-08 미 육군 Janus 대상, 포트캠벨. 착공 2028년 말 목표. HALEU TRISO · 4년 재장전 · 도로·철도 수송||Picked for the US Army Janus programme in Aug 2026, Fort Campbell. Construction target late 2028. HALEU TRISO, 4-year refuelling, road or rail]]</td></tr>
+    <tr class="mark"><td>[[HTTR (일본)||HTTR (Japan)]]</td><td class="n">[[30 MWt 시험로||30 MWt test reactor]]</td><td>[[프리즘형, 1998 초임계. 2004-04 세계 최초 전출력 출구 950 °C. 중요한 것은 5장의 시험임||Prismatic, critical 1998. World-first 950 °C outlet at full power, April 2004. What matters is the testing in ch. 5]]</td></tr>
+    <tr><td>[[한국||Korea]]</td><td class="n">[[750~950 °C 목표||750-950 °C target]]</td><td>[[2004 NHDD 는 실증로까지 못 감. 2024-07 445억 원 민관 과제(2027년까지). 2026-09 한전기술·포스코이앤씨 MOU||2004 NHDD never reached a demonstrator. ₩44.5 bn public-private project from July 2024, to 2027. KEPCO E&amp;C-POSCO E&amp;C MOU in Sept 2026]]</td></tr>
+    <tr><td>[[영국||UK]]</td><td class="n">[[AMR 실증 노형||AMR demonstrator]]</td><td>[[2021~22 HTGR 선정. 2026-06 JAEA·NNL·롤스로이스 협력각서 2건. 부지·공급사·착공 결정 없음||Chose the HTGR in 2021-22. Two MOUs with JAEA, NNL and Rolls-Royce in June 2026. No site, vendor or build decision]]</td></tr>
+  </table>
+  </div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- 정격과 실제 */
+S({tag:'RATED VS ACTUAL', ov:'[[HTR-PM 의 정격 출력과 실제 운전 출력||HTR-PM rated output against actual operation]]',
+src:'[[<b>출처</b> 본 교재 4.5절 · 2026-05 중국 업계 발표 · 누적 이용률은 세계원자력협회 데이터베이스||<b>Source</b> This textbook &#167;4.5 · Chinese industry statement of May 2026 · cumulative capacity factor from the World Nuclear Association database]]',
+abbr:'[[<b>평형 연소</b> 새 연료 투입과 배출이 균형을 이뤄 노심 조성이 일정해진 상태 · <b>이용률</b> 실제 발전량 ÷ 정격으로 계속 돌렸을 때의 발전량 · <b>초도호기</b> 한 노형의 첫 번째 호기||<b>equilibrium core</b> fresh-fuel input and discharge in balance so the core composition is steady · <b>capacity factor</b> actual energy ÷ energy at rated power all the time · <b>first-of-a-kind</b> the first unit of a design]]',
+html:`<h2 class="t">[[HTR-PM 의 <em>정격 출력</em>과 실제 운전 출력||HTR-PM <em>rated output</em> against actual operation]]</h2>
+<ul class="b">
+  <li>[[두 모듈 모두 <b>165 MWt</b>로 운전 중, 계통 출력 약 116 MWe. 현재 인가 최대는 200 MWt이고 노심이 평형에 도달하는 2~3년 뒤 출력 상승 예정||Both modules run at <b>165 MWt</b>, about 116 MWe to the grid. The present licence limit is 200 MWt, with uprating planned once the core reaches equilibrium in 2-3 years]]</li>
+  <li>[[실패가 아니라 초도호기의 정상적인 모습임. 다만 <b class="amb">&#8220;4세대가 상용화되었다&#8221;와 &#8220;정격 출력으로 안정 운전 중&#8221;은 전혀 다른 문장</b>임||This is normal for a first-of-a-kind, not a failure. But <b class="amb">&#8220;Gen IV is commercial&#8221; and &#8220;running steadily at rated power&#8221; are very different sentences</b>]]</li>
+</ul>
+<div class="body">
+  <div class="fig">
+  <svg viewBox="0 0 800 390" role="img" aria-label="[[모듈 열출력의 정격 250, 인가 최대 200, 실제 165 MWt를 비교한 막대||Module thermal power bars - rated 250, licensed maximum 200, actual 165 MWt]]">
+    <g id="ra-g"></g>
+  </svg>
+  </div>
+  <div class="side">
+    <div class="readout warn"><span class="k">[[누적 이용률 (WNA)||Cumulative capacity factor (WNA)]]</span><span class="v">29.7<small>%</small></span></div>
+    <div class="readout"><span class="k">[[계통 출력 (2026-05)||Grid output (May 2026)]]</span><span class="v">~116<small>MWe</small></span></div>
+  </div>
+</div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#ra-g'), X0=180, k=560/250, bars=[];
+  [0,50,100,150,200,250].forEach(v=>{
+    G.appendChild(mk('line',{x1:X0+v*k,x2:X0+v*k,y1:8,y2:320,class:'grid'}));
+    G.appendChild(mk('text',{x:X0+v*k,y:344,'text-anchor':'middle',class:'lbl'})).textContent=v;
+  });
+  G.appendChild(mk('text',{x:X0+560,y:370,'text-anchor':'end',class:'lbl'})).textContent=TX('모듈 열출력 MWt','module thermal power, MWt');
+  [[TX('정격','Rated'),250,'var(--ink-3)'],[TX('현재 인가 최대','Licensed maximum'),200,'var(--cool)'],[TX('실제 운전 (2026-05)','Actual (May 2026)'),165,'var(--hot)']]
+    .forEach((b,i)=>{
+      const y=24+i*100;
+      G.appendChild(mk('text',{x:X0-14,y:y+36,'text-anchor':'end','font-family':'var(--sans)','font-size':17,fill:'var(--ink)','font-weight':600})).textContent=b[0];
+      const r=mk('rect',{x:X0,y:y,width:'0',height:58,fill:b[2],opacity:0.85}); G.appendChild(r); bars.push([r,b[1]*k]);
+      G.appendChild(mk('text',{x:X0+b[1]*k-10,y:y+37,'text-anchor':'end','font-family':'var(--mono)','font-size':18,fill:'var(--on-accent)','font-weight':600})).textContent=b[1];
+    });
+  if(RM){ bars.forEach(b=>b[0].setAttribute('width',b[1])); return; }
+  bars.forEach((b,i)=>b[0].animate([{width:'0px'},{width:b[1]+'px'}],{duration:650,delay:220*i,fill:'forwards',easing:'ease-out'}));
+}});
+
+
+/* ---------------------------------------------------------------- 공정열 */
+S({tag:'PROCESS HEAT', ov:'[[용도별 필요 온도와 HTGR 출구 750 °C||Temperatures that each use needs, against the 750 °C HTGR outlet]]',
+src:'[[<b>출처</b> 본 교재 4.6절 · HTR-PM 은 2024-03 룽청시 지역난방망에 연결 — 19만 m², 약 1,850세대, 12 MW||<b>Source</b> This textbook &#167;4.6 · HTR-PM joined the Rongcheng district-heating grid in March 2024 - 190,000 m², about 1,850 homes, 12 MW]]',
+abbr:'[[<b>공정열</b> 전기가 아니라 산업 공정에 바로 쓰는 열 · <b>고온수전해</b> 고온 수증기를 전기분해해 수소를 만드는 방법 · <b>메탄 수증기 개질</b> 천연가스와 수증기로 수소를 만드는 방법 · <b>황-요오드(SI)</b> 열화학 수소 생산 공정||<b>process heat</b> heat used directly by industry rather than turned into power · <b>high-temperature electrolysis</b> splitting steam electrically at high temperature · <b>steam methane reforming</b> hydrogen from natural gas and steam · <b>sulfur-iodine (SI)</b> a thermochemical hydrogen cycle]]',
+html:`<h2 class="t">[[용도별 필요 온도와 <em>HTGR 출구 750 °C</em>||Temperatures that each use needs, against the <em>750 °C HTGR outlet</em>]]</h2>
+<ul class="b">
+  <li>[[HTGR의 진짜 시장은 전기가 아니라 <b>열</b>임 — Xe-100의 첫 고객은 화학회사, BANR은 군, 한국 과제 참여사는 제철·석유화학||The HTGR&#8217;s real market is <b>heat</b>, not power - Xe-100&#8217;s first customer is a chemical firm, BANR&#8217;s is the army, Korea&#8217;s partners are steel and petrochemicals]]</li>
+  <li>[[750 °C를 노리는 이유는 이 목록의 <b class="ok">대부분을 덮기 때문</b>임. HTR-PM은 2024-03부터 지역난방 12 MW 공급 중(4세대 원자로의 첫 도시 난방)||750 °C is the target because it <b class="ok">covers most of this list</b>. HTR-PM has supplied 12 MW of district heat since March 2024 - the first Gen IV reactor to heat a city]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 330" role="img" aria-label="[[지역난방, 공정증기, 고온수전해, 메탄 개질, 황-요오드 수소 생산의 필요 온도 구간과 HTGR 출구 750 °C 선||Temperature bands for district heating, process steam, high-temperature electrolysis, methane reforming and sulfur-iodine hydrogen, with the 750 °C HTGR outlet line]]">
+  <g id="ph-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#ph-g'), X0=300, X1=1050, sx=T=>X0+T/1000*(X1-X0), bars=[];
+  [0,200,400,600,800,1000].forEach(T=>{
+    G.appendChild(mk('line',{x1:sx(T),x2:sx(T),y1:0,y2:270,class:'grid'}));
+    G.appendChild(mk('text',{x:sx(T),y:292,'text-anchor':'middle',class:'lbl'})).textContent=T+' °C';
+  });
+  const U=[[TX('지역난방','District heating'),100,200,'var(--ok)'],
+           [TX('정유·석유화학 공정증기','Refinery / petrochemical steam'),250,550,'var(--cool)'],
+           [TX('고온수전해','High-temperature electrolysis'),700,850,'var(--amber)'],
+           [TX('메탄 수증기 개질','Steam methane reforming'),700,900,'var(--amber)'],
+           [TX('황-요오드 수소 생산','Sulfur-iodine hydrogen'),850,950,'var(--hot)']];
+  U.forEach((u,i)=>{
+    const y=12+i*52;
+    G.appendChild(mk('text',{x:X0-16,y:y+24,'text-anchor':'end','font-family':'var(--sans)','font-size':17,fill:'var(--ink)','font-weight':600})).textContent=u[0];
+    const r=mk('rect',{x:sx(u[1]),y:y,width:'0',height:36,fill:u[3],opacity:0.75}); G.appendChild(r); bars.push([r,sx(u[2])-sx(u[1])]);
+    const last=i===U.length-1;
+    G.appendChild(mk('text',{x:last?sx(u[1])-10:sx(u[2])+10,y:y+24,class:'lbl','text-anchor':last?'end':'start'})).textContent=u[1]+'~'+u[2];
+  });
+  const L=mk('line',{x1:sx(750),x2:sx(750),y1:0,y2:270,stroke:'var(--hot)','stroke-width':2.4,'stroke-dasharray':'8 5'}); G.appendChild(L);
+  G.appendChild(mk('text',{x:sx(750)-8,y:318,'text-anchor':'end','font-family':'var(--mono)','font-size':15,fill:'var(--hot)','font-weight':600})).textContent=TX('HTGR 출구 750 °C','HTGR outlet 750 °C');
+  if(RM){ bars.forEach(b=>b[0].setAttribute('width',b[1])); return; }
+  bars.forEach((b,i)=>b[0].animate([{width:'0px'},{width:b[1]+'px'}],{duration:600,delay:150*i,fill:'forwards',easing:'ease-out'}));
+}});
+</script>
