@@ -4,7 +4,7 @@
 
 | 교재 | 덱 | 비고 |
 |---|---|---|
-| 「SMR 설계요건과 공학적안전설비」 (Rev1.0) | `w02-03_smr-design-requirements` | 이 폴더에 없음 — Word·PDF 원본은 `malmok2/Documents` |
+| `THINK Lab SMR 설계요건과 공학적안전설비 (Rev1.0).pdf` | `w02-03_smr-design-requirements` | 60쪽. **PDF 만** — 원본(원고·Word)은 `malmok2/Documents` 의 같은 이름 Rev 폴더. 거기서 다시 구우면 PDF 를 이리로 다시 복사한다 |
 | `THINK Lab SMR 자료를 찾는 법과 PWR형 SMR (Rev1.0).docx` · `.pdf` | `w03-04_smr-data-and-pwr-smrs` | 81쪽 |
 | `THINK Lab 물을 쓰지 않는 SMR - VHTR SFR MSR (Rev1.0 수치정정).docx` · `.pdf` | `w05a_htgr-vhtr` · `w05b_sfr` · `w06_msr` | 94쪽. 2026-10 수치 정정 반영(CHANGELOG 참조) |
 
