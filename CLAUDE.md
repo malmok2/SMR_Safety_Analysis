@@ -17,8 +17,9 @@
 
 비경수로 세 덱은 **섹션 번호가 교재 장 번호와 같다**(HTGR 1~6, SFR 7~11, MSR 12~18).
 
-교재 Word 원본은 `textbooks/` 에 있다(첫 교재 「SMR 설계요건과 공학적안전설비」만 빠져 있다 —
+교재 Word 원본과 그 PDF 는 `textbooks/` 에 있다(첫 교재 「SMR 설계요건과 공학적안전설비」만 빠져 있다 —
 `C:\Claude\Documents\THINK Lab SMR 설계요건과 공학적안전설비 Rev1.0`, 별도 저장소 `malmok2/Documents`).
+Word 를 고치면 PDF 도 다시 굽는다 — 굽는 법과, MS World 가 이 파일 이름을 읽는다는 것은 `textbooks/README.md`.
 그림 소스는 이 저장소에 없다. 수치를 바꿔야 하면 **교재가 기준**이고, 양쪽을 같이 고친다.
 
 ---
