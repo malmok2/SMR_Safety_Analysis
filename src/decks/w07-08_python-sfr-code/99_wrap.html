@@ -1,0 +1,131 @@
+<script>
+/* ================================================================
+   SECTION 13 — 한계와 다음 단계 · 정리 · 약어  (교재 13장)
+   ================================================================ */
+SECT('13 · [[한계와 다음 단계||Limits and next steps]]');
+
+S({tag:'WHAT THIS CODE CANNOT DO', ov:'[[이 코드가 못 하는 것 — 셋은 결과를 비보수적으로 바꿈||What this code cannot do - three effects are non-conservative]]',
+src:'[[<b>출처</b> 본 교재 13.1절 · 보수적 = 실제보다 판정 기준에 가깝게(더 나쁘게) 계산 · 축 방향 첨두: 맨 노심 코사인 분포면 평균의 π/2배, 반사체가 있는 실제 노심은 더 작음 · 다차원 풀 혼합은 ANL 의 SAM 이 핵심 기능으로 둠(앞 교재 11.4절)||<b>Source</b> This textbook &#167;13.1 · conservative = computed closer to the limit than reality · axial peaking: π/2 × average for a bare cosine core, less with reflectors · multidimensional pool mixing is a core feature of ANL&#8217;s SAM (earlier textbook &#167;11.4)]]',
+abbr:'[[<b>고온 채널</b> 첨두 출력을 받는 가장 뜨거운 봉의 유로 · <b>열성층</b> 뜨거운 유체가 위, 찬 유체가 아래로 층을 이루는 것 · <b>보수적</b> 판정에 불리한 쪽으로 계산하는 것||<b>hot channel</b> the coolant channel of the peak-power pin · <b>stratification</b> hot fluid layering over cold · <b>conservative</b> erring toward the limit]]',
+html:`<h2 class="t">[[이 코드가 <em>못 하는 것</em>||What this code <em>cannot do</em>]]</h2>
+<ul class="b">
+  <li>[[계통코드를 쓰는 사람은 결과보다 <b>한계를 먼저</b> 말할 수 있어야 함. 다섯 가지 중 셋(고온 채널 · 지지판 팽창 지연 · 저유량 마찰)은 결과를 <b class="hot">비보수적</b>으로 바꿈||A code user must state <b>the limits before the results</b>. Three of the five (hot channel, delayed grid expansion, low-flow friction) bias results <b class="hot">non-conservatively</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 360" role="img" aria-label="[[코드에 없는 다섯 가지 모델과 결과에 주는 영향의 방향||Five missing models and the direction of their effect on results]]">
+  <g id="lm-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const G=el.querySelector('#lm-g'), mk=svgEl, gs=[];
+  [[TX('축 방향 노드 · 고온 채널','axial nodes, hot channel'),TX('평균 봉만 풂 — 첨두 봉은 더 뜨거움','average pin only - the peak pin runs hotter'),TX('비보수적','non-conservative'),'var(--hot)'],
+   [TX('고온 풀 열성층','hot-pool stratification'),TX('완전 혼합 가정 — 1차원으로는 원리적으로 못 풂','perfect mixing - 1-D cannot represent it'),TX('설계마다 다름','design-dependent'),'var(--amber)'],
+   [TX('나트륨 비등 · 2상 유동','sodium boiling, two-phase'),TX('단상만 — 비등이 시작되면 결과가 무의미','single phase only - meaningless once boiling starts'),TX('적용 범위 밖','out of scope'),'var(--amber)'],
+   [TX('구조물 열용량 · 팽창 지연','structures, expansion lag'),TX('열용량 없음(보수적) · 지지판 반응도 즉시(비보수적)','no heat capacity (conservative), instant grid feedback (not)'),TX('둘이 섞임','mixed'),'var(--amber)'],
+   [TX('저유량 마찰 · 2차 동특성','low-flow friction, secondary'),TX('정격 Re 마찰 상수 — 자연순환 유량 과대','friction fixed at rated Re - overpredicts natural circulation'),TX('비보수적','non-conservative'),'var(--hot)']].forEach((r,i)=>{
+    const g=mk('g',{transform:'translate(0,'+(i*72)+')',opacity:0});
+    g.appendChild(mk('rect',{width:1120,height:62,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:4,height:62,fill:r[3]}));
+    g.appendChild(mk('text',{x:22,y:38,'font-family':'var(--sans)','font-size':18,fill:'var(--ink)','font-weight':600})).textContent=r[0];
+    g.appendChild(mk('text',{x:330,y:38,'font-family':'var(--sans)','font-size':16,fill:'var(--ink-2)'})).textContent=r[1];
+    g.appendChild(mk('text',{x:1100,y:38,'text-anchor':'end','font-family':'var(--mono)','font-size':14.5,fill:r[3],'font-weight':600})).textContent=r[2];
+    G.appendChild(g); gs.push(g); });
+  pyFade(gs,160);
+}});
+
+
+S({tag:'NEXT STEPS', ov:'[[다음 단계 — 확장, EBR-II 확인, 인허가급 코드||Next steps - extend, validate on EBR-II, move to licensing codes]]',
+src:'[[<b>출처</b> 본 교재 13.2절 · IAEA, Benchmark Analysis of EBR-II Shutdown Heat Removal Tests, IAEA-TECDOC-1819 (2017) · SAS4A/SASSYS-1 · SAM 은 ANL 의 SFR 계통코드(앞 교재 11.5절 코드 지형도)||<b>Source</b> This textbook &#167;13.2 · IAEA, Benchmark Analysis of EBR-II Shutdown Heat Removal Tests, IAEA-TECDOC-1819 (2017) · SAS4A/SASSYS-1 and SAM are ANL&#8217;s SFR system codes (code map in &#167;11.5 of the earlier textbook)]]',
+abbr:'[[<b>SHRT</b> Shutdown Heat Removal Tests — 1984–86 EBR-II 시험 · <b>CRP</b> IAEA 공동연구 · <b>SAS4A/SASSYS-1</b> SFR 안전해석 기준 코드 · <b>SAM</b> MOOSE 기반 현대 계통코드||<b>SHRT</b> Shutdown Heat Removal Tests at EBR-II · <b>CRP</b> IAEA coordinated research project · <b>SAS4A/SASSYS-1</b> the reference SFR safety code · <b>SAM</b> a modern MOOSE-based system code]]',
+html:`<h2 class="t">[[다음 단계 — <em>확장 · 확인 · 인허가급 코드</em>||Next - <em>extend, validate, licensing codes</em>]]</h2>
+<ul class="b">
+  <li>[[코드를 키울 때는 <b>한 번에 하나만</b> 바꾸고, 바꿀 때마다 B1~B5 와 무사고 시험을 다시 돌림 — 축 방향 노드를 넣어도 B3·B4 는 해석해를 재현해야 함||Grow the code <b>one change at a time</b> and rerun B1-B5 and the null transient each time - with axial nodes, B3 and B4 must still reproduce their references]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 350" role="img" aria-label="[[minisfr 에서 확장, EBR-II SHRT 확인, SAM·SAS4A/SASSYS-1 로 가는 네 단계||Four steps from minisfr to extension, EBR-II SHRT validation and SAM or SAS4A/SASSYS-1]]">
+  <g id="nx-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const G=el.querySelector('#nx-g'), mk=svgEl, gs=[];
+  [['minisfr Rev1.0',TX('상태 19개 · 실행 수 초','19 states · runs in seconds'),TX('이 교재','this book'),'var(--cool)'],
+   [TX('확장','Extend'),TX('축 노드 10칸 · 고온 채널 · 2차 계통 → 상태 약 40개','10 axial cells, hot channel, secondary → about 40 states'),TX('13장 과제','ch. 13 exercises'),'var(--cool)'],
+   [TX('확인','Validate'),TX('EBR-II SHRT-17 · SHRT-45R 측정값과 비교','compare with EBR-II SHRT-17 and SHRT-45R'),'IAEA-TECDOC-1819','var(--ok)'],
+   [TX('인허가급 코드','Licensing codes'),'SAS4A/SASSYS-1 · SAM',TX('입·출력을 읽는 틀','a frame to read them'),'var(--hot)']].forEach((s,i)=>{
+    const x=i*285, g=mk('g',{transform:'translate('+x+',20)',opacity:0});
+    g.appendChild(mk('rect',{width:262,height:310,fill:'var(--panel)',stroke:s[3],'stroke-width':1.6}));
+    g.appendChild(mk('text',{x:18,y:44,'font-family':'var(--sans)','font-size':20,fill:s[3],'font-weight':600})).textContent=s[0];
+    wrapT(s[1],13).slice(0,4).forEach((ln,k)=>g.appendChild(mk('text',{x:18,y:90+k*26,'font-family':'var(--sans)','font-size':16,fill:'var(--ink)'})).textContent=ln);
+    g.appendChild(mk('text',{x:18,y:290,'font-family':'var(--mono)','font-size':13,fill:'var(--ink-3)'})).textContent=s[2];
+    if(i<3) g.appendChild(mk('path',{d:'M264,155 H280 M274,149 L280,155 L274,161',stroke:'var(--ink-3)','stroke-width':1.6,fill:'none'}));
+    G.appendChild(g); gs.push(g); });
+  pyFade(gs,200);
+}});
+
+
+SECT('[[정리와 약어||Wrap-up and abbreviations]]');
+
+S({tag:'SIX NUMBERS', ov:'[[이 덱에서 기억할 여섯 개의 숫자||Six numbers to keep from this deck]]',
+src:'[[<b>출처</b> 본 교재 5·7·9·11·12장 실행 기록(code/outputs) · 각 숫자의 근거는 해당 슬라이드의 출처 줄 참조||<b>Source</b> Run records of chs. 5, 7, 9, 11 and 12 (code/outputs) · see each slide&#8217;s source line for the basis]]',
+html:`<h2 class="t">[[이 덱에서 기억할 <em>여섯 개의 숫자</em>||<em>Six numbers</em> to keep from this deck]]</h2>
+<ul class="b">
+  <li>[[코드의 답은 <b>검증한 만큼만</b> 믿을 수 있음 — 여섯 숫자 중 셋은 물리, 셋은 수치의 숫자임||A code&#8217;s answer is only as good as <b>its verification</b> - three of these numbers are physics, three are numerics]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 400" role="img" aria-label="[[0.27 ms, 2.4배, 1과 2, A/B 0.173, 635.7 °C, 60 K 의 여섯 숫자와 뜻||Six numbers and their meaning: 0.27 ms, 2.4 ×, 1 and 2, A/B 0.173, 635.7 °C, 60 K]]">
+  <g id="sx2-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const mk=svgEl, G=el.querySelector('#sx2-g'), gs=[];
+  [['0.27 ms','var(--hot)',TX('전진 오일러의 안정 한계','forward-Euler stability limit'),TX('강성 → 음해법 + 뉴턴','stiff → implicit + Newton')],
+   ['× 2.4','var(--amber)',TX('물 상관식의 Nu 과대','water correlation overshoots Nu'),TX('나트륨은 Mikityuk, Pe 하나로','sodium: Mikityuk, one Pe')],
+   ['1 · 2','var(--cool)',TX('후진 오일러 · CN 의 차수','order of BE and CN'),TX('기울기가 다르면 버그','a different slope is a bug')],
+   ['A/B 0.173','var(--ok)',TX('작을수록 ULOF 가 순함','smaller is gentler in ULOF'),TX('점근 상승 ΔTc·A/B = 26.9 K','asymptotic rise ΔTc·A/B = 26.9 K')],
+   ['635.7 °C','var(--hot)',TX('ULOF 최고 노심 출구 (45 s)','ULOF peak core outlet (45 s)'),TX('Radau 와 0.1 K 안에서 같음','within 0.1 K of Radau')],
+   ['60 K','var(--ok)',TX('가장 작은 판정 여유 (ULOF)','smallest margin (ULOF)'),TX('고온 채널에서는 줄어듦','shrinks in a hot channel')]].forEach((n,i)=>{
+    const x=(i%3)*378, y=Math.floor(i/3)*204, g=mk('g',{transform:'translate('+x+','+y+')',opacity:0});
+    g.appendChild(mk('rect',{width:362,height:190,fill:'var(--panel)',stroke:'var(--rule)'}));
+    g.appendChild(mk('rect',{width:362,height:3,fill:n[1]}));
+    g.appendChild(mk('text',{x:22,y:66,'font-family':'var(--mono)','font-size':34,fill:n[1],'font-weight':600})).textContent=n[0];
+    g.appendChild(mk('text',{x:22,y:118,'font-family':'var(--sans)','font-size':18,fill:'var(--ink)','font-weight':600})).textContent=n[2];
+    g.appendChild(mk('text',{x:22,y:152,'font-family':'var(--sans)','font-size':15.5,fill:'var(--ink-2)','font-weight':300})).textContent=n[3];
+    G.appendChild(g); gs.push(g); });
+  pyFade(gs,150);
+}});
+
+
+S({tag:'ABBREVIATIONS', ov:'[[약어 — 사고 · 계통 · 수치 기법||Abbreviations - events, systems, numerics]]',
+src:'[[<b>출처</b> 본 교재 부록 B · 각 슬라이드 하단의 약어 줄과 같은 내용임||<b>Source</b> This textbook, appendix B · the same entries as the abbreviation line under each slide]]',
+html:`<h2 class="t">[[약어 — 사고 · 계통 · 수치 기법||Abbreviations - events, systems, numerics]]</h2>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 470" role="img" aria-label="[[사고·계통·수치 기법 관련 약어의 원어와 뜻||Event, system and numerical abbreviations with expansions and meanings]]">
+  <g id="ab1"></g>
+</svg>
+</div></div>`,
+init(el){ abbrTable(el,'#ab1',[
+  ['PLOF','Protected Loss Of Flow',TX('보호 유량상실 — 펌프 정지 + 제어봉 삽입','protected loss of flow - pump trip with scram')],
+  ['ULOF','Unprotected Loss Of Flow',TX('비보호 유량상실 — 제어봉 실패','unprotected loss of flow - scram fails')],
+  ['UTOP','Unprotected Transient OverPower',TX('비보호 과출력 — 제어봉 인출','unprotected overpower - rod withdrawal')],
+  ['ULOHS','Unprotected Loss Of Heat Sink',TX('비보호 열제거원 상실','unprotected loss of heat sink')],
+  ['IHX','Intermediate Heat Exchanger',TX('중간 열교환기','intermediate heat exchanger')],
+  ['RVACS','Reactor Vessel Auxiliary Cooling System',TX('원자로용기 공기냉각계통','vessel air cooling system')],
+  ['ODE','Ordinary Differential Equation',TX('상미분방정식 dy/dt = f(t, y)','ordinary differential equation')],
+  ['BE · CN','Backward Euler · Crank-Nicolson',TX('후진 오일러(1차) · 크랭크–니콜슨(2차)','1st and 2nd order implicit schemes')],
+  ['NTU','Number of Transfer Units',TX('전달 단위 수 UA/(ṁcp)','UA/(ṁcp)')],
+  ['FCCI','Fuel-Cladding Chemical Interaction',TX('연료–피복 화학 상호작용(공정반응)','fuel-clad eutectic interaction')],
+  ['V&V','Verification and Validation',TX('검증과 확인','verification and validation')],
+  ['SHRT','Shutdown Heat Removal Tests',TX('EBR-II 정지 열제거 시험','EBR-II shutdown heat removal tests')],
+  ['SAM','System Analysis Module',TX('ANL 의 MOOSE 기반 계통코드','ANL&#8217;s MOOSE-based system code')],
+  ['pcm · $','per cent mille · dollar',TX('10⁻⁵ · 반응도 ÷ β (1 $ = 330 pcm)','10⁻⁵ · reactivity ÷ β (1 $ = 330 pcm)')]
+]); }});
+
+
+S({bare:true, cls:'cover', ov:'[[끝 — 다음 주차||End - next week]]',
+html:`<div class="kick">[[NUE4067 · 7~8주차 · 실습 편||NUE4067 · weeks 7-8 · hands-on part]]</div>
+<h1>[[print 한 줄에서<br><span>상태 19개의 계통코드까지</span>||From a single print<br><span>to a 19-state system code</span>]]</h1>
+<div class="ln"></div>
+<div class="meta">[[교재 「파이썬으로 만드는 SFR 안전해석 코드」 Rev1.0 · 실습 폴더 code/ · 확인 문제는 각 장 끝<br>
+지도교수 <b>송민섭</b> · THINK Lab · 한양대학교 원자력공학과||Textbook &#8220;Building an SFR Safety Analysis Code in Python&#8221; Rev1.0 · hands-on folder code/ · exercises at the end of each chapter<br>
+Instructor <b>Minseop Song</b> · THINK Lab · Hanyang University]]</div>`});
+</script>

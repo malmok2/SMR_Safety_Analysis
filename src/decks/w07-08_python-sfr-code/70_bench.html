@@ -1,0 +1,141 @@
+<script>
+/* ================================================================
+   SECTION 11 — 검증 벤치마크 B1~B5  (교재 11장)
+   ================================================================ */
+SECT('11 · [[검증 벤치마크||Verification benchmarks]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;11 검증 벤치마크 — 코드의 답을 믿는 근거||&#167;11 Verification benchmarks - why trust the answer]]',
+html:`[[<div class="no">11</div><h2>검증 벤치마크 B1~B5</h2><div class="ln"></div>
+<p>정답을 아는 문제 다섯 개로 코드의 층을 아래부터 덮음 — <b>해석해 · 행렬 지수함수 · 세제곱근 식 ·
+준정적 반응도 균형 · 독립 적분기</b>. 근거가 없는 숫자는 판정에 쓸 수 없음.</p>||<div class="no">11</div><h2>Verification benchmarks B1-B5</h2><div class="ln"></div>
+<p>Five problems with known answers cover the code layer by layer - <b>exact solution, matrix exponential, cube-root law,
+quasi-static reactivity balance, independent integrator</b>. A number without evidence cannot be judged.</p>]]`});
+
+
+/* ---------------------------------------------------------------- V&V */
+S({tag:'VERIFICATION VS VALIDATION', ov:'[[검증과 확인 — 식을 맞게 풀었는가, 맞는 식을 풀었는가||Verification and validation - solved right, or solved the right thing]]',
+src:'[[<b>출처</b> 본 교재 11.1절 표 11.1 · 판정 기준은 교재가 정한 값 · 확인용 적분 자료는 앞 교재 「물을 쓰지 않는 SMR」 표 11.1 · 미국 NRC Regulatory Guide 1.203 이 인허가 계통코드에 같은 순서(검증 → 확인 → 불확실도)를 요구함||<b>Source</b> This textbook &#167;11.1, table 11.1 · acceptance values are the book&#8217;s own · validation data from table 11.1 of the earlier textbook · US NRC Regulatory Guide 1.203 asks licensing codes for the same order (verification → validation → uncertainty)]]',
+abbr:'[[<b>검증(verification)</b> 정답을 아는 수학 문제와 비교 — 버그·수치 오차 · <b>확인(validation)</b> 실험·운전 자료와 비교 — 모델의 가정 · <b>Radau</b> 5차 음해 룽게–쿠타 적분기(SciPy)||<b>verification</b> compare with problems of known answer - bugs and numerical error · <b>validation</b> compare with experiments and plant data - model assumptions · <b>Radau</b> 5th-order implicit Runge-Kutta (SciPy)]]',
+html:`<h2 class="t">[[검증과 확인 — <em>순서가 중요함</em>||Verification and validation - <em>order matters</em>]]</h2>
+<ul class="b">
+  <li>[[검증이 먼저 — 버그가 있는 코드를 실험과 비교하면 <b>모델 오차와 버그가 섞여 둘 다 못 찾음</b>. 이 장은 검증만 함||Verify first - compare a buggy code with experiment and <b>model error and bugs mix so neither can be found</b>. This chapter only verifies]]</li>
+</ul>
+<div class="body">
+<div class="fig">
+<table class="d">
+  <tr><th>[[벤치마크||benchmark]]</th><th>[[대상||what it tests]]</th><th>[[기준||reference]]</th><th>[[결과||result]]</th></tr>
+  <tr><td>B1</td><td>[[적분기 (비강성)||integrator, non-stiff]]</td><td>[[지수 해석해||exact exponential]]</td><td class="n ok">[[차수 1.00 / 2.00||order 1.00 / 2.00]]</td></tr>
+  <tr><td>B2</td><td>[[적분기 (강성)||integrator, stiff]]</td><td>[[행렬 지수함수||matrix exponential]]</td><td class="n ok">≤ 7.9×10⁻⁵</td></tr>
+  <tr><td>B3</td><td>[[루프 수력 + 에너지||loop + energy]]</td><td>[[세제곱근 식||cube-root law]]</td><td class="n ok">+0.13 – 0.32 %</td></tr>
+  <tr><td>B4</td><td>[[반응도 되먹임||reactivity feedback]]</td><td>[[A·B·C 균형식||A·B·C balance]]</td><td class="n ok">[[다섯째 자리 일치||5 digits]]</td></tr>
+  <tr><td>B5</td><td>[[계통 전체 (ULOF)||whole plant (ULOF)]]</td><td>SciPy Radau</td><td class="n ok">[[최고 오차 0.1 K 이하||peak error ≤ 0.1 K]]</td></tr>
+</table>
+</div>
+<div class="side">
+  <div class="readout hi"><span class="k">[[검증 — 이 장||Verification - this chapter]]</span><span class="v" style="font-size:20px">[[식을 맞게 풀었나||solved it right?]]</span></div>
+  <div class="readout good"><span class="k">[[확인 — 다음 단계||Validation - next]]</span><span class="v" style="font-size:20px">EBR-II SHRT</span></div>
+</div>
+</div>`});
+
+
+/* ---------------------------------------------------------------- B1 · B5 수렴 */
+S({tag:'B1 · B5 CONVERGENCE', ov:'[[B1 과 B5 — 단순 문제와 계통 전체에서 같은 차수||B1 and B5 - the same order on a toy and on the whole plant]]',
+src:'[[<b>계산</b> 본 교재 11.2·11.5절 · B1: 5장 풀 문제 72 h, Δt = 4, 2, 1, 0.5 h · B5: ULOF 0–200 s 를 Radau(rtol 10⁻¹⁰)와 비교한 T(100 s) 오차, Δt = 0.4–0.05 s · 기준해 최고 노심 출구 635.6626 °C(44.8 s) · B5 자료는 data.py||<b>Calculation</b> This textbook &#167;11.2, 11.5 · B1: the ch. 5 pool problem to 72 h, Δt = 4, 2, 1, 0.5 h · B5: ULOF 0-200 s against Radau (rtol 10⁻¹⁰), error in T(100 s), Δt = 0.4-0.05 s · reference peak core outlet 635.6626 °C (44.8 s) · B5 data from data.py]]',
+html:`<h2 class="t">[[B1 과 B5 — <em>같은 차수</em>가 계통 전체에서도||B1 and B5 - <em>the same order</em> on the whole plant]]</h2>
+<ul class="b">
+  <li>[[해석해가 있는 풀 문제(B1)와 붕괴열·열전달계수·풀이 모두 살아 있는 ULOF(B5) 모두에서 후진 오일러는 기울기 1, 크랭크–니콜슨은 <b>기울기 2</b>||On the pool problem with an exact answer (B1) and on the full ULOF (B5), backward Euler shows slope 1 and Crank-Nicolson <b>slope 2</b>]]</li>
+  <li>[[간격 0.4 s 의 후진 오일러도 최고 온도 오차 0.1 K — 판정 여유 60 K 에 비해 <b>결론을 바꾸지 않음</b>||Even backward Euler at 0.4 s errs by 0.1 K at the peak - against a 60 K margin it <b>does not change the conclusion</b>]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 370" role="img" aria-label="[[B1(왼쪽)과 B5(오른쪽)의 시간 간격 대 오차, 후진 오일러와 크랭크–니콜슨(로그-로그)||Error against time step for B1 (left) and B5 (right), backward Euler and Crank-Nicolson (log-log)]]">
+  <g id="cv-a"></g><g id="cv-b"></g>
+</svg>
+</div></div>`,
+init(el){
+  const A=el.querySelector('#cv-a'), B=el.querySelector('#cv-b'), lg=v=>'1e'+Math.round(Math.log10(v));
+  const a1=pyAxes(A,{x0:70,y0:28,w:420,h:290,xr:[1500,16000],yr:[1e-3,10],xlog:true,ylog:true,xt:[1800,3600,7200,14400],yt:[1e-3,1e-2,0.1,1,10],
+    yf:v=>v>=1?v:lg(v),xl:TX('B1 · Δt (s)','B1 · Δt (s)'),yl:TX('72 h 오차 (K)','error at 72 h (K)')});
+  const dt1=[14400,7200,3600,1800];
+  [[[4.57,2.29,1.15,0.575],'var(--amber)','BE'],[[0.108,0.027,0.00675,0.00169],'var(--cool)','CN']].forEach((s,i)=>{
+    const P=dt1.map((d,k)=>[d,s[0][k]]); pyLine(A,a1,P,s[1],{w:2.6,delay:200*i});
+    P.forEach(p=>A.appendChild(svgEl('circle',{cx:a1.fx(p[0]),cy:a1.fy(p[1]),r:4.5,fill:s[1]})));
+    pyKey(A,110,60+i*24,s[1],s[2]); });
+  const a2=pyAxes(B,{x0:650,y0:28,w:420,h:290,xr:[0.04,0.5],yr:[1e-5,1],xlog:true,ylog:true,xt:[0.05,0.1,0.2,0.4],yt:[1e-5,1e-4,1e-3,1e-2,0.1,1],
+    yf:v=>v>=1?v:lg(v),xl:TX('B5 · Δt (s)','B5 · Δt (s)'),yl:TX('T(100 s) 오차 (K)','error in T(100 s) (K)')});
+  const dt5=[0.4,0.2,0.1,0.05];
+  [['BE','var(--amber)'],['CN','var(--cool)']].forEach((s,i)=>{
+    const P=dt5.map((d,k)=>[d,PYD.b5[s[0]][k]]); pyLine(B,a2,P,s[1],{w:2.6,delay:400+200*i});
+    P.forEach(p=>B.appendChild(svgEl('circle',{cx:a2.fx(p[0]),cy:a2.fy(p[1]),r:4.5,fill:s[1]})));
+    pyKey(B,690,60+i*24,s[1],s[0]); });
+}});
+
+
+/* ---------------------------------------------------------------- B4 계산기 */
+S({tag:'B4 · QUASI-STATIC BALANCE', ov:'[[B4 준정적 반응도 균형 — A, B, C 로 비보호 사고의 끝을 예측||B4 quasi-static reactivity balance - predicting where unprotected accidents end]]',
+src:'[[<b>계산</b> 본 교재 11.4절 · 정상 관계 T<sub>out</sub> − T<sub>in</sub> = ΔT<sub>c</sub>P/F, T<sub>f</sub> − T<sub>out</sub> = ΔT<sub>f</sub>P 를 반응도 식에 넣음 · ΔT<sub>c</sub> = 155 K, ΔT<sub>f</sub> = 33.6 K · A = α<sub>f</sub>ΔT<sub>f</sub>, B = (α<sub>f</sub> + α<sub>c</sub>/2)ΔT<sub>c</sub>, C = α<sub>f</sub> + α<sub>c</sub> + α<sub>g</sub> · D. C. Wade and Y. I. Chang, Nucl. Sci. Eng. 100 (1988) 507 의 준정적 균형과 같은 구조(원 논문은 A, B, C 를 양의 크기로 정의) · ULOF 의 F 는 0.05 로 둠||<b>Calculation</b> This textbook &#167;11.4 · steady relations T<sub>out</sub> − T<sub>in</sub> = ΔT<sub>c</sub>P/F, T<sub>f</sub> − T<sub>out</sub> = ΔT<sub>f</sub>P substituted into the reactivity sum · ΔT<sub>c</sub> = 155 K, ΔT<sub>f</sub> = 33.6 K · A = α<sub>f</sub>ΔT<sub>f</sub>, B = (α<sub>f</sub> + α<sub>c</sub>/2)ΔT<sub>c</sub>, C = α<sub>f</sub> + α<sub>c</sub> + α<sub>g</sub> · same structure as the quasi-static balance of D. C. Wade and Y. I. Chang, Nucl. Sci. Eng. 100 (1988) 507 (which defines A, B, C as positive magnitudes) · F = 0.05 for ULOF]]',
+abbr:'[[<b>준정적</b> 사고가 충분히 느려 매 순간을 정상 상태로 볼 수 있는 근사 · <b>ULOF · UTOP · ULOHS</b> 비보호 유량상실 · 과출력 · 열제거원 상실 · <b>A/B</b> 작을수록 유량상실의 온도 상승이 작음||<b>quasi-static</b> slow enough that every instant is a steady state · <b>ULOF, UTOP, ULOHS</b> unprotected loss of flow, overpower, loss of heat sink · <b>A/B</b> the smaller, the smaller the loss-of-flow temperature rise]]',
+html:`<h2 class="t">[[B4 준정적 반응도 균형 — <em>A · B · C</em>||B4 quasi-static reactivity balance - <em>A, B, C</em>]]</h2>
+<ul class="b">
+  <li>[[0 = (P − 1)A + (P/F − 1)B + C δT<sub>in</sub> + ρ<sub>ext</sub> — 느린 사고의 끝에서 총 반응도는 0. 계수 셋으로 세 비보호 사고의 점근값이 나옴||0 = (P − 1)A + (P/F − 1)B + C δT<sub>in</sub> + ρ<sub>ext</sub> - at the end of a slow accident total reactivity is zero. Three coefficients give all three asymptotes]]</li>
+  <li>[[계통코드는 균형식의 가정(막 계수 고정·붕괴열 없음)에서 <b>다섯째 자리까지</b> 맞음: ULOF P 0.15957 대 0.15956, UTOP 1.73485 대 1.73485||Under the formula&#8217;s assumptions (fixed film, no decay heat) the code matches <b>to five digits</b>: ULOF P 0.15957 vs 0.15956, UTOP 1.73485 vs 1.73485]]</li>
+</ul>
+<div class="body">
+<div class="fig">
+<table class="d">
+  <tr><th>[[계수||coefficient]]</th><th>[[값||value]]</th><th>[[사고||accident]]</th><th>[[점근값||asymptote]]</th></tr>
+  <tr><td>A</td><td class="n" id="q-a">−20.2 pcm</td><td>ULOF (F 0.05)</td><td class="n" id="q-ulof">+25.3 K</td></tr>
+  <tr><td>B</td><td class="n" id="q-b">−116.2 pcm</td><td>UTOP (+0.3 $)</td><td class="n" id="q-utop">P 1.726</td></tr>
+  <tr><td>C</td><td class="n" id="q-c">−1.40 pcm/K</td><td>ULOHS</td><td class="n" id="q-ulohs">T<sub>in</sub> 452.4 °C</td></tr>
+  <tr class="mark"><td>A/B</td><td class="n" id="q-ab">0.173</td><td>[[판정||verdict]]</td><td id="q-v">[[A/B 작음 — 유리||A/B small - favourable]]</td></tr>
+</table>
+</div>
+<div class="side">
+  <div class="ctl"><label>[[연료 계수 α_f||Fuel coeff α_f]] <span id="q-fs">−0.60</span></label><input type="range" id="q-f" min="-1.5" max="-0.1" step="0.05" value="-0.6"></div>
+  <div class="ctl"><label>[[냉각재 계수 α_c||Coolant coeff α_c]] <span id="q-cs">−0.30</span></label><input type="range" id="q-cc" min="-1" max="0.6" step="0.05" value="-0.3"></div>
+  <div class="ctl"><label>[[지지판 계수 α_g||Grid coeff α_g]] <span id="q-gs">−0.50</span></label><input type="range" id="q-g" min="-1.5" max="0" step="0.05" value="-0.5"></div>
+  <p class="sub" style="font-size:14.5px">[[단위 pcm/K · 교재 기본값 −0.6/−0.3/−0.5||units pcm/K · book defaults −0.6/−0.3/−0.5]]</p>
+</div>
+</div>`,
+init(el){
+  const f=el.querySelector('#q-f'), c=el.querySelector('#q-cc'), g=el.querySelector('#q-g'), dTc=155, dTf=33.61, F=0.05, rho=99;
+  const sg=v=>(v<0?'−':'+')+fmt(Math.abs(v),2);
+  function upd(){
+    const af=+f.value, ac=+c.value, ag=+g.value, A=af*dTf, B=(af+ac/2)*dTc, C=af+ac+ag;
+    el.querySelector('#q-a').textContent=sg(A).replace(/(\.\d)\d$/,'$1')+' pcm';
+    el.querySelector('#q-b').textContent=sg(B).replace(/(\.\d)\d$/,'$1')+' pcm';
+    el.querySelector('#q-c').textContent=sg(C)+' pcm/K';
+    el.querySelector('#q-ab').textContent=fmt(A/B,3);
+    const dto=dTc*A*(1-F)/(A*F+B);
+    el.querySelector('#q-ulof').textContent=(B<0? '+'+fmt(dto,1)+' K' : TX('B ≥ 0 — 발산','B ≥ 0 - runaway'));
+    const P=(A+B-rho)/(A+B); el.querySelector('#q-utop').textContent=(A+B<0? 'P '+fmt(P,3) : TX('A+B ≥ 0 — 발산','A+B ≥ 0 - runaway'));
+    el.querySelector('#q-ulohs').innerHTML=(C<0? 'T<sub>in</sub> '+fmt(355+(A+B)/C,1)+' °C' : TX('C ≥ 0 — 멈추지 않음','C ≥ 0 - no shutdown'));
+    el.querySelector('#q-v').textContent=(B<0&&A/B<0.5)? TX('A/B 작음 — 유리','A/B small - favourable') : TX('A/B 큼 — 불리','A/B large - unfavourable');
+    el.querySelector('#q-fs').textContent=af.toFixed(2); el.querySelector('#q-cs').textContent=ac.toFixed(2); el.querySelector('#q-gs').textContent=ag.toFixed(2);
+  }
+  [f,c,g].forEach(s=>s.oninput=upd); upd();
+}});
+
+
+/* ---------------------------------------------------------------- B4 ULOHS 넘침 */
+S({tag:'B4 · ULOHS OVERSHOOT', ov:'[[B4 ULOHS — 풀이 클수록 준정적 식에 다가감||B4 ULOHS - a bigger pool approaches the quasi-static answer]]',
+src:'[[<b>계산</b> 본 교재 11.4절 b4.py · 막 계수 고정, 붕괴열·RVACS 없음, IHX 10 s 동안 상실 · 풀 열용량 ×1, ×10, ×100 · 끝값 486.21, 456.08, 452.90 °C 대 식 452.44 °C · 넘침은 배율에 반비례(지발중성자가 출력을 수십 초 붙잡는 동안 열이 더 들어감) · 가로축은 시간/배율 · 자료 data.py||<b>Calculation</b> This textbook &#167;11.4, b4.py · fixed film, no decay heat or RVACS, IHX lost over 10 s · pool heat capacity ×1, ×10, ×100 · end values 486.21, 456.08, 452.90 °C against 452.44 °C · overshoot scales inversely with the factor (delayed neutrons hold power for tens of seconds while heat keeps coming) · x axis is time/factor · data from data.py]]',
+html:`<h2 class="t">[[B4 ULOHS — <em>준정적 가정이 깨지는 곳</em>||B4 ULOHS - <em>where the quasi-static assumption fails</em>]]</h2>
+<ul class="b">
+  <li>[[정격 풀은 0.6 K/s 로 데워져 반응도가 0 을 지나도 출력이 바로 0 이 되지 않음 → 34 K 넘침. <b>버그가 아니라 가정이 깨진 것</b>||The rated pool heats at 0.6 K/s, so power does not vanish the moment reactivity crosses zero → 34 K overshoot. <b>Not a bug - a broken assumption</b>]]</li>
+  <li>[[풀을 10배·100배로 키우면 넘침이 3.6 K, 0.46 K 로 1/10씩 줆 — 코드는 준정적 극한을 정확히 재현함||Scale the pool ×10, ×100 and the overshoot drops to 3.6 K and 0.46 K - the code reproduces the quasi-static limit]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 370" role="img" aria-label="[[풀 열용량 배율 1, 10, 100 에서 노심 입구 온도와 준정적 식 452.4 °C||Core inlet temperature for pool factors 1, 10, 100 and the quasi-static 452.4 °C]]">
+  <g id="b4-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const G=el.querySelector('#b4-g');
+  const ax=pyAxes(G,{x0:80,y0:28,w:760,h:290,xr:[10,20000],yr:[350,495],xlog:true,xt:[10,100,1000,10000],yt:[360,400,440,480],
+    xl:TX('시간 / 열용량 배율 (s)','time / heat-capacity factor (s)'),yl:TX('노심 입구 온도 (°C)','core inlet temperature (°C)')});
+  G.appendChild(svgEl('line',{x1:80,x2:840,y1:ax.fy(452.44),y2:ax.fy(452.44),stroke:'var(--ink-2)','stroke-dasharray':'6 5','stroke-width':1.6}));
+  G.appendChild(svgEl('text',{x:90,y:ax.fy(452.44)-8,class:'lbl b'})).textContent=TX('준정적 식 452.4 °C','quasi-static 452.4 °C');
+  [['1','var(--hot)','× 1'],['10','var(--amber)','× 10'],['100','var(--cool)','× 100']].forEach((s,i)=>{
+    pyLine(G,ax,PYD.b4[s[0]].filter(r=>r[0]>=10),s[1],{w:2.8,delay:300*i}); pyKey(G,880,90+i*28,s[1],TX('풀 ','pool ')+s[2]); });
+}});
+</script>

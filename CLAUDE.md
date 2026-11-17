@@ -14,6 +14,7 @@
 | `w02-03_smr-design-requirements` | 2~3 | 「SMR 설계요건과 공학적안전설비」 |
 | `w03-04_smr-data-and-pwr-smrs` | 3~4 | 「SMR 자료를 찾는 법과 PWR형 SMR」 |
 | `w05a_htgr-vhtr` · `w05b_sfr` · `w06_msr` | 5~6 | 「물을 쓰지 않는 SMR — VHTR · SFR · MSR」 1~6 · 7~11 · 12~18장 |
+| `w07-08_python-sfr-code` | 7~8 | 「파이썬으로 만드는 SFR 안전해석 코드」 1~13장 — 그래프 자료는 덱 폴더의 `data.py` 가 교재 실습 코드를 돌려 만든다 |
 
 비경수로 세 덱은 **섹션 번호가 교재 장 번호와 같다**(HTGR 1~6, SFR 7~11, MSR 12~18).
 

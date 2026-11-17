@@ -1,0 +1,249 @@
+<script>
+/* ================================================================
+   SECTION 06~08 — 물성 · 노심 열전달 · 루프 수력  (교재 6~8장)
+   Fink & Leibowitz 나트륨 물성을 브라우저에서 그대로 계산한다(T 는 켈빈).
+   ================================================================ */
+SECT('06~08 · [[물성 · 노심 · 루프||Properties, core, loop]]');
+
+const NA={
+  K:t=>t+273.15,
+  rho:t=>{ const x=1-(t+273.15)/2503.7; return 219+275.32*x+511.58*Math.sqrt(x); },
+  cp:t=>{ const T=t+273.15; return 1000*(1.6582-8.4790e-4*T+4.4541e-7*T*T-2992.6/(T*T)); },
+  k:t=>{ const T=t+273.15; return 124.67-0.11381*T+5.5226e-5*T*T-1.1842e-8*T*T*T; },
+  mu:t=>{ const T=t+273.15; return Math.exp(-6.4406-0.3958*Math.log(T)+556.835/T); }
+};
+
+S({bare:true, cls:'div', ov:'[[&#167;06~08 물성 · 노심 열전달 · 루프 수력||&#167;06-08 Properties, core heat transfer, loop]]',
+html:`[[<div class="no">06</div><h2>물성 · 노심 열전달 · 루프 수력</h2><div class="ln"></div>
+<p>계통코드의 물리 모듈 세 개를 한 파일씩 만듦 — <b>props.py · core.py · loop.py</b>.
+모든 함수는 섭씨를 받고 SI 를 돌려줌. 단위는 경계에서만 바꿈.</p>||<div class="no">06</div><h2>Properties, core heat transfer, loop</h2><div class="ln"></div>
+<p>Three physics modules, one file each - <b>props.py, core.py, loop.py</b>.
+Every function takes °C and returns SI. Units change only at the boundary.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 물성 */
+S({tag:'SODIUM PROPERTIES', ov:'[[나트륨 물성 모듈 — Fink–Leibowitz 와 흔한 실수 세 가지||Sodium properties - Fink-Leibowitz and three common mistakes]]',
+src:'[[<b>출처</b> J. K. Fink and L. Leibowitz, ANL/RE-95/2 (1995) · 본 교재 6장 · ρ = 219 + 275.32x + 511.58x<sup>0.5</sup>, x = 1 − T/2503.7 (T 는 K) · 다섯 온도에서 앞 교재 표 7.1 과 일치 · 앞 교재 7.2절 식은 f·g 자리가 바뀌어 인쇄됨(표 값은 정확)||<b>Source</b> J. K. Fink and L. Leibowitz, ANL/RE-95/2 (1995) · this textbook ch. 6 · ρ = 219 + 275.32x + 511.58x<sup>0.5</sup>, x = 1 − T/2503.7 (T in K) · matches table 7.1 of the earlier textbook at five temperatures · that book&#8217;s &#167;7.2 prints f and g swapped (its table is right)]]',
+abbr:'[[<b>Pr</b> 프란틀수 μc<sub>p</sub>/k — 운동량 확산 대 열 확산 · <b>kelvin()</b> 단위를 바꾸는 유일한 함수||<b>Pr</b> Prandtl number μc<sub>p</sub>/k - momentum over thermal diffusion · <b>kelvin()</b> the only function that converts units]]',
+html:`<h2 class="t">[[나트륨 물성 모듈 — <em>단위는 한 곳에서만</em>||Sodium properties - <em>convert units in one place</em>]]</h2>
+<ul class="b">
+  <li>[[상관식은 켈빈, 사람은 섭씨 — <b>kelvin() 하나</b>만 273.15 를 더함. 선형식에 섭씨를 넣으면 400 °C 밀도가 <b class="hot">+7.3 %</b>, 계수 f·g 를 바꾸면 <b class="hot">−3.4 %</b>||Correlations use kelvin, people use °C - <b>one kelvin()</b> adds 273.15. Putting °C into the linear fit gives <b class="hot">+7.3 %</b> at 400 °C; swapping f and g gives <b class="hot">−3.4 %</b>]]</li>
+</ul>
+<div class="body">
+<div class="fig">
+<svg viewBox="0 0 800 380" role="img" aria-label="[[100~900 °C 나트륨 밀도: Fink 식, 켈빈 선형식, 섭씨를 잘못 넣은 선형식||Sodium density 100-900 °C: Fink, linear fit in kelvin, and the linear fit fed with °C by mistake]]">
+  <g id="pr-g"></g><g id="pr-d"></g>
+</svg>
+</div>
+<div class="side">
+  <div class="readout hi"><span class="k">ρ · c<sub>p</sub></span><span class="v" id="pr-r" style="font-size:24px">857.7 · 1283</span></div>
+  <div class="readout"><span class="k">k · Pr</span><span class="v" id="pr-k" style="font-size:24px">69.5 · 0.0051</span></div>
+  <div class="ctl"><label>[[온도||Temperature]] <span id="pr-ts">400 °C</span></label>
+    <input type="range" id="pr-t" min="100" max="880" step="1" value="400"></div>
+</div>
+</div>`,
+init(el){
+  const G=el.querySelector('#pr-g'), D=el.querySelector('#pr-d');
+  const ax=pyAxes(G,{x0:70,y0:28,w:700,h:304,xr:[100,900],yr:[700,1000],xt:[100,300,500,700,900],yt:[700,800,900,1000],
+    xl:TX('온도 (°C)','temperature (°C)'),yl:TX('밀도 (kg/m³)','density (kg/m³)')});
+  G.insertBefore(svgEl('rect',{x:ax.fx(355),y:28,width:ax.fx(510)-ax.fx(355),height:304,fill:'var(--ok)',opacity:.12}),G.firstChild);
+  const T=[]; for(let t=100;t<=900;t+=10) T.push(t);
+  pyLine(G,ax,T.map(t=>[t,NA.rho(t)]),'var(--cool)',{w:3});
+  pyLine(G,ax,T.map(t=>[t,1014-0.235*(t+273.15)]),'var(--ink-3)',{dash:'6 5',w:2});
+  pyLine(G,ax,T.map(t=>[t,1014-0.235*t]),'var(--hot)',{dash:'3 4',w:2.2});
+  pyKey(G,470,50,'var(--cool)','Fink & Leibowitz');
+  pyKey(G,470,74,'var(--ink-3)',TX('선형식 (T 는 K)','linear fit (T in K)'),'6 5');
+  pyKey(G,470,98,'var(--hot)',TX('선형식에 °C — 실수','linear fit fed °C - wrong'),'3 4');
+  G.appendChild(svgEl('text',{x:ax.fx(432),y:324,'text-anchor':'middle',class:'lbl',fill:'var(--ok)'})).textContent=TX('운전 범위','operating');
+  const dot=svgEl('circle',{r:6,fill:'var(--amber)'}); D.appendChild(dot);
+  const s=el.querySelector('#pr-t');
+  function upd(){ const t=+s.value;
+    dot.setAttribute('cx',ax.fx(t)); dot.setAttribute('cy',ax.fy(NA.rho(t)));
+    el.querySelector('#pr-r').textContent=fmt(NA.rho(t),1)+' · '+fmt(NA.cp(t));
+    el.querySelector('#pr-k').textContent=fmt(NA.k(t),1)+' · '+(NA.mu(t)*NA.cp(t)/NA.k(t)).toFixed(4);
+    el.querySelector('#pr-ts').textContent=t+' °C'; }
+  s.oninput=upd; upd();
+}});
+
+
+/* ---------------------------------------------------------------- 연료봉 열저항 */
+S({tag:'FUEL PIN · RESISTANCES', ov:'[[연료봉 열저항 네 층 — 연료 전도가 60 %||Four thermal resistances in a fuel pin - fuel conduction takes 60 %]]',
+src:'[[<b>계산</b> 본 교재 7.1·7.3절 · 슬러그 7.8 mm, 피복 9.0/10.0 mm, k<sub>f</sub> 20, 결합 나트륨 65, HT9 25 W/(m·K), h = 90,775 W/(m²·K)(정격) · 평균–표면 q&#8242;/(8πk<sub>f</sub>), 껍질 q&#8242;ln(r<sub>o</sub>/r<sub>i</sub>)/(2πk), 막 q&#8242;/(πD<sub>o</sub>h) · 10 kW/m 에서 19.89 + 3.50 + 6.71 + 3.51 = 33.61 K, 중심은 냉각재 + 53.5 K · 축 방향 첨두 없음||<b>Calculation</b> This textbook &#167;7.1, 7.3 · slug 7.8 mm, clad 9.0/10.0 mm, k<sub>f</sub> 20, sodium bond 65, HT9 25 W/(m·K), h = 90,775 W/(m²·K) at rated flow · mean-to-surface q&#8242;/(8πk<sub>f</sub>), shells q&#8242;ln(r<sub>o</sub>/r<sub>i</sub>)/(2πk), film q&#8242;/(πD<sub>o</sub>h) · at 10 kW/m 19.89 + 3.50 + 6.71 + 3.51 = 33.61 K, centre at coolant + 53.5 K · no axial peaking]]',
+abbr:'[[<b>q&#8242;</b> 선출력 W/m · <b>결합 나트륨</b> 금속연료와 피복 사이 간극을 채운 나트륨 · <b>HT9</b> 페라이트-마르텐사이트 피복강 · <b>UA</b> 열컨덕턴스 W/K||<b>q&#8242;</b> linear heat rate, W/m · <b>sodium bond</b> sodium filling the fuel-clad gap · <b>HT9</b> ferritic-martensitic cladding steel · <b>UA</b> thermal conductance, W/K]]',
+html:`<h2 class="t">[[연료봉 <em>열저항 네 층</em>||Four <em>thermal resistances</em> in a fuel pin]]</h2>
+<ul class="b">
+  <li>[[열은 연료 → 결합 나트륨 → 피복 → 냉각재 막을 직렬로 지남. 층마다의 온도 강하는 <b>선출력에 비례</b>함||Heat crosses fuel → bond → clad → film in series. Each drop is <b>proportional to the linear heat rate</b>]]</li>
+  <li>[[연료봉 1,200개를 <b>노드 하나</b>로: M<sub>f</sub>c<sub>f</sub> dT<sub>f</sub>/dt = P − UA(T<sub>f</sub> − T<sub>c</sub>) · UA = 0.893 MW/K, 시간상수 <b>0.43 s</b>||All 1,200 pins become <b>one node</b>: M<sub>f</sub>c<sub>f</sub> dT<sub>f</sub>/dt = P − UA(T<sub>f</sub> − T<sub>c</sub>) · UA = 0.893 MW/K, time constant <b>0.43 s</b>]]</li>
+</ul>
+<div class="body">
+<div class="fig">
+<svg viewBox="0 0 800 330" role="img" aria-label="[[연료봉 단면과 네 층의 온도 강하 막대||Fuel pin cross-section and bars for the four temperature drops]]">
+  <circle cx="140" cy="160" r="130" fill="var(--cool)" opacity=".14"/>
+  <circle cx="140" cy="160" r="82" fill="var(--ink-3)" opacity=".55"/>
+  <circle cx="140" cy="160" r="74" fill="var(--amber)" opacity=".35"/>
+  <circle cx="140" cy="160" r="64" fill="var(--hot)" opacity=".85"/>
+  <text x="140" y="166" text-anchor="middle" font-family="var(--sans)" font-size="17" font-weight="600" fill="var(--on-accent)">U-10Zr</text>
+  <text x="140" y="314" text-anchor="middle" class="lbl">[[냉각재 막 · 피복 · 결합재 · 연료||film · clad · bond · fuel]]</text>
+  <g id="rs-g"></g>
+</svg>
+</div>
+<div class="side">
+  <div class="readout warn"><span class="k">[[연료 중심 − 냉각재||Centre − coolant]]</span><span class="v" id="rs-c">53.5<small>K</small></span></div>
+  <div class="readout"><span class="k">[[연료 평균 − 냉각재||Mean fuel − coolant]]</span><span class="v" id="rs-m">33.6<small>K</small></span></div>
+  <div class="ctl"><label>[[선출력 q&#8242;||Linear heat rate q&#8242;]] <span id="rs-qs">10.0 kW/m</span></label>
+    <input type="range" id="rs-q" min="2" max="40" step="0.5" value="10"></div>
+</div>
+</div>`,
+init(el){
+  const G=el.querySelector('#rs-g'), mk=svgEl;
+  const R=[[1.9894e-3,TX('연료 (평균−표면)','fuel (mean−surface)'),'var(--hot)'],[3.5039e-4,TX('결합 나트륨','sodium bond'),'var(--amber)'],
+           [6.7075e-4,TX('피복 HT9','HT9 clad'),'var(--ink-3)'],[1/(Math.PI*0.01*90775),TX('대류 막','film'),'var(--cool)']];
+  const bars=R.map((r,i)=>{ const y=40+i*66;
+    G.appendChild(mk('text',{x:310,y:y+20,'font-family':'var(--sans)','font-size':16,fill:'var(--ink)','font-weight':600})).textContent=r[1];
+    const b=mk('rect',{x:310,y:y+30,height:18,width:10,fill:r[2]}); G.appendChild(b);
+    const t=mk('text',{x:320,y:y+45,'font-family':'var(--mono)','font-size':15,fill:r[2],'font-weight':600}); G.appendChild(t);
+    return [b,t,r[0]]; });
+  const s=el.querySelector('#rs-q');
+  function upd(){ const q=(+s.value)*1e3; let sum=0;
+    bars.forEach(b=>{ const dT=b[2]*q; sum+=dT; const w=Math.min(400,dT*4.5); b[0].setAttribute('width',Math.max(2,w));
+      b[1].setAttribute('x',310+Math.max(2,w)+8); b[1].textContent=fmt(dT,1)+' K'; });
+    el.querySelector('#rs-m').innerHTML=fmt(sum,1)+'<small>K</small>';
+    el.querySelector('#rs-c').innerHTML=fmt(sum+R[0][0]*q,1)+'<small>K</small>';
+    el.querySelector('#rs-qs').textContent=fmt(q/1e3,1)+' kW/m'; }
+  s.oninput=upd; upd();
+}});
+
+
+/* ---------------------------------------------------------------- Mikityuk */
+S({tag:'LIQUID-METAL HEAT TRANSFER', ov:'[[액체금속 열전달 — 물 상관식은 2.4배 틀림||Liquid-metal heat transfer - the water correlation is 2.4 × off]]',
+src:'[[<b>출처</b> K. Mikityuk, Nucl. Eng. Des. 239 (2009) 680–687 · Nu = 0.047(1 − e<sup>−3.8(P/D−1)</sup>)(Pe<sup>0.77</sup> + 250), 30 ≤ Pe ≤ 5000, 1.1 ≤ P/D ≤ 1.95 · 본 교재 7.2절 목록 7.3 · 정격 510 °C: Re 69,251, Pr 0.0046, Pe 319 → Nu 8.37 대 Dittus–Boelter 19.92||<b>Source</b> K. Mikityuk, Nucl. Eng. Des. 239 (2009) 680-687 · Nu = 0.047(1 − e<sup>−3.8(P/D−1)</sup>)(Pe<sup>0.77</sup> + 250), 30 ≤ Pe ≤ 5000, 1.1 ≤ P/D ≤ 1.95 · this textbook &#167;7.2, listing 7.3 · rated, 510 °C: Re 69,251, Pr 0.0046, Pe 319 → Nu 8.37 against Dittus-Boelter 19.92]]',
+abbr:'[[<b>Pe</b> 페클레수 Re·Pr · <b>Nu</b> 누셀트수 hD<sub>h</sub>/k · <b>P/D</b> 봉 피치 대 지름 · <b>Dittus–Boelter</b> 물·기체용 난류 관내 상관식 0.023Re<sup>0.8</sup>Pr<sup>0.4</sup>||<b>Pe</b> Péclet number Re·Pr · <b>Nu</b> Nusselt number hD<sub>h</sub>/k · <b>P/D</b> pitch over diameter · <b>Dittus-Boelter</b> turbulent pipe correlation for water and gas, 0.023Re<sup>0.8</sup>Pr<sup>0.4</sup>]]',
+html:`<h2 class="t">[[액체금속 열전달 — <em>Pe 하나로</em> 정리||Liquid-metal heat transfer - <em>one number, Pe</em>]]</h2>
+<ul class="b">
+  <li>[[나트륨의 Pr 은 0.005 — 열이 운동량보다 200배 빨리 퍼져 난류 중심에서도 분자 전도가 열을 나름. 레이놀즈 상사(물 상관식의 근거)가 무너짐||Sodium&#8217;s Pr is 0.005 - heat spreads 200 times faster than momentum, so molecular conduction carries heat even in the turbulent core. Reynolds analogy (the basis of water correlations) breaks]]</li>
+  <li>[[Pe → 0 에서 Mikityuk 식은 <b>약 6.3</b> 에 머묾 — 유동이 멈춰도 전도로 열이 감. 물 상관식은 0 으로 감||As Pe → 0, Mikityuk stays near <b>6.3</b> - heat still conducts when flow stops. The water correlation goes to zero]]</li>
+</ul>
+<div class="body">
+<div class="fig">
+<svg viewBox="0 0 800 330" role="img" aria-label="[[페클레수에 따른 누셀트수: Mikityuk 식과 Dittus–Boelter 식(로그-로그)||Nusselt number against Péclet number: Mikityuk and Dittus-Boelter (log-log)]]">
+  <g id="mk-g"></g><g id="mk-d"></g>
+</svg>
+</div>
+<div class="side">
+  <div class="readout hi"><span class="k">Nu Mikityuk</span><span class="v" id="mk-a">8.37</span></div>
+  <div class="readout warn"><span class="k">Nu Dittus–Boelter</span><span class="v" id="mk-b">19.92</span></div>
+  <div class="ctl"><label>[[페클레수 Pe||Péclet number Pe]] <span id="mk-ps">319</span></label>
+    <input type="range" id="mk-p" min="1" max="3.6" step="0.005" value="2.5038"></div>
+</div>
+</div>`,
+init(el){
+  const G=el.querySelector('#mk-g'), D=el.querySelector('#mk-d'), Pr=0.0046049, x=1-Math.exp(-3.8*0.2);
+  const mki=p=>0.047*x*(Math.pow(p,0.77)+250), db=p=>0.023*Math.pow(p/Pr,0.8)*Math.pow(Pr,0.4);
+  const ax=pyAxes(G,{x0:70,y0:28,w:700,h:262,xr:[10,4000],yr:[1,200],xlog:true,ylog:true,xt:[10,30,100,300,1000,3000],yt:[1,3,10,30,100],
+    xl:TX('페클레수 Pe','Péclet number Pe'),yl:TX('누셀트수 Nu','Nusselt number Nu')});
+  G.insertBefore(svgEl('rect',{x:ax.fx(30),y:28,width:ax.fx(4000)-ax.fx(30),height:262,fill:'var(--ok)',opacity:.08}),G.firstChild);
+  const P=[]; for(let k=0;k<=80;k++) P.push(Math.pow(10,1+k*2.6/80));
+  pyLine(G,ax,P.map(p=>[p,mki(p)]),'var(--cool)',{w:3});
+  pyLine(G,ax,P.map(p=>[p,db(p)]),'var(--hot)',{dash:'7 5',w:2.4});
+  pyKey(G,100,60,'var(--cool)',TX('Mikityuk (액체금속, P/D 1.2)','Mikityuk (liquid metal, P/D 1.2)'));
+  pyKey(G,100,84,'var(--hot)',TX('Dittus–Boelter (물)','Dittus-Boelter (water)'),'7 5');
+  const d1=svgEl('circle',{r:6,fill:'var(--cool)'}), d2=svgEl('circle',{r:6,fill:'var(--hot)'}); D.appendChild(d1); D.appendChild(d2);
+  const s=el.querySelector('#mk-p');
+  function upd(){ const p=Math.pow(10,+s.value);
+    d1.setAttribute('cx',ax.fx(p)); d1.setAttribute('cy',ax.fy(mki(p))); d2.setAttribute('cx',ax.fx(p)); d2.setAttribute('cy',ax.fy(db(p)));
+    el.querySelector('#mk-a').textContent=fmt(mki(p),2); el.querySelector('#mk-b').textContent=fmt(db(p),2);
+    el.querySelector('#mk-ps').textContent=fmt(p); }
+  s.oninput=upd; upd();
+}});
+
+
+/* ---------------------------------------------------------------- 루프와 펌프 서행 */
+S({tag:'LOOP MOMENTUM · COASTDOWN', ov:'[[루프 운동량 방정식과 펌프 서행||Loop momentum equation and pump coastdown]]',
+src:'[[<b>계산</b> 본 교재 8.1–8.2절 · I dṁ/dt = Δp<sub>pump</sub> + gH(ρ<sub>cold</sub> − ρ<sub>hot</sub>) − Rṁ|ṁ| · I = 65 1/m, R = 4.509 1/(kg·m), H = 5 m · 정격 펌프 수두 102.0 kPa 는 정상 상태 조건에서 거꾸로 정함, 부력 1.75 kPa · 펌프 회전수 1/(1 + t/τ), 수두 ∝ 회전수² · 온도는 정격 고정(목록 8.3) · τ = 10 s 에서 10 s 51.5 %, 60 s 19.3 %||<b>Calculation</b> This textbook &#167;8.1-8.2 · I dṁ/dt = Δp<sub>pump</sub> + gH(ρ<sub>cold</sub> − ρ<sub>hot</sub>) − Rṁ|ṁ| · I = 65 1/m, R = 4.509 1/(kg·m), H = 5 m · rated pump head 102.0 kPa back-solved from the steady state, buoyancy 1.75 kPa · pump speed 1/(1 + t/τ), head ∝ speed² · temperatures held at rated (listing 8.3) · at τ = 10 s: 51.5 % at 10 s, 19.3 % at 60 s]]',
+abbr:'[[<b>관성 I</b> 루프의 Σ(L/A) · <b>R</b> 마찰·형상 손실의 저항 계수 · <b>서행</b> 펌프 전원이 끊긴 뒤 회전자 관성으로 천천히 멈추는 것||<b>inertia I</b> Σ(L/A) round the loop · <b>R</b> friction and form-loss coefficient · <b>coastdown</b> the pump slowing on rotor inertia after losing power]]',
+html:`<h2 class="t">[[루프 운동량 방정식과 <em>펌프 서행</em>||Loop momentum equation and <em>pump coastdown</em>]]</h2>
+<ul class="b">
+  <li>[[루프 한 바퀴의 압력 수지 하나: <b>관성 = 펌프 + 부력 − 마찰</b>. 정격 펌프 수두는 입력하지 않고 정상 상태 조건에서 정함 — 정상 상태 초기화의 기본 생각||One pressure balance round the loop: <b>inertia = pump + buoyancy − friction</b>. The rated pump head is not an input - it is back-solved from the steady state]]</li>
+  <li>[[관성 시간상수 Iṁ<sub>0</sub>/Δp<sub>0</sub> = 0.097 s 가 펌프 τ 보다 100배 짧아 유량은 회전수를 따라감. 회전수가 줄어도 <b class="ok">부력이 13 % 를 지탱</b>함||The loop time constant Iṁ<sub>0</sub>/Δp<sub>0</sub> = 0.097 s is 100 times shorter than τ, so flow follows pump speed. As speed falls, <b class="ok">buoyancy holds 13 %</b>]]</li>
+</ul>
+<div class="body">
+<div class="fig">
+<svg viewBox="0 0 800 320" role="img" aria-label="[[펌프 정지 후 120초 동안 유량과 펌프 회전수, 부력만의 유량||Flow, pump speed and the buoyancy-only flow for 120 s after the pumps trip]]">
+  <g id="cd-g"></g><g id="cd-d"></g>
+</svg>
+</div>
+<div class="side">
+  <div class="readout hi"><span class="k">[[10 s 유량||Flow at 10 s]]</span><span class="v" id="cd-a">51.5<small>%</small></span></div>
+  <div class="readout"><span class="k">[[60 s 유량||Flow at 60 s]]</span><span class="v" id="cd-b">19.3<small>%</small></span></div>
+  <div class="ctl"><label>[[펌프 관성 τ||Pump inertia τ]] <span id="cd-ts">10 s</span></label>
+    <input type="range" id="cd-t" min="2" max="40" step="1" value="10"></div>
+</div>
+</div>`,
+init(el){
+  const G=el.querySelector('#cd-g'), D=el.querySelector('#cd-d'), I=65, R=4.509152, dp0=102049.16, db0=1752.814, m0=151.7244;
+  const ax=pyAxes(G,{x0:70,y0:28,w:700,h:248,xr:[0,120],yr:[0,100],xt:[0,20,40,60,80,100,120],yt:[0,20,40,60,80,100],
+    xl:TX('펌프 정지 후 시간 (s)','time after pump trip (s)'),yl:TX('정격 대비 (%)','% of rated')});
+  const fnc=100*Math.sqrt(db0/(R*m0*m0));
+  G.appendChild(svgEl('line',{x1:70,x2:770,y1:ax.fy(fnc),y2:ax.fy(fnc),stroke:'var(--ok)','stroke-dasharray':'4 4','stroke-width':1.6}));
+  G.appendChild(svgEl('text',{x:760,y:ax.fy(fnc)-8,'text-anchor':'end',class:'lbl',fill:'var(--ok)'})).textContent=TX('부력만의 유량 13.0 %','buoyancy-only 13.0 %');
+  pyKey(G,470,50,'var(--cool)',TX('유량 (운동량식 적분)','flow (momentum equation)'));
+  pyKey(G,470,74,'var(--amber)',TX('펌프 회전수','pump speed'),'6 5');
+  const s=el.querySelector('#cd-t');
+  function upd(){ const tau=+s.value, dt=0.01; let m=m0, t=0, a10=0, a60=0; const P=[[0,100]], W=[];
+    for(let k=1;k<=12000;k++){ const w=1/(1+t/tau); m+=dt*(dp0*w*w+db0-R*m*Math.abs(m))/I; t=k*dt;
+      if(k===1000) a10=m; if(k===6000) a60=m; if(k%50===0) P.push([t,100*m/m0]); }
+    for(let t2=0;t2<=120;t2+=1) W.push([t2,100/(1+t2/tau)]);
+    D.innerHTML='';
+    D.appendChild(svgEl('path',{d:'M'+W.map(p=>ax.fx(p[0]).toFixed(1)+','+ax.fy(p[1]).toFixed(1)).join(' L'),fill:'none',stroke:'var(--amber)','stroke-width':2,'stroke-dasharray':'6 5'}));
+    D.appendChild(svgEl('path',{d:'M'+P.map(p=>ax.fx(p[0]).toFixed(1)+','+ax.fy(p[1]).toFixed(1)).join(' L'),fill:'none',stroke:'var(--cool)','stroke-width':3}));
+    el.querySelector('#cd-a').innerHTML=fmt(100*a10/m0,1)+'<small>%</small>';
+    el.querySelector('#cd-b').innerHTML=fmt(100*a60/m0,1)+'<small>%</small>';
+    el.querySelector('#cd-ts').textContent=tau+' s'; }
+  s.oninput=upd; upd();
+}});
+
+
+/* ---------------------------------------------------------------- 자연순환 */
+S({tag:'NATURAL CIRCULATION', ov:'[[자연순환 유량 — 출력의 세제곱근에 비례||Natural circulation flow - the cube root of power]]',
+src:'[[<b>계산</b> 본 교재 8.3절 · 정상 상태 Rṁ² = gHρβΔT, ΔT = Q/(ṁc<sub>p</sub>) → ṁ = (gHρβQ/(c<sub>p</sub>R))<sup>1/3</sup> · β, ρ 는 355 °C 값, c<sub>p</sub> 1275.7 · 마찰계수는 정격 Re 의 상수(저유량에서는 실제 마찰이 더 큼 — 13장) · 11장 B3 계통 계산: 2 % 10.541, 5 % 14.316, 10 % 18.058 kg/s||<b>Calculation</b> This textbook &#167;8.3 · steady Rṁ² = gHρβΔT, ΔT = Q/(ṁc<sub>p</sub>) → ṁ = (gHρβQ/(c<sub>p</sub>R))<sup>1/3</sup> · β and ρ at 355 °C, c<sub>p</sub> 1275.7 · friction fixed at the rated Re (real friction is larger at low flow - ch. 13) · B3 system results in ch. 11: 2 % 10.541, 5 % 14.316, 10 % 18.058 kg/s]]',
+abbr:'[[<b>β</b> 체적팽창계수 −(1/ρ)dρ/dT · <b>열중심 높이차 H</b> IHX 와 노심의 가운데 높이 차이||<b>β</b> volumetric expansion coefficient −(1/ρ)dρ/dT · <b>thermal-centre height H</b> elevation of the IHX centre above the core centre]]',
+html:`<h2 class="t">[[자연순환 유량 — <em>출력의 세제곱근</em>||Natural circulation - <em>the cube root of power</em>]]</h2>
+<ul class="b">
+  <li>[[펌프가 서면 부력과 마찰의 균형이 유량을 정함. 출력이 8배가 되어도 유량은 <b>2배</b>만 됨 → 출력이 클수록 노심 온도차가 커짐||With pumps off, buoyancy balances friction. Eight times the power gives only <b>twice</b> the flow → the core ΔT grows with power]]</li>
+  <li>[[붕괴열 수준(1–2 %)에서 유량은 8–11 kg/s(정격의 5.5–7 %), 노심 온도차 28–45 K||At decay-heat level (1-2 %) the flow is 8-11 kg/s (5.5-7 % of rated) with a core ΔT of 28-45 K]]</li>
+</ul>
+<div class="body">
+<div class="fig">
+<svg viewBox="0 0 800 330" role="img" aria-label="[[출력에 따른 자연순환 유량: 해석해 선과 계통코드 계산 점(로그-로그)||Natural circulation flow against power: analytic line and system-code points (log-log)]]">
+  <g id="nc-g"></g><g id="nc-d"></g>
+</svg>
+</div>
+<div class="side">
+  <div class="readout hi"><span class="k">[[자연순환 유량||Natural circulation flow]]</span><span class="v" id="nc-m">10.53<small>kg/s</small></span></div>
+  <div class="readout warn"><span class="k">[[노심 온도차||Core ΔT]]</span><span class="v" id="nc-t">44.7<small>K</small></span></div>
+  <div class="ctl"><label>[[출력||Power]] <span id="nc-ps">2.0 %</span></label>
+    <input type="range" id="nc-p" min="-1" max="1.5" step="0.005" value="0.301"></div>
+</div>
+</div>`,
+init(el){
+  const G=el.querySelector('#nc-g'), D=el.querySelector('#nc-d'), R=4.509152, cp=1275.658, g=9.81, H=5;
+  const r=NA.rho(355), be=-(NA.rho(355.5)-NA.rho(354.5))/r;
+  const mf=q=>Math.pow(g*H*r*be*q/(cp*R),1/3);
+  const ax=pyAxes(G,{x0:70,y0:28,w:700,h:262,xr:[0.1,30],yr:[3,40],xlog:true,ylog:true,xt:[0.1,0.3,1,3,10,30],yt:[3,5,10,20,40],
+    xl:TX('출력 (정격의 %)','power (% of rated)'),yl:TX('유량 (kg/s)','flow (kg/s)')});
+  const P=[]; for(let k=0;k<=60;k++){ const f=Math.pow(10,-1+k*2.477/60); P.push([f,mf(f/100*30e6)]); }
+  pyLine(G,ax,P,'var(--cool)',{w:3});
+  [[2,10.541],[5,14.316],[10,18.058]].forEach(p=>G.appendChild(svgEl('circle',{cx:ax.fx(p[0]),cy:ax.fy(p[1]),r:6,fill:'var(--hot)'})));
+  pyKey(G,100,60,'var(--cool)',TX('해석해 ṁ ∝ Q^1/3','analytic ṁ ∝ Q^1/3'));
+  G.appendChild(svgEl('circle',{cx:113,cy:79,r:6,fill:'var(--hot)'}));
+  G.appendChild(svgEl('text',{x:134,y:84,'font-family':'var(--sans)','font-size':14.5,fill:'var(--ink-2)'})).textContent=TX('계통코드 (11장 B3)','system code (B3, ch. 11)');
+  const dot=svgEl('circle',{r:6,fill:'var(--amber)'}); D.appendChild(dot);
+  const s=el.querySelector('#nc-p');
+  function upd(){ const f=Math.pow(10,+s.value), q=f/100*30e6, m=mf(q);
+    dot.setAttribute('cx',ax.fx(f)); dot.setAttribute('cy',ax.fy(m));
+    el.querySelector('#nc-m').innerHTML=fmt(m,2)+'<small>kg/s</small>';
+    el.querySelector('#nc-t').innerHTML=fmt(q/(m*cp),1)+'<small>K</small>';
+    el.querySelector('#nc-ps').textContent=fmt(f,f<1?2:1)+' %'; }
+  s.oninput=upd; upd();
+}});
+</script>

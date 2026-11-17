@@ -7,7 +7,7 @@
 | `THINK Lab SMR 설계요건과 공학적안전설비 (Rev1.0).pdf` | `w02-03_smr-design-requirements` | 60쪽. **PDF 만** — 원본(원고·Word)은 `malmok2/Documents` 의 같은 이름 Rev 폴더. 거기서 다시 구우면 PDF 를 이리로 다시 복사한다 |
 | `THINK Lab SMR 자료를 찾는 법과 PWR형 SMR (Rev1.0).docx` · `.pdf` | `w03-04_smr-data-and-pwr-smrs` | 81쪽 |
 | `THINK Lab 물을 쓰지 않는 SMR - VHTR SFR MSR (Rev1.0 수치정정).docx` · `.pdf` | `w05a_htgr-vhtr` · `w05b_sfr` · `w06_msr` | 94쪽. 2026-10 수치 정정 반영(CHANGELOG 참조) |
-| `THINK Lab 파이썬으로 만드는 SFR 안전해석 코드 (Rev1.0).docx` · `.pdf` | (덱 없음 — 실습 교재) | 92쪽. 파이썬 기초부터 30 MWt 풀형 SFR 계통코드를 짓고 벤치마크·사고 4종까지. 원고·실습 코드(`code/minisfr`)는 `malmok2/Documents` 의 같은 이름 Rev 폴더 |
+| `THINK Lab 파이썬으로 만드는 SFR 안전해석 코드 (Rev1.0).docx` · `.pdf` | `w07-08_python-sfr-code` | 92쪽. 파이썬 기초부터 30 MWt 풀형 SFR 계통코드를 짓고 벤치마크·사고 4종까지. 원고·실습 코드(`code/minisfr`)는 `malmok2/Documents` 의 같은 이름 Rev 폴더 |
 
 **PDF 는 Word 에서 굽는다** — 손으로 고치지 않는다. Word 를 고치면 PDF 도 다시 구워 같이 커밋한다.
 `malmok2/Documents` 의 교재 키트로 굽는다(LibreOffice 가 목차를 채우고 Pretendard 를 심는다):

@@ -1,0 +1,159 @@
+<script>
+/* ================================================================
+   SECTION 10 — 모듈 결합: plant.py  (교재 10장)
+   PYD 열: [t, P, F, T_f, T_c(출구), T_in, ρ_f, ρ_c, ρ_g, ρ_ext]
+   ================================================================ */
+SECT('10 · [[모듈 결합||Coupling the modules]]');
+
+S({bare:true, cls:'div', ov:'[[&#167;10 모듈 결합 — 상태 19개의 계통코드||&#167;10 Coupling - a 19-state system code]]',
+html:`[[<div class="no">10</div><h2>모듈 결합 — plant.py</h2><div class="ln"></div>
+<p>다섯 모듈을 우변 함수 하나로 묶음. 순서가 곧 인과임 — <b>온도 → 반응도 → 출력 → 열 흐름 → 온도 변화</b>.
+계산 전에 정상 상태를 맞추고 무사고 시험으로 확인함.</p>||<div class="no">10</div><h2>Coupling - plant.py</h2><div class="ln"></div>
+<p>Five modules become one right-hand-side function. The order is the causality - <b>temperature → reactivity → power → heat flow → temperature change</b>.
+Set the steady state first and confirm it with a null transient.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 상태 벡터 */
+S({tag:'STATE VECTOR', ov:'[[상태 벡터 19칸 — 모든 모듈이 같은 약속을 지킴||The 19-slot state vector - one contract for every module]]',
+src:'[[<b>출처</b> 본 교재 10.1절 · 배치는 minisfr/plant.py 머리말 독스트링 · IF = 1 + 6 + 7 = 14 는 온도 묶음이 시작하는 위치 · T<sub>c</sub> 는 노심 냉각재 칸 = 노심 출구(도너셀), T<sub>k</sub> 는 저온 풀 = 노심 입구||<b>Source</b> This textbook &#167;10.1 · layout in the docstring of minisfr/plant.py · IF = 1 + 6 + 7 = 14 marks where the temperatures start · T<sub>c</sub> is the core coolant cell = core outlet (donor cell), T<sub>k</sub> the cold pool = core inlet]]',
+abbr:'[[<b>도너셀</b> 노드 온도를 출구 온도와 같게 두는 1차 상류 근사 · <b>슬라이싱</b> y[1:7] 처럼 배열 일부를 자르는 문법 — 끝 번호는 포함하지 않음||<b>donor cell</b> first-order upwind - node temperature equals its outlet · <b>slicing</b> taking part of an array like y[1:7] - the end index is excluded]]',
+html:`<h2 class="t">[[상태 벡터 <em>19칸</em>||The <em>19-slot</em> state vector]]</h2>
+<ul class="b">
+  <li>[[적분기는 숫자 배열 하나만 앎. 몇 번째 칸이 무엇인지는 코드를 쓰는 사람이 정하고 <b>모든 모듈이 같은 약속을 지켜야 함</b> — 어긋나면 오류 없이 틀린 답이 나옴||The integrator only sees one array. Which slot means what is a contract <b>every module must keep</b> - break it and you get wrong answers without an error]]</li>
+</ul>
+<div class="body"><div class="fig">
+<svg viewBox="0 0 1120 350" role="img" aria-label="[[상태 벡터 19칸: 출력 1, 선구핵 6, 붕괴열 7, 온도 4, 유량 1||19 slots: power 1, precursors 6, decay heat 7, temperatures 4, flow 1]]">
+  <g id="sv-g" transform="translate(0,26)"></g>
+</svg>
+</div></div>`,
+init(el){
+  const G=el.querySelector('#sv-g'), mk=svgEl, gs=[];
+  const S1=[['n','var(--hot)']].concat([1,2,3,4,5,6].map(i=>['c'+i,'var(--amber)'])).concat([1,2,3,4,5,6,7].map(j=>['h'+j,'var(--ink-3)']))
+    .concat([['T_f','var(--hot)'],['T_c','var(--cool)'],['T_h','var(--hot)'],['T_k','var(--cool)'],['ṁ','var(--ok)']]);
+  S1.forEach((s,i)=>{ const x=i*58.5, g=mk('g',{transform:'translate('+x+',90)',opacity:0});
+    g.appendChild(mk('rect',{width:52,height:64,fill:'var(--panel)',stroke:s[1],'stroke-width':1.6}));
+    g.appendChild(mk('text',{x:26,y:40,'text-anchor':'middle','font-family':'var(--mono)','font-size':15,fill:'var(--ink)','font-weight':600})).textContent=s[0];
+    g.appendChild(mk('text',{x:26,y:86,'text-anchor':'middle',class:'lbl'})).textContent=String(i);
+    G.appendChild(g); gs.push(g); });
+  [[0,0,TX('출력','power'),'var(--hot)'],[1,6,TX('선구핵 6군 (9장)','precursors (ch. 9)'),'var(--amber)'],[7,13,TX('붕괴열 7군 (4장)','decay heat (ch. 4)'),'var(--ink-3)'],
+   [14,17,TX('온도 4 (7·10장)','4 temperatures'),'var(--cool)'],[18,18,TX('유량','flow'),'var(--ok)']].forEach((b,k)=>{
+    const xa=b[0]*58.5, xb=b[1]*58.5+52, y=k%2?44:64;
+    G.appendChild(mk('line',{x1:xa,x2:xb,y1:y+10,y2:y+10,stroke:b[3],'stroke-width':2.4}));
+    G.appendChild(mk('text',{x:(xa+xb)/2,y:y,'text-anchor':'middle','font-family':'var(--sans)','font-size':15,fill:b[3],'font-weight':600})).textContent=b[2]; });
+  G.appendChild(mk('text',{x:0,y:228,'font-family':'var(--mono)','font-size':16,fill:'var(--ink)'})).textContent='n, c, hd = y[0], y[1:7], y[7:IF]      tf, tc, th, tk, m = y[IF:]';
+  G.appendChild(mk('text',{x:0,y:262,'font-family':'var(--sans)','font-size':16,fill:'var(--ink-2)'})).textContent=TX('붕괴열 군 수를 바꾸면 IF 가 저절로 바뀜 — 위치를 숫자로 흩어 쓰지 않음','change the number of decay groups and IF follows - never scatter raw indices');
+  pyFade(gs,40);
+}});
+
+
+/* ---------------------------------------------------------------- rhs */
+S({tag:'RIGHT-HAND SIDE', ov:'[[우변 함수 rhs — 반응도에서 에너지 수지까지||The right-hand side - from reactivity to energy balance]]',
+src:'[[<b>출처</b> 본 교재 10.2절 목록 10.1–10.2(minisfr/plant.py 87–108번 줄 — 주석과 몇 줄을 뺌) · ρ<sub>fb</sub> = α<sub>f</sub>ΔT<sub>f</sub> + α<sub>c</sub>ΔT̄<sub>c</sub> + α<sub>g</sub>ΔT<sub>in</sub>(−0.6/−0.3/−0.5 pcm/K) · P = Q<sub>0</sub>((1 − ΣE<sub>j</sub>)n + ΣH<sub>j</sub>) · IHX 는 2차측 340 °C 일정의 효율–NTU · 중성자원 S = 10⁻⁴ s⁻¹ 은 12장의 장기 계산을 위해 넣음||<b>Source</b> This textbook &#167;10.2, listings 10.1-10.2 (minisfr/plant.py lines 87-108 - comments and a few lines dropped) · ρ<sub>fb</sub> = α<sub>f</sub>ΔT<sub>f</sub> + α<sub>c</sub>ΔT̄<sub>c</sub> + α<sub>g</sub>ΔT<sub>in</sub> (−0.6/−0.3/−0.5 pcm/K) · P = Q<sub>0</sub>((1 − ΣE<sub>j</sub>)n + ΣH<sub>j</sub>) · IHX by effectiveness-NTU with the secondary fixed at 340 °C · the neutron source S = 10⁻⁴ s⁻¹ serves the long runs in ch. 12]]',
+abbr:'[[<b>효율–NTU</b> 열교환기 제열을 ṁc<sub>p</sub>(T<sub>h</sub> − T<sub>s</sub>)(1 − e<sup>−NTU</sup>)로 계산, NTU = UA/(ṁc<sub>p</sub>) · <b>되먹임</b> 온도가 반응도를, 반응도가 출력을 바꾸는 고리||<b>effectiveness-NTU</b> IHX duty ṁc<sub>p</sub>(T<sub>h</sub> − T<sub>s</sub>)(1 − e<sup>−NTU</sup>), NTU = UA/(ṁc<sub>p</sub>) · <b>feedback</b> temperature changes reactivity, reactivity changes power]]',
+html:`<h2 class="t">[[우변 함수 <em>rhs</em> — 반응도에서 에너지 수지까지||The right-hand side <em>rhs</em> - reactivity to energy balance]]</h2>
+<ul class="b">
+  <li>[[계통코드의 물리는 모두 이 함수 안에 있음. 사고 시나리오는 <b>rho_ext · t_trip · ua_ihx</b> 세 손잡이만 바꿈(12장)||All the physics of the code lives here. Accident scenarios only turn three knobs - <b>rho_ext, t_trip, ua_ihx</b> (ch. 12)]]</li>
+</ul>
+<div class="body">
+<div class="fig">
+<pre class="pyc" style="font-size:12.8px;line-height:1.42"><span class="k">def</span> rhs(self, t, y):
+    n, c, hd = y[<span class="n">0</span>], y[<span class="n">1</span>:<span class="n">7</span>], y[<span class="n">7</span>:IF]
+    tf, tc, th, tk, m = y[IF:]
+    rho = (self.feedback(tf, tc, tk) + self.rho_ext(t)) * <span class="n">1e-5</span>
+    rho -= self.src * d.gen_time
+    dn, dc = kinetics.rhs(n, c, rho, b, d.gen_time)
+    dn += self.src
+    dh = decay.LAM * (self.e * n - hd)
+    p = d.q0 * ((<span class="n">1.0</span> - self.e.sum()) * n + hd.sum())
+    q_fc = core.ua_fuel(d, h) * (tf - tc)
+    dtf = (p - q_fc) / self.mc_f
+    dtc = (mcp * (tk - tc) + q_fc) / self.mc_c
+    dth = mcp * (tc - th) / self.mc_h
+    q_out = self.q_ihx(t, m, th) + self.ua_rv * (tk - d.t_air)
+    dtk = (mcp * (th - tk) - q_out) / self.mc_k
+    dm = self.loop.dmdt(m, t, self.t_trip, th, tk)</pre>
+</div>
+<div class="side">
+<svg viewBox="0 0 330 380" role="img" aria-label="[[rhs 안의 계산 순서: 반응도, 점동특성, 열출력, 열 흐름, 에너지 수지, 유량||Order inside rhs: reactivity, kinetics, power, heat flow, energy balance, flow]]"><g id="rh-g"></g></svg>
+</div>
+</div>`,
+init(el){
+  const G=el.querySelector('#rh-g'), mk=svgEl, gs=[];
+  [[TX('온도 → 반응도','T → reactivity'),'var(--hot)'],[TX('점동특성 dn, dc','kinetics dn, dc'),'var(--hot)'],[TX('열출력 P (+붕괴열)','power P (+decay)'),'var(--amber)'],
+   [TX('UA(T_f − T_c)','UA(T_f − T_c)'),'var(--cool)'],[TX('노드 4개 에너지 수지','4-node energy balance'),'var(--cool)'],[TX('루프 dṁ/dt','loop dṁ/dt'),'var(--ok)']].forEach((b,i)=>{
+    const g=mk('g',{transform:'translate(0,'+(i*62)+')',opacity:0});
+    g.appendChild(mk('rect',{width:330,height:48,fill:'var(--panel)',stroke:b[1],'stroke-width':1.6}));
+    g.appendChild(mk('text',{x:16,y:30,'font-family':'var(--sans)','font-size':16,fill:'var(--ink)'})).textContent=b[0];
+    if(i<5) g.appendChild(mk('path',{d:'M165,50 V60 M159,54 L165,60 L171,54',stroke:'var(--ink-3)','stroke-width':1.6,fill:'none'}));
+    G.appendChild(g); gs.push(g); });
+  pyFade(gs,150);
+}});
+
+
+/* ---------------------------------------------------------------- 정상 상태 */
+S({tag:'STEADY STATE · NULL TRANSIENT', ov:'[[정상 상태와 무사고 시험 — 계수는 정상 조건에서 거꾸로||Steady state and the null transient - coefficients back-solved]]',
+src:'[[<b>계산</b> 본 교재 10.3절 목록 10.4–10.7(s10a.py, s10b.py) · 펌프 수두 = Rṁ<sub>0</sub>² − 부력 = 102.0 kPa · RVACS UA = 0.15 MW ÷ (355 − 30) K = 461.5 W/K · IHX ε = 29.85 MW ÷ (ṁc<sub>p</sub>(510 − 340)) = 0.907 → UA = −ln(1 − ε)ṁc<sub>p</sub> = 0.460 MW/K · 1,000 s 무사고: 163걸음, 이탈 0||<b>Calculation</b> This textbook &#167;10.3, listings 10.4-10.7 (s10a.py, s10b.py) · pump head = Rṁ<sub>0</sub>² − buoyancy = 102.0 kPa · RVACS UA = 0.15 MW ÷ (355 − 30) K = 461.5 W/K · IHX ε = 29.85 MW ÷ (ṁc<sub>p</sub>(510 − 340)) = 0.907 → UA = −ln(1 − ε)ṁc<sub>p</sub> = 0.460 MW/K · 1,000 s null transient: 163 steps, zero drift]]',
+abbr:'[[<b>무사고 시험</b> 사고 없이 오래 돌려 아무것도 변하지 않는지 확인하는 계산 · <b>잔차</b> 정상 상태에서 계산한 dy/dt — 0 이어야 함||<b>null transient</b> run long with no event and check that nothing moves · <b>residual</b> dy/dt at the steady state - must be zero]]',
+html:`<h2 class="t">[[정상 상태와 <em>무사고 시험</em>||Steady state and the <em>null transient</em>]]</h2>
+<ul class="b">
+  <li>[[출발점이 정상 상태가 아니면 사고를 넣지 않아도 온도가 움직이고, 그 움직임이 사고 결과와 섞임. 그래서 <b>펌프·IHX·RVACS 계수를 정상 조건에서 거꾸로 정함</b>||If the start is not steady, temperatures drift with no event and the drift mixes into the result. So <b>pump, IHX and RVACS coefficients are back-solved from the steady state</b>]]</li>
+  <li>[[정상 상태 벡터의 잔차 <b>7×10⁻¹³</b>(배정밀도 반올림 수준), 1,000 s 무사고 시험의 이탈 <b>0</b>||Residual at the steady state <b>7×10⁻¹³</b> (double-precision round-off); drift over a 1,000 s null transient <b>zero</b>]]</li>
+</ul>
+<div class="body">
+<div class="fig">
+<svg viewBox="0 0 800 300" role="img" aria-label="[[정격 정상 상태의 노드 온도와 열 수지: 노심 30 MW 가 IHX 29.85 MW 와 RVACS 0.15 MW 로 나감||Rated node temperatures and heat balance: 30 MW from the core leaves through IHX 29.85 MW and RVACS 0.15 MW]]">
+  <g id="ss-g"></g>
+</svg>
+</div>
+<div class="side">
+  <div class="readout good"><span class="k">max |dy/dt|</span><span class="v">7.1e-13</span></div>
+  <div class="readout"><span class="k">[[무사고 1,000 s 이탈||Null-transient drift]]</span><span class="v">0</span></div>
+  <div class="readout hi"><span class="k">[[펌프 · IHX UA||Pump · IHX UA]]</span><span class="v" style="font-size:22px">102.0 kPa · 0.460</span></div>
+</div>
+</div>`,
+init(el){
+  const G=el.querySelector('#ss-g'), mk=svgEl;
+  const ax=pyAxes(G,{x0:70,y0:28,w:700,h:212,xr:[0,5],yr:[300,580],yt:[300,400,500],
+    yl:TX('정상 상태 온도 (°C)','steady temperature (°C)')});
+  const B=[[TX('연료 평균','mean fuel'),543.6,'var(--hot)'],[TX('노심 출구','core outlet'),510.0,'var(--hot)'],[TX('고온 풀','hot pool'),510.0,'var(--hot)'],
+           [TX('2차측','secondary'),340.0,'var(--amber)'],[TX('저온 풀','cold pool'),355.0,'var(--cool)']];
+  const rs=[];
+  B.forEach((b,i)=>{ const x=ax.fx(i+0.5)-45, y=ax.fy(b[1]);
+    const r=mk('rect',{x:x,y:y,width:90,height:ax.fy(300)-y,fill:b[2],opacity:0}); G.appendChild(r); rs.push(r);
+    G.appendChild(mk('text',{x:x+45,y:y-8,'text-anchor':'middle','font-family':'var(--mono)','font-size':15,fill:'var(--ink)','font-weight':600})).textContent=b[1].toFixed(1);
+    G.appendChild(mk('text',{x:x+45,y:262,'text-anchor':'middle','font-family':'var(--sans)','font-size':15,fill:'var(--ink-2)'})).textContent=b[0]; });
+  G.appendChild(mk('text',{x:420,y:292,'text-anchor':'middle','font-family':'var(--mono)','font-size':15,fill:'var(--ok)','font-weight':600})).textContent=TX('노심 30 MW = IHX 29.85 + RVACS 0.15 MW','core 30 MW = IHX 29.85 + RVACS 0.15 MW');
+  if(RM) rs.forEach(r=>r.setAttribute('opacity',0.8)); else rs.forEach((r,i)=>r.animate([{opacity:0},{opacity:0.8}],{duration:340,delay:140*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 첫 ULOF */
+S({tag:'FIRST ACCIDENT · ULOF', ov:'[[첫 사고 계산 — 비보호 유량상실 ULOF||First accident run - unprotected loss of flow]]',
+src:'[[<b>계산</b> 본 교재 10.4절 목록 10.8–10.9(s10c.py) · p.t_trip = 0.0 한 줄로 펌프 정지, 제어봉 실패 · 크랭크–니콜슨, 간격 0.01–5 s · 45 s 에 노심 출구 635.7 °C 최고, 600 s 에 출력 18 %·유량 15 % · 그래프 자료 data.py||<b>Calculation</b> This textbook &#167;10.4, listings 10.8-10.9 (s10c.py) · one line p.t_trip = 0.0 trips the pumps, rods fail · Crank-Nicolson, steps 0.01-5 s · core outlet peaks at 635.7 °C at 45 s; at 600 s power 18 %, flow 15 % · data from data.py]]',
+abbr:'[[<b>ULOF</b> Unprotected Loss Of Flow — 펌프 정지에 제어봉 삽입 실패가 겹친 사고 · <b>SHRT-45R</b> 1986년 EBR-II 의 같은 종류 시험||<b>ULOF</b> unprotected loss of flow - pump trip with failed scram · <b>SHRT-45R</b> the 1986 EBR-II test of the same kind]]',
+html:`<h2 class="t">[[첫 사고 계산 — <em>비보호 유량상실</em>||First accident - <em>unprotected loss of flow</em>]]</h2>
+<ul class="b">
+  <li>[[유량이 출력보다 빨리 줄어 출구 온도가 오름 → 세 음의 계수가 출력을 낮춤 → 출력이 유량 아래로 내려오면 온도가 내려감. <b>제어봉 없이 자연순환으로 안정</b>||Flow falls faster than power, so the outlet heats → three negative coefficients cut power → once power drops below flow the core cools. <b>Stable on natural circulation without rods</b>]]</li>
+  <li>[[아직 이 숫자를 믿을 근거는 없음 — 11장의 검증이 먼저임||There is no reason yet to trust these numbers - chapter 11 verifies first]]</li>
+</ul>
+<div class="body">
+<div class="fig">
+<svg viewBox="0 0 1120 320" role="img" aria-label="[[ULOF 600초: 출력과 유량(왼쪽), 노심 출구와 연료 평균 온도(오른쪽)||ULOF over 600 s: power and flow (left), core outlet and mean fuel temperature (right)]]">
+  <g id="ul-a"></g><g id="ul-b"></g>
+</svg>
+</div></div>`,
+init(el){
+  const R=PYD.ulof, A=el.querySelector('#ul-a'), B=el.querySelector('#ul-b');
+  const a1=pyAxes(A,{x0:60,y0:24,w:440,h:250,xr:[0,600],yr:[0,1],xt:[0,200,400,600],yt:[0,0.25,0.5,0.75,1],
+    xl:TX('시간 (s)','time (s)'),yl:TX('정격 대비','fraction of rated')});
+  pyLine(A,a1,pyCol(R,1),'var(--hot)',{w:3}); pyLine(A,a1,pyCol(R,2),'var(--cool)',{w:2.4,dash:'7 5'});
+  pyKey(A,330,60,'var(--hot)',TX('열출력','power')); pyKey(A,330,84,'var(--cool)',TX('유량','flow'),'7 5');
+  const a2=pyAxes(B,{x0:640,y0:24,w:440,h:250,xr:[0,600],yr:[500,660],xt:[0,200,400,600],yt:[500,550,600,650],
+    xl:TX('시간 (s)','time (s)'),yl:TX('온도 (°C)','temperature (°C)')});
+  pyLine(B,a2,pyCol(R,4),'var(--hot)',{w:3,delay:300}); pyLine(B,a2,pyCol(R,3),'var(--amber)',{w:2,dash:'4 4'});
+  pyKey(B,900,250,'var(--hot)',TX('노심 출구','core outlet')); pyKey(B,900,274,'var(--amber)',TX('연료 평균','mean fuel'),'4 4');
+  const pk=R.reduce((m,r)=>r[4]>m[4]?r:m,R[0]);
+  B.appendChild(svgEl('circle',{cx:a2.fx(pk[0]),cy:a2.fy(pk[4]),r:6,fill:'var(--hot)'}));
+  B.appendChild(svgEl('text',{x:a2.fx(pk[0])+12,y:a2.fy(pk[4])-6,'font-family':'var(--mono)','font-size':15,fill:'var(--hot)','font-weight':600})).textContent='635.7 °C · 45 s';
+}});
+</script>

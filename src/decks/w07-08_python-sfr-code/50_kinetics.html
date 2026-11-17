@@ -1,0 +1,168 @@
+<script>
+/* ================================================================
+   SECTION 09 — 점동특성과 강성 문제  (교재 9장)
+   Keepin U-235 열중성자 6군 상대 분율, β = 330 pcm, Λ = 0.4 μs
+   ================================================================ */
+SECT('09 · [[점동특성과 강성||Point kinetics and stiffness]]');
+const PK={LAM:[0.0124,0.0305,0.111,0.301,1.14,3.01], A:[0.033,0.219,0.196,0.395,0.115,0.042], b:330e-5, L:4e-7};
+
+S({bare:true, cls:'div', ov:'[[&#167;09 점동특성과 강성 문제||&#167;09 Point kinetics and stiffness]]',
+html:`[[<div class="no">09</div><h2>점동특성과 강성 문제</h2><div class="ln"></div>
+<p>출력은 반응도에 스스로 반응함. 세대시간 0.4 μs 와 지발중성자 수십 초가 한 식에 있어
+<b>전진 오일러는 0.27 ms 보다 큰 간격에서 발산</b>함 — 뉴턴 반복으로 푸는 음해법을 지음.</p>||<div class="no">09</div><h2>Point kinetics and stiffness</h2><div class="ln"></div>
+<p>Power responds to reactivity by itself. A 0.4 μs generation time and delayed neutrons of tens of seconds share one equation,
+so <b>forward Euler diverges above 0.27 ms</b> - we build an implicit integrator solved by Newton iteration.</p>]]`});
+
+
+/* ---------------------------------------------------------------- 시간 규모 */
+S({tag:'PROMPT AND DELAYED', ov:'[[즉발 중성자와 지발중성자 6군 — 시간 규모의 차이||Prompt and six delayed groups - the gap in time scales]]',
+src:'[[<b>출처</b> G. R. Keepin et al., Phys. Rev. 107 (1957) 1044 — U-235 열중성자 6군(λ 0.0124–3.01 s⁻¹, 상대 분율 합 1.000) · β = 330 pcm 은 설계 입력(앞 교재 표 10.1 의 ASTRID 계열 328–331 pcm 근처) · Pu-239 고속 핵분열의 군 상수는 조금 다름 · 본 교재 9.1절||<b>Source</b> G. R. Keepin et al., Phys. Rev. 107 (1957) 1044 - U-235 thermal six groups (λ 0.0124-3.01 s⁻¹, relative fractions sum to 1.000) · β = 330 pcm is a design input (near the ASTRID-family 328-331 pcm of the earlier book&#8217;s table 10.1) · Pu-239 fast-fission constants differ slightly · this textbook &#167;9.1]]',
+abbr:'[[<b>Λ</b> 즉발 중성자 세대시간 · <b>β</b> 유효 지발중성자 분율 · <b>$</b> 반응도를 β 로 나눈 단위, 1 $ = 330 pcm · <b>pcm</b> 10⁻⁵||<b>Λ</b> prompt neutron generation time · <b>β</b> effective delayed neutron fraction · <b>$</b> reactivity divided by β, 1 $ = 330 pcm · <b>pcm</b> 10⁻⁵]]',
+html:`<h2 class="t">[[즉발 중성자와 <em>지발중성자 6군</em>||Prompt neutrons and <em>six delayed groups</em>]]</h2>
+<ul class="b">
+  <li>[[핵분열 중성자의 99.67 % 는 즉시, 0.33 % 는 선구핵이 붕괴하며 0.23–55.9 s 뒤에 나옴 — 이 작은 분율이 원자로를 <b>제어 가능</b>하게 함||99.67 % of fission neutrons are prompt; 0.33 % follow precursor decay 0.23-55.9 s later - this small fraction makes a reactor <b>controllable</b>]]</li>
+  <li>[[고속로의 Λ 는 경수로보다 약 100배 짧음 — 두 시간 규모의 비가 6×10⁵–1.4×10⁸ 으로 벌어짐||A fast reactor&#8217;s Λ is about 100 times shorter than an LWR&#8217;s - the two time scales differ by 6×10⁵ to 1.4×10⁸]]</li>
+</ul>
+<div class="body col">
+<div class="formula" style="font-size:20px">dn/dt <span class="op">=</span> (ρ − β)/Λ · n + Σλ<sub>i</sub>c<sub>i</sub> &nbsp;&nbsp;&nbsp; dc<sub>i</sub>/dt <span class="op">=</span> β<sub>i</sub>/Λ · n − λ<sub>i</sub>c<sub>i</sub></div>
+<div class="fig">
+<svg viewBox="0 0 1120 330" role="img" aria-label="[[즉발 중성자 세대시간과 지발중성자 6군 반감기의 로그 시간축 막대||Prompt generation time and the half-lives of six delayed groups on a log time axis]]">
+  <g id="dn-g"></g>
+</svg>
+</div></div>`,
+init(el){
+  const G=el.querySelector('#dn-g'), mk=svgEl;
+  const ax=pyAxes(G,{x0:90,y0:34,w:1000,h:252,xr:[1e-7,1e3],yr:[0,6.6],xlog:true,xt:[1e-7,1e-5,1e-3,0.1,10,1000],xf:v=>v>=1?v:'1e'+Math.round(Math.log10(v)),
+    xl:TX('시간 (s, 로그)','time (s, log)')});
+  const bars=[];
+  PK.LAM.forEach((l,i)=>{ const h=Math.log(2)/l, y=ax.fy(6-i)-12;
+    G.appendChild(mk('text',{x:82,y:y+17,'text-anchor':'end','font-family':'var(--mono)','font-size':13,fill:'var(--ink-2)'})).textContent=TX((i+1)+'군','g'+(i+1));
+    const b=mk('rect',{x:ax.fx(1e-7),y:y,height:22,width:ax.fx(h)-ax.fx(1e-7),fill:'var(--amber)',opacity:0}); G.appendChild(b); bars.push(b);
+    G.appendChild(mk('text',{x:ax.fx(h)+8,y:y+16,'font-family':'var(--mono)','font-size':13,fill:'var(--ink)'})).textContent=fmt(h,2)+' s · '+PK.A[i].toFixed(3);
+  });
+  G.appendChild(mk('line',{x1:ax.fx(4e-7),x2:ax.fx(4e-7),y1:24,y2:286,stroke:'var(--hot)','stroke-width':3}));
+  G.appendChild(mk('text',{x:ax.fx(4e-7)+8,y:20,'font-family':'var(--mono)','font-size':14,fill:'var(--hot)','font-weight':600})).textContent='Λ = 0.4 μs';
+  if(RM) bars.forEach(b=>b.setAttribute('opacity',0.85)); else bars.forEach((b,i)=>b.animate([{opacity:0},{opacity:0.85}],{duration:340,delay:120*i,fill:'forwards'}));
+}});
+
+
+/* ---------------------------------------------------------------- 전진 오일러 발산 */
+S({tag:'STIFFNESS', ov:'[[강성 문제 — 전진 오일러는 0.27 ms 위에서 발산||Stiffness - forward Euler diverges above 0.27 ms]]',
+src:'[[<b>계산</b> 본 교재 9.2절 목록 9.2(s09a.py) · +0.1 $ 계단, 10 ms 적분 · 가장 빠른 고유값 (β − ρ)/Λ = 7425 s⁻¹ → 안정 한계 Δt < 2/7425 = 2.69×10⁻⁴ s · 즉발 도약 근사 β/(β − ρ) = 1.1111 · 그림은 브라우저가 같은 계산을 직접 함||<b>Calculation</b> This textbook &#167;9.2, listing 9.2 (s09a.py) · +0.1 $ step, 10 ms · fastest eigenvalue (β − ρ)/Λ = 7425 s⁻¹ → stability limit Δt < 2/7425 = 2.69×10⁻⁴ s · prompt-jump approximation β/(β − ρ) = 1.1111 · the browser repeats the calculation live]]',
+abbr:'[[<b>강성</b> 시간 규모가 크게 다른 성분이 한 연립식에 섞인 성질 · <b>즉발 도약</b> 반응도가 들어간 순간 즉발 중성자로 출력이 바로 뛰는 것 · <b>수치 불안정</b> 오차가 걸음마다 커지는 것||<b>stiffness</b> components with very different time scales in one system · <b>prompt jump</b> the immediate power step carried by prompt neutrons · <b>numerical instability</b> error that grows every step]]',
+html:`<h2 class="t">[[강성 문제 — <em>전진 오일러의 발산</em>||Stiffness - <em>forward Euler diverges</em>]]</h2>
+<ul class="b">
+  <li>[[계수 (ρ − β)/Λ 의 모드는 0.13 ms 만에 사라지는데도 <b>그 모드가 간격을 정함</b> — 이 조건으로 72시간을 풀면 10⁹ 걸음||The (ρ − β)/Λ mode dies in 0.13 ms yet <b>it sets the step</b> - 72 hours would take 10⁹ steps]]</li>
+  <li>[[간격을 0.2 → 0.3 ms 로 올려 봄 — 출력이 걸음마다 부호를 바꾸며 커짐. <b class="hot">음수 출력은 물리가 아니라 수치 오류</b>||Raise the step from 0.2 to 0.3 ms - power flips sign every step and grows. <b class="hot">Negative power is a numerical error, not physics</b>]]</li>
+</ul>
+<div class="body">
+<div class="fig">
+<svg viewBox="0 0 800 320" role="img" aria-label="[[+0.1 달러 계단 10 ms: 전진 오일러 출력과 즉발 도약 값||+0.1 dollar step over 10 ms: forward-Euler power and the prompt-jump value]]">
+  <g id="st-g"></g><g id="st-d"></g>
+</svg>
+</div>
+<div class="side">
+  <div class="readout" id="st-rb"><span class="k">n (10 ms)</span><span class="v" id="st-n">1.1116</span></div>
+  <div class="readout"><span class="k">[[안정 한계||Stability limit]]</span><span class="v">0.269<small>ms</small></span></div>
+  <div class="ctl"><label>[[시간 간격 Δt||Time step Δt]] <span id="st-ds">0.20 ms</span></label>
+    <input type="range" id="st-dt" min="0.05" max="0.32" step="0.01" value="0.2"></div>
+</div>
+</div>`,
+init(el){
+  const G=el.querySelector('#st-g'), D=el.querySelector('#st-d'), b=PK.b, L=PK.L, rho=0.1*b;
+  const ax=pyAxes(G,{x0:70,y0:24,w:700,h:250,xr:[0,10],yr:[0.01,1000],ylog:true,xt:[0,2,4,6,8,10],yt:[0.01,0.1,1,10,100,1000],
+    xl:TX('시간 (ms)','time (ms)'),yl:TX('|n| (정격 대비, 로그)','|n| (relative, log)')});
+  G.appendChild(svgEl('line',{x1:70,x2:770,y1:ax.fy(1.1111),y2:ax.fy(1.1111),stroke:'var(--ok)','stroke-dasharray':'6 5','stroke-width':1.8}));
+  G.appendChild(svgEl('text',{x:760,y:ax.fy(1.1111)-8,'text-anchor':'end',class:'lbl',fill:'var(--ok)'})).textContent=TX('즉발 도약 1.111','prompt jump 1.111');
+  const s=el.querySelector('#st-dt');
+  function upd(){ const dt=(+s.value)*1e-3; let n=1, c=PK.A.map((a,i)=>a*b/(L*PK.LAM[i])); const P=[[0,1]];
+    for(let k=1;k*dt<=0.01+1e-12;k++){ const dn=(rho-b)/L*n+c.reduce((s2,ci,i)=>s2+PK.LAM[i]*ci,0);
+      c=c.map((ci,i)=>ci+dt*(PK.A[i]*b/L*n-PK.LAM[i]*ci)); n+=dt*dn; P.push([k*dt*1e3,n]); }
+    D.innerHTML=''; const ok=Math.abs(n-1.1116)<0.01;
+    D.appendChild(svgEl('path',{d:'M'+P.map(p=>ax.fx(p[0]).toFixed(1)+','+ax.fy(clamp(Math.abs(p[1]),0.01,1000)).toFixed(1)).join(' L'),fill:'none',stroke:ok?'var(--cool)':'var(--hot)','stroke-width':2}));
+    P.forEach(p=>D.appendChild(svgEl('circle',{cx:ax.fx(p[0]),cy:ax.fy(clamp(Math.abs(p[1]),0.01,1000)),r:2.6,fill:ok?'var(--cool)':'var(--hot)'})));
+    el.querySelector('#st-n').textContent=Math.abs(n)<1e4?n.toFixed(4):n.toExponential(2);
+    el.querySelector('#st-rb').className='readout '+(ok?'good':'warn');
+    el.querySelector('#st-ds').textContent=(+s.value).toFixed(2)+' ms'; }
+  s.oninput=upd; upd();
+}});
+
+
+/* ---------------------------------------------------------------- 뉴턴 음해법 */
+S({tag:'IMPLICIT · NEWTON', ov:'[[θ법과 뉴턴 반복 — 범용 음해 적분기 step()||The θ-method and Newton iteration - a general implicit step()]]',
+src:'[[<b>출처</b> 본 교재 9.3절 목록 9.4(minisfr/solver.py 21–34번 줄) · 잔차 F = y<sup>1</sup> − y<sup>0</sup> − Δt(θf<sub>1</sub> + (1 − θ)f<sub>0</sub>) · 수정량 (I − θΔtJ)δ = −F · 야코비안은 걸음마다 한 번 수치 미분(수정 뉴턴법) · 허용치 상대 10⁻¹⁰ · 슬라이드의 코드는 주석을 뺀 것||<b>Source</b> This textbook &#167;9.3, listing 9.4 (minisfr/solver.py lines 21-34) · residual F = y<sup>1</sup> − y<sup>0</sup> − Δt(θf<sub>1</sub> + (1 − θ)f<sub>0</sub>) · update (I − θΔtJ)δ = −F · Jacobian by finite differences once per step (modified Newton) · relative tolerance 10⁻¹⁰ · code shown without comments]]',
+abbr:'[[<b>θ법</b> θ = 1 후진 오일러(1차), θ = 0.5 크랭크–니콜슨(2차) · <b>야코비안 J</b> ∂f<sub>i</sub>/∂y<sub>j</sub> · <b>A-안정</b> 간격에 상관없이 감쇠 모드를 감쇠시키는 성질||<b>θ-method</b> θ = 1 backward Euler (1st order), θ = 0.5 Crank-Nicolson (2nd) · <b>Jacobian J</b> ∂f<sub>i</sub>/∂y<sub>j</sub> · <b>A-stable</b> damps decaying modes at any step size]]',
+html:`<h2 class="t">[[θ법과 <em>뉴턴 반복</em>||The θ-method and <em>Newton iteration</em>]]</h2>
+<ul class="b">
+  <li>[[다음 시각의 기울기를 쓰면 미지수가 양변에 생김 → 잔차 F = 0 을 뉴턴법으로 풂. <b>함수 f 자체를 인자로 받으므로</b> 점동특성이든 계통 전체든 같은 적분기를 씀||Using the new-time slope puts the unknown on both sides → solve F = 0 by Newton. <b>Because f itself is the argument</b>, the same integrator serves kinetics or the whole plant]]</li>
+</ul>
+<div class="body">
+<div class="fig">
+<div class="pyk">minisfr/solver.py · step()</div>
+<pre class="pyc" style="font-size:13.6px"><span class="k">def</span> step(f, t, y0, dt, theta=<span class="n">1.0</span>, tol=<span class="n">1e-10</span>, itmax=<span class="n">20</span>):
+    f0 = f(t, y0)
+    y1 = y0.copy()
+    jac = jacobian(f, t + dt, y0, f(t + dt, y0))
+    mat = np.eye(y0.size) - dt * theta * jac
+    <span class="k">for</span> it <span class="k">in</span> range(<span class="n">1</span>, itmax + <span class="n">1</span>):
+        f1 = f(t + dt, y1)
+        res = y1 - y0 - dt * (theta * f1 + (<span class="n">1.0</span> - theta) * f0)
+        dy = np.linalg.solve(mat, -res)
+        y1 = y1 + dy
+        <span class="k">if</span> np.max(np.abs(dy) / (np.abs(y1) + <span class="n">1.0</span>)) &lt; tol:
+            <span class="k">return</span> y1, it
+    <span class="k">raise</span> RuntimeError(...)</pre>
+</div>
+<div class="side">
+<svg viewBox="0 0 330 370" role="img" aria-label="[[뉴턴 반복의 다섯 단계 흐름||Five steps of the Newton loop]]"><g id="nw-g"></g></svg>
+</div>
+</div>`,
+init(el){
+  const G=el.querySelector('#nw-g'), mk=svgEl, gs=[];
+  [[TX('첫 추정 y¹ ← y⁰','guess y¹ ← y⁰'),'var(--ink-3)'],[TX('잔차 F 계산','residual F'),'var(--cool)'],[TX('(I − θΔtJ)δ = −F 풀기','solve (I − θΔtJ)δ = −F'),'var(--cool)'],
+   [TX('y¹ ← y¹ + δ','y¹ ← y¹ + δ'),'var(--cool)'],[TX('|δ| < 10⁻¹⁰ 이면 다음 걸음','|δ| < 10⁻¹⁰ → next step'),'var(--ok)']].forEach((b,i)=>{
+    const g=mk('g',{transform:'translate(0,'+(i*74)+')',opacity:0});
+    g.appendChild(mk('rect',{width:330,height:56,fill:'var(--panel)',stroke:b[1],'stroke-width':1.6}));
+    g.appendChild(mk('text',{x:16,y:35,'font-family':'var(--mono)','font-size':15,fill:b[1],'font-weight':600})).textContent=(i+1)+'  ';
+    g.appendChild(mk('text',{x:44,y:35,'font-family':'var(--sans)','font-size':16,fill:'var(--ink)'})).textContent=b[0];
+    if(i<4) g.appendChild(mk('path',{d:'M165,58 V70 M159,64 L165,70 L171,64',stroke:'var(--ink-3)','stroke-width':1.6,fill:'none'}));
+    G.appendChild(g); gs.push(g); });
+  pyFade(gs,160);
+}});
+
+
+/* ---------------------------------------------------------------- 계단 응답 */
+S({tag:'STEP RESPONSE', ov:'[[계단 반응도 응답 — 즉발 도약과 안정 주기||Step reactivity response - prompt jump and stable period]]',
+src:'[[<b>계산</b> 본 교재 9.4절 목록 9.6(s09b.py) · 음해 적분기, 첫 간격 0.1 ms, 최대 50 ms(전진 오일러 한계의 185배) · 안정 주기는 7×7 계수행렬의 가장 큰 고유값의 역수(kinetics.inhour) · +0.1 $ 98.52 s, +0.3 $ 18.16 s, −1.0 $ −83.90 s · 그래프 자료는 minisfr 실행값(data.py)||<b>Calculation</b> This textbook &#167;9.4, listing 9.6 (s09b.py) · implicit integrator, first step 0.1 ms, up to 50 ms (185 times the forward-Euler limit) · stable period = 1/(largest eigenvalue of the 7×7 matrix) (kinetics.inhour) · +0.1 $ 98.52 s, +0.3 $ 18.16 s, −1.0 $ −83.90 s · curves are minisfr output (data.py)]]',
+abbr:'[[<b>안정 주기</b> 충분한 시간 뒤 출력이 e배 되는 시간 · <b>역시간 방정식(inhour)</b> 안정 주기를 주는 식||<b>stable period</b> e-folding time once transients die · <b>inhour equation</b> the equation that gives it]]',
+html:`<h2 class="t">[[계단 반응도 응답 — <em>즉발 도약과 안정 주기</em>||Step response - <em>prompt jump and stable period</em>]]</h2>
+<ul class="b">
+  <li>[[t = 0 에서 세 곡선 모두 수직으로 뜀(+0.3 $ 는 1.43배, −1 $ 는 0.5배). 그 뒤 안정 주기의 지수 함수(점선)에 붙음||All three curves jump at t = 0 (×1.43 for +0.3 $, ×0.5 for −1 $), then settle onto the stable-period exponential (dotted)]]</li>
+  <li>[[−1 $ 의 주기 −83.9 s — 가장 느린 1군(반감기 55.9 s)이 출력을 붙잡음. <b>정지 뒤 핵분열이 사라지는 데 수 분</b>이 걸리는 이유||−1 $ gives −83.9 s - the slowest group (55.9 s half-life) holds the power up. <b>That is why fission takes minutes to fade after a scram</b>]]</li>
+</ul>
+<div class="body">
+<div class="fig">
+<svg viewBox="0 0 800 320" role="img" aria-label="[[계단 반응도 +0.3, +0.1, −1.0 달러에서 10초 동안 핵분열 출력(로그)||Fission power over 10 s for steps of +0.3, +0.1 and −1.0 dollars (log)]]">
+  <g id="sr-g"></g>
+</svg>
+</div>
+<div class="side">
+<table class="d">
+  <tr><th>[[반응도||step]]</th><th>n(10 s)</th><th>[[주기||period]]</th></tr>
+  <tr><td class="n hot">+0.3 $</td><td class="n">3.1290</td><td class="n">18.16 s</td></tr>
+  <tr><td class="n amb">+0.1 $</td><td class="n">1.3425</td><td class="n">98.52 s</td></tr>
+  <tr><td class="n cool">−1.0 $</td><td class="n">0.2404</td><td class="n">−83.90 s</td></tr>
+</table>
+</div>
+</div>`,
+init(el){
+  const G=el.querySelector('#sr-g');
+  const ax=pyAxes(G,{x0:70,y0:24,w:700,h:250,xr:[0,10],yr:[0.2,4],ylog:true,xt:[0,2,4,6,8,10],yt:[0.2,0.5,1,2,4],
+    xl:TX('시간 (s)','time (s)'),yl:TX('핵분열 출력 n (로그)','fission power n (log)')});
+  [['0.3','var(--hot)',18.16],['0.1','var(--amber)',98.52],['-1.0','var(--cool)',-83.90]].forEach((c,i)=>{
+    const R=PYD.steps[c[0]]; pyLine(G,ax,R.map(r=>[r[0],r[1]]),c[1],{w:2.8,delay:250*i});
+    const n10=R[R.length-1][1]; const P=[]; for(let t=4;t<=10;t+=0.5) P.push([t,n10*Math.exp((t-10)/c[2])]);
+    pyLine(G,ax,P,'var(--ink-3)',{dash:'2 4',w:1.4});
+  });
+}});
+</script>
